@@ -1,8 +1,8 @@
-from .Player import Player
+from .Dummy import Dummy
 import random
 
 
-class StupidRat(Player):
+class StupidRat(Dummy):
     def __init__(self, session, name):
         super().__init__(session, name)
 

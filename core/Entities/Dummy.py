@@ -3,8 +3,10 @@ from core.Weapons.Fist import Fist
 from core.Action import FreeAction, DecisiveAction, Action
 
 
-class Player(Entity):
+class Dummy(Entity):
     def __init__(self, session, name):
+        self.dodge_cooldown = 0
+
         super().__init__(session)
 
         self.name = name
@@ -17,16 +19,14 @@ class Player(Entity):
 
         self.weapon = Fist()
 
-        self.dodge_cooldown = 0
-
-        self.actions += [
-            DecisiveAction(self.dodge, 'Перекат', 'dodge')
-        ]
-
     @property
-    def targets(self):
-        return self.nearby_entities if not self.weapon.ranged else \
-            [entity for entity in self.session.entities if entity != self]
+    def actions(self):
+        actions = super().actions
+        if self.dodge_cooldown == 0:
+            actions += [
+                DecisiveAction(self.dodge, 'Перекат', 'dodge')
+            ]
+        return actions
 
     def tick_turn(self):
         super().tick_turn()

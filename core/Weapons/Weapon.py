@@ -13,7 +13,7 @@ class Weapon(object):
         self.accuracybonus = 0
 
         self.actions = [
-            DecisiveAction(self.attack)
+            DecisiveAction(self.attack, 'Атака', 'attack')
         ]
 
     def calculate_damage(self, source, target):
@@ -40,4 +40,8 @@ class Weapon(object):
         source.energy -= self.energycost
         target.inbound_dmg += damage
         source.outbound_dmg += damage
+        if damage:
+            source.say(f'I attack {target.name} with {self.name}! Dealt {damage} damage!')
+        else:
+            source.say(f'I attack {target.name} with {self.name}, but miss!')
         return damage

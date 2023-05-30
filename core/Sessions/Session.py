@@ -35,7 +35,7 @@ class Session:
             if entity.hp <= 0:
                 self.entities.remove(entity)
                 continue
-        if len(self.entities) <= 1:
+        if len(self.entities) <= 1:  # TODO: Normal stopping mechanism
             self.stop()
             return
         for entity in sorted(self.entities.copy(), key=lambda e: e.action.priority):

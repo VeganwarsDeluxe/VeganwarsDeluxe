@@ -21,14 +21,27 @@ class Entity:
         # Temporary
         self.inbound_dmg: int = 0
         self.outbound_dmg: int = 0
-        self.actions: list[Action] = [
-            DecisiveAction(self.skip, 'Пропустить', 'skip'),
-            DecisiveAction(self.reload, 'Перезарядка', 'reload'),
-            DecisiveAction(self.approach, 'Подойти', 'approach')
-        ]
-        self.actions += self.weapon.actions
+
         self.action: Action = self.actions[0]
         self.target: Entity = self
+
+    @property
+    def targets(self):
+        return self.nearby_entities if not self.weapon.ranged else \
+            [entity for entity in self.session.entities if entity != self]
+
+    @property
+    def actions(self):
+        actions = [
+            DecisiveAction(self.skip, 'Пропустить', 'skip'),
+            DecisiveAction(self.reload, 'Перезарядка', 'reload'),
+        ]
+        actions += self.weapon.actions
+        if not self.approached:
+            actions += [
+                DecisiveAction(self.approach, 'Подойти', 'approach')
+            ]
+        return actions
 
     def say(self, text):
         print(f'[{self.name}] {text}')
@@ -48,11 +61,11 @@ class Entity:
         return (1 - ((1 - energy / 10) ** cubes)) * 100
 
     def skip(self, *args):
-        self.say("Chilling.")
+        self.say("Skipping turn.")
 
     def reload(self, *args):
         self.energy = self.max_energy
-        self.say("Recharged.")
+        self.say("Reloaded.")
 
     def approach(self, *args):
         self.nearby_entities = [entity for entity in self.session.entities if entity != self]
