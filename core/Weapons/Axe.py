@@ -16,7 +16,7 @@ class Axe(Weapon):
         if not damage:
             return damage
         threshold = target.get_skill('damage-threshold')
-        print(f'{target.name} покалечен!')
+        source.session.say(f'{target.name} покалечен!')
 
         threshold.threshold += 1
         return damage

@@ -11,6 +11,9 @@ class Session:
 
         self.entities: list[Entity] = []
 
+    def say(self, text):
+        print(text)
+
     @property
     def alive_entities(self):
         for entity in self.entities:
@@ -40,7 +43,7 @@ class Session:
                 self.trigger('hp-loss')
                 hp_loss = entity.cache.get('hp_loss')
                 entity.hp -= hp_loss
-                print(f"{entity.hp * '♥️'}|{entity.name} damaged by {hp_loss} HP. {entity.hp} is left.")
+                self.say(f"{entity.hp * '♥️'}|{entity.name} damaged by {hp_loss} HP. {entity.hp} is left.")
 
     def stop(self):
         self.active = False
@@ -57,7 +60,7 @@ class Session:
     def death(self):
         for entity in self.alive_entities:
             if entity.hp <= 0:
-                print(f'{entity.name} погибает!')
+                self.say(f'{entity.name} погибает!')
                 entity.dead = True
 
     def finish(self):
@@ -78,7 +81,7 @@ class Session:
         self.trigger('pre-action')  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
         self.trigger('post-action')  # 3. Post-action stage
-        print(f'Results of turn {self.turn}:')
+        self.say(f'Results of turn {self.turn}:')
         self.trigger('pre-damages')
         self.calculate_damages()  # 4. Damages stage
         self.trigger('post-damages')  # 5. Post-damages stage

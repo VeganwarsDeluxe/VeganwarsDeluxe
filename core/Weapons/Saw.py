@@ -18,6 +18,6 @@ class Saw(Weapon):
             return damage
         injury = target.get_skill('injury')
         injury.injury += 1
-        print(f'{target.name} ранен! ({injury.injury})')
+        source.session.say(f'{target.name} ранен! ({injury.injury})')
         return damage
 

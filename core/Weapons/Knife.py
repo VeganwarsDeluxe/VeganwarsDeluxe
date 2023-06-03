@@ -14,7 +14,7 @@ class Knife(Weapon):
         if not damage:
             return damage
         bleeding = target.get_skill('bleeding')
-        print(f'{target.name} истекает кровью!')
+        source.session.say(f'{target.name} истекает кровью!')
         bleeding.active = True
         return damage
 

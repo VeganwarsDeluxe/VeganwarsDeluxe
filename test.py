@@ -63,7 +63,7 @@ def simulate():
         if not s.active:
             return
         s.pre_move(), s.trigger('pre-move')
-        print(f'Turn {s.turn} begins!')
+        s.say(f'Turn {s.turn} begins!')
         for player in s.alive_entities:
             player.say(f'Я могу: {[a.id for a in player.actions]} и {[i.id for i in player.items]}')
             if player.items and random.choice([True, False]):
@@ -83,7 +83,7 @@ def simulate():
             player.action.source = player
             player.action.target = player.target
         s.move()
-        print()
+        s.say('')
 
 
 simulate()

@@ -66,7 +66,7 @@ class Entity:
         return actions
 
     def say(self, text):
-        print(f'[{self.name}] {text}')
+        self.session.say(f'[{self.name}] {text}')
 
     @property
     def approached(self):

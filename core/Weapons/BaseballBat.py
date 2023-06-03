@@ -17,7 +17,7 @@ class BaseballBat(Weapon):
         if random.randint(0, 100) > 30:
             return
         stun = target.get_skill('stun')
-        print(f'{target.name} оглушен!')
+        source.session.say(f'{target.name} оглушен!')
         stun.stun += 2
         return damage
 
