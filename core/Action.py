@@ -1,11 +1,13 @@
 class Action:
-    def __init__(self, func, decisive=True, priority=0, name='Action', id='action'):
+    def __init__(self, func, decisive=True, priority=0, name='Action', id='action', type='all'):
         self.priority: int = priority
         self.decisive: bool = decisive
         self.name = name
         self.id = id
         self.func = func
         self.data = dict()
+
+        self.type = type  # 'all', 'ally', 'enemy'
 
         self.source = None
         self.target = None
@@ -17,11 +19,11 @@ class Action:
 
 
 class DecisiveAction(Action):
-    def __init__(self, func, name='Action', id='action', priority=0):
-        super().__init__(func, decisive=True, name=name, id=id, priority=priority)
+    def __init__(self, func, name='Action', id='action', priority=0, type='all'):
+        super().__init__(func, decisive=True, name=name, id=id, priority=priority, type=type)
 
 
 class FreeAction(Action):
-    def __init__(self, func, name='Action', id='action', priority=0):
-        super().__init__(func, decisive=False, name=name, id=id, priority=priority)
+    def __init__(self, func, name='Action', id='action', priority=0, type='all'):
+        super().__init__(func, decisive=False, name=name, id=id, priority=priority, type=type)
 

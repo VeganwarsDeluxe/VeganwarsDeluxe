@@ -20,7 +20,7 @@ class Chain(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_weapon, 'Вьібить оружие', 'knock_weapon')
+            DecisiveAction(self.knock_weapon, 'Вьібить оружие', 'knock_weapon', type='enemy')
         ]
 
     def knock_weapon(self, source, target):

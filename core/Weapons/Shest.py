@@ -19,7 +19,7 @@ class Shest(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_down, 'Сбить с ног', 'knock_down')
+            DecisiveAction(self.knock_down, 'Сбить с ног', 'knock_down', type='enemy')
         ]
 
     def knock_down(self, source, target):

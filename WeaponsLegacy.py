@@ -18,16 +18,7 @@ class PenisDubina(Weapon):
         self.accuracybonus = 0
 
 
-class Rifle(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 11
-        self.name = 'Снайперская винтовка'
-        self.ranged = True
-        self.cubes = 1
-        self.accuracybonus = -4
-        self.energycost = 5
-        self.dmgbonus = 7
+
 
 
 
