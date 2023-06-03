@@ -1,5 +1,5 @@
 import random
-from .Weapon import Weapon
+from core.Weapons.Weapon import Weapon
 
 
 class Revolver(Weapon):

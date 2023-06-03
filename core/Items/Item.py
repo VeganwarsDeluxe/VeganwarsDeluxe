@@ -1,9 +1,10 @@
 from core.Action import Action
+from core.TargetType import TargetType
 
 
 class Item(Action):
-    def __init__(self, name='Item', id='item', decisive=True):
-        super().__init__(None, decisive=decisive, name=name, id=id)
+    def __init__(self, name='Item', id='item', decisive=True, type=TargetType()):
+        super().__init__(None, decisive=decisive, name=name, id=id, type=type)
         self.target = None
         self.priority = 5
 

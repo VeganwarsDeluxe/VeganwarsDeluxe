@@ -1,5 +1,6 @@
 import random
 from core.Action import DecisiveAction
+from core.TargetType import TargetType
 
 
 class Weapon(object):
@@ -15,7 +16,7 @@ class Weapon(object):
 
     @property
     def actions(self):
-        return [DecisiveAction(self.attack, 'Атака', 'attack', type='enemy')]
+        return [DecisiveAction(self.attack, 'Атака', 'attack', type=TargetType(ally=False, melee=not self.ranged))]
 
     def calculate_damage(self, source, target):
         """
@@ -45,7 +46,7 @@ class Weapon(object):
         target.inbound_dmg += damage
         source.outbound_dmg += damage
         if damage:
-            source.say(f'I attack {target.name} with {self.name}! Dealt {damage} damage!')
+            source.session.say(f'👊|{source.name} бьет {target.name} используя {self.name}! Нанесено {damage} урона.')
         else:
-            source.say(f'I attack {target.name} with {self.name}, but miss!')
+            source.session.say(f'💨|{source.name} бьет {target.name} используя {self.name}, но не попадает.')
         return damage

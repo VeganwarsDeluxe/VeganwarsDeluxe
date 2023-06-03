@@ -1,5 +1,8 @@
+from core.TargetType import TargetType
+
+
 class Action:
-    def __init__(self, func, decisive=True, priority=0, name='Action', id='action', type='all'):
+    def __init__(self, func, decisive=True, priority=0, name='Action', id='action', type=TargetType()):
         self.priority: int = priority
         self.decisive: bool = decisive
         self.name = name
@@ -7,7 +10,7 @@ class Action:
         self.func = func
         self.data = dict()
 
-        self.type = type  # 'all', 'ally', 'enemy'
+        self.type: TargetType = type  # 'all', 'ally', 'enemy_meele', 'enemy_ranged', 'none'
 
         self.source = None
         self.target = None
@@ -19,11 +22,11 @@ class Action:
 
 
 class DecisiveAction(Action):
-    def __init__(self, func, name='Action', id='action', priority=0, type='all'):
+    def __init__(self, func, name='Action', id='action', priority=0, type=TargetType()):
         super().__init__(func, decisive=True, name=name, id=id, priority=priority, type=type)
 
 
 class FreeAction(Action):
-    def __init__(self, func, name='Action', id='action', priority=0, type='all'):
+    def __init__(self, func, name='Action', id='action', priority=0, type=TargetType()):
         super().__init__(func, decisive=False, name=name, id=id, priority=priority, type=type)
 

@@ -1,6 +1,7 @@
 from .Entity import Entity
-from core.Weapons.Fist import Fist
-from core.Action import FreeAction, DecisiveAction, Action
+from modern.Weapons.Fist import Fist
+from core.Action import DecisiveAction
+from core.TargetType import TargetType
 
 
 class Dummy(Entity):
@@ -24,7 +25,7 @@ class Dummy(Entity):
         actions = super().default_actions
         if self.dodge_cooldown == 0:
             actions += [
-                DecisiveAction(self.dodge, 'Перекат', 'dodge')
+                DecisiveAction(self.dodge, 'Перекат', 'dodge', type=TargetType(me=True))
             ]
         return actions
 
@@ -34,4 +35,4 @@ class Dummy(Entity):
 
     def dodge(self, *args):
         self.dodge_cooldown = 5
-        self.say("Dodging!")
+        self.session.say(f"💨|{self.name} перекатывается.")

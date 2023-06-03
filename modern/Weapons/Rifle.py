@@ -1,6 +1,8 @@
-from .Weapon import Weapon
+from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
 import random
+
+from core.TargetType import TargetType
 
 
 class Rifle(Weapon):
@@ -21,7 +23,7 @@ class Rifle(Weapon):
         main_target, level = self.main_target
         if main_target and level == 2:
             return super().actions
-        return [DecisiveAction(self.aim_rifle, 'Вьіцелить', 'aim_rifle', type='enemy')] + super().actions
+        return [DecisiveAction(self.aim_rifle, 'Вьіцелить', 'aim_rifle', type=TargetType(ally=False))] + super().actions
 
     def aim_rifle(self, source, target):
         main_target, level = self.main_target

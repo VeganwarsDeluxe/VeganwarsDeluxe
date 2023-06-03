@@ -1,6 +1,7 @@
+from core.TargetType import TargetType
 from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
-from core.Weapons.Fist import Fist
+from modern.Weapons.Fist import Fist
 
 
 class Chain(Weapon):
@@ -20,7 +21,8 @@ class Chain(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_weapon, 'Вьібить оружие', 'knock_weapon', type='enemy')
+            DecisiveAction(self.knock_weapon, 'Вьібить оружие',
+                           'knock_weapon', type=TargetType(ally=False, melee=False))
         ]
 
     def knock_weapon(self, source, target):

@@ -1,4 +1,4 @@
-from core.State import State
+from core.States.State import State
 from core.Action import DecisiveAction
 
 

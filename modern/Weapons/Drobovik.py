@@ -1,4 +1,4 @@
-from .Weapon import Weapon
+from core.Weapons.Weapon import Weapon
 
 
 class Drobovik(Weapon):

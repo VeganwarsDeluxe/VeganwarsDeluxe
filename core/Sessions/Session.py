@@ -81,7 +81,7 @@ class Session:
         self.trigger('pre-action')  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
         self.trigger('post-action')  # 3. Post-action stage
-        self.say(f'Results of turn {self.turn}:')
+        self.say(f'\nРезультаты хода {self.turn}:')
         self.trigger('pre-damages')
         self.calculate_damages()  # 4. Damages stage
         self.trigger('post-damages')  # 5. Post-damages stage

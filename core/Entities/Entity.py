@@ -1,8 +1,8 @@
-from core.Action import FreeAction, DecisiveAction, Action
+from core.Action import DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
 from core.Skills.Skill import Skill
 from core.Items.Item import Item
-
+from core.TargetType import TargetType
 
 class Entity:
     def __init__(self, session):
@@ -45,6 +45,23 @@ class Entity:
         if result:
             return result[0]
 
+    def get_targets(self, target_type: TargetType = TargetType()):
+        if target_type.me:
+            return [self]
+        targets = self.session.entities
+        if target_type.melee:
+            targets = list(filter(lambda t: t in self.nearby_entities, targets))
+        if target_type.all:
+            return targets
+        elif target_type.ally:
+            return list(filter(lambda t: self.is_ally(t), targets))
+        elif not target_type.ally:
+            return list(filter(lambda t: not self.is_ally(t), targets))
+        raise RuntimeError(f'{self.action.id} - wrong type')
+
+    def is_ally(self, target):
+        return target == self  # TODO: Normal ally system
+
     @property
     def targets(self):
         return self.nearby_entities if not self.weapon.ranged else \
@@ -53,20 +70,20 @@ class Entity:
     @property
     def default_actions(self):
         actions = [
-            DecisiveAction(self.skip, 'Пропустить', 'skip'),
-            DecisiveAction(self.reload, 'Перезарядка', 'reload'),
+            DecisiveAction(self.skip, 'Пропустить', 'skip', type=TargetType(me=True)),
+            DecisiveAction(self.reload, 'Перезарядка', 'reload', type=TargetType(me=True)),
         ]
         actions += self.weapon.actions
         for skill in self.skills:
             actions += skill.actions
         if not self.approached:
             actions += [
-                DecisiveAction(self.approach, 'Подойти', 'approach')
+                DecisiveAction(self.approach, 'Подойти', 'approach', type=TargetType(me=True))
             ]
         return actions
 
     def say(self, text):
-        self.session.say(f'[{self.name}] {text}')
+        self.session.say(f'💬|{self.name}: {text}')
 
     @property
     def approached(self):
@@ -89,14 +106,14 @@ class Entity:
         return (1 - ((1 - energy / 10) ** cubes)) * 100
 
     def skip(self, *args):
-        self.say("Skipping turn.")
+        self.session.say(f"⬇|{self.name} пропускает ход")
 
     def reload(self, *args):
         self.energy = self.max_energy
-        self.say("Reloaded.")
+        self.session.say(f"🕓|{self.name} перезаряжается. Энергия восстановлена до максимальной! ({self.max_energy})")
 
     def approach(self, *args):
         self.nearby_entities = [entity for entity in self.session.entities if entity != self]
         for entity in self.nearby_entities:
             entity.nearby_entities.append(self) if self not in entity.nearby_entities else None
-        self.say('Approaching!')
+        self.session.say(f'👣|{self.name} подходит к противнику вплотную.')

@@ -1,5 +1,6 @@
-from .Weapon import Weapon
+from core.Weapons.Weapon import Weapon
 from core.Action import FreeAction
+from core.TargetType import TargetType
 
 
 class Claws(Weapon):
@@ -17,7 +18,7 @@ class Claws(Weapon):
     @property
     def actions(self):
         return super().actions + [
-            FreeAction(self.switch_claws, 'Сменить статус когтей', 'switch_claws')
+            FreeAction(self.switch_claws, 'Сменить статус когтей', 'switch_claws', type=TargetType(me=True))
         ]
 
     def switch_claws(self, source, target):

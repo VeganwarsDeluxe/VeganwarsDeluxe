@@ -1,6 +1,5 @@
-from .Skill import Skill
+from core.Skills.Skill import Skill
 from core.Entities.Entity import Entity
-import random
 
 
 class Dvuzhil(Skill):

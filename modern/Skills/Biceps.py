@@ -1,4 +1,4 @@
-from .Skill import Skill
+from core.Skills.Skill import Skill
 from core.Entities.Entity import Entity
 import random
 
@@ -23,7 +23,7 @@ class Biceps(Skill):
             return
         if not damage:
             return
-        source.say(f'Бицепс отработал! Урон удвоен c {damage} до {damage*2}!')
+        source.session.say(f'❗️', n=False)
         damage *= 2
         source.action.data.update({'damage': damage})
 
