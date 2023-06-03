@@ -30,19 +30,23 @@ class Session:
             if 0 == entity.inbound_dmg and 0 == entity.outbound_dmg:
                 continue
             if entity.inbound_dmg >= entity.outbound_dmg:
-                entity.hp -= 1  # TODO: Implement Axe
-                print(f"{entity.hp * '♥️'}|{entity.name} damaged by 1 HP. {entity.hp} is left.")
+                hp_loss = (entity.inbound_dmg // 6) + 1
+                entity.cache.update({'hp_loss': hp_loss})
+                self.trigger('hp-loss')
+                hp_loss = entity.cache.get('hp_loss')
+                entity.hp -= hp_loss
+                print(f"{entity.hp * '♥️'}|{entity.name} damaged by {hp_loss} HP. {entity.hp} is left.")
 
     def stop(self):
         self.active = False
 
-    def trigger_skills(self, stage):
+    def trigger(self, stage):
         """
-        stages: post-death, pre-action, post-action, post-damages, post-tick, pre-move, attack
+        stages: post-death, pre-action, post-action, post-damages, pre-damages, post-tick, pre-move, attack, hp-loss
         """
         self.stage = stage
         for entity in self.entities:
-            for skill in filter(lambda s: s.stage == stage, entity.skills):
+            for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
                 skill(entity)
 
     def death(self):
@@ -61,14 +65,15 @@ class Session:
             entity.action(entity, entity.target)
 
     def move(self):                                                                           # 0. Pre-move stage
-        self.trigger_skills('pre-action')                                                     # 1. Pre-action stage
+        self.trigger('pre-action')                                                     # 1. Pre-action stage
         self.call_actions()                                                                   # 2. Action stage
-        self.trigger_skills('post-action')                                                    # 3. Post-action stage
+        self.trigger('post-action')                                                    # 3. Post-action stage
         print(f'Results of turn {self.turn}:')
+        self.trigger('pre-damages')
         self.calculate_damages()                                                              # 4. Damages stage
-        self.trigger_skills('post-damages')                                                   # 5. Post-damages stage
+        self.trigger('post-damages')                                                   # 5. Post-damages stage
         self.tick()                                                                           # 6. Tick stage
-        self.trigger_skills('post-tick')                                                      # 7. Post-tick stage
+        self.trigger('post-tick')                                                      # 7. Post-tick stage
         self.death()                                                                          # 8. Death stage
-        self.trigger_skills('post-death')                                                     # 9. Post-death stage
+        self.trigger('post-death')                                                     # 9. Post-death stage
         self.finish()                                                                         # 10. Finish stage

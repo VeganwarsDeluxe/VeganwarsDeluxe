@@ -39,7 +39,7 @@ class Weapon(object):
         damage = self.calculate_damage(source, target)
         source.energy -= self.energycost
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.trigger_skills('attack')                                   # 7.1 Attack stage
+        source.session.trigger('attack')                                   # 7.1 Attack stage
         damage = source.action.data.get('damage')
         target.inbound_dmg += damage
         source.outbound_dmg += damage

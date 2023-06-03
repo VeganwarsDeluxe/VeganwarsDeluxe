@@ -24,9 +24,15 @@ class Entity:
         # Temporary
         self.inbound_dmg: int = 0
         self.outbound_dmg: int = 0
+        self.cache = {}
 
         self.action: Action = self.actions[0]
         self.target: Entity = self
+
+    def get_skill(self, id: str):
+        result = list(filter(lambda s: s.id == id, self.skills))
+        if result:
+            return result[0]
 
     @property
     def targets(self):
@@ -58,6 +64,7 @@ class Entity:
     def tick_turn(self):
         self.outbound_dmg = 0
         self.inbound_dmg = 0
+        self.cache = {}
 
     @property
     def hit_chance(self, *args):
