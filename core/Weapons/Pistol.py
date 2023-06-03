@@ -2,8 +2,8 @@ from .Weapon import Weapon
 
 
 class Pistol(Weapon):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, owner):
+        super().__init__(owner)
         self.id = 1
         self.name = 'Пистолет'
         self.ranged = True

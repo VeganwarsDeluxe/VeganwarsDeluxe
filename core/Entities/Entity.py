@@ -16,7 +16,7 @@ class Entity:
         self.energy: int = 0
         self.max_energy: int = 0
 
-        self.weapon: Weapon = Weapon()
+        self.weapon: Weapon = Weapon(self)
         self.skills: list[Skill] = []
 
         self.nearby_entities: list[Entity] = []
@@ -26,8 +26,16 @@ class Entity:
         self.outbound_dmg: int = 0
         self.cache = {}
 
-        self.action: Action = self.actions[0]
+        self.pre_move()
+        self.actions: list[Action] = []
+
+        self.action: Action = self.default_actions[0]
         self.target: Entity = self
+
+    def get_action(self, id: str):
+        result = list(filter(lambda a: a.id == id, self.actions))
+        if result:
+            return result[0]
 
     def get_skill(self, id: str):
         result = list(filter(lambda s: s.id == id, self.skills))
@@ -40,7 +48,7 @@ class Entity:
             [entity for entity in self.session.entities if entity != self]
 
     @property
-    def actions(self):
+    def default_actions(self):
         actions = [
             DecisiveAction(self.skip, 'Пропустить', 'skip'),
             DecisiveAction(self.reload, 'Перезарядка', 'reload'),
@@ -61,10 +69,14 @@ class Entity:
     def approached(self):
         return self.nearby_entities == [entity for entity in self.session.entities if entity != self]
 
-    def tick_turn(self):
+    def pre_move(self):
         self.outbound_dmg = 0
         self.inbound_dmg = 0
         self.cache = {}
+        self.actions = self.default_actions
+
+    def tick_turn(self):
+        pass
 
     @property
     def hit_chance(self, *args):

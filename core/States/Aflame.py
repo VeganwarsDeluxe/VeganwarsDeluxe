@@ -4,7 +4,7 @@ from core.State import State
 class Aflame(State):
     def __init__(self):
         super().__init__(id='aflame', name='Огонь', constant=True)
-        self.flame = 1
+        self.flame = 0
         self.extinguished = False
 
     def __call__(self, source):

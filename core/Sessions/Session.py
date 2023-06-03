@@ -3,7 +3,7 @@ from core.Entities.Entity import Entity
 
 class Session:
     def __init__(self):
-        self.turn = 0
+        self.turn = 1
         self.started = False
         self.active = True
         self.stage = 'pre-start'
@@ -24,6 +24,10 @@ class Session:
         for entity in self.entities:
             entity.tick_turn()
         self.turn += 1
+
+    def pre_move(self):
+        for entity in self.entities:
+            entity.pre_move()
 
     def calculate_damages(self):
         for entity in self.entities:

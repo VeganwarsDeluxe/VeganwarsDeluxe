@@ -3,8 +3,9 @@ from core.Action import DecisiveAction
 
 
 class Weapon(object):
-    def __init__(self):
+    def __init__(self, owner):
         self.id = None
+        self.owner = owner
         self.energycost = 2
         self.cubes = 2
         self.dmgbonus = 0

@@ -17,11 +17,11 @@ class Dummy(Entity):
         self.energy = 5
         self.max_energy = 5
 
-        self.weapon = Fist()
+        self.weapon = Fist(self)
 
     @property
-    def actions(self):
-        actions = super().actions
+    def default_actions(self):
+        actions = super().default_actions
         if self.dodge_cooldown == 0:
             actions += [
                 DecisiveAction(self.dodge, 'Перекат', 'dodge')

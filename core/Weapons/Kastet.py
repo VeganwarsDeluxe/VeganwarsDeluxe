@@ -4,7 +4,7 @@ from .Weapon import Weapon
 
 class Kastet(Weapon):
     def __init__(self):
-        super().__init__()
+        super().__init__(owner)
         self.id = 14
         self.name = 'Кастет'
         self.cubes = 3

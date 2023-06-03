@@ -2,8 +2,8 @@ from .Weapon import Weapon
 
 
 class Drobovik(Weapon):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, owner):
+        super().__init__(owner)
         self.id = 5
         self.name = 'Дробовик'
         self.energycost = 4

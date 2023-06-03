@@ -3,8 +3,8 @@ from core.Action import FreeAction
 
 
 class Claws(Weapon):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, owner):
+        super().__init__(owner)
         self.id = 26
         self.name = 'Стальные когти'
         self.cubes = 3

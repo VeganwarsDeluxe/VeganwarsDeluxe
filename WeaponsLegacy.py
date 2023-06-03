@@ -1,21 +1,3 @@
-class Baseball(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 2
-        self.name = 'Бита'
-        self.accuracybonus = 2
-        self.cubes = 3
-
-
-class Knife(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 3
-        self.name = 'Нож'
-        self.accuracybonus = 2
-        self.cubes = 3
-
-
 class Torch(Weapon):
     def __init__(self):
         super().__init__()
@@ -23,17 +5,6 @@ class Torch(Weapon):
         self.name = 'Факел'
         self.accuracybonus = 2
         self.cubes = 3
-
-
-class Flamethrower(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 8
-        self.name = 'Огнемет'
-        self.ranged = True
-        self.energycost = 4
-        self.cubes = 2
-        self.accuracybonus = 2
 
 
 class PenisDubina(Weapon):
@@ -59,15 +30,7 @@ class Rifle(Weapon):
         self.dmgbonus = 7
 
 
-class Axe(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 12
-        self.name = 'Топор'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
+
 
 
 class Bulava(Weapon):
@@ -87,17 +50,6 @@ class Kuvalda(Weapon):
         super().__init__()
         self.id = 15
         self.name = 'Кувалда'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
-
-
-class Chain(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 16
-        self.name = 'Цепь'
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
@@ -219,16 +171,6 @@ class Electro(Weapon):
         self.ranged = True
 
 
-class Saw(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 28
-        self.name = 'Пиломет'
-        self.cubes = 2
-        self.accuracybonus = 3
-        self.energycost = 3
-        self.dmgbonus = 0
-        self.ranged = True
 
 
 class Police(Weapon):
@@ -411,16 +353,6 @@ class VirusHit(Weapon):
         self.ranged = True
         self.dmgbonus = 1
 
-
-class Shest(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 45
-        self.name = 'Шест'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
 
 
 class WeakSkeleSword(Weapon):

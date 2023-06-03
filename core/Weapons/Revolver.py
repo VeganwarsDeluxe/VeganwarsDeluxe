@@ -3,8 +3,8 @@ from .Weapon import Weapon
 
 
 class Revolver(Weapon):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, owner):
+        super().__init__(owner)
         self.id = 6
         self.name = 'Револьвер'
         self.ranged = True
