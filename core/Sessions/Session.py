@@ -1,6 +1,7 @@
 from core.Entities.Entity import Entity
 
 
+# TODO: Text system
 class Session:
     def __init__(self):
         self.turn = 1
@@ -65,19 +66,24 @@ class Session:
             return
 
     def call_actions(self):
-        for entity in sorted(self.entities, key=lambda e: e.action.priority):
-            entity.action(entity, entity.target)
+        all_actions = []
+        for entity in self.alive_entities:
+            for item in entity.using_items:
+                all_actions.append(item)
+            all_actions.append(entity.action)
+        for action in sorted(all_actions, key=lambda e: e.priority):
+            action()
 
-    def move(self):                                                                           # 0. Pre-move stage
-        self.trigger('pre-action')                                                     # 1. Pre-action stage
-        self.call_actions()                                                                   # 2. Action stage
-        self.trigger('post-action')                                                    # 3. Post-action stage
+    def move(self):  # 0. Pre-move stage
+        self.trigger('pre-action')  # 1. Pre-action stage
+        self.call_actions()  # 2. Action stage
+        self.trigger('post-action')  # 3. Post-action stage
         print(f'Results of turn {self.turn}:')
         self.trigger('pre-damages')
-        self.calculate_damages()                                                              # 4. Damages stage
-        self.trigger('post-damages')                                                   # 5. Post-damages stage
-        self.tick()                                                                           # 6. Tick stage
-        self.trigger('post-tick')                                                      # 7. Post-tick stage
-        self.death()                                                                          # 8. Death stage
-        self.trigger('post-death')                                                     # 9. Post-death stage
-        self.finish()                                                                         # 10. Finish stage
+        self.calculate_damages()  # 4. Damages stage
+        self.trigger('post-damages')  # 5. Post-damages stage
+        self.tick()  # 6. Tick stage
+        self.trigger('post-tick')  # 7. Post-tick stage
+        self.death()  # 8. Death stage
+        self.trigger('post-death')  # 9. Post-death stage
+        self.finish()  # 10. Finish stage

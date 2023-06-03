@@ -1,6 +1,7 @@
 from core.Action import FreeAction, DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
 from core.Skills.Skill import Skill
+from core.Items.Item import Item
 
 
 class Entity:
@@ -18,6 +19,7 @@ class Entity:
 
         self.weapon: Weapon = Weapon(self)
         self.skills: list[Skill] = []
+        self.items: list[Item] = []
 
         self.nearby_entities: list[Entity] = []
 
@@ -28,6 +30,7 @@ class Entity:
 
         self.pre_move()
         self.actions: list[Action] = []
+        self.using_items: list[Item] = []
 
         self.action: Action = self.default_actions[0]
         self.target: Entity = self
@@ -74,6 +77,7 @@ class Entity:
         self.inbound_dmg = 0
         self.cache = {}
         self.actions = self.default_actions
+        self.using_items = []
 
     def tick_turn(self):
         pass
