@@ -1,5 +1,6 @@
 from core.Action import FreeAction, DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
+from core.Skills.Skill import Skill
 
 
 class Entity:
@@ -10,11 +11,13 @@ class Entity:
 
         self.hp: int = 0
         self.max_hp: int = 0
+        self.dead = False
 
         self.energy: int = 0
         self.max_energy: int = 0
 
         self.weapon: Weapon = Weapon()
+        self.skills: list[Skill] = []
 
         self.nearby_entities: list[Entity] = []
 
@@ -37,6 +40,8 @@ class Entity:
             DecisiveAction(self.reload, 'Перезарядка', 'reload'),
         ]
         actions += self.weapon.actions
+        for skill in self.skills:
+            actions += skill.actions
         if not self.approached:
             actions += [
                 DecisiveAction(self.approach, 'Подойти', 'approach')

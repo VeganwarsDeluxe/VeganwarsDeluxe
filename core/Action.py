@@ -5,6 +5,7 @@ class Action:
         self.name = name
         self.id = id
         self.func = func
+        self.data = dict()
 
     def __call__(self, source, target):  # Abstract "Run" method for overriding
         return self.func(source, target)
@@ -18,3 +19,4 @@ class DecisiveAction(Action):
 class FreeAction(Action):
     def __init__(self, func, name='Action', id='action'):
         super().__init__(func, decisive=False, name=name, id=id)
+

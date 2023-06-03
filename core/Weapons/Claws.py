@@ -14,9 +14,11 @@ class Claws(Weapon):
 
         self.claws = False
 
-        self.actions.append(
+    @property
+    def actions(self):
+        return super().actions + [
             FreeAction(self.switch_claws, 'Сменить статус когтей', 'switch_claws')
-        )
+        ]
 
     def switch_claws(self, source, target):
         if not self.claws:

@@ -14,7 +14,7 @@ class Kastet(Weapon):
 
     def attack(self, source, target):
         damage = super().attack(source, target)
-        if target.current_action == 'reloading':
+        if target.action.id == 'reloading':
             target.say('I lose 4 energies from kastet attack!')
             target.energy -= 4
         return damage

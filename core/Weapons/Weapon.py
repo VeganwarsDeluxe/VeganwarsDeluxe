@@ -12,9 +12,9 @@ class Weapon(object):
         self.ranged = False
         self.accuracybonus = 0
 
-        self.actions = [
-            DecisiveAction(self.attack, 'Атака', 'attack')
-        ]
+    @property
+    def actions(self):
+        return [DecisiveAction(self.attack, 'Атака', 'attack')]
 
     def calculate_damage(self, source, target):
         """
@@ -38,6 +38,9 @@ class Weapon(object):
         """
         damage = self.calculate_damage(source, target)
         source.energy -= self.energycost
+        source.action.data.update({'damage': damage, 'source': source, 'target': target})
+        source.session.trigger_skills('attack')                                   # 7.1 Attack stage
+        damage = source.action.data.get('damage')
         target.inbound_dmg += damage
         source.outbound_dmg += damage
         if damage:
