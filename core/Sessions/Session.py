@@ -62,6 +62,8 @@ class Session:
             if entity.hp <= 0:
                 self.say(f'☠️|{entity.name} теряет сознание.')
                 entity.dead = True
+                for alive_entity in self.entities:
+                    alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
     def finish(self):
         if len(list(self.alive_entities)) <= 1:  # TODO: Normal stopping mechanism

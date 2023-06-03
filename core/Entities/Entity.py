@@ -4,6 +4,7 @@ from core.Skills.Skill import Skill
 from core.Items.Item import Item
 from core.TargetType import TargetType
 
+
 class Entity:
     def __init__(self, session):
         self.session = session
@@ -50,7 +51,8 @@ class Entity:
     def get_targets(self, target_type: TargetType = TargetType()):
         if target_type.me:
             return [self]
-        targets = self.session.entities
+        # TODO: Fix in necromancy
+        targets = filter(lambda t: t != self, self.session.alive_entities)
         if target_type.melee:
             targets = list(filter(lambda t: t in self.nearby_entities, targets))
         if target_type.all:
@@ -110,7 +112,7 @@ class Entity:
         return int(max((1 - ((1 - energy / 10) ** cubes)) * 100, 0))
 
     def skip(self, *args):
-        self.session.say(f"⬇|{self.name} пропускает ход")
+        self.session.say(f"⬇|{self.name} пропускает ход.")
 
     def reload(self, *args):
         self.energy = self.max_energy
