@@ -1,5 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
+from core.TargetType import TargetType
 
 
 class Stun(State):
@@ -14,7 +15,7 @@ class Stun(State):
             source.actions = self.actions
         if source.session.stage == 'post-damages':
             if self.stun == 1:
-                source.say('Я пришел в себя!')
+                source.session.say(f'🌀|{source.name} приходит в себя.')
             self.stun -= 1
 
     @property
@@ -29,7 +30,7 @@ class Stun(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.lay_stun, name='Лежать в стане', id='lay_stun')
+            DecisiveAction(self.lay_stun, name='Лежать в стане', id='lay_stun', type=TargetType(me=True))
         ]
 
 

@@ -21,16 +21,19 @@ class Chain(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_weapon, 'Вьібить оружие',
-                           'knock_weapon', type=TargetType(ally=False, melee=False))
+            DecisiveAction(self.knock_weapon, 'Выбить оружие',
+                           'knock_weapon', type=TargetType(ally=False, melee=True))
         ]
 
     def knock_weapon(self, source, target):
         self.cooldown_turn = source.session.turn + 3
+        self.attack(source, target)
         if target.action.id != 'reload':
-            source.say(f'Я попьітался вьібить оружие {target.name}, но у меня не получилось!')
+            source.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
         else:
-            source.say(f'Я вьібил оружие {target.name}!')
+            source.session.say(f'⛓|{source.name} выбил оружие из рук {target.name}!')
+            state = target.get_skill('knocked-weapon')
+            state.weapon = target.weapon
             target.weapon = Fist(target)
 
 

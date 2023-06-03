@@ -1,5 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
+from core.TargetType import TargetType
 
 
 class KnockedWeapon(State):
@@ -16,7 +17,7 @@ class KnockedWeapon(State):
 
     def pick_up(self, source, target):
         source.weapon = self.weapon
-        source.say(f'Я поднял с пола {self.weapon.name}!')
+        source.session.say(f'🤚{source.name} подбирает потерянное оружие.')
         self.weapon = None
 
     @property
@@ -24,7 +25,7 @@ class KnockedWeapon(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.pick_up, name='Подобрать оружие', id='pick_up')
+            DecisiveAction(self.pick_up, name='Подобрать оружие', id='pick_up', type=TargetType(me=True))
         ]
 
 

@@ -1,3 +1,4 @@
+from core.TargetType import TargetType
 from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
 
@@ -19,9 +20,14 @@ class Shest(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_down, 'Сбить с ног', 'knock_down', type='enemy')
+            DecisiveAction(self.knock_down, 'Сбить с ног', 'knock_down', type=TargetType(ally=False))
         ]
 
     def knock_down(self, source, target):
         self.cooldown_turn = source.session.turn + 3
-        source.say(f'Я сбил {target.name} с ног!')
+        if target.action.id == 'dodge':
+            source.session.say(f'🚷💨|{source.name} не удалось сбить {target.name} с ног!')
+            return
+        source.session.say(f'🚷|{source.name} сбивает {target.name} с ног! {target.name} теряет равновесие и падает!')
+        state = target.get_skill('knockdown')
+        state.active = True

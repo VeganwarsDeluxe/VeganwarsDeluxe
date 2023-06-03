@@ -15,13 +15,13 @@ class Aflame(State):
         if self.extinguished:
             self.flame = 0
             self.extinguished = False
-            source.say('Огонь на мне потух!')
+            source.session.say(f'🔥|Огонь на {source.name} потух!')
             return
         damage = self.flame
-        source.say(f'Я горю. Получаю {damage} урона.')
+        source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
         source.inbound_dmg += damage
         if self.flame > 1:
-            source.say(f'От огня я теряю {self.flame-1} єнергии!')
+            source.session.say(f'🔥|{source.name} горит. Теряет {self.flame-1} энергии.')
             source.energy -= self.flame-1
         if self.flame == 1:
             self.extinguished = True

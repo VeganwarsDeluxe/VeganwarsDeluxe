@@ -43,7 +43,7 @@ class Session:
                 self.trigger('hp-loss')
                 hp_loss = entity.cache.get('hp_loss')
                 entity.hp -= hp_loss
-                self.say(f"{entity.hp * '♥️'}|{entity.name} damaged by {hp_loss} HP. {entity.hp} is left.")
+                self.say(f"{entity.hp * '♥️'}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
 
     def stop(self):
         self.active = False
@@ -60,7 +60,7 @@ class Session:
     def death(self):
         for entity in self.alive_entities:
             if entity.hp <= 0:
-                self.say(f'{entity.name} погибает!')
+                self.say(f'☠️|{entity.name} теряет сознание.')
                 entity.dead = True
 
     def finish(self):

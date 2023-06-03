@@ -20,7 +20,7 @@ class Injury(State):
             return
         if damage == 0:
             return
-        source.say(f'От ранения урон увеличен c {damage} до {damage + self.injury}!')
+        # source.say(f'От ранения урон увеличен c {damage} до {damage + self.injury}!')
         entity.action.data.update({'damage': damage + self.injury})
 
 

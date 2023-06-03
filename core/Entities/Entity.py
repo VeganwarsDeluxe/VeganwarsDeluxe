@@ -23,6 +23,8 @@ class Entity:
 
         self.nearby_entities: list[Entity] = []
 
+        self.team = None
+
         # Temporary
         self.inbound_dmg: int = 0
         self.outbound_dmg: int = 0
@@ -60,7 +62,9 @@ class Entity:
         raise RuntimeError(f'{self.action.id} - wrong type')
 
     def is_ally(self, target):
-        return target == self  # TODO: Normal ally system
+        if target.team is None or self.team is None:
+            return False
+        return target.team == self.team
 
     @property
     def targets(self):
@@ -103,7 +107,7 @@ class Entity:
     def hit_chance(self, *args):
         energy = self.energy + self.weapon.accuracybonus if self.energy else 0
         cubes = self.weapon.cubes
-        return (1 - ((1 - energy / 10) ** cubes)) * 100
+        return int(max((1 - ((1 - energy / 10) ** cubes)) * 100, 0))
 
     def skip(self, *args):
         self.session.say(f"⬇|{self.name} пропускает ход")

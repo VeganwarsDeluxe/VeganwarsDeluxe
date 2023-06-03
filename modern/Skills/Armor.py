@@ -22,5 +22,5 @@ class Armor(Skill):
         entity.action.data.update({'armored': True})
         if damage == 0:
             return
-        source.say(f'Броня отработала! Урон уменьшен c {damage} до {damage - 1}!')
+        source.session.say(f'🛡|Броня {source.name} сняла {1} урона.')
         entity.action.data.update({'damage': damage - 1})

@@ -12,16 +12,13 @@ class Thief(Skill):
 
     def steal(self, source, target):
         success = False
-        for entity in source.session.alive_entities:
-            if entity == source:
-                continue
-            for item in entity.using_items.copy():
-                source.say(f'{entity.name} хотел использовать {item.name}, но я его украл!')
-                success = True
-                source.items.append(item)
-                item.canceled = True
+        for item in target.using_items.copy():
+            source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+            success = True
+            source.items.append(item)
+            item.canceled = True
         if not success:
-            source.say('У меня не получилось ничего украсть!')
+            source.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
 
     @property
     def actions(self):

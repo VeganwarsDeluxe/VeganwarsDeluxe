@@ -1,5 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
+from core.TargetType import TargetType
 
 
 class Knockdown(State):
@@ -16,14 +17,14 @@ class Knockdown(State):
 
     def stand_up(self, source, target):
         self.active = False
-        source.say('Я поднялся с земли!')
+        source.session.say(f'⬆️|{source.name} поднимается с земли.')
 
     @property
     def actions(self):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.stand_up, name='Поднятся с земли', id='stand_up')
+            DecisiveAction(self.stand_up, name='Поднятся с земли', id='stand_up', type=TargetType(me=True))
         ]
 
 
