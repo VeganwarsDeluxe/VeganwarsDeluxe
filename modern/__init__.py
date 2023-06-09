@@ -14,6 +14,9 @@ from modern.Weapons.Chain import Chain
 from modern.Weapons.Saw import Saw
 from modern.Weapons.BaseballBat import BaseballBat
 from modern.Weapons.Rifle import Rifle
+from modern.Weapons.Bulava import Bulava
+from modern.Weapons.Molot import Molot
+from modern.Weapons.Torch import Torch
 
 from modern.Skills.Biceps import Biceps
 from modern.Skills.Dvuzhil import Dvuzhil
@@ -33,6 +36,6 @@ from modern.Items.Stimulator import Stimulator
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun]
 all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief]
-all_weapons = [Claws, Drobovik, Obrez, Kastet, Tesak, Chain, BaseballBat, Rifle,
-               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw]
+all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
+               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot]
 all_items = [Stimulator]

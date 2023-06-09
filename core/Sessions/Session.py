@@ -11,8 +11,8 @@ class Session:
 
         self.entities: list[Entity] = []
 
-    def say(self, text):
-        print(text)
+    def say(self, text, n=True):
+        print(text, end=('\n' if n else ''))
 
     @property
     def alive_entities(self):
@@ -83,8 +83,9 @@ class Session:
         self.trigger('pre-action')  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
         self.trigger('post-action')  # 3. Post-action stage
-        self.say(f'\nРезультаты хода {self.turn}:')
+        self.say(f'\nЭффекты {self.turn}:')
         self.trigger('pre-damages')
+        self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
         self.trigger('post-damages')  # 5. Post-damages stage
         self.tick()  # 6. Tick stage

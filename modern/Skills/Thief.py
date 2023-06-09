@@ -1,6 +1,6 @@
 from core.Skills.Skill import Skill
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import TargetType, Enemies
 
 
 class Thief(Skill):
@@ -23,7 +23,7 @@ class Thief(Skill):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.steal, name='Украсть предмет', id='steal', priority=-1, type=TargetType(ally=False))
+            DecisiveAction(self.steal, name='Украсть предмет', id='steal', priority=-1, type=Enemies())
         ]
 
 

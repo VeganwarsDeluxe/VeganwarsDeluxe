@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
 import random
 
-from core.TargetType import TargetType
+from core.TargetType import TargetType, Enemies
 
 
 class Rifle(Weapon):
@@ -23,12 +23,12 @@ class Rifle(Weapon):
         main_target, level = self.main_target
         if main_target and level == 2:
             return super().actions
-        return [DecisiveAction(self.aim_rifle, 'Вьіцелить', 'aim_rifle', type=TargetType(ally=False))] + super().actions
+        return [DecisiveAction(self.aim_rifle, 'Вьіцелить', 'aim_rifle', type=Enemies())] + super().actions
 
     def aim_rifle(self, source, target):
         main_target, level = self.main_target
         self.main_target = target, min(2, level+1)
-        source.say('Я целюсь.')
+        source.session.say(f'🎯|{source.name} целится.')
     
     def calculate_damage(self, source, target):
         main_target, level = self.main_target

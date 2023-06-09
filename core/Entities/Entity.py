@@ -2,7 +2,7 @@ from core.Action import DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
 from core.Skills.Skill import Skill
 from core.Items.Item import Item
-from core.TargetType import TargetType
+from core.TargetType import TargetType, OwnOnly
 
 
 class Entity:
@@ -43,25 +43,40 @@ class Entity:
         if result:
             return result[0]
 
+    def remove_action(self, id: str):
+        action = self.get_action(id)
+        if not action:
+            return
+        self.actions.remove(action)
+
     def get_skill(self, id: str):
         result = list(filter(lambda s: s.id == id, self.skills))
         if result:
             return result[0]
 
-    def get_targets(self, target_type: TargetType = TargetType()):
-        if target_type.me:
+    def get_targets(self, target_type: TargetType):
+        target_pool = self.session.entities
+        if target_type.own == 1:    # Self only
             return [self]
-        # TODO: Fix in necromancy
-        targets = filter(lambda t: t != self, self.session.alive_entities)
-        if target_type.melee:
-            targets = list(filter(lambda t: t in self.nearby_entities, targets))
-        if target_type.all:
-            return targets
-        elif target_type.ally:
-            return list(filter(lambda t: self.is_ally(t), targets))
-        elif not target_type.ally:
-            return list(filter(lambda t: not self.is_ally(t), targets))
-        raise RuntimeError(f'{self.action.id} - wrong type')
+        elif target_type.own == 2:  # Exclude self
+            target_pool = list(filter(lambda t: t != self, target_pool))
+
+        if target_type.aliveness == 1:   # Exclude dead
+            target_pool = list(filter(lambda t: not t.dead, target_pool))
+        elif target_type.aliveness == 2: # Exclude alive
+            target_pool = list(filter(lambda t: t.dead, target_pool))
+
+        if target_type.team == 1:  # Exclude enemies
+            target_pool = list(filter(lambda t: self.is_ally(t), target_pool))
+        elif target_type.team == 2:  # Exclude allies
+            target_pool = list(filter(lambda t: not self.is_ally(t), target_pool))
+
+        if target_type.distance == 1:   # Exclude distant
+            target_pool = list(filter(lambda t: t in self.nearby_entities, target_pool))
+        elif target_type.distance == 2:  # Exclude nearby
+            target_pool = list(filter(lambda t: t not in self.nearby_entities, target_pool))
+
+        return target_pool
 
     def is_ally(self, target):
         if target.team is None or self.team is None:
@@ -76,15 +91,15 @@ class Entity:
     @property
     def default_actions(self):
         actions = [
-            DecisiveAction(self.skip, 'Пропустить', 'skip', type=TargetType(me=True)),
-            DecisiveAction(self.reload, 'Перезарядка', 'reload', type=TargetType(me=True)),
+            DecisiveAction(self.skip, 'Пропустить', 'skip', type=OwnOnly()),
+            DecisiveAction(self.reload, 'Перезарядка', 'reload', type=OwnOnly()),
         ]
         actions += self.weapon.actions
         for skill in self.skills:
             actions += skill.actions
         if not self.approached:
             actions += [
-                DecisiveAction(self.approach, 'Подойти', 'approach', type=TargetType(me=True))
+                DecisiveAction(self.approach, 'Подойти', 'approach', type=OwnOnly())
             ]
         return actions
 
@@ -93,7 +108,7 @@ class Entity:
 
     @property
     def approached(self):
-        return self.nearby_entities == [entity for entity in self.session.entities if entity != self]
+        return self.nearby_entities == list(filter(lambda t: t != self, self.session.entities))
 
     def pre_move(self):
         self.outbound_dmg = 0
@@ -119,7 +134,7 @@ class Entity:
         self.session.say(f"🕓|{self.name} перезаряжается. Энергия восстановлена до максимальной! ({self.max_energy})")
 
     def approach(self, *args):
-        self.nearby_entities = [entity for entity in self.session.entities if entity != self]
+        self.nearby_entities = list(filter(lambda t: t != self, self.session.entities))
         for entity in self.nearby_entities:
             entity.nearby_entities.append(self) if self not in entity.nearby_entities else None
         self.session.say(f'👣|{self.name} подходит к противнику вплотную.')

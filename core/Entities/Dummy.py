@@ -1,7 +1,7 @@
 from .Entity import Entity
 from modern.Weapons.Fist import Fist
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import OwnOnly
 
 
 class Dummy(Entity):
@@ -25,7 +25,7 @@ class Dummy(Entity):
         actions = super().default_actions
         if self.dodge_cooldown == 0:
             actions += [
-                DecisiveAction(self.dodge, 'Перекат', 'dodge', type=TargetType(me=True))
+                DecisiveAction(self.dodge, 'Перекат', 'dodge', type=OwnOnly())
             ]
         return actions
 

@@ -1,42 +1,5 @@
-class Torch(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 7
-        self.name = 'Факел'
-        self.accuracybonus = 2
-        self.cubes = 3
-
-
-class PenisDubina(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 9
-        self.name = 'Пенис-дубина'
-        self.energycost = 5
-        self.cubes = 2
-        self.dmgbonus = 4
-        self.accuracybonus = 0
-
-
-
-
-
-
-
-
-class Bulava(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 13
-        self.name = 'Булава'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
-
-
-
 class Kuvalda(Weapon):
+
     def __init__(self):
         super().__init__()
         self.id = 15
@@ -138,18 +101,6 @@ class Bow(Weapon):
         self.ranged = True
 
 
-class Non(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 25
-        self.name = 'None'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
-
-
-
 class Electro(Weapon):
     def __init__(self):
         super().__init__()
@@ -160,8 +111,6 @@ class Electro(Weapon):
         self.energycost = 3
         self.dmgbonus = 0
         self.ranged = True
-
-
 
 
 class Police(Weapon):
@@ -277,16 +226,6 @@ class Shield(Weapon):
         self.energycost = 2
         self.dmgbonus = 0
 
-
-class Molot(Weapon):
-    def __init__(self):
-        super().__init__()
-        self.id = 39
-        self.name = 'Молот'
-        self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
 
 
 class Sword2(Weapon):

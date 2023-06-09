@@ -1,4 +1,4 @@
-from core.TargetType import TargetType
+from core.TargetType import TargetType, Enemies
 from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
 from modern.Weapons.Fist import Fist
@@ -22,7 +22,7 @@ class Chain(Weapon):
             return super().actions
         return super().actions + [
             DecisiveAction(self.knock_weapon, 'Выбить оружие',
-                           'knock_weapon', type=TargetType(ally=False, melee=True))
+                           'knock_weapon', type=Enemies(distance=1))
         ]
 
     def knock_weapon(self, source, target):

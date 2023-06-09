@@ -12,8 +12,8 @@ class Knockdown(State):
         if not self.active:
             return
         if source.session.stage == 'pre-move':
-            source.actions.remove(source.get_action('attack'))
-            source.actions.remove(source.get_action('dodge'))
+            source.remove_action('attack')
+            source.remove_action('dodge')
 
     def stand_up(self, source, target):
         self.active = False

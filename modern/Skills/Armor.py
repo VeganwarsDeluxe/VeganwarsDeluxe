@@ -5,10 +5,10 @@ import random
 
 class Armor(Skill):
     def __init__(self):
-        super().__init__(id='armor', name='Броня', stage='attack')
+        super().__init__(id='armor', name='Броня', stage='post-attack')
 
     def __call__(self, source: Entity):
-        if random.randint(0, 100) > 15:
+        if random.randint(0, 100) > 150:
             return
         damage = 0
         entity = source
@@ -22,5 +22,5 @@ class Armor(Skill):
         entity.action.data.update({'armored': True})
         if damage == 0:
             return
-        source.session.say(f'🛡|Броня {source.name} сняла {1} урона.')
+        source.session.say(f'🛡|Броня {source.name} снимает {1} урона.')
         entity.action.data.update({'damage': damage - 1})

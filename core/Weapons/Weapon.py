@@ -1,6 +1,6 @@
 import random
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import Enemies
 
 
 class Weapon(object):
@@ -16,7 +16,9 @@ class Weapon(object):
 
     @property
     def actions(self):
-        return [DecisiveAction(self.attack, 'Атака', 'attack', type=TargetType(ally=False, melee=not self.ranged))]
+        return [
+            DecisiveAction(self.attack, 'Атака', 'attack', type=Enemies(distance=not self.ranged))
+        ]
 
     def calculate_damage(self, source, target):
         """
@@ -40,13 +42,22 @@ class Weapon(object):
         """
         damage = self.calculate_damage(source, target)
         source.energy -= self.energycost
+
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.trigger('attack')                                   # 7.1 Attack stage
+        source.session.trigger('attack')                                   # 7.1 Pre-Attack stage
         damage = source.action.data.get('damage')
+
+        attack_text = 'стреляет' if self.ranged else 'бьет'
+        attack_emoji = '💥' if self.ranged else '👊'
+        if damage:
+            source.session.say(f'{attack_emoji}|{source.name} {attack_text} {target.name} используя {self.name}! Нанесено {damage} урона.')
+        else:
+            source.session.say(f'💨|{source.name} {attack_text} {target.name} используя {self.name}, но не попадает.')
+
+        source.action.data.update({'damage': damage, 'source': source, 'target': target})
+        source.session.trigger('post-attack')  # 7.1 Pre-Attack stage
+        damage = source.action.data.get('damage')
+
         target.inbound_dmg += damage
         source.outbound_dmg += damage
-        if damage:
-            source.session.say(f'👊|{source.name} бьет {target.name} используя {self.name}! Нанесено {damage} урона.')
-        else:
-            source.session.say(f'💨|{source.name} бьет {target.name} используя {self.name}, но не попадает.')
         return damage
