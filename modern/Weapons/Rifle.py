@@ -23,7 +23,7 @@ class Rifle(Weapon):
         main_target, level = self.main_target
         if main_target and level == 2:
             return super().actions
-        return [DecisiveAction(self.aim_rifle, 'Вьіцелить', 'aim_rifle', type=Enemies())] + super().actions
+        return [DecisiveAction(self.aim_rifle, target_type=Enemies(), name='Вьіцелить', id='aim_rifle')] + super().actions
 
     def aim_rifle(self, source, target):
         main_target, level = self.main_target

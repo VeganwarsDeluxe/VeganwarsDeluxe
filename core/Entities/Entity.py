@@ -92,15 +92,15 @@ class Entity:
     @property
     def default_actions(self):
         actions = [
-            DecisiveAction(self.skip, 'Пропустить', 'skip', type=OwnOnly()),
-            DecisiveAction(self.reload, 'Перезарядка', 'reload', type=OwnOnly()),
+            DecisiveAction(self.skip, target_type=OwnOnly(), name='Пропустить', id='skip'),
+            DecisiveAction(self.reload, target_type=OwnOnly(), name='Перезарядка', id='reload'),
         ]
         actions += self.weapon.actions
         for skill in self.skills:
             actions += skill.actions
         if not self.approached:
             actions += [
-                DecisiveAction(self.approach, 'Подойти', 'approach', type=OwnOnly())
+                DecisiveAction(self.approach, target_type=OwnOnly(), name='Подойти', id='approach')
             ]
         return actions
 

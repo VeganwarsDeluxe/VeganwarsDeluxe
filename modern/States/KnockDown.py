@@ -11,7 +11,7 @@ class Knockdown(State):
     def __call__(self, source):
         if not self.active:
             return
-        if source.session.stage == 'pre-move':
+        if source.session.current_stage == 'pre-move':
             source.remove_action('attack')
             source.remove_action('dodge')
 
@@ -24,7 +24,7 @@ class Knockdown(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.stand_up, name='Поднятся с земли', id='stand_up', type=OwnOnly())
+            DecisiveAction(self.stand_up, target_type=OwnOnly(), name='Поднятся с земли', id='stand_up')
         ]
 
 

@@ -11,9 +11,9 @@ class Stun(State):
     def __call__(self, source):
         if not self.active:
             return
-        if source.session.stage == 'pre-move':
+        if source.session.current_stage == 'pre-move':
             source.actions = self.actions
-        if source.session.stage == 'post-damages':
+        if source.session.current_stage == 'post-damages':
             if self.stun == 1:
                 source.session.say(f'🌀|{source.name} приходит в себя.')
             self.stun -= 1
@@ -30,7 +30,7 @@ class Stun(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.lay_stun, name='Лежать в стане', id='lay_stun', type=OwnOnly())
+            DecisiveAction(self.lay_stun, target_type=OwnOnly(), name='Лежать в стане', id='lay_stun')
         ]
 
 

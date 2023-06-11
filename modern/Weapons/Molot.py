@@ -23,7 +23,7 @@ class Molot(Weapon):
         if self.owner.session.turn < self.cooldown_turn or self.owner.energy < 4:
             return super().actions
         return [
-            DecisiveAction(self.true_strike, 'Точный удар', 'true_strike', type=Enemies(distance=1))
+            DecisiveAction(self.true_strike, target_type=Enemies(distance=1), name='Точный удар', id='true_strike')
         ] + super().actions
 
     def energy_bonus(self, source):

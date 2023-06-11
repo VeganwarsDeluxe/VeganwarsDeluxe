@@ -17,7 +17,7 @@ class Weapon(object):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.attack, 'Атака', 'attack', type=Enemies(distance=not self.ranged))
+            DecisiveAction(self.attack, target_type=Enemies(distance=not self.ranged), name='Атака', id='attack')
         ]
 
     def calculate_damage(self, source, target):
@@ -44,13 +44,13 @@ class Weapon(object):
         source.energy -= self.energycost
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.trigger('attack')                                   # 7.1 Pre-Attack stage
+        source.session.stage('attack')                                   # 7.1 Pre-Attack stage
         damage = source.action.data.get('damage')
 
         self.attack_text(source, target, damage)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.trigger('post-attack')  # 7.2 Post-Attack stage
+        source.session.stage('post-attack')  # 7.2 Post-Attack stage
         damage = source.action.data.get('damage')
 
         target.inbound_dmg.add(source, damage)

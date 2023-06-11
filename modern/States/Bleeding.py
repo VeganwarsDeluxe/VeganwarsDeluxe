@@ -8,7 +8,7 @@ class Bleeding(State):
         self.active = False
 
     def __call__(self, source):
-        if source.session.stage != 'pre-damages':
+        if source.session.current_stage != 'pre-damages':
             return
         if not self.active:
             return

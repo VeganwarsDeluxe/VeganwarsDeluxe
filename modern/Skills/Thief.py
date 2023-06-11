@@ -23,7 +23,7 @@ class Thief(Skill):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.steal, name='Украсть предмет', id='steal', priority=-1, type=Enemies())
+            DecisiveAction(self.steal, target_type=Enemies(), name='Украсть предмет', id='steal', priority=-1)
         ]
 
 

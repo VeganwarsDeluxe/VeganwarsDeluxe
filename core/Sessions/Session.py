@@ -1,13 +1,12 @@
 from core.Entities.Entity import Entity
 
 
-# TODO: Text system
 class Session:
     def __init__(self):
         self.turn = 1
         self.started = False
         self.active = True
-        self.stage = 'pre-start'
+        self.current_stage = 'pre-start'
 
         self.entities: list[Entity] = []
 
@@ -21,8 +20,12 @@ class Session:
                 yield entity
 
     @property
-    def enough_players(self):
-        return len(self.entities) > 2
+    def alive_teams(self):
+        teams = []
+        for entity in self.alive_entities:
+            if entity.team not in teams:
+                teams.append(entity.team)
+        return teams
 
     def tick(self):
         for entity in self.entities:
@@ -37,7 +40,7 @@ class Session:
         for entity in self.entities:
             entity.inbound_dmg.cancel(source)
 
-    def calculate_damages(self):
+    def calculate_damages(self):  # TODO: Revise just in case, I am worried
         for entity in self.entities:  # Cancelling round
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
@@ -50,7 +53,7 @@ class Session:
             hp_loss = (entity.inbound_dmg.sum() // 6) + 1
             entity.cache.update({'hp_loss': hp_loss})
 
-            self.trigger('hp-loss')
+            self.stage('hp-loss')
 
             hp_loss = entity.cache.get('hp_loss')
             entity.hp -= hp_loss
@@ -59,11 +62,11 @@ class Session:
     def stop(self):
         self.active = False
 
-    def trigger(self, stage):
+    def stage(self, stage):
         """
         stages: post-death, pre-action, post-action, post-damages, pre-damages, post-tick, pre-move, attack, hp-loss
         """
-        self.stage = stage
+        self.current_stage = stage
         for entity in self.entities:
             for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
                 skill(entity)
@@ -77,11 +80,18 @@ class Session:
                     alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
     def finish(self):
-        if len(list(self.alive_entities)) <= 1:  # TODO: Normal stopping mechanism
+        if not len(self.alive_teams):  # If everyone is dead
             self.stop()
             return
 
-    def call_actions(self):
+        if len(self.alive_teams) > 1:  # If there is more than 1 team alive (no-team is also a team)
+            return
+        if self.alive_teams[0] is None:  # If there is only no-team entities
+            if len(list(self.alive_entities)) > 1:  # If there is more than one player
+                return
+        self.stop()
+
+    def call_actions(self):  # TODO: Revise action calling
         all_actions = []
         for entity in self.alive_entities:
             for item in entity.using_items:
@@ -91,16 +101,16 @@ class Session:
             action()
 
     def move(self):  # 0. Pre-move stage
-        self.trigger('pre-action')  # 1. Pre-action stage
+        self.stage('pre-action')  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
-        self.trigger('post-action')  # 3. Post-action stage
+        self.stage('post-action')  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
-        self.trigger('pre-damages')
+        self.stage('pre-damages')
         self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
-        self.trigger('post-damages')  # 5. Post-damages stage
+        self.stage('post-damages')  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        self.trigger('post-tick')  # 7. Post-tick stage
+        self.stage('post-tick')  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        self.trigger('post-death')  # 9. Post-death stage
+        self.stage('post-death')  # 9. Post-death stage
         self.finish()  # 10. Finish stage

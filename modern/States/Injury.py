@@ -7,7 +7,7 @@ class Injury(State):
         self.injury = 0
 
     def __call__(self, source):
-        if source.session.stage != 'attack':
+        if source.session.current_stage != 'attack':
             return
         if not self.injury:
             return
