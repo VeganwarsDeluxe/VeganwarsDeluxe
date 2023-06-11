@@ -9,7 +9,7 @@ class DamageThreshold(State):
     def __call__(self, source):
         if source.session.stage != 'hp-loss':
             return
-        hp_loss = (source.inbound_dmg // self.threshold) + 1
+        hp_loss = (source.inbound_dmg.sum() // self.threshold) + 1
         source.cache.update({'hp_loss': hp_loss})
 
 

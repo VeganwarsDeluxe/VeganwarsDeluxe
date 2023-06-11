@@ -1,3 +1,6 @@
 telegram
 venv
 .idea
+telegram/viro
+tests
+WeaponsLegacy.py

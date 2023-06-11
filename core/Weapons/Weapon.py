@@ -47,17 +47,21 @@ class Weapon(object):
         source.session.trigger('attack')                                   # 7.1 Pre-Attack stage
         damage = source.action.data.get('damage')
 
+        self.attack_text(source, target, damage)
+
+        source.action.data.update({'damage': damage, 'source': source, 'target': target})
+        source.session.trigger('post-attack')  # 7.2 Post-Attack stage
+        damage = source.action.data.get('damage')
+
+        target.inbound_dmg.add(source, damage)
+        source.outbound_dmg.add(target, damage)
+        return damage
+
+    def attack_text(self, source, target, damage):
         attack_text = 'стреляет' if self.ranged else 'бьет'
         attack_emoji = '💥' if self.ranged else '👊'
         if damage:
-            source.session.say(f'{attack_emoji}|{source.name} {attack_text} {target.name} используя {self.name}! Нанесено {damage} урона.')
+            source.session.say(f'{attack_emoji}|{source.name} {attack_text} {target.name} используя {self.name}! '
+                               f'Нанесено {damage} урона.')
         else:
             source.session.say(f'💨|{source.name} {attack_text} {target.name} используя {self.name}, но не попадает.')
-
-        source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.trigger('post-attack')  # 7.1 Pre-Attack stage
-        damage = source.action.data.get('damage')
-
-        target.inbound_dmg += damage
-        source.outbound_dmg += damage
-        return damage

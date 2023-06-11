@@ -33,17 +33,28 @@ class Session:
         for entity in self.entities:
             entity.pre_move()
 
-    def calculate_damages(self):
+    def cancel_damages(self, source):
         for entity in self.entities:
-            if 0 == entity.inbound_dmg and 0 == entity.outbound_dmg:
+            entity.inbound_dmg.cancel(source)
+
+    def calculate_damages(self):
+        for entity in self.entities:  # Cancelling round
+            if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
+                entity.outbound_dmg.clear()
+                self.cancel_damages(entity)
+
+        for entity in self.entities:
+            if entity.inbound_dmg.sum() == 0:
                 continue
-            if entity.inbound_dmg >= entity.outbound_dmg:
-                hp_loss = (entity.inbound_dmg // 6) + 1
-                entity.cache.update({'hp_loss': hp_loss})
-                self.trigger('hp-loss')
-                hp_loss = entity.cache.get('hp_loss')
-                entity.hp -= hp_loss
-                self.say(f"{entity.hp * '♥️'}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
+            entity.inbound_dmg.cancel(entity)
+            hp_loss = (entity.inbound_dmg.sum() // 6) + 1
+            entity.cache.update({'hp_loss': hp_loss})
+
+            self.trigger('hp-loss')
+
+            hp_loss = entity.cache.get('hp_loss')
+            entity.hp -= hp_loss
+            self.say(f"{entity.hp * '♥️'}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
 
     def stop(self):
         self.active = False

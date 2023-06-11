@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
 import random
 
-from core.TargetType import TargetType
+from core.TargetType import TargetType, Enemies
 
 
 class Molot(Weapon):
@@ -23,18 +23,24 @@ class Molot(Weapon):
         if self.owner.session.turn < self.cooldown_turn or self.owner.energy < 4:
             return super().actions
         return [
-            DecisiveAction(self.true_strike, 'Точный удар', 'true_strike', type=TargetType(ally=False, melee=True))
+            DecisiveAction(self.true_strike, 'Точный удар', 'true_strike', type=Enemies(distance=1))
         ] + super().actions
 
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
+    def attack_text(self, source, target, damage):
+        if self.strike and damage:
+            source.session.say(f'🔨|{source.name} наносит точный удар по {target.name}! Нанесено {damage} урона.')
+        else:
+            super().attack_text(source, target, damage)
+
     def true_strike(self, source, target):
         self.cooldown_turn = source.session.turn + 6
         self.owner.energy -= 4
         self.strike = True
-        source.session.say(f'🔨|{source.name} наносит точный удар по {target.name}!')
-        return self.attack(source, target)
+        damage = self.attack(source, target)
+        self.strike = False
     
     def calculate_damage(self, source, target):
         if not self.strike:

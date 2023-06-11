@@ -19,7 +19,7 @@ class Aflame(State):
             return
         damage = self.flame
         source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
-        source.inbound_dmg += damage
+        source.inbound_dmg.add(None, damage)
         if self.flame > 1:
             source.session.say(f'🔥|{source.name} горит. Теряет {self.flame-1} энергии.')
             source.energy -= self.flame-1

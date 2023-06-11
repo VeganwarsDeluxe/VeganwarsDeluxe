@@ -1,6 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import TargetType, OwnOnly
 
 
 class Stun(State):
@@ -30,7 +30,7 @@ class Stun(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.lay_stun, name='Лежать в стане', id='lay_stun', type=TargetType(me=True))
+            DecisiveAction(self.lay_stun, name='Лежать в стане', id='lay_stun', type=OwnOnly())
         ]
 
 

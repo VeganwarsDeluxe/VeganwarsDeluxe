@@ -1,6 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import TargetType, OwnOnly
 
 
 class KnockedWeapon(State):
@@ -25,7 +25,7 @@ class KnockedWeapon(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.pick_up, name='Подобрать оружие', id='pick_up', type=TargetType(me=True))
+            DecisiveAction(self.pick_up, name='Подобрать оружие', id='pick_up', type=OwnOnly())
         ]
 
 

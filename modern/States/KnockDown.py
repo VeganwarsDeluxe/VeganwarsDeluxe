@@ -1,6 +1,6 @@
 from core.States.State import State
 from core.Action import DecisiveAction
-from core.TargetType import TargetType
+from core.TargetType import TargetType, OwnOnly
 
 
 class Knockdown(State):
@@ -24,7 +24,7 @@ class Knockdown(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.stand_up, name='Поднятся с земли', id='stand_up', type=TargetType(me=True))
+            DecisiveAction(self.stand_up, name='Поднятся с земли', id='stand_up', type=OwnOnly())
         ]
 
 

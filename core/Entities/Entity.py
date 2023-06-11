@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 from core.Skills.Skill import Skill
 from core.Items.Item import Item
 from core.TargetType import TargetType, OwnOnly
+from core.DamageHolder import DamageHolder
 
 
 class Entity:
@@ -27,8 +28,8 @@ class Entity:
         self.team = None
 
         # Temporary
-        self.inbound_dmg: int = 0
-        self.outbound_dmg: int = 0
+        self.inbound_dmg = DamageHolder()
+        self.outbound_dmg = DamageHolder()
         self.cache = {}
 
         self.pre_move()
@@ -111,8 +112,8 @@ class Entity:
         return self.nearby_entities == list(filter(lambda t: t != self, self.session.entities))
 
     def pre_move(self):
-        self.outbound_dmg = 0
-        self.inbound_dmg = 0
+        self.outbound_dmg.clear()
+        self.inbound_dmg.clear()
         self.cache = {}
         self.actions = self.default_actions
         self.using_items = []
