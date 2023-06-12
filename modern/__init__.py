@@ -33,9 +33,11 @@ from modern.States.Injury import Injury
 from modern.States.Stun import Stun
 
 from modern.Items.Stimulator import Stimulator
+from modern.Items.Grenade import Grenade
+from modern.Items.Molotov import Molotov
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun]
 all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot]
-all_items = [Stimulator]
+all_items = [Stimulator, Grenade, Molotov]

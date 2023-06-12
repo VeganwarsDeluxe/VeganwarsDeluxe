@@ -34,7 +34,9 @@ class Entity:
 
         self.pre_move()
         self.actions: list[Action] = []
-        self.using_items: list[Item] = []
+
+        self.action_queue: list[Action] = []
+        self.item_queue: list[Item] = []
 
         self.action: Action = self.default_actions[0]
         self.target: Entity = self
@@ -54,30 +56,6 @@ class Entity:
         result = list(filter(lambda s: s.id == id, self.skills))
         if result:
             return result[0]
-
-    def get_targets(self, target_type: TargetType):
-        target_pool = self.session.entities
-        if target_type.own == 1:    # Self only
-            return [self]
-        elif target_type.own == 2:  # Exclude self
-            target_pool = list(filter(lambda t: t != self, target_pool))
-
-        if target_type.aliveness == 1:   # Exclude dead
-            target_pool = list(filter(lambda t: not t.dead, target_pool))
-        elif target_type.aliveness == 2: # Exclude alive
-            target_pool = list(filter(lambda t: t.dead, target_pool))
-
-        if target_type.team == 1:  # Exclude enemies
-            target_pool = list(filter(lambda t: self.is_ally(t), target_pool))
-        elif target_type.team == 2:  # Exclude allies
-            target_pool = list(filter(lambda t: not self.is_ally(t), target_pool))
-
-        if target_type.distance == 1:   # Exclude distant
-            target_pool = list(filter(lambda t: t in self.nearby_entities, target_pool))
-        elif target_type.distance == 2:  # Exclude nearby
-            target_pool = list(filter(lambda t: t not in self.nearby_entities, target_pool))
-
-        return target_pool
 
     def is_ally(self, target):
         if target.team is None or self.team is None:
@@ -116,7 +94,7 @@ class Entity:
         self.inbound_dmg.clear()
         self.cache = {}
         self.actions = self.default_actions
-        self.using_items = []
+        self.item_queue = []
 
     def tick_turn(self):
         pass

@@ -94,8 +94,10 @@ class Session:
     def call_actions(self):  # TODO: Revise action calling
         all_actions = []
         for entity in self.alive_entities:
-            for item in entity.using_items:
+            for item in entity.item_queue:
                 all_actions.append(item)
+            for action in entity.action_queue:
+                all_actions.append(action)
             all_actions.append(entity.action)
         for action in sorted(all_actions, key=lambda e: e.priority):
             action()

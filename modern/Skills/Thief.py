@@ -12,7 +12,7 @@ class Thief(Skill):
 
     def steal(self, source, target):
         success = False
-        for item in target.using_items.copy():
+        for item in target.item_queue.copy():
             source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
             success = True
             source.items.append(item)
