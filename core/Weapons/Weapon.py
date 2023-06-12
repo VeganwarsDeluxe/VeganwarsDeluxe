@@ -17,7 +17,8 @@ class Weapon(object):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.attack, target_type=Enemies(distance=not self.ranged), name='Атака', id='attack')
+            DecisiveAction(self.attack, self.owner,
+                           target_type=Enemies(distance=not self.ranged), name='Атака', id='attack')
         ]
 
     def calculate_damage(self, source, target):

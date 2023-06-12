@@ -4,8 +4,8 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Stun(State):
-    def __init__(self):
-        super().__init__(id='stun', name='Оглушение', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='stun', name='Оглушение', constant=True)
         self.stun = 0
 
     def __call__(self, source):
@@ -30,7 +30,7 @@ class Stun(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.lay_stun, target_type=OwnOnly(), name='Лежать в стане', id='lay_stun')
+            DecisiveAction(self.lay_stun, self.source, target_type=OwnOnly(), name='Лежать в стане', id='lay_stun')
         ]
 
 

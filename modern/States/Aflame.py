@@ -2,8 +2,8 @@ from core.States.State import State
 
 
 class Aflame(State):  # TODO: Fix flame lol
-    def __init__(self):
-        super().__init__(id='aflame', name='Огонь', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='aflame', name='Огонь', constant=True)
         self.flame = 0
         self.extinguished = False
 

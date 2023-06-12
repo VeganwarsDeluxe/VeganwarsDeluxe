@@ -2,7 +2,7 @@ from core.TargetType import TargetType
 
 
 class Action:
-    def __init__(self, func, target_type, decisive=True, name='Action', id='action', priority=0):
+    def __init__(self, func, source, target_type, decisive=True, name='Action', id='action', priority=0):
         self.priority: int = priority  # TODO: Revise priorities of all actions
         self.decisive: bool = decisive
         self.name = name
@@ -12,7 +12,7 @@ class Action:
 
         self.target_type: TargetType = target_type
 
-        self.source = None
+        self.source = source
         self.target = None
 
         self.canceled = False
@@ -22,8 +22,6 @@ class Action:
 
     @property
     def targets(self):
-        if not self.source:
-            return
         return self.get_targets(self.source, self.target_type)
 
     def get_targets(self, source, target_type: TargetType):
@@ -56,8 +54,8 @@ class Action:
 
 
 class DecisiveAction(Action):
-    def __init__(self, func, target_type, name='Action', id='action', priority=0):
-        super().__init__(func, target_type=target_type, decisive=True, name=name, id=id, priority=priority)
+    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
+        super().__init__(func, source, target_type=target_type, decisive=True, name=name, id=id, priority=priority)
 
     @property
     def cost(self):
@@ -65,8 +63,8 @@ class DecisiveAction(Action):
 
 
 class FreeAction(Action):
-    def __init__(self, func, name='Action', id='action', priority=0, type=TargetType()):
-        super().__init__(func, target_type=type, decisive=False, name=name, id=id, priority=priority)
+    def __init__(self, func, source, name='Action', id='action', priority=0, type=TargetType()):
+        super().__init__(func, source, target_type=type, decisive=False, name=name, id=id, priority=priority)
 
     @property
     def cost(self):

@@ -5,8 +5,8 @@ from core.TargetType import Enemies
 
 
 class Molotov(DecisiveItem):
-    def __init__(self):
-        super().__init__(name='Коктейль Молотова', id='molotov')
+    def __init__(self, source):
+        super().__init__(source, name='Коктейль Молотова', id='molotov')
 
         self.range = 2
 

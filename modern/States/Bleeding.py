@@ -2,8 +2,8 @@ from core.States.State import State
 
 
 class Bleeding(State):
-    def __init__(self):
-        super().__init__(id='bleeding', name='Кровотечение', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='bleeding', name='Кровотечение', constant=True)
         self.bleeding = 3
         self.active = False
 

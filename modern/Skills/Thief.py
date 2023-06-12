@@ -4,8 +4,8 @@ from core.TargetType import TargetType, Enemies
 
 
 class Thief(Skill):
-    def __init__(self):
-        super().__init__(id='thief', name='Вор', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='thief', name='Вор', constant=True)
 
     def __call__(self, source):
         pass
@@ -23,7 +23,8 @@ class Thief(Skill):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.steal, target_type=Enemies(), name='Украсть предмет', id='steal', priority=-1)
+            DecisiveAction(self.steal, self.source, target_type=Enemies(),
+                           name='Украсть предмет', id='steal', priority=-1)
         ]
 
 

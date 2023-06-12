@@ -1,5 +1,6 @@
 class State:
-    def __init__(self, id=None, name='None', constant=False, stage='pre-action'):
+    def __init__(self, source, id=None, name='None', constant=False, stage='pre-action'):
+        self.source = source
         self.id = id
         self.name = name
         self.constant = constant

@@ -2,8 +2,8 @@ from core.Items.Item import DecisiveItem
 
 
 class Stimulator(DecisiveItem):
-    def __init__(self):
-        super().__init__(name='Стимулятор', id='stimulator')
+    def __init__(self, source):
+        super().__init__(source, name='Стимулятор', id='stimulator')
 
     def use(self):
         self.target.hp += 2

@@ -4,8 +4,8 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class KnockedWeapon(State):
-    def __init__(self):
-        super().__init__(id='knocked-weapon', name='Выбивание оружия', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='knocked-weapon', name='Выбивание оружия', constant=True)
         self.weapon = None
 
     def __call__(self, source):

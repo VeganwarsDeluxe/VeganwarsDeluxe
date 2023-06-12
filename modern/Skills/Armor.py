@@ -4,8 +4,8 @@ import random
 
 
 class Armor(Skill):
-    def __init__(self):
-        super().__init__(id='armor', name='Броня', stage='post-attack')
+    def __init__(self, source):
+        super().__init__(source, id='armor', name='Броня', stage='post-attack')
 
     def __call__(self, source: Entity):
         if random.randint(0, 100) > 150:

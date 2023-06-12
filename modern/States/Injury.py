@@ -2,8 +2,8 @@ from core.States.State import State
 
 
 class Injury(State):
-    def __init__(self):
-        super().__init__(id='injury', name='Ранение', constant=True)
+    def __init__(self, source):
+        super().__init__(source, id='injury', name='Ранение', constant=True)
         self.injury = 0
 
     def __call__(self, source):

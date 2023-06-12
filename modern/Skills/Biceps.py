@@ -4,8 +4,8 @@ import random
 
 
 class Biceps(Skill):
-    def __init__(self):
-        super().__init__(id='biceps', name='Бицепс', stage='attack')
+    def __init__(self, source):
+        super().__init__(source, id='biceps', name='Бицепс', stage='attack')
 
     @property
     def triggers(self):

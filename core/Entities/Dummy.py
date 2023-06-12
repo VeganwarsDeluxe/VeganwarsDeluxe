@@ -25,7 +25,7 @@ class Dummy(Entity):
         actions = super().default_actions
         if self.dodge_cooldown == 0:
             actions += [
-                DecisiveAction(self.dodge, target_type=OwnOnly(), name='Перекат', id='dodge')
+                DecisiveAction(self.dodge, self, target_type=OwnOnly(), name='Перекат', id='dodge')
             ]
         return actions
 

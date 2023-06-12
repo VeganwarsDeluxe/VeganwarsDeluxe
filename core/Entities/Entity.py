@@ -42,9 +42,11 @@ class Entity:
         self.target: Entity = self
 
     def get_action(self, id: str):
-        result = list(filter(lambda a: a.id == id, self.actions))
-        if result:
-            return result[0]
+        action = list(filter(lambda a: a.id == id, self.actions))
+        if action:
+            action = action[0]
+        action.source = self
+        return action
 
     def remove_action(self, id: str):
         action = self.get_action(id)
@@ -70,15 +72,15 @@ class Entity:
     @property
     def default_actions(self):
         actions = [
-            DecisiveAction(self.skip, target_type=OwnOnly(), name='Пропустить', id='skip'),
-            DecisiveAction(self.reload, target_type=OwnOnly(), name='Перезарядка', id='reload'),
+            DecisiveAction(self.skip, self, target_type=OwnOnly(), name='Пропустить', id='skip'),
+            DecisiveAction(self.reload, self, target_type=OwnOnly(), name='Перезарядка', id='reload'),
         ]
         actions += self.weapon.actions
         for skill in self.skills:
             actions += skill.actions
         if not self.approached:
             actions += [
-                DecisiveAction(self.approach, target_type=OwnOnly(), name='Подойти', id='approach')
+                DecisiveAction(self.approach, self, target_type=OwnOnly(), name='Подойти', id='approach')
             ]
         return actions
 
