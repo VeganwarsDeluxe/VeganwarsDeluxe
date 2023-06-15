@@ -24,7 +24,7 @@ class Knockdown(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.stand_up, target_type=OwnOnly(), name='Поднятся с земли', id='stand_up')
+            DecisiveAction(self.stand_up, self.source, target_type=OwnOnly(), name='Поднятся с земли', id='stand_up')
         ]
 
 

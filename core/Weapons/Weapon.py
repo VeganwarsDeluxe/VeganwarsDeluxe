@@ -26,7 +26,7 @@ class Weapon(object):
         Mostly universal formulas for weapon damage.
         """
         damage = 0
-        energy = source.energy + self.accuracybonus if source.energy else 0
+        energy = source.energy + self.accuracybonus if (source.energy > 0) else 0
         cubes = self.cubes - (target.action.id == 'dodge') * 5
         for _ in range(cubes):
             x = random.randint(1, 10)
@@ -42,7 +42,7 @@ class Weapon(object):
         Actually performs attack on target, dealing damage.
         """
         damage = self.calculate_damage(source, target)
-        source.energy -= self.energycost
+        source.energy = max(source.energy - self.energycost, 0)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
         source.session.stage('attack')                                   # 7.1 Pre-Attack stage

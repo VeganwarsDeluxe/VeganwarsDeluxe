@@ -18,7 +18,7 @@ class Claws(Weapon):
     @property
     def actions(self):
         return super().actions + [
-            FreeAction(self.switch_claws, 'Сменить статус когтей', 'switch_claws', type=OwnOnly())
+            FreeAction(self.switch_claws, self.owner, 'Сменить статус когтей', 'switch_claws', type=OwnOnly())
         ]
 
     def switch_claws(self, source, target):
@@ -32,4 +32,4 @@ class Claws(Weapon):
             self.dmgbonus = 0
             self.energycost = 2
         self.claws = not self.claws
-        source.say(f'I {"enable" if self.claws else "disable"} my claws!')
+        source.session.say(f'I {"enable" if self.claws else "disable"} my claws!')

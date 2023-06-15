@@ -25,7 +25,7 @@ class KnockedWeapon(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.pick_up, target_type=OwnOnly(), name='Подобрать оружие', id='pick_up')
+            DecisiveAction(self.pick_up, self.source, target_type=OwnOnly(), name='Подобрать оружие', id='pick_up')
         ]
 
 

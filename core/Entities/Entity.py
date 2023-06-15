@@ -7,10 +7,10 @@ from core.DamageHolder import DamageHolder
 
 
 class Entity:
-    def __init__(self, session):
+    def __init__(self, session, name=''):
         self.session = session
 
-        self.name: str = ''
+        self.name: str = name
 
         self.hp: int = 0
         self.max_hp: int = 0
@@ -45,8 +45,8 @@ class Entity:
         action = list(filter(lambda a: a.id == id, self.actions))
         if action:
             action = action[0]
-        action.source = self
-        return action
+            action.source = self
+            return action
 
     def remove_action(self, id: str):
         action = self.get_action(id)
@@ -103,6 +103,8 @@ class Entity:
 
     @property
     def hit_chance(self, *args):
+        if self.energy <= 0:
+            return 0
         energy = self.energy + self.weapon.accuracybonus if self.energy else 0
         cubes = self.weapon.cubes
         return int(max((1 - ((1 - energy / 10) ** cubes)) * 100, 0))
