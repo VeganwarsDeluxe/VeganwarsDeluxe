@@ -3,11 +3,10 @@ import random
 from mongoengine import connect
 
 import modern
-from bot import bot
+from deluxe.bot import bot
 from deluxe.game.Entities.Cow import Cow
-from deluxe.game.Entities.Dummy import Dummy
-from game.matchmaking.Matchmaker import Matchmaker
-from db.Rating import RatingManager
+from deluxe.game.matchmaking.Matchmaker import Matchmaker
+from deluxe.db.Rating import RatingManager
 from config import admin, mongourl
 
 from game.ContentManager import ContentManager
