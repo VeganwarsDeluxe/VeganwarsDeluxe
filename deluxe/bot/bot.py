@@ -1,8 +1,13 @@
+from mongoengine import connect
 from telebot import TeleBot
 from telebot.apihelper import ApiTelegramException
 import time
-from config import bot_token
+from config import bot_token, mongourl
 import traceback
+
+from deluxe.db import RatingManager
+from deluxe.game.ContentManager import ContentManager
+from deluxe.game.matchmaking.Matchmaker import Matchmaker
 
 
 class ExtendedBot(TeleBot):
@@ -17,3 +22,8 @@ class ExtendedBot(TeleBot):
 
 
 bot = TeleBot(bot_token)
+mm = Matchmaker(bot)
+rm = RatingManager()
+
+cm = ContentManager()
+connect(host=mongourl, db='viro')

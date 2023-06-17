@@ -26,6 +26,7 @@ class Dummy(TelegramEntity):
 
     def choose_act(self):
         self.action = DecisiveAction(self.silence, self, TargetType())
+        self.ready = True
 
     def silence(self, source, target):
         pass

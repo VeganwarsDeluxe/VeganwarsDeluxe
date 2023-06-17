@@ -40,6 +40,9 @@ class Matchmaker:
             else:
                 self.send_act_buttons(player, game)
 
+        if not game.unready_players:
+            self.cycle(game)
+
     def get_act_buttons(self, player, game):
         first_row = []
         second_row = []
@@ -268,6 +271,9 @@ class Matchmaker:
             if player.npc:
                 continue
             self.send_weapon_choice_buttons(player)
+        if not game.not_chosen_weapon:
+            self.bot.send_message(game.chat_id, f'Оружие выбрано.')
+            self.choose_skills(int(chat_id))
 
     def choose_skills(self, chat_id):
         game = self.games.get(chat_id)
@@ -275,6 +281,12 @@ class Matchmaker:
             if player.npc:
                 continue
             self.send_skill_choice_buttons(player)
+        if not game.not_chosen_skills:
+            tts = f'Способности выбраны, игра начинается! Выбор оружия:'
+            for player in game.alive_entities:
+                tts += f'\n{player.name}: {player.weapon.name}'
+            self.bot.send_message(game.chat_id, tts)
+            self.pre_move(game.chat_id)
 
     def send_weapon_choice_buttons(self, player, number=3):
         weapons, clss = [modern.Rifle(player), modern.Claws(player)], [modern.Rifle, modern.Claws]

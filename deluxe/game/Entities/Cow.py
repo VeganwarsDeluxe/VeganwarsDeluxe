@@ -13,7 +13,10 @@ class Cow(Dummy):
         self.max_hp = 1
         self.max_energy = 5
 
+        self.team = 'cows'
+
     def choose_act(self):
+        super().choose_act()
         self.action = random.choice([
             DecisiveAction(self.eat_grass, self, OwnOnly(), 'reload'),
             DecisiveAction(self.walk_away, self, OwnOnly(), 'walk_away'),

@@ -1,1 +1,1 @@
-from .bot import bot
+from .bot import bot, rm, cm, mm
