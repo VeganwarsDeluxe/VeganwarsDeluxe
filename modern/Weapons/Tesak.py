@@ -5,12 +5,15 @@ class Tesak(Weapon):
     def __init__(self, owner):
         super().__init__(owner)
         self.id = 61
-        self.name = "Тесак"
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
         self.ranged = False
+
+        self.name = "Тесак"
+        self.description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
+                           'по цели бонус уменьшается на 1.'
 
         self.tesak_bonus = 4
     

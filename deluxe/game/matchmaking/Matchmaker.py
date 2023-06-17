@@ -2,7 +2,7 @@ import random
 from telebot import types
 
 from .TelegramSession import TelegramSession
-from .TelegramEntity import TelegramEntity
+from deluxe.game.Entities.TelegramEntity import TelegramEntity
 import modern
 from core.Skills.Skill import Skill
 
@@ -14,6 +14,7 @@ class Matchmaker:
 
     def pre_move(self, chat_id):
         game = self.games.get(chat_id)
+        game.update_actions()
         game.pre_move(), game.stage('pre-move')
         if not game.active:
             if list(game.alive_entities):
@@ -21,15 +22,29 @@ class Matchmaker:
             else:
                 tts = 'Игра окончена! Все погибли!'
             self.bot.send_message(game.chat_id, tts)
+            for player in game.entities:
+                if player.id == game.chat_id:
+                    continue
+                try:
+                    if player.id == game.chat_id:
+                        continue
+                    self.bot.send_message(player.id, tts)
+                except:
+                    pass
             del self.games[chat_id]
+            return
 
         for player in game.alive_entities:
-            self.send_act_buttons(player, game)
+            if player.npc:
+                player.choose_act()
+            else:
+                self.send_act_buttons(player, game)
 
     def get_act_buttons(self, player, game):
         first_row = []
         second_row = []
         all = []
+        items = []
         approach = []
         skip = []
         for action in player.actions:
@@ -45,39 +60,130 @@ class Matchmaker:
             else:
                 all.append(button)
 
+        for item in player.items:
+            items.append(types.InlineKeyboardButton(text=item.name, callback_data=f"item_{game.chat_id}_{item.id}"))
+
         kb = types.InlineKeyboardMarkup()
         first_row.reverse()
+        second_row.append(
+            types.InlineKeyboardButton(text='Инфо', callback_data='ci_777')
+        )
+
         kb.add(*first_row)
         kb.add(*second_row)
-        for button in all:
-            kb.add(button)
+        kb.add(types.InlineKeyboardButton(
+            text='Дополнительно', callback_data=f"more_{game.chat_id}"
+        ))
         kb.add(*approach)
         kb.add(*skip)
         return kb
 
-    def choose_target(self, game, player, targets):
+    def get_additional_buttons(self, player, game):
+        all = []
+        items = []
+        for action in player.actions:
+            button = types.InlineKeyboardButton(text=action.name, callback_data=f"act_{game.chat_id}_{action.id}")
+            if action.id in ['attack', 'reload', 'approach', 'dodge', 'skip', 'extinguish']:
+                pass
+            else:
+                all.append(button)
+
+        item_count = {}
+        for item in player.items:
+            if (item.id, item.name) not in item_count:
+                item_count[(item.id, item.name)] = 1
+            else:
+                item_count[(item.id, item.name)] += 1
+        for item_id, item_name in item_count:
+            items.append(types.InlineKeyboardButton(
+                text=f"{item_name} ({item_count[(item_id, item_name)]})", callback_data=f"item_{game.chat_id}_{item_id}"
+            ))
+
+        kb = types.InlineKeyboardMarkup()
+        for button in all:
+            kb.add(button)
+        for button in items:
+            kb.add(button)
+        kb.add(types.InlineKeyboardButton(
+            text='Назад', callback_data=f"back_{game.chat_id}"
+        ))
+        return kb
+
+    def choose_item_target(self, game, player, targets, index=-1):
         kb = types.InlineKeyboardMarkup()
         for target in targets:
             kb.add(types.InlineKeyboardButton(
-                text=target.name, callback_data=f"tgt_{game.chat_id}_{target.id}"
+                text=target.name, callback_data=f"itgt_{game.chat_id}_{target.id}_{index}"
             ))
         kb.add(types.InlineKeyboardButton(
-                text='Назад', callback_data=f"back_{game.chat_id}"
-            ))
+            text='Назад', callback_data=f"back_{game.chat_id}"
+        ))
         self.bot.send_message(player.id, 'Вьібор цели!', reply_markup=kb)
+
+    def choose_target(self, game, player, targets, index=-1):
+        kb = types.InlineKeyboardMarkup()
+        for target in targets:
+            kb.add(types.InlineKeyboardButton(
+                text=target.name, callback_data=f"tgt_{game.chat_id}_{target.id}_{index}"
+            ))
+        kb.add(types.InlineKeyboardButton(
+            text='Назад', callback_data=f"back_{game.chat_id}"
+        ))
+        self.bot.send_message(player.id, 'Вьібор цели!', reply_markup=kb)
+
+    def choose_item(self, game: TelegramSession, user_id, act_id):
+        player = game.get_player(user_id)
+        item = player.get_item(act_id)
+        index = -1
+        if item.cost < 1:
+            player.item_queue.append(item)
+            player.items.remove(item)
+            index = len(player.item_queue) - 1
+        else:
+            player.action = item
+
+        targets = item.targets
+        if not item.target_type.own == 1:
+            print(f"{item.id}: {item.targets} | {item.target_type}")
+            self.choose_item_target(game, player, targets, index)
+            return
+        item.target = player
+        player.target = player
+        if item.cost < 1:
+            if item.cost == -1:
+                item()
+                player.item_queue.remove(item)
+                player.update_actions()
+            self.send_act_buttons(player, game)
+            return
+        player.ready = True
+        if not game.unready_players:
+            self.cycle(game)
 
     def choose_act(self, game: TelegramSession, user_id, act_id):
         player = game.get_player(user_id)
         action = player.get_action(act_id)
-        player.action = action
+        index = -1
+        if action.cost < 1:
+            player.action_queue.append(action)
+            index = len(player.action_queue) - 1
+        else:
+            player.action = action
 
-        targets = player.action.targets
+        targets = action.targets
         if not action.target_type.own == 1:
-            self.choose_target(game, player, targets)
+            self.choose_target(game, player, targets, index)
             return
+        action.target = player
         player.target = player
+        if action.cost < 1:
+            if action.cost == -1:
+                action()
+                player.action_queue.remove(action)
+                player.update_actions()
+            self.send_act_buttons(player, game)
+            return
         player.ready = True
-        player.action.target = player
         if not game.unready_players:
             self.cycle(game)
 
@@ -89,15 +195,34 @@ class Matchmaker:
                 continue
             for tts in text.split('\n\n'):
                 self.bot.send_message(game.chat_id, tts)
+                for player in game.entities:
+                    try:
+                        if player.id == game.chat_id:
+                            continue
+                        self.bot.send_message(player.id, tts)
+                    except:
+                        pass
         self.pre_move(game.chat_id)
 
     def send_act_buttons(self, player, game):
         kb = self.get_act_buttons(player, game)
-        tts = f"Ход {game.turn}\n" \
-              f"{'♥️' * player.hp}|{player.hp} жизней. Максимум: {player.max_hp}\n" \
-              f"{'⚡️' * player.energy}|{player.energy}. Максимум: {player.max_energy}\n" \
-              f"🎯|Вероятность попасть - {int(player.hit_chance)}%"
+        tts = self.get_act_text(player, game)
         self.bot.send_message(player.id, tts, reply_markup=kb)
+
+    def get_act_text(self, player, game):
+        tts = f"Ход {game.turn}\n" \
+              f"{player.hearts}|{player.hp} жизней. Максимум: {player.max_hp}\n" \
+              f"{player.energies}|{player.energy} энергии. Максимум: {player.max_energy}\n" \
+              f"🎯|Вероятность попасть - {int(player.hit_chance)}%\n"
+        if player.weapon.id == 11 and player.weapon.main_target[0]:
+            target, power = player.weapon.main_target
+            chance = player.hit_chance
+            if power == 1:
+                chance += 60
+            elif power == 1:
+                chance += 90
+            tts += f'🎯|Вероятность попасть в {target.name}|🎃 - {chance}%'
+        return tts
 
     def get_skill(self, skill_id, player):
         skills = list(filter(lambda s: s(player).id == skill_id, modern.all_skills))
@@ -121,18 +246,39 @@ class Matchmaker:
         player.energy, player.max_energy, player.hp, player.max_hp = 5, 5, 4, 4
         game.entities.append(player)
 
+    def choose_items(self, chat_id):
+        game = self.games.get(chat_id)
+        for player in game.not_chosen_items:
+            given = []
+            for _ in range(game.items_given):
+                item = random.choice(modern.all_items)(player)
+                pool = list(filter(lambda i: i(player).id not in given, modern.all_items))
+                if pool:
+                    item = random.choice(pool)(player)
+                given.append(item.id)
+                player.items.append(item)
+            player.chose_items = True
+            if player.npc:
+                continue
+            self.bot.send_message(player.id, f'Ваши предметы: '
+                                             f'{", ".join([item.name for item in player.items])}')
+
     def choose_weapons(self, chat_id):
         game = self.games.get(chat_id)
         for player in game.not_chosen_weapon:
+            if player.npc:
+                continue
             self.send_weapon_choice_buttons(player)
 
     def choose_skills(self, chat_id):
         game = self.games.get(chat_id)
         for player in game.not_chosen_skills:
+            if player.npc:
+                continue
             self.send_skill_choice_buttons(player)
 
     def send_weapon_choice_buttons(self, player, number=3):
-        weapons, clss = [modern.Flamethrower(player)], [modern.Flamethrower]
+        weapons, clss = [modern.Rifle(player), modern.Claws(player)], [modern.Rifle, modern.Claws]
         for _ in range(number):
             variants = list(filter(lambda w: w not in clss, modern.all_weapons))
             if not variants:
@@ -143,8 +289,8 @@ class Matchmaker:
 
         kb = types.InlineKeyboardMarkup()
         for weapon in weapons:
-            kb.add(types.InlineKeyboardButton(text=weapon.name,
-                                              callback_data=f"cw_{player.session.chat_id}_{weapon.id}"))
+            kb.add(types.InlineKeyboardButton(weapon.name, callback_data=f"cw_{player.session.chat_id}_{weapon.id}"),
+                   types.InlineKeyboardButton('Информация', callback_data=f"wi_{weapon.id}"))
         kb.add(types.InlineKeyboardButton(text='Случайное оружие',
                                           callback_data=f"cw_{player.session.chat_id}_random"))
         self.bot.send_message(player.id, 'Выберите оружие:', reply_markup=kb)
@@ -162,8 +308,9 @@ class Matchmaker:
 
         kb = types.InlineKeyboardMarkup()
         for skill in skills:
-            kb.add(types.InlineKeyboardButton(text=skill.name,
-                                              callback_data=f"cs_{cycle}_{player.session.chat_id}_{skill.id}"))
+            kb.add(
+                types.InlineKeyboardButton(skill.name, callback_data=f"cs_{cycle}_{player.session.chat_id}_{skill.id}"),
+                types.InlineKeyboardButton('Информация', callback_data=f"ci_{skill.id}"))
         kb.add(types.InlineKeyboardButton(text='Случайный скилл',
                                           callback_data=f"cs_{cycle}_{player.session.chat_id}_random"))
         self.bot.send_message(player.id, f'Выберите скилл ({cycle} из {game.skill_cycles}):', reply_markup=kb)

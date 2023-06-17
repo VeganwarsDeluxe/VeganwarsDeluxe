@@ -2,7 +2,7 @@ from core.Action import DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
 from core.Skills.Skill import Skill
 from core.Items.Item import Item
-from core.TargetType import TargetType, OwnOnly
+from core.TargetType import OwnOnly
 from core.DamageHolder import DamageHolder
 
 
@@ -41,12 +41,27 @@ class Entity:
         self.action: Action = self.default_actions[0]
         self.target: Entity = self
 
+    @property
+    def hearts(self):
+        return '♥️' * self.hp if self.hp < 8 else f"♥️x{self.hp}"
+
+    @property
+    def energies(self):
+        return '⚡️' * self.energy if self.energy < 8 else f"⚡️x{self.energy}"
+
     def get_action(self, id: str):
         action = list(filter(lambda a: a.id == id, self.actions))
         if action:
             action = action[0]
             action.source = self
             return action
+
+    def get_item(self, id: str):
+        items = list(filter(lambda i: i.id == id, self.items))
+        if items:
+            item = items[0]
+            item.source = self
+            return item
 
     def remove_action(self, id: str):
         action = self.get_action(id)
@@ -60,6 +75,8 @@ class Entity:
             return result[0]
 
     def is_ally(self, target):
+        if target == self:
+            return True
         if target.team is None or self.team is None:
             return False
         return target.team == self.team
@@ -91,12 +108,15 @@ class Entity:
     def approached(self):
         return self.nearby_entities == list(filter(lambda t: t != self, self.session.entities))
 
+    def update_actions(self):
+        self.actions = self.default_actions
+
     def pre_move(self):
         self.outbound_dmg.clear()
         self.inbound_dmg.clear()
         self.cache = {}
-        self.actions = self.default_actions
         self.item_queue = []
+        self.action_queue = []
 
     def tick_turn(self):
         pass

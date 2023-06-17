@@ -6,7 +6,7 @@ from core.TargetType import Enemies
 
 class Molotov(DecisiveItem):
     def __init__(self, source):
-        super().__init__(source, name='Коктейль Молотова', id='molotov')
+        super().__init__(source, name='Коктейль Молотова', id='molotov', target_type=Enemies())
 
         self.range = 2
 
@@ -21,6 +21,7 @@ class Molotov(DecisiveItem):
             target = random.choice(target_pool)
             aflame = target.get_skill('aflame')
             aflame.flame += 1
+            aflame.dealer = self.source
             targets.append(target)
 
         self.source.session.say(f'🍸|{self.source.name} кидает коктейль молотова! '

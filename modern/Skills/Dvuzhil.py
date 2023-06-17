@@ -6,7 +6,7 @@ class Dvuzhil(Skill):
     def __init__(self, source):
         super().__init__(source, id='dvuzhil', name='Двужильность', stage='pre-move')
 
-    def __call__(self, source: Entity):
-        if source.session.turn == 1:
-            source.hp += 1
-            source.max_hp += 1
+    def __call__(self):
+        if self.source.session.turn == 1:
+            self.source.hp += 1
+            self.source.max_hp += 1

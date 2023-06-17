@@ -6,3 +6,4 @@ class Player(Document):
     name = StringField(default='Unknown')
     username = StringField(default='@none')
     rating = IntField(default=1000)
+    money = IntField(default=0)

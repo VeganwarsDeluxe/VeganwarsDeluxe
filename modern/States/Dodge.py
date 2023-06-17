@@ -8,7 +8,8 @@ class Dodge(State):
         super().__init__(source, id='dodge', name='Перекат', constant=True)
         self.dodge_cooldown = 0
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if source.session.current_stage == 'post-tick':
             self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 

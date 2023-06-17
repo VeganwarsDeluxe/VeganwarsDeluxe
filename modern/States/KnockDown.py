@@ -8,10 +8,11 @@ class Knockdown(State):
         super().__init__(source, id='knockdown', name='Потеря равновесия', constant=True)
         self.active = False
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if not self.active:
             return
-        if source.session.current_stage == 'pre-move':
+        if source.session.current_stage == 'post-update':
             source.remove_action('attack')
             source.remove_action('dodge')
 

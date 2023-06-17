@@ -10,9 +10,11 @@ class Weapon(object):
         self.energycost = 2
         self.cubes = 2
         self.dmgbonus = 0
-        self.name = 'None'
         self.ranged = False
         self.accuracybonus = 0
+
+        self.name = 'None'
+        self.description = 'Описание еще не написано.'
 
     @property
     def actions(self):
@@ -59,7 +61,7 @@ class Weapon(object):
         return damage
 
     def attack_text(self, source, target, damage):
-        attack_text = 'стреляет' if self.ranged else 'бьет'
+        attack_text = 'стреляет в' if self.ranged else 'бьет'
         attack_emoji = '💥' if self.ranged else '👊'
         if damage:
             source.session.say(f'{attack_emoji}|{source.name} {attack_text} {target.name} используя {self.name}! '

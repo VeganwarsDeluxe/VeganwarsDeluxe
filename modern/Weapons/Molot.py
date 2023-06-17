@@ -9,11 +9,14 @@ class Molot(Weapon):
     def __init__(self, owner):
         super().__init__(owner)
         self.id = 39
-        self.name = 'Молот'
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
+
+        self.name = 'Молот'
+        self.description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \
+                           'получает +1 к урону.'
 
         self.cooldown_turn = 0
         self.strike = False

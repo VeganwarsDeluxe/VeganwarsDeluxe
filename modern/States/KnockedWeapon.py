@@ -8,7 +8,8 @@ class KnockedWeapon(State):
         super().__init__(source, id='knocked-weapon', name='Выбивание оружия', constant=True)
         self.weapon = None
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         pass
 
     @property

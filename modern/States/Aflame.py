@@ -10,13 +10,14 @@ class Aflame(State):  # TODO: Fix flame lol
         self.dealer = self.source
         self.extinguished = False
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if source.session.current_stage == 'post-action':
             if source.action.id == 'skip' and self.flame:
                 source.session.say(f'💨|{source.name} потушил себя.')
                 self.flame = 0
                 self.extinguished = False
-        if source.session.current_stage == 'pre-move' and self.flame:
+        if source.session.current_stage == 'post-update' and self.flame:
             source.remove_action('skip')
         if source.session.current_stage != 'pre-damages':
             return
@@ -30,7 +31,7 @@ class Aflame(State):  # TODO: Fix flame lol
         else:
             self.extinguished = False
         damage = self.flame
-        source.session.say(f'🔥|{source.name} горит. Получает {damage} урона от {self.dealer.name}.')
+        source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
         source.inbound_dmg.add(self.dealer, damage)
         source.outbound_dmg.add(self.dealer, damage)
         if self.flame > 1:

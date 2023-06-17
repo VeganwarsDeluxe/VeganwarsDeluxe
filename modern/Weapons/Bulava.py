@@ -9,11 +9,14 @@ class Bulava(Weapon):
     def __init__(self, owner):
         super().__init__(owner)
         self.id = 13
-        self.name = 'Булава'
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
+
+        self.name = 'Булава'
+        self.description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
+                           'вы получаете +1 урона.'
 
         self.main_target = None, 0
         self.last_attack_turn = 0

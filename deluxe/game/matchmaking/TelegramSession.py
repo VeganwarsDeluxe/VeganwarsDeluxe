@@ -1,5 +1,5 @@
 from core.Sessions.Session import Session
-from .TelegramEntity import TelegramEntity
+from deluxe.game.Entities.TelegramEntity import TelegramEntity
 
 
 class TelegramSession(Session):
@@ -13,6 +13,9 @@ class TelegramSession(Session):
 
         self.skill_cycles = 2
         self.skill_number = 5
+
+        self.items_given = 2
+        self.cowed = False
 
     def get_player(self, id):
         result = [p for p in self.entities if p.id == id]
@@ -34,6 +37,10 @@ class TelegramSession(Session):
     @property
     def not_chosen_skills(self):
         return [p for p in self.entities if not p.chose_skills]
+
+    @property
+    def not_chosen_items(self):
+        return [p for p in self.entities if not p.chose_items]
 
     def say(self, text, n=True):
         self.texts[0] += text + ("\n" if n else '')

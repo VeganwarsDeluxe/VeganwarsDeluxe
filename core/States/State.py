@@ -13,5 +13,5 @@ class State:
     def actions(self):
         return []
 
-    def __call__(self, source):
+    def __call__(self):
         pass

@@ -6,7 +6,8 @@ class DamageThreshold(State):
         super().__init__(source, id='damage-threshold', name='Покалечен', constant=True)
         self.threshold = 6
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if source.session.current_stage != 'hp-loss':
             return
         damage = source.cache.get('hp_loss_damage')

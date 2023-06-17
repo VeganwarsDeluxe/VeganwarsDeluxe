@@ -8,10 +8,11 @@ class Stun(State):
         super().__init__(source, id='stun', name='Оглушение', constant=True)
         self.stun = 0
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if not self.active:
             return
-        if source.session.current_stage == 'pre-move':
+        if source.session.current_stage == 'post-update':
             source.actions = self.actions
         if source.session.current_stage == 'post-damages':
             if self.stun == 1:

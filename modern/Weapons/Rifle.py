@@ -9,12 +9,15 @@ class Rifle(Weapon):
     def __init__(self, owner):
         super().__init__(owner)
         self.id = 11
-        self.name = 'Снайперская винтовка'
         self.ranged = True
         self.cubes = 1
         self.accuracybonus = -4
         self.energycost = 5
         self.dmgbonus = 7
+
+        self.name = 'Снайперская винтовка'
+        self.description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
+                           ' чтобы повысить точность против выбранного персонажа'
 
         self.main_target = None, 0
 

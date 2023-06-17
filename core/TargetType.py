@@ -16,6 +16,11 @@ class TargetType:
         return f"D: {self.distance} | T: {self.team} | A: {self.aliveness} | O: {self.own}"
 
 
+class Allies(TargetType):
+    def __init__(self, distance=0, aliveness=1):
+        super().__init__(distance=distance, team=1, aliveness=aliveness, own=0)
+
+
 class Enemies(TargetType):
     def __init__(self, distance=0, aliveness=1):
         super().__init__(distance=distance, team=2, aliveness=aliveness, own=2)

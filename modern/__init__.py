@@ -17,6 +17,11 @@ from modern.Weapons.Rifle import Rifle
 from modern.Weapons.Bulava import Bulava
 from modern.Weapons.Molot import Molot
 from modern.Weapons.Torch import Torch
+from modern.Weapons.HealerWand import HealerWand
+from modern.Weapons.Police import Police
+from modern.Weapons.Saber import Saber
+from modern.Weapons.Sword import Sword
+from modern.Weapons.Bow import Bow
 
 from modern.Skills.Biceps import Biceps
 from modern.Skills.Dvuzhil import Dvuzhil
@@ -36,9 +41,12 @@ from modern.States.Dodge import Dodge
 from modern.Items.Stimulator import Stimulator
 from modern.Items.Grenade import Grenade
 from modern.Items.Molotov import Molotov
+from modern.Items.ThrowingKnife import ThrowingKnife
+from modern.Items.FlashGrenade import FlashGrenade
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge]
 all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
-               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot]
+               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot, HealerWand,
+               Police, Saber, Sword, Bow]
 all_items = [Stimulator, Grenade, Molotov]

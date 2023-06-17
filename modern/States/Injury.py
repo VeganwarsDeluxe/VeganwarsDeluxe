@@ -6,7 +6,8 @@ class Injury(State):
         super().__init__(source, id='injury', name='Ранение', constant=True)
         self.injury = 0
 
-    def __call__(self, source):
+    def __call__(self):
+        source = self.source
         if source.session.current_stage != 'attack':
             return
         if not self.injury:

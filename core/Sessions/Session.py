@@ -32,6 +32,12 @@ class Session:
             entity.tick_turn()
         self.turn += 1
 
+    def update_actions(self):
+        self.stage('pre-update')
+        for entity in self.entities:
+            entity.update_actions()
+        self.stage('post-update')
+
     def pre_move(self):
         for entity in self.entities:
             entity.pre_move()
@@ -50,6 +56,7 @@ class Session:
             self.lose_hp(entity, in_damage)
 
     def lose_hp(self, entity, damage):
+        print(damage)
         hp_loss = (damage // 6) + 1
         entity.cache.update({'hp_loss': hp_loss, 'hp_loss_damage': damage})
 
@@ -57,7 +64,7 @@ class Session:
 
         hp_loss = entity.cache.get('hp_loss')
         entity.hp -= hp_loss
-        self.say(f"{entity.hp * '♥️'}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
+        self.say(f"{entity.hearts}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
 
     def calculate_damages(self):  # TODO: Revise just in case, I am worried
         for entity in self.entities:  # Cancelling round
@@ -82,7 +89,7 @@ class Session:
         self.current_stage = stage
         for entity in self.entities:
             for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
-                skill(entity)
+                skill()
 
     def death(self):
         for entity in self.alive_entities:
@@ -113,7 +120,7 @@ class Session:
                 all_actions.append(action)
             all_actions.append(entity.action)
         for action in sorted(all_actions, key=lambda e: e.priority):
-            action()
+            action() if not action.canceled else None
 
     def move(self):  # 0. Pre-move stage
         self.stage('pre-action')  # 1. Pre-action stage

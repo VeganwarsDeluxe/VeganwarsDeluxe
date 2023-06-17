@@ -59,13 +59,22 @@ class DecisiveAction(Action):
 
     @property
     def cost(self):
-        return True
+        return 1
 
 
 class FreeAction(Action):
-    def __init__(self, func, source, name='Action', id='action', priority=0, type=TargetType()):
-        super().__init__(func, source, target_type=type, decisive=False, name=name, id=id, priority=priority)
+    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
+        super().__init__(func, source, target_type=target_type, decisive=False, name=name, id=id, priority=priority)
 
     @property
     def cost(self):
-        return False
+        return 0
+
+
+class ImmediateAction(Action):
+    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
+        super().__init__(func, source, target_type=target_type, decisive=False, name=name, id=id, priority=priority)
+
+    @property
+    def cost(self):
+        return -1
