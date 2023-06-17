@@ -56,7 +56,6 @@ class Session:
             self.lose_hp(entity, in_damage)
 
     def lose_hp(self, entity, damage):
-        print(damage)
         hp_loss = (damage // 6) + 1
         entity.cache.update({'hp_loss': hp_loss, 'hp_loss_damage': damage})
 

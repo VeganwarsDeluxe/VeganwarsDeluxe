@@ -144,7 +144,6 @@ class Matchmaker:
 
         targets = item.targets
         if not item.target_type.own == 1:
-            print(f"{item.id}: {item.targets} | {item.target_type}")
             self.choose_item_target(game, player, targets, index)
             return
         item.target = player
