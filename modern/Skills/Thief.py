@@ -12,13 +12,20 @@ class Thief(Skill):
 
     def steal(self, source, target):
         success = False
-        source.say(f'{target} юзает: {", ".join([item.name for item in target.item_queue])}')
-        for item in target.item_queue:
-            source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+        for item in [item for item in target.item_queue]:
             success = True
+            source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+            target.item_queue.remove(item)
             source.items.append(item)
             item.source = source
             item.canceled = True
+        if target.action.type == 'item':
+            success = True
+            source.session.say(f'😏|{target.name} хотел использовать '
+                               f'{target.action.name}, но вор {source.name} его украл!')
+            target.action.source = source
+            source.items.append(target.action)
+            target.action.canceled = True
         if not success:
             source.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
 

@@ -16,6 +16,7 @@ class Action:
         self.target = None
 
         self.canceled = False
+        self.type = 'action'
 
     def __call__(self):  # Abstract "Run" method for overriding
         return self.func(self.source, self.target)

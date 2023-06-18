@@ -139,6 +139,7 @@ class Matchmaker:
         item = player.get_item(act_id)
         index = -1
         if item.cost < 1:
+            item.canceled = False
             player.item_queue.append(item)
             player.items.remove(item)
             index = len(player.item_queue) - 1
@@ -152,10 +153,6 @@ class Matchmaker:
         item.target = player
         player.target = player
         if item.cost < 1:
-            if item.cost == -1:
-                item()
-                player.item_queue.remove(item)
-                player.update_actions()
             self.send_act_buttons(player, game)
             return
         player.ready = True
@@ -171,6 +168,7 @@ class Matchmaker:
             index = len(player.action_queue) - 1
         else:
             player.action = action
+        action.canceled = False
 
         targets = action.targets
         if not action.target_type.own == 1:

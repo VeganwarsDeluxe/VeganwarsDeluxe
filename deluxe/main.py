@@ -259,15 +259,12 @@ def act_callback_handler(c):
     if index != -1:
         item = player.item_queue[index]
     item.target = target
+    item.canceled = False
 
     bot.edit_message_text(f'Выбрано: {item.name} на {item.target.name}',
                           c.message.chat.id, c.message.message_id)
 
     if item.cost < 1:
-        if item.cost == -1:
-            item()
-            player.item_queue.remove(item)
-            player.update_actions()
         mm.send_act_buttons(player, game)
         return
 
@@ -299,6 +296,7 @@ def act_callback_handler(c):
     if index != -1:
         action = player.action_queue[index]
     action.target = target
+    action.canceled = False
 
     bot.edit_message_text(f'Выбрано: {action.name} на {target.name}',
                           c.message.chat.id, c.message.message_id)

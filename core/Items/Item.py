@@ -7,6 +7,7 @@ class Item(Action):  # TODO: Make your mind about implementation
         super().__init__(None, source, target_type=target_type, name=name, id=id)
         self.target = None
         self.priority = 5
+        self.type = 'item'
 
     def __call__(self):
         if self.canceled:
