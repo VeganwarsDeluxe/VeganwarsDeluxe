@@ -13,6 +13,7 @@ class TelegramEntity(Entity):
 
         self.chose_weapon = False
         self.chose_skills = False
+        self.skill_cycle = 0
         self.chose_items = False
         self.ready = False
 

@@ -1,4 +1,6 @@
 import random
+import traceback
+
 import modern
 from config import admin
 from deluxe.bot import bot, mm, cm
@@ -6,6 +8,20 @@ from deluxe.game.Entities.Cow import Cow
 
 #       Handler imports
 import deluxe.bot.rating
+
+
+@bot.message_handler(commands=['do'])
+def vd_prepare_handler(m):
+    if m.from_user.id != admin:
+        return
+    if not m.text.count(' '):
+        return
+    code = m.text.split(' ', 1)[1]
+    try:
+        result = eval(code)
+    except:
+        result = traceback.format_exc()
+    bot.reply_to(m, f"Code: {code}\n\nResult: {result}")
 
 
 @bot.message_handler(commands=['vd_prepare'])
@@ -65,7 +81,7 @@ def vd_join_handler(m):
         bot.reply_to(m, 'Так нельзя. Напиши /add_cow число.')
         return
     count = int(m.text.split(' ')[1])
-    if not (0 < count < 15):
+    if not (0 <= count <= 15):
         bot.reply_to(m, 'Неправильно. Введи число от 0 до 15')
         return
     if not game:
@@ -119,11 +135,12 @@ def act_callback_handler(c):
     if not player:
         bot.edit_message_text('Вы не в игре!', c.message.chat.id, c.message.message_id)
         return
-    if player.chose_skills:
+    if player.chose_skills or player.skill_cycle == int(cycle):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
     skill = mm.get_skill(skill_id, player)
     player.skills.append(skill)
+    player.skill_cycle = int(cycle)
 
     if int(cycle) >= game.skill_cycles:
         player.chose_skills = True
@@ -240,7 +257,7 @@ def act_callback_handler(c):
 
     item = player.action
     if index != -1:
-        item = player.action_queue[index]
+        item = player.item_queue[index]
     item.target = target
 
     bot.edit_message_text(f'Выбрано: {item.name} на {item.target.name}',
@@ -253,6 +270,8 @@ def act_callback_handler(c):
             player.update_actions()
         mm.send_act_buttons(player, game)
         return
+
+    player.items.remove(item) if item in player.items else bot.send_message(admin, 'Та за шо.')
 
     player.ready = True
     if not game.unready_players:

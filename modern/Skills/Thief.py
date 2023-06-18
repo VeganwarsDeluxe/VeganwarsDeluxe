@@ -12,6 +12,7 @@ class Thief(Skill):
 
     def steal(self, source, target):
         success = False
+        source.say(f'{target} юзает: {", ".join([item.name for item in target.item_queue])}')
         for item in target.item_queue:
             source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
             success = True
