@@ -4,7 +4,7 @@ from core.TargetType import Allies
 
 class Adrenaline(FreeItem):
     def __init__(self, source):
-        super().__init__(source, name='Адреналин', id='stimulator', target_type=Allies())
+        super().__init__(source, name='Адреналин', id='adrenaline', target_type=Allies())
 
     def use(self):
         self.target.energy += 3

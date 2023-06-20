@@ -74,6 +74,23 @@ def vd_join_handler(m):
     mm.join_game(m.chat.id, m.from_user.id, m.from_user.full_name)
 
 
+@bot.message_handler(commands=['vd_suicide'])
+def vd_join_handler(m):
+    game = mm.get_game(m.chat.id)
+    if not game:
+        return
+    player = game.get_player(m.from_user.id)
+    if not player:
+        return
+    if game.lobby:
+        return
+    player.hp = -1000
+    player.ready = True
+    if not game.unready_players:
+        game.say(f'☠️|{player.name} совершает суицид.')
+        mm.cycle(game)
+
+
 @bot.message_handler(commands=['add_cow'])
 def vd_join_handler(m):
     game = mm.get_game(m.chat.id)

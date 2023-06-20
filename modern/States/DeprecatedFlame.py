@@ -3,7 +3,7 @@ from core.States.State import State
 from core.TargetType import OwnOnly
 
 
-class Aflame(State):  # TODO: Fix flame lol
+class Aflame(State):
     def __init__(self, source):
         super().__init__(source, id='aflame', name='Огонь', constant=True)
         self.flame = 0

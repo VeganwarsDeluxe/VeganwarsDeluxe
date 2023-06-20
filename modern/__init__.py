@@ -17,7 +17,6 @@ from modern.Weapons.Rifle import Rifle
 from modern.Weapons.Bulava import Bulava
 from modern.Weapons.Molot import Molot
 from modern.Weapons.Torch import Torch
-from modern.Weapons.HealerWand import HealerWand
 from modern.Weapons.Police import Police
 from modern.Weapons.Saber import Saber
 from modern.Weapons.Sword import Sword
@@ -25,7 +24,6 @@ from modern.Weapons.Bow import Bow
 
 from modern.Skills.Biceps import Biceps
 from modern.Skills.Dvuzhil import Dvuzhil
-from modern.Skills.Armor import Armor
 from modern.Skills.Cherep import Cherep
 from modern.Skills.Thief import Thief
 from modern.Skills.Medic import Medic
@@ -39,18 +37,20 @@ from modern.States.KnockedWeapon import KnockedWeapon
 from modern.States.Injury import Injury
 from modern.States.Stun import Stun
 from modern.States.Dodge import Dodge
+from modern.States.Armor import Armor
 
 from modern.Items.Stimulator import Stimulator
 from modern.Items.Grenade import Grenade
 from modern.Items.Molotov import Molotov
 from modern.Items.ThrowingKnife import ThrowingKnife
 from modern.Items.FlashGrenade import FlashGrenade
+from modern.Items.Adrenaline import Adrenaline
 
-all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge]
-all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief, Medic]
+all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor]
+all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
-               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot, HealerWand,
+               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
                Police, Saber, Sword, Bow]
-all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife]
+all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline]
 
-game_items_pool = [Grenade, Molotov, FlashGrenade, ThrowingKnife]
+game_items_pool = [Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline]

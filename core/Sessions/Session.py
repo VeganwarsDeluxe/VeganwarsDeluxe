@@ -67,6 +67,9 @@ class Session:
 
     def calculate_damages(self):  # TODO: Revise just in case, I am worried
         for entity in self.entities:  # Cancelling round
+            if entity.energy > entity.max_energy:
+                self.say(f'💨|{entity.name} теряет излишек энергии.')
+                entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
                 self.cancel_damages(entity)

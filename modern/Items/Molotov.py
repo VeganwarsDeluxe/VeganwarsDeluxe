@@ -20,7 +20,7 @@ class Molotov(DecisiveItem):
                 continue
             target = random.choice(target_pool)
             aflame = target.get_skill('aflame')
-            aflame.add_flame(self.source, 2)
+            aflame.add_flame(self.source, 1)
             targets.append(target)
 
         self.source.session.say(f'🍸|{self.source.name} кидает коктейль молотова! '
