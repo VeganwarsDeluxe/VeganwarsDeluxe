@@ -36,11 +36,6 @@ class Flamethrower(Weapon):
         if not damage:
             return damage
         aflame = target.get_skill('aflame')
-        if aflame.flame == 0:
-            source.session.say(f'🔥|{target.name} загорелся!')
-        else:
-            source.session.say(f'🔥|Огонь {target.name} усиливается!')
-        aflame.flame += 1
-        aflame.dealer = self.owner
+        aflame.add_flame(source, 1)
         return damage
 

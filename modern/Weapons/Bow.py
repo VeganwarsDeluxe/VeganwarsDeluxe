@@ -35,9 +35,4 @@ class Bow(Weapon):
         self.cooldown_turn = source.session.turn + 5
         source.session.say(f'☄️|{source.name} поджигает стрелу и запускает ее в {target.name}!')
         aflame = target.get_skill('aflame')
-        if aflame.flame == 0:
-            source.session.say(f'🔥|{target.name} загорелся!')
-        else:
-            source.session.say(f'🔥|Огонь {target.name} усиливается!')
-        aflame.flame += 2
-        aflame.dealer = self.owner
+        aflame.add_flame(source, 2)

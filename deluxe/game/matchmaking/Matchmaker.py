@@ -287,7 +287,7 @@ class Matchmaker:
             self.pre_move(game.chat_id)
 
     def send_weapon_choice_buttons(self, player, number=3):
-        weapons, clss = [modern.Rifle(player), modern.Claws(player)], [modern.Rifle, modern.Claws]
+        weapons, clss = [], []
         for _ in range(number):
             variants = list(filter(lambda w: w not in clss, modern.all_weapons))
             if not variants:
