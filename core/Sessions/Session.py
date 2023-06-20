@@ -46,15 +46,6 @@ class Session:
         for entity in self.entities:
             entity.inbound_dmg.cancel(source)
 
-    def calculate_damages_new(self):
-        for entity in self.entities:
-            in_damage = 0
-            for incoming in entity.inbound_dmg.damages:
-                source, damage = incoming
-                if source.outbound_dmg.sum() >= source.inbound_dmg.sum():
-                    in_damage += damage
-            self.lose_hp(entity, in_damage)
-
     def lose_hp(self, entity, damage):
         hp_loss = (damage // 6) + 1
         entity.cache.update({'hp_loss': hp_loss, 'hp_loss_damage': damage})
