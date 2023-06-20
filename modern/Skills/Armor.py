@@ -6,6 +6,7 @@ import random
 class Armor(Skill):
     def __init__(self, source):
         super().__init__(source, id='armor', name='Броня', stage='post-attack')
+        self.description = 'Дает шанс поглотить 1 урона.'
 
     def __call__(self):
         if random.randint(0, 100) > 150:

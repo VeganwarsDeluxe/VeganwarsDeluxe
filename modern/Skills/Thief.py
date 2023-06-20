@@ -6,6 +6,8 @@ from core.TargetType import TargetType, Enemies
 class Thief(Skill):
     def __init__(self, source):
         super().__init__(source, id='thief', name='Вор', constant=True)
+        self.description = 'Если применить эту способность на цель, которая применяет какой-либо предмет, вы ' \
+                           'получите этот предмет. Дает +1 точности на дальнобойние оружия. (еще не дает)'
 
     def __call__(self):
         pass

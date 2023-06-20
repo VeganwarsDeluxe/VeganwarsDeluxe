@@ -251,8 +251,8 @@ class Matchmaker:
         for player in game.not_chosen_items:
             given = []
             for _ in range(game.items_given):
-                item = random.choice(modern.all_items)(player)
-                pool = list(filter(lambda i: i(player).id not in given, modern.all_items))
+                item = random.choice(modern.game_items_pool)(player)
+                pool = list(filter(lambda i: i(player).id not in given, modern.game_items_pool))
                 if pool:
                     item = random.choice(pool)(player)
                 given.append(item.id)
@@ -309,6 +309,7 @@ class Matchmaker:
         skills, clss = [], []
         for _ in range(number):
             variants = list(filter(lambda s: s not in clss, modern.all_skills))
+            variants = list(filter(lambda s: s(player).id not in [s.id for s in player.skills], variants))
             if not variants:
                 break
             choice = random.choice(variants)

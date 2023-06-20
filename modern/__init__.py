@@ -28,6 +28,8 @@ from modern.Skills.Dvuzhil import Dvuzhil
 from modern.Skills.Armor import Armor
 from modern.Skills.Cherep import Cherep
 from modern.Skills.Thief import Thief
+from modern.Skills.Medic import Medic
+from modern.Skills.Stockpile import Stockpile
 
 from modern.States.Aflame import Aflame
 from modern.States.DamageThreshold import DamageThreshold
@@ -45,8 +47,10 @@ from modern.Items.ThrowingKnife import ThrowingKnife
 from modern.Items.FlashGrenade import FlashGrenade
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge]
-all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief]
+all_skills = [Dvuzhil, Armor, Biceps, Cherep, Thief, Medic]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot, HealerWand,
                Police, Saber, Sword, Bow]
-all_items = [Stimulator, Grenade, Molotov]
+all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife]
+
+game_items_pool = [Grenade, Molotov, FlashGrenade, ThrowingKnife]
