@@ -12,10 +12,13 @@ class Thief(Skill):
     def __init__(self, source):
         super().__init__(source, constant=True)
 
+        self.cooldown_turn = 0
+
     def __call__(self):
         pass
 
     def steal(self, source, target):
+        self.cooldown_turn = self.source.session.turn + 3
         success = False
         for item in [item for item in target.item_queue]:
             success = True
@@ -36,9 +39,9 @@ class Thief(Skill):
 
     @property
     def actions(self):
+        if self.source.session.turn < self.cooldown_turn:
+            return []
         return [
             DecisiveAction(self.steal, self.source, target_type=Enemies(),
                            name='Украсть предмет', id='steal', priority=-2)
         ]
-
-
