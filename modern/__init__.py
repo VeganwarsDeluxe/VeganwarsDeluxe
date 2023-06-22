@@ -56,4 +56,4 @@ all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, 
                Police, Saber, Sword, Bow]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield]
 
-game_items_pool = [Shield]  # [Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]
+game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]
