@@ -15,8 +15,6 @@ class Weapon(object):
         self.ranged = False
         self.accuracybonus = 0
 
-        self.name = 'None'
-
     @property
     def actions(self):
         return [

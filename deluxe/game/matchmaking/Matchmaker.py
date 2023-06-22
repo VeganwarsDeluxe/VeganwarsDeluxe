@@ -307,8 +307,7 @@ class Matchmaker:
         game = player.session
         skills = []
         for _ in range(number):
-            variants = list(filter(lambda s: s not in variants, modern.all_skills))
-            variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
+            variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
             if not variants:
                 break
             choice = random.choice(variants)
