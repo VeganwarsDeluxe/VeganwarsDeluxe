@@ -26,6 +26,11 @@ class Enemies(TargetType):
         super().__init__(distance=distance, team=2, aliveness=aliveness, own=2)
 
 
+class Everyone(TargetType):
+    def __init__(self, distance=0, aliveness=1):
+        super().__init__(distance=distance, team=0, aliveness=aliveness, own=0)
+
+
 class OwnOnly(TargetType):
     def __init__(self):
         super().__init__(distance=0, team=0, aliveness=1, own=1)

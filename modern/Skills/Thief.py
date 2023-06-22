@@ -35,7 +35,7 @@ class Thief(Skill):
     def actions(self):
         return [
             DecisiveAction(self.steal, self.source, target_type=Enemies(),
-                           name='Украсть предмет', id='steal', priority=-1)
+                           name='Украсть предмет', id='steal', priority=-2)
         ]
 
 

@@ -45,12 +45,15 @@ from modern.Items.Molotov import Molotov
 from modern.Items.ThrowingKnife import ThrowingKnife
 from modern.Items.FlashGrenade import FlashGrenade
 from modern.Items.Adrenaline import Adrenaline
+from modern.Items.Hitin import Hitin
+from modern.Items.Jet import Jet
+from modern.Items.Shield import Shield
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
                Police, Saber, Sword, Bow]
-all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline]
+all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield]
 
-game_items_pool = [Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline]
+game_items_pool = [Shield]  # [Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]

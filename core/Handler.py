@@ -93,6 +93,8 @@ class ScheduledHandler(Handler):
         self.interval = interval
 
     def check_turn(self):
+        if self.session.turn < self.start:
+            return
         return (self.session.turn - self.start) % self.interval == 0
 
     def __call__(self):

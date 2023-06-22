@@ -26,6 +26,8 @@ class Armor(State):
 
     def add(self, value: int):
         self.armor += value
+        if self.armor < 0:
+            self.armor = 0
 
     def roll_armor(self):
         armor = 0

@@ -6,7 +6,7 @@ class Item(Action):  # TODO: Make your mind about implementation
     def __init__(self, source, name='Item', id='item', target_type=TargetType()):
         super().__init__(None, source, target_type=target_type, name=name, id=id)
         self.target = None
-        self.priority = 5
+        self.priority = -1
         self.type = 'item'
 
     def __call__(self):
