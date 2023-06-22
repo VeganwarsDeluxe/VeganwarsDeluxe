@@ -19,6 +19,8 @@ class Armor(State):
         if damage == 0:
             return
         armor = min(damage, self.roll_armor())
+        if not armor:
+            return
         self.source.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
         entity.action.data.update({'damage': damage - armor})
 

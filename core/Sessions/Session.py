@@ -1,14 +1,24 @@
 from core.Entities.Entity import Entity
+from core.Handler import HandlerManager
 
 
 class Session:
     def __init__(self):
         self.turn = 1
-        self.started = False
         self.active = True
-        self.current_stage = 'pre-start'
 
         self.entities: list[Entity] = []
+
+        self.handlers: HandlerManager = HandlerManager(self)
+        self.current_stage = 'pre-start'
+
+    def stage(self, stage):  # TODO: Rename to event
+        self.current_stage = stage
+        for entity in self.entities:
+            for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
+                skill()
+
+        self.handlers.event()
 
     def say(self, text, n=True):
         print(text, end=('\n' if n else ''))
@@ -74,15 +84,6 @@ class Session:
 
     def stop(self):
         self.active = False
-
-    def stage(self, stage):
-        """
-        stages: post-death, pre-action, post-action, post-damages, pre-damages, post-tick, pre-move, attack, hp-loss
-        """
-        self.current_stage = stage
-        for entity in self.entities:
-            for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
-                skill()
 
     def death(self):
         for entity in self.alive_entities:
