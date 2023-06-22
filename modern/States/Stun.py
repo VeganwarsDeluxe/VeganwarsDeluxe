@@ -4,8 +4,10 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Stun(State):
+    id = 'stun'
+
     def __init__(self, source):
-        super().__init__(source, id='stun', name='Оглушение', constant=True)
+        super().__init__(source, constant=True)
         self.stun = 0
 
     def __call__(self):

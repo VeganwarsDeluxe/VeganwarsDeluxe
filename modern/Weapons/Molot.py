@@ -7,6 +7,7 @@ from core.TargetType import TargetType, Enemies
 
 class Molot(Weapon):
     id = 39
+    name = 'Молот'
     description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \
                   'получает +1 к урону.'
 
@@ -16,8 +17,6 @@ class Molot(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Молот'
 
         self.cooldown_turn = 0
         self.strike = False

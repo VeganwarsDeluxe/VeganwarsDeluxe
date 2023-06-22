@@ -4,8 +4,10 @@ from core.TargetType import OwnOnly
 
 
 class Aflame(State):
+    id = 'aflame'
+
     def __init__(self, source):
-        super().__init__(source, id='aflame', name='Огонь', constant=True)
+        super().__init__(source, constant=True)
         self.flame = 0
         self.dealer = self.source
         self.extinguished = False

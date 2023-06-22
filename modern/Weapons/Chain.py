@@ -6,6 +6,7 @@ from modern.Weapons.Fist import Fist
 
 class Chain(Weapon):
     id = 16
+    name = 'Цепь'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
                   'рук. Если враг перезаряжается, шанс равен 100%.'
 
@@ -15,8 +16,6 @@ class Chain(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Цепь'
         self.cooldown_turn = 0
 
     @property

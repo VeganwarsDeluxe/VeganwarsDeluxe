@@ -6,6 +6,7 @@ from core.TargetType import Enemies, Allies
 
 class Saber(Weapon):
     id = 32
+    name = 'Водомет'
     description = 'Дальний бой, урон 1-3. Способность: создаёт водяной щит вокруг цели, из-за чего та не ' \
                   'может загореться три хода, восстанавливает 2 энергии в ход и получает +1 урона.'
 
@@ -17,7 +18,6 @@ class Saber(Weapon):
         self.dmgbonus = 0
         self.ranged = True
 
-        self.name = 'Водомет'
         self.cooldown_turn = 0
 
     @property

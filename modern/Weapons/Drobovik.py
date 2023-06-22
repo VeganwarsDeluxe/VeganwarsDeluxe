@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 class Drobovik(Weapon):
     id = 5
+    name = 'Дробовик'
     description = 'Дальний бой, урон 2-7, точность низкая, затраты энергии: 4. Атакуя цель, находящуюся с ' \
                   'вами в ближнем бою, вы получаете +1 к урону.'
 
@@ -13,8 +14,6 @@ class Drobovik(Weapon):
         self.cubes = 6
         self.ranged = True
         self.accuracybonus = -2
-
-        self.name = 'Дробовик'
         
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)

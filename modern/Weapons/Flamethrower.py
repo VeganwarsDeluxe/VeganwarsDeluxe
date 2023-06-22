@@ -5,6 +5,7 @@ from core.Weapons.Weapon import Weapon
 
 class Flamethrower(Weapon):
     id = 8
+    name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
     def __init__(self, owner):
@@ -13,8 +14,6 @@ class Flamethrower(Weapon):
         self.energycost = 4
         self.cubes = 1
         self.accuracybonus = 2
-
-        self.name = 'Огнемет'
 
     def calculate_damage(self, source, target):
         """

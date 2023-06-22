@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 class Pistol(Weapon):
     id = 1
+    name = 'Пистолет'
     description = 'Дальний бой, урон 1-3, точность наивысшая.'
 
     def __init__(self, owner):
@@ -11,5 +12,3 @@ class Pistol(Weapon):
         self.cubes = 3
         self.accuracybonus = 3
         self.energycost = 3
-
-        self.name = 'Пистолет'

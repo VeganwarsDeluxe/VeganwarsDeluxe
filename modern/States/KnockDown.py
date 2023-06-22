@@ -4,8 +4,10 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Knockdown(State):
+    id = 'knockdown'
+
     def __init__(self, source):
-        super().__init__(source, id='knockdown', name='Потеря равновесия', constant=True)
+        super().__init__(source, constant=True)
         self.active = False
 
     def __call__(self):

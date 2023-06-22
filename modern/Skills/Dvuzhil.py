@@ -3,9 +3,12 @@ from core.Entities.Entity import Entity
 
 
 class Dvuzhil(Skill):
+    id = 'dvuzhil'
+    description = 'В начале боя вы получаете +1 хп. Устойчивость к кровотечению повышена.'
+    name = 'Двужильность'
+
     def __init__(self, source):
-        super().__init__(source, id='dvuzhil', name='Двужильность', stage='pre-move')
-        self.description = 'В начале боя вы получаете +1 хп. Устойчивость к кровотечению повышена.'
+        super().__init__(source, stage='pre-move')
 
     def __call__(self):
         if self.source.session.turn == 1:

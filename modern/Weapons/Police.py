@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 class Police(Weapon):
     id = 29
+    name = 'Полицейская дубинка'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждая атака отнимает у цели 1 энергии.'
 
     def __init__(self, owner):
@@ -11,8 +12,6 @@ class Police(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Полицейская дубинка'
 
     def attack(self, source, target):
         damage = super().attack(source, target)

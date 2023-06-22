@@ -3,6 +3,7 @@ from .Drobovik import Drobovik
 
 class Obrez(Drobovik):
     id = 4
+    name = 'Обрез'
     description = 'Дальний бой, урон 1-4, точность средняя. Атакуя цель, находящуюся с вами в ближнем ' \
                   'бою, вы получаете +1 к урону.'
 
@@ -12,5 +13,3 @@ class Obrez(Drobovik):
         self.accuracybonus = 0
         self.cubes = 4
         self.ranged = True
-
-        self.name = 'Обрез'

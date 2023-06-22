@@ -5,6 +5,7 @@ from core.TargetType import Enemies
 
 class Saber(Weapon):
     id = 22
+    name = 'Сабля'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: можно выбрать любого врага. ' \
                   'Если тот атаковал, урон от его атаки полностью блокируется, а энергия цели снижается до 0.'
 
@@ -14,8 +15,6 @@ class Saber(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Сабля'
 
         self.cooldown_turn = 0
 

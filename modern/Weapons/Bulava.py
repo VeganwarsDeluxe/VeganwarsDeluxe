@@ -7,6 +7,7 @@ from core.TargetType import TargetType
 
 class Bulava(Weapon):
     id = 13
+    name = 'Булава'
     description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
                   'вы получаете +1 урона.'
 
@@ -16,8 +17,6 @@ class Bulava(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Булава'
 
         self.main_target = None, 0
         self.last_attack_turn = 0

@@ -4,6 +4,7 @@ from core.Weapons.Weapon import Weapon
 
 class Revolver(Weapon):
     id = 6
+    name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 
     def __init__(self, owner):
@@ -13,8 +14,6 @@ class Revolver(Weapon):
         self.dmgbonus = 0
         self.energycost = 3
         self.accuracybonus = 2
-
-        self.name = 'Револьвер'
 
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)

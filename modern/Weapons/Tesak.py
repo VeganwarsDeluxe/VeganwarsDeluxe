@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 class Tesak(Weapon):
     id = 61
+    name = "Тесак"
     description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
                   'по цели бонус уменьшается на 1.'
 
@@ -14,7 +15,6 @@ class Tesak(Weapon):
         self.dmgbonus = 0
         self.ranged = False
 
-        self.name = "Тесак"
         self.tesak_bonus = 4
     
     def calculate_damage(self, source, target):

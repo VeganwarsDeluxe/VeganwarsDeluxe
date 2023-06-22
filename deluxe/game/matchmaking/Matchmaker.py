@@ -287,14 +287,13 @@ class Matchmaker:
             self.pre_move(game.chat_id)
 
     def send_weapon_choice_buttons(self, player, number=3):
-        weapons, clss = [modern.Saber(player)], [modern.Saber]
+        weapons = [modern.Saber]
         for _ in range(number):
-            variants = list(filter(lambda w: w not in clss, modern.all_weapons))
+            variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
             if not variants:
                 break
             choice = random.choice(variants)
             weapons.append(choice(player))
-            clss.append(choice)
 
         kb = types.InlineKeyboardMarkup()
         for weapon in weapons:
@@ -306,15 +305,14 @@ class Matchmaker:
 
     def send_skill_choice_buttons(self, player, number=5, cycle=1):
         game = player.session
-        skills, clss = [], []
+        skills = []
         for _ in range(number):
-            variants = list(filter(lambda s: s not in clss, modern.all_skills))
-            variants = list(filter(lambda s: s(player).id not in [s.id for s in player.skills], variants))
+            variants = list(filter(lambda s: s not in variants, modern.all_skills))
+            variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
             if not variants:
                 break
             choice = random.choice(variants)
             skills.append(choice(player))
-            clss.append(choice)
 
         kb = types.InlineKeyboardMarkup()
         for skill in skills:

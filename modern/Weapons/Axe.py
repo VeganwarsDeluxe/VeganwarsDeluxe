@@ -3,6 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 class Axe(Weapon):
     id = 12
+    name = 'Топор'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс покалечить цель, ' \
                   'после чего ей становится легче снять больше, чем одну жизнь.'
 
@@ -12,8 +13,6 @@ class Axe(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Топор'
 
     def attack(self, source, target):
         damage = super().attack(source, target)

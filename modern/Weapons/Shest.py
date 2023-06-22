@@ -5,6 +5,7 @@ from core.Action import DecisiveAction
 
 class Shest(Weapon):
     id = 45
+    name = 'Шест'
     description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
                   'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
 
@@ -14,8 +15,6 @@ class Shest(Weapon):
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
-
-        self.name = 'Шест'
 
         self.cooldown_turn = 0
 

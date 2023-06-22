@@ -2,8 +2,10 @@ from core.States.State import State
 
 
 class Injury(State):
+    id = 'injury'
+
     def __init__(self, source):
-        super().__init__(source, id='injury', name='Ранение', constant=True)
+        super().__init__(source, constant=True)
         self.injury = 0
 
     def __call__(self):

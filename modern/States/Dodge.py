@@ -4,8 +4,10 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Dodge(State):
+    id = 'dodge'
+
     def __init__(self, source):
-        super().__init__(source, id='dodge', name='Перекат', constant=True)
+        super().__init__(source, constant=True)
         self.dodge_cooldown = 0
 
     def __call__(self):

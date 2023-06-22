@@ -5,8 +5,12 @@ from core.Skills.Skill import Skill
 
 
 class Stockpile(Skill):
+    id = 'stockpile'
+    name = 'Запасливый'
+    description = 'В начале матча вы получаете два дополнительных предмета.'
+
     def __init__(self, source):
-        super().__init__(source, id='stockpile', name='Запасливый', stage='pre-move')
+        super().__init__(source, stage='pre-move')
 
     def __call__(self):
         if self.source.session.turn == 1:

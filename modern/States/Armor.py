@@ -3,8 +3,10 @@ from core.States.State import State
 
 
 class Armor(State):
+    id = 'armor'
+
     def __init__(self, source):
-        super().__init__(source, id='armor', name='Броня', stage='post-attack')
+        super().__init__(source, stage='post-attack')
         self.armor = 0
 
     def __call__(self):
