@@ -74,6 +74,21 @@ def vd_join_handler(m):
     mm.join_game(m.chat.id, m.from_user.id, m.from_user.full_name)
 
 
+@bot.message_handler(commands=['pivo'])
+def vd_join_handler(m):
+    game = mm.get_game(m.chat.id)
+    if not game:
+        return
+    player = game.get_player(m.from_user.id)
+    if not player:
+        return
+    if game.lobby:
+        return
+    for i in range(100):
+        player.items.append(modern.RageSerum(player))
+    bot.reply_to(m, 'Добавлено сто сівороток.')
+
+
 @bot.message_handler(commands=['vd_suicide'])
 def vd_join_handler(m):
     game = mm.get_game(m.chat.id)

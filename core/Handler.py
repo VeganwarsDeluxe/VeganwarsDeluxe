@@ -104,4 +104,4 @@ class ScheduledHandler(Handler):
 
 class SingleTurnHandler(ScheduledHandler):
     def __init__(self, session, func, events, turn):
-        super().__init__(session, func, events, turn, 1, 1)
+        super().__init__(session, func, events, start=turn, interval=1, repeats=1)

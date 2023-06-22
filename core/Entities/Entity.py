@@ -49,8 +49,11 @@ class Entity:
     def energies(self):
         return '⚡️' * self.energy if self.energy < 8 else f"⚡️x{self.energy}"
 
-    def get_action(self, id: str):
-        action = list(filter(lambda a: a.id == id, self.actions))
+    def get_action(self, id: str, default=False):
+        pool = self.actions
+        if default:
+            pool = self.default_actions
+        action = list(filter(lambda a: a.id == id, pool))
         if action:
             action = action[0]
             action.source = self

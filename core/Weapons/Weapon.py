@@ -5,6 +5,7 @@ from core.TargetType import Enemies
 
 class Weapon(object):
     id = None
+    name = 'None'
     description = 'Описание еще не написано.'
 
     def __init__(self, owner):

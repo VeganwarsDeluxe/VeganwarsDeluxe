@@ -219,7 +219,7 @@ class Matchmaker:
             chance = player.hit_chance
             if power == 1:
                 chance += 60
-            elif power == 1:
+            elif power == 2:
                 chance += 90
             tts += f'🎯|Вероятность попасть в {target.name}|🎃 - {chance}%'
         return tts
@@ -308,6 +308,7 @@ class Matchmaker:
         skills = []
         for _ in range(number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
+            variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
             if not variants:
                 break
             choice = random.choice(variants)
