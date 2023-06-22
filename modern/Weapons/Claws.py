@@ -4,17 +4,18 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Claws(Weapon):
+    id = 26
+    description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \
+                  'но затрачивая 4 энергии за атаку.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 26
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
 
         self.name = 'Стальные когти'
-        self.description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \
-                           'но затрачивая 4 энергии за атаку.'
 
         self.claws = False
 

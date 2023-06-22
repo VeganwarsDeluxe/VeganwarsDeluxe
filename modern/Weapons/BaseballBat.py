@@ -3,14 +3,15 @@ import random
 
 
 class BaseballBat(Weapon):
+    id = 2
+    description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс оглушить цель.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 2
         self.accuracybonus = 2
         self.cubes = 3
 
         self.name = 'Бита'
-        self.description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс оглушить цель.'
 
     def attack(self, source, target):
         damage = super().attack(source, target)

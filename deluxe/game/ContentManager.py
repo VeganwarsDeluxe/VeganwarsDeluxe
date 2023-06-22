@@ -15,6 +15,5 @@ class ContentManager:
 
     def get_weapon(self, weapon_id):
         weapon_id = int(weapon_id)
-        weapons = list(filter(lambda w: w(self.entity).id == weapon_id, modern.all_weapons))
-        return weapons[0](self.entity) if weapons else modern.Fist(self.entity)
-
+        weapons = list(filter(lambda w: w.id == weapon_id, modern.all_weapons))
+        return weapons[0](self.entity) if weapons else modern.Fist

@@ -2,9 +2,12 @@ from core.Weapons.Weapon import Weapon
 
 
 class Tesak(Weapon):
+    id = 61
+    description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
+                  'по цели бонус уменьшается на 1.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 61
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
@@ -12,9 +15,6 @@ class Tesak(Weapon):
         self.ranged = False
 
         self.name = "Тесак"
-        self.description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
-                           'по цели бонус уменьшается на 1.'
-
         self.tesak_bonus = 4
     
     def calculate_damage(self, source, target):

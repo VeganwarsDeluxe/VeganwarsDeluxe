@@ -2,9 +2,12 @@ from core.Weapons.Weapon import Weapon
 
 
 class Saw(Weapon):
+    id = 28
+    description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
+                  'увеличивающий урон от атак по цели на 1.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 28
         self.cubes = 2
         self.accuracybonus = 3
         self.energycost = 3
@@ -12,7 +15,6 @@ class Saw(Weapon):
         self.ranged = True
 
         self.name = 'Пиломет'
-        self.description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", увеличивающий урон от атак по цели на 1.'
 
     def attack(self, source, target):
         damage = super().attack(source, target)

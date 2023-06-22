@@ -4,8 +4,10 @@ from core.TargetType import Enemies
 
 
 class Weapon(object):
+    id = None
+    description = 'Описание еще не написано.'
+
     def __init__(self, owner):
-        self.id = None
         self.owner = owner
         self.energycost = 2
         self.cubes = 2
@@ -14,7 +16,6 @@ class Weapon(object):
         self.accuracybonus = 0
 
         self.name = 'None'
-        self.description = 'Описание еще не написано.'
 
     @property
     def actions(self):

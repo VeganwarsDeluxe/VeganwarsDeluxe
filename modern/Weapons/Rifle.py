@@ -6,9 +6,12 @@ from core.TargetType import TargetType, Enemies
 
 
 class Rifle(Weapon):
+    id = 11
+    description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
+                  ' чтобы повысить точность против выбранного персонажа'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 11
         self.ranged = True
         self.cubes = 1
         self.accuracybonus = -4
@@ -16,8 +19,6 @@ class Rifle(Weapon):
         self.dmgbonus = 7
 
         self.name = 'Снайперская винтовка'
-        self.description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
-                           ' чтобы повысить точность против выбранного персонажа'
 
         self.main_target = None, 0
 

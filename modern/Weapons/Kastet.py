@@ -3,9 +3,11 @@ from core.Weapons.Weapon import Weapon
 
 
 class Kastet(Weapon):
+    id = 14
+    description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 14
         self.name = 'Кастет'
         self.cubes = 3
         self.accuracybonus = 2

@@ -3,14 +3,15 @@ import random
 
 
 class Torch(Weapon):
+    id = 7
+    description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 7
         self.accuracybonus = 2
         self.cubes = 3
 
         self.name = 'Факел'
-        self.description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'
 
     def attack(self, source, target):
         damage = super().attack(source, target)

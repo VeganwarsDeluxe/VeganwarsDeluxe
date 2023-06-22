@@ -4,16 +4,17 @@ from core.Weapons.Weapon import Weapon
 
 
 class Flamethrower(Weapon):
+    id = 8
+    description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 8
         self.ranged = True
         self.energycost = 4
         self.cubes = 1
         self.accuracybonus = 2
 
         self.name = 'Огнемет'
-        self.description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
     def calculate_damage(self, source, target):
         """

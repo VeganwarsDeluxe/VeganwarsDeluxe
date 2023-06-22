@@ -4,17 +4,18 @@ from core.Action import DecisiveAction
 
 
 class Shest(Weapon):
+    id = 45
+    description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
+                  'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 45
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
 
         self.name = 'Шест'
-        self.description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
-                           'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
 
         self.cooldown_turn = 0
 

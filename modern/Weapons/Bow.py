@@ -6,9 +6,12 @@ from core.TargetType import TargetType, Enemies
 
 
 class Bow(Weapon):
+    id = 24
+    description = 'Дальний бой, урон 1-3, точность средняя. Способность: поджигает стрелу, которая не ' \
+                  'наносит урон, но накладывает на цель 2 эффекта горения.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 24
         self.cubes = 3
         self.accuracybonus = 1
         self.energycost = 3
@@ -16,8 +19,6 @@ class Bow(Weapon):
         self.ranged = True
 
         self.name = 'Лук'
-        self.description = 'Дальний бой, урон 1-3, точность средняя. Способность: поджигает стрелу, которая не ' \
-                           'наносит урон, но накладывает на цель 2 эффекта горения.'
 
         self.cooldown_turn = 0
         self.strike = False

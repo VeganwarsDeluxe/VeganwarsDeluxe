@@ -5,9 +5,12 @@ from core.TargetType import Enemies, Allies
 
 
 class Saber(Weapon):
+    id = 32
+    description = 'Дальний бой, урон 1-3. Способность: создаёт водяной щит вокруг цели, из-за чего та не ' \
+                  'может загореться три хода, восстанавливает 2 энергии в ход и получает +1 урона.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 32
         self.cubes = 3
         self.accuracybonus = 1
         self.energycost = 3
@@ -15,9 +18,6 @@ class Saber(Weapon):
         self.ranged = True
 
         self.name = 'Водомет'
-        self.description = 'Дальний бой, урон 1-3. Способность: создаёт водяной щит вокруг цели, из-за чего та не ' \
-                           'может загореться три хода, восстанавливает 2 энергии в ход и получает +1 урона.'
-
         self.cooldown_turn = 0
 
     @property

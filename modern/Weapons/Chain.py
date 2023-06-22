@@ -5,18 +5,18 @@ from modern.Weapons.Fist import Fist
 
 
 class Chain(Weapon):
+    id = 16
+    description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
+                  'рук. Если враг перезаряжается, шанс равен 100%.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 16
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
         self.dmgbonus = 0
 
         self.name = 'Цепь'
-        self.description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
-                           'рук. Если враг перезаряжается, шанс равен 100%.'
-
         self.cooldown_turn = 0
 
     @property

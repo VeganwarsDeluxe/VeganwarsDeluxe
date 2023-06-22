@@ -2,9 +2,11 @@ from core.Weapons.Weapon import Weapon
 
 
 class Sword(Weapon):
+    id = 30
+    description = 'Ближний бой, урон 1-3.'
+
     def __init__(self, owner):
         super().__init__(owner)
-        self.id = 30
         self.name = 'Меч'
         self.cubes = 3
         self.accuracybonus = 2
@@ -12,4 +14,3 @@ class Sword(Weapon):
         self.dmgbonus = 0
 
         self.name = 'Меч'
-        self.description = 'Ближний бой, урон 1-3.'
