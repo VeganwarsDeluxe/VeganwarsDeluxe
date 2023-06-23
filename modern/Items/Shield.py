@@ -19,7 +19,7 @@ class Shield(DecisiveItem):
                 return
             if attack.target != self.target:
                 return
-            damage = entity.action.data.get('damage')
+            damage = attack.data.get('damage')
             if not damage:
                 return
-            entity.action.data.update({'damage': 0})
+            attack.data.update({'damage': 0})

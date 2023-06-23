@@ -39,6 +39,17 @@ def vd_prepare_handler(m):
     bot.reply_to(m, 'Набор в игру запущен!', reply_markup=kb)
 
 
+@bot.message_handler(commands=['vd_delete'])
+def vd_prepare_handler(m):
+    game = mm.get_game(m.chat.id)
+    if not game:
+        bot.reply_to(m, 'Игра и так не запущена!')
+        return
+    mm.create_game(m.chat.id)
+    del mm.games[m.chat.id]
+    bot.reply_to(m, 'Игра удалена.')
+
+
 @bot.message_handler(commands=['start'], func=lambda m: " jg_" in m.text)
 def vd_prepare_handler(m):
     game_id = int(m.text.split('_')[-1])
