@@ -56,11 +56,11 @@ class WaterShield(State):
         aflame = self.source.get_skill('aflame')
         aflame.extinguished = True
         aflame.flame = 1
-        if self.source.session.current_stage == 'attack':
+        if self.source.session.event.moment == 'attack':
             damage = self.source.action.data.get('damage')
             if damage:
-                self.source.action.data.update({'damage': damage+1})
-        if self.source.session.current_stage != 'post-damages':
+                self.source.action.data.update({'damage': damage + 1})
+        if self.source.session.event.moment != 'post-damages':
             return
         self.source.say(f'🔋|{self.source.name} получает 2 энергии.')
         self.source.energy += 2

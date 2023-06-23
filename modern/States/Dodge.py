@@ -12,7 +12,7 @@ class Dodge(State):
 
     def __call__(self):
         source = self.source
-        if source.session.current_stage == 'post-tick':
+        if source.session.event.moment == 'post-tick':
             self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
     def dodge(self, source, target):

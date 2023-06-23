@@ -20,8 +20,11 @@ class ExtendedBot(TeleBot):
                 time.sleep(2)
                 self.send_message(*args, **kwargs)
 
+    def get_deep_link(self, data: str):
+        return f"https://t.me/{self.user.username}?start={data}"
 
-bot = TeleBot(bot_token)
+
+bot = ExtendedBot(bot_token)
 mm = Matchmaker(bot)
 rm = RatingManager()
 

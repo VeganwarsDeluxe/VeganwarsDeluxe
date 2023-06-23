@@ -22,6 +22,10 @@ class Molotov(DecisiveItem):
             aflame = target.get_skill('aflame')
             aflame.add_flame(self.source, 1)
             targets.append(target)
-
+        self.source.energy = max(self.source.energy - 2, 0)
         self.source.session.say(f'🍸|{self.source.name} кидает коктейль молотова! '
                                 f'{",".join([t.name for t in targets])} в огне!')
+
+    @property
+    def blocked(self):
+        return self.source.energy < 2

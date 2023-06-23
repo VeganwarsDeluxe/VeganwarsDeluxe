@@ -35,7 +35,10 @@ class Matchmaker:
             return
 
         for player in game.alive_entities:
-            if player.npc:
+            if player.get_skill('stun').active:
+                player.action = player.get_action('lay_stun')
+                player.ready = True
+            elif player.npc:
                 player.choose_act()
             else:
                 self.send_act_buttons(player, game)

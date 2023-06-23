@@ -30,6 +30,15 @@ class HandlerManager:
 
         return decorator_func
 
+    def now(self, events=True):
+        def decorator_func(func):
+            self.handlers.append(
+                SingleTurnHandler(self.session, func, events, self.session.turn)
+            )
+            return func
+
+        return decorator_func
+
     def at_event(self, events=True):
         def decorator_func(func):
             self.handlers.append(
@@ -62,15 +71,27 @@ class Handler:
         self.times_executed = set()
 
     def is_triggered(self):
-        if self.events is True:
-            return True
-        if self.session.current_stage not in self.events:
-            return False
         if self.repeats != -1:
             if len(self.times_executed) >= self.repeats:
-                return False
-        if self.events == self.session.current_stage:
+                if self.session.turn not in self.times_executed:
+                    return False
+        if self.is_event_triggered():
             return True
+        return False
+
+    def is_event_triggered(self):
+        if self.events is True:
+            return True
+        if isinstance(self.events, list):
+            for event in self.events:
+                if event == self.session.event.moment:
+                    return True
+        elif isinstance(self.events, str):
+            if self.events == self.session.event.moment:
+                return True
+            else:
+                pass
+        return False
 
     def __call__(self):
         if self.is_triggered():
@@ -98,8 +119,9 @@ class ScheduledHandler(Handler):
         return (self.session.turn - self.start) % self.interval == 0
 
     def __call__(self):
-        if self.check_turn():
-            super().__call__()
+        if not self.check_turn():
+            return
+        super().__call__()
 
 
 class SingleTurnHandler(ScheduledHandler):

@@ -14,9 +14,9 @@ class Stun(State):
         source = self.source
         if not self.active:
             return
-        if source.session.current_stage == 'post-update':
+        if source.session.event.moment == 'post-update':
             source.actions = self.actions
-        if source.session.current_stage == 'post-damages':
+        if source.session.event.moment == 'post-damages':
             if self.stun == 1:
                 source.session.say(f'🌀|{source.name} приходит в себя.')
             self.stun -= 1

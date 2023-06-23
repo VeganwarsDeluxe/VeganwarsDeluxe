@@ -10,7 +10,7 @@ class Injury(State):
 
     def __call__(self):
         source = self.source
-        if source.session.current_stage != 'attack':
+        if source.session.event.moment != 'attack':
             return
         if not self.injury:
             return

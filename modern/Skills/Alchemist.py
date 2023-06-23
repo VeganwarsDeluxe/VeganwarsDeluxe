@@ -9,7 +9,7 @@ class Alchemist(Skill):
                   'которой заставляет выбранную цель атаковать дополнительно к своему действию..'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source, stage='pre-move')
 
     def __call__(self):
         if self.source.session.turn == 1:

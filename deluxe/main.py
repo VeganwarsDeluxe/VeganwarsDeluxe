@@ -1,6 +1,8 @@
 import random
 import traceback
 
+from telebot import types
+
 import modern
 from config import admin
 from deluxe.bot import bot, mm, cm
@@ -31,7 +33,28 @@ def vd_prepare_handler(m):
         bot.reply_to(m, 'Игра уже запущена! Вступайте командой /vd_join.')
         return
     mm.create_game(m.chat.id)
-    bot.reply_to(m, 'Набор в игру запущен! Заходите командой /vd_join.')
+
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(text='Вступить в игру', url=bot.get_deep_link(f"jg_{m.chat.id}")))
+    bot.reply_to(m, 'Набор в игру запущен!', reply_markup=kb)
+
+
+@bot.message_handler(commands=['start'], func=lambda m: " jg_" in m.text)
+def vd_prepare_handler(m):
+    game_id = int(m.text.split('_')[-1])
+    game = mm.get_game(game_id)
+    if not game:
+        bot.reply_to(m, 'Данная игра не запущена!')
+        return
+    if m.from_user.id in game.player_ids:
+        bot.reply_to(m, 'Вы уже в игре!')
+        return
+    if not game.lobby:
+        bot.reply_to(m, 'Игра уже идет!')
+        return
+    bot.send_message(m.from_user.id, 'Вы вступили в игру! Осторжно, бот в бета тесте!')
+    bot.send_message(game_id, f'{m.from_user.full_name} вступил в игру!')
+    mm.join_game(game_id, m.from_user.id, m.from_user.full_name)
 
 
 @bot.message_handler(commands=['vd_go'])
@@ -216,6 +239,9 @@ def act_callback_handler(c):
     if not action:
         bot.edit_message_text('Кнопка стухла!', c.message.chat.id, c.message.message_id)
         return
+    if action.blocked:
+        bot.answer_callback_query(c.id, "Кнопка заблокирована!", show_alert=True)
+        return
     bot.edit_message_text(f"Выбрано: {action.name}", c.message.chat.id, c.message.message_id)
     mm.choose_item(game, c.from_user.id, item_id)
 
@@ -234,6 +260,9 @@ def act_callback_handler(c):
     action = player.get_action(act_id)
     if not action:
         bot.edit_message_text('Кнопка стухла!', c.message.chat.id, c.message.message_id)
+        return
+    if action.blocked:
+        bot.answer_callback_query(c.id, "Кнопка заблокирована!", show_alert=True)
         return
     bot.edit_message_text(f"Выбрано: {action.name}", c.message.chat.id, c.message.message_id)
     mm.choose_act(game, c.from_user.id, act_id)

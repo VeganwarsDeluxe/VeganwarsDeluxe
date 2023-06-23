@@ -14,13 +14,12 @@ class Shield(DecisiveItem):
 
         @self.source.session.handlers.at(turn=self.source.session.turn, events='post-attack')
         def shield_block():
-            for entity in self.source.session.entities:
-                attack_target = entity.action.data.get('target')
-                if not attack_target:
-                    continue
-                if attack_target != self.target:
-                    continue
-                damage = entity.action.data.get('damage')
-                if not damage:
-                    continue
-                entity.action.data.update({'damage': 0})
+            attack = self.source.session.event.action
+            if not attack.target:
+                return
+            if attack.target != self.target:
+                return
+            damage = entity.action.data.get('damage')
+            if not damage:
+                return
+            entity.action.data.update({'damage': 0})

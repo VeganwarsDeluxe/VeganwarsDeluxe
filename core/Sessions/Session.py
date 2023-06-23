@@ -1,5 +1,6 @@
 from core.Entities.Entity import Entity
 from core.Handler import HandlerManager
+from core.Event import Event
 
 
 class Session:
@@ -10,15 +11,17 @@ class Session:
         self.entities: list[Entity] = []
 
         self.handlers: HandlerManager = HandlerManager(self)
-        self.current_stage = 'pre-start'
+        self.event: Event = Event()
 
     def stage(self, stage):  # TODO: Rename to event
-        self.current_stage = stage
+        self.event.now(stage)
+
         for entity in self.entities:
             for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
                 skill()
-
         self.handlers.event()
+
+        self.event.end()
 
     def say(self, text, n=True):
         print(text, end=('\n' if n else ''))
@@ -40,7 +43,6 @@ class Session:
     def tick(self):
         for entity in self.entities:
             entity.tick_turn()
-        self.turn += 1
 
     def update_actions(self):
         self.stage('pre-update')
@@ -130,3 +132,5 @@ class Session:
         self.death()  # 8. Death stage
         self.stage('post-death')  # 9. Post-death stage
         self.finish()  # 10. Finish stage
+
+        self.turn += 1

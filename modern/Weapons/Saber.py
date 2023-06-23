@@ -23,7 +23,7 @@ class Saber(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return [
-            DecisiveAction(self.parry, self.owner, target_type=Enemies(distance=1),
+            DecisiveAction(self.parry, self.owner, target_type=Enemies(),
                            name='Парировать', id='parry', priority=-5)
         ] + super().actions
 

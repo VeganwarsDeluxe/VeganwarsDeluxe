@@ -19,6 +19,9 @@ class Action:
         self.type = 'action'
 
     def __call__(self):  # Abstract "Run" method for overriding
+        if self.canceled:
+            return
+        self.source.session.event.action = self
         return self.func(self.source, self.target)
 
     @property
@@ -51,6 +54,10 @@ class Action:
 
     @property
     def cost(self):
+        return False
+
+    @property
+    def blocked(self):
         return False
 
 

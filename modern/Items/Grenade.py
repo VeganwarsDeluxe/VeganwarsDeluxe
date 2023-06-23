@@ -24,5 +24,10 @@ class Grenade(DecisiveItem):
             target.inbound_dmg.add(self.source, damage)
             self.source.outbound_dmg.add(self.source, damage)
             targets.append(target)
+        self.source.energy = max(self.source.energy - 2, 0)
         self.source.session.say(f'💣|{self.source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
                                 f'{",".join([t.name for t in targets])}.')
+
+    @property
+    def blocked(self):
+        return self.source.energy < 2

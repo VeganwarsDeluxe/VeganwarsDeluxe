@@ -8,7 +8,7 @@ class State:
         self.stage = stage
 
     def is_triggered(self, stage):
-        return self.constant or self.stage == stage
+        return self.constant or self.stage == stage or self.stage == stage.split('$')[-1]
 
     @property
     def actions(self):

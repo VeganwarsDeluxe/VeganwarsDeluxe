@@ -14,7 +14,7 @@ class Knockdown(State):
         source = self.source
         if not self.active:
             return
-        if source.session.current_stage == 'post-update':
+        if source.session.event.moment == 'post-update':
             source.remove_action('attack')
             source.remove_action('dodge')
 
