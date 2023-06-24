@@ -22,16 +22,15 @@ class ShieldGen(Skill):
 
         @source.session.handlers.at(turn=source.session.turn, events='post-attack')
         def shield_block():
-            for entity in source.session.entities:
-                attack_target = entity.action.data.get('target')
-                if not attack_target:
-                    continue
-                if attack_target != target:
-                    continue
-                damage = entity.action.data.get('damage')
-                if not damage:
-                    continue
-                entity.action.data.update({'damage': 0})
+            attack = source.session.event.action
+            if not attack.target:
+                return
+            if attack.target != target:
+                return
+            damage = attack.data.get('damage')
+            if not damage:
+                return
+            attack.data.update({'damage': 0})
 
     @property
     def actions(self):

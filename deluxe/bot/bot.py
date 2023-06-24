@@ -13,12 +13,12 @@ from deluxe.game.matchmaking.Matchmaker import Matchmaker
 class ExtendedBot(TeleBot):
     def send_message(self, *args, **kwargs):
         try:
-            super().send_message(*args, **kwargs)
+            return super().send_message(*args, **kwargs)
         except ApiTelegramException as e:
             print(traceback.format_exc())
             if 'Too Many Requests' in e.description:
                 time.sleep(2)
-                self.send_message(*args, **kwargs)
+                return self.send_message(*args, **kwargs)
 
     def get_deep_link(self, data: str):
         return f"https://t.me/{self.user.username}?start={data}"

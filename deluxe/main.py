@@ -29,14 +29,20 @@ def vd_prepare_handler(m):
 @bot.message_handler(commands=['vd_prepare'])
 def vd_prepare_handler(m):
     game = mm.get_game(m.chat.id)
-    if game:
-        bot.reply_to(m, 'Игра уже запущена! Вступайте командой /vd_join.')
-        return
-    mm.create_game(m.chat.id)
 
+    if game:
+        if game.lobby:
+            bot.reply_to(game.lobby_message, 'Игра уже запущена!')
+        else:
+            bot.reply_to(m, 'Игра уже идет!')
+        return
+
+    game = mm.create_game(m.chat.id)
     kb = types.InlineKeyboardMarkup()
-    kb.add(types.InlineKeyboardButton(text='Вступить в игру', url=bot.get_deep_link(f"jg_{m.chat.id}")))
-    bot.reply_to(m, 'Набор в игру запущен!', reply_markup=kb)
+    kb.add(types.InlineKeyboardButton(text='♿️Вступить в игру', url=bot.get_deep_link(f"jg_{m.chat.id}")))
+    kb.add(types.InlineKeyboardButton(text='▶️Запустить игру', callback_data="vd_go"))
+    m = bot.send_message(m.chat.id, f'Игра: {game.name}\n\nУчастники:', reply_markup=kb)
+    game.lobby_message = m
 
 
 @bot.message_handler(commands=['vd_delete'])
@@ -87,6 +93,25 @@ def vd_join_handler(m):
     bot.reply_to(m, 'Игра начинается!')
 
 
+@bot.callback_query_handler(func=lambda c: c.data == 'vd_go')
+def act_callback_handler(c):
+    game = mm.get_game(c.message.chat.id)
+    if not game:
+        bot.answer_callback_query(c.id, "Игра не запущена!")
+        return
+    if c.from_user.id not in game.player_ids:
+        if c.from_user.id != admin:
+            bot.answer_callback_query(c.id, "Вас нет в игре!")
+            return
+    if not game.lobby:
+        bot.answer_callback_query(c.id, "Игра уже идет!")
+        return
+    game.lobby = False
+    mm.choose_items(c.message.chat.id)
+    mm.choose_weapons(c.message.chat.id)
+    bot.reply_to(c.message, 'Игра начинается!')
+
+
 @bot.message_handler(commands=['vd_join'])
 def vd_join_handler(m):
     game = mm.get_game(m.chat.id)
@@ -106,21 +131,6 @@ def vd_join_handler(m):
         return
     bot.send_message(m.chat.id, f'{m.from_user.full_name} вступил в игру!')
     mm.join_game(m.chat.id, m.from_user.id, m.from_user.full_name)
-
-
-@bot.message_handler(commands=['pivo'])
-def vd_join_handler(m):
-    game = mm.get_game(m.chat.id)
-    if not game:
-        return
-    player = game.get_player(m.from_user.id)
-    if not player:
-        return
-    if game.lobby:
-        return
-    for i in range(100):
-        player.items.append(modern.RageSerum(player))
-    bot.reply_to(m, 'Добавлено сто сівороток.')
 
 
 @bot.message_handler(commands=['vd_suicide'])
@@ -160,6 +170,7 @@ def vd_join_handler(m):
     for _ in range(count):
         cow = Cow(game)
         game.entities.append(cow)
+    mm.update_message(game)
     bot.send_message(m.chat.id, f'{count} коров прибежало!')
 
 

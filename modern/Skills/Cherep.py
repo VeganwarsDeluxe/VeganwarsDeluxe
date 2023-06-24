@@ -17,4 +17,4 @@ class Cherep(Skill):
             threshold.threshold += 1
 
             armor = self.source.get_skill('armor')
-            armor.add(1)
+            armor.add(1, 50)

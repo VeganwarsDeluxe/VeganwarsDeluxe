@@ -16,15 +16,14 @@ class Biceps(Skill):
         return ['attack']
 
     def __call__(self):
+        attack = self.source.session.event.action
         if self.source.weapon.ranged:
             return
         if random.randint(0, 100) > 30:
             return
-        damage = self.source.action.data.get('damage')
+        damage = attack.data.get('damage')
         if not damage:
             return
         self.source.session.say(f'❗️', n=False)
         damage *= 2
-        self.source.action.data.update({'damage': damage})
-
-
+        attack.data.update({'damage': damage})

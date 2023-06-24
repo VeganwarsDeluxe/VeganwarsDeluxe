@@ -7,34 +7,35 @@ class Armor(State):
 
     def __init__(self, source):
         super().__init__(source, stage='post-attack')
-        self.armor = 0
+        self.armor = []
 
     def __call__(self):
-        for entity in self.source.session.entities:
-            if entity.action.id != 'attack':
-                continue
-            if entity.action.data.get('target') == self.source:
-                self.negate_damage(entity)
+        attack = self.source.session.event.action
+        if attack.target == self.source:
+            self.negate_damage(attack)
 
-    def negate_damage(self, entity):
-        damage = entity.action.data.get('damage')
-        if damage == 0:
+    def negate_damage(self, attack):
+        damage = attack.data.get('damage')
+        if not damage:
             return
         armor = min(damage, self.roll_armor())
         if not armor:
             return
         self.source.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
-        entity.action.data.update({'damage': damage - armor})
+        attack.data.update({'damage': damage - armor})
 
-    def add(self, value: int):
-        self.armor += value
-        if self.armor < 0:
-            self.armor = 0
+    def add(self, value: int, chance=100):
+        self.armor.append((value, chance))
+
+    def remove(self, armor):
+        if armor in self.armor:
+            self.armor.remove(armor)
 
     def roll_armor(self):
-        armor = 0
-        for _ in range(self.armor):
-            if random.randint(0, 100) > 50:
-                continue
-            armor += 1
-        return armor
+        result = 0
+        for armor, chance in self.armor:
+            for _ in range(armor):
+                if random.randint(0, 100) > chance:
+                    continue
+                result += 1
+        return result

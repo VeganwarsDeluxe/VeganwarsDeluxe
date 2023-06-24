@@ -3,12 +3,15 @@ from deluxe.game.Entities.TelegramEntity import TelegramEntity
 
 
 class TelegramSession(Session):
+    name = 'Basic'
+
     def __init__(self, chat_id=None):
         super().__init__()
         self.entities: list[TelegramEntity] = []
         self.texts = ['', '']
-        self.chat_id = chat_id
 
+        self.chat_id = chat_id
+        self.lobby_message = None
         self.lobby = True
 
         self.skill_cycles = 2

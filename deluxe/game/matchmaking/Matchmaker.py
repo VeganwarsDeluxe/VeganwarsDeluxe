@@ -249,6 +249,16 @@ class Matchmaker:
         player.energy, player.max_energy, player.hp, player.max_hp = 5, 5, 4, 4
         game.entities.append(player)
 
+        self.update_message(game)
+
+    def update_message(self, game):
+        tts = f"Игра: {game.name}\n\nУчастники: {', '.join([player.name for player in game.entities])}"
+        kb = types.InlineKeyboardMarkup()
+        kb.add(types.InlineKeyboardButton(text='♿️Вступить в игру', url=self.bot.get_deep_link(f"jg_{game.chat_id}")))
+        kb.add(types.InlineKeyboardButton(text='▶️Запустить игру', callback_data="vd_go"))
+        self.bot.edit_message_text(tts, message_id=game.lobby_message.message_id, chat_id=game.lobby_message.chat.id,
+                                   reply_markup=kb)
+
     def choose_items(self, chat_id):
         game = self.games.get(chat_id)
         for player in game.not_chosen_items:
@@ -290,7 +300,7 @@ class Matchmaker:
             self.pre_move(game.chat_id)
 
     def send_weapon_choice_buttons(self, player, number=3):
-        weapons = [modern.Saber]
+        weapons = [modern.Revolver]
         for _ in range(number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
             if not variants:
