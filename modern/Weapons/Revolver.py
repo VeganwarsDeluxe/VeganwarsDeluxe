@@ -6,7 +6,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Revolver(Weapon):
-    id = 6
+    id = 'revolver'
     name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 

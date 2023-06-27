@@ -7,7 +7,7 @@ from core.TargetType import Enemies, Allies, Everyone
 
 
 class PortalGun(Weapon):
-    id = 301
+    id = 'portalgun'
     name = 'Портальная пушка'
     description = 'Дальний бой, урон 1-2.'
 

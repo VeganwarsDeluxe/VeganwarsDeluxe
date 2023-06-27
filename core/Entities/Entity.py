@@ -92,15 +92,15 @@ class Entity:
     @property
     def default_actions(self):
         actions = [
-            DecisiveAction(self.skip, self, target_type=OwnOnly(), name='Пропустить', id='skip'),
-            DecisiveAction(self.reload, self, target_type=OwnOnly(), name='Перезарядка', id='reload'),
+            SkipTurnAction(self),
+            ReloadAction(self)
         ]
         actions += self.weapon.actions
         for skill in self.skills:
             actions += skill.actions
         if not self.approached:
             actions += [
-                DecisiveAction(self.approach, self, target_type=OwnOnly(), name='Подойти', id='approach')
+                ApproachAction(self)
             ]
         return actions
 
@@ -132,15 +132,40 @@ class Entity:
         cubes = self.weapon.cubes
         return int(max((1 - ((1 - energy / 10) ** cubes)) * 100, 0))
 
-    def skip(self, *args):
-        self.session.say(f"⬇|{self.name} пропускает ход.")
 
-    def reload(self, *args):
-        self.energy = self.max_energy
-        self.session.say(f"🕓|{self.name} перезаряжается. Энергия восстановлена до максимальной! ({self.max_energy})")
+class ApproachAction(DecisiveAction):
+    id = 'approach'
+    name = 'Подойти'
 
-    def approach(self, *args):
-        self.nearby_entities = list(filter(lambda t: t != self, self.session.entities))
-        for entity in self.nearby_entities:
-            entity.nearby_entities.append(self) if self not in entity.nearby_entities else None
-        self.session.say(f'👣|{self.name} подходит к противнику вплотную.')
+    def __init__(self, source):
+        super().__init__(source, OwnOnly())
+
+    def func(self, source, target):
+        source.nearby_entities = list(filter(lambda t: t != source, source.session.entities))
+        for entity in source.nearby_entities:
+            entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
+        source.session.say(f'👣|{source.name} подходит к противнику вплотную.')
+
+
+class ReloadAction(DecisiveAction):
+    id = 'reload'
+    name = 'Перезарядка'
+
+    def __init__(self, source):
+        super().__init__(source, OwnOnly())
+
+    def func(self, source, target):
+        source.energy = source.max_energy
+        source.session.say(f"🕓|{source.name} перезаряжается. "
+                           f"Энергия восстановлена до максимальной! ({source.max_energy})")
+
+
+class SkipTurnAction(DecisiveAction):
+    id = 'skip'
+    name = 'Пропустить'
+
+    def __init__(self, source):
+        super().__init__(source, OwnOnly())
+
+    def func(self, source, target):
+        source.session.say(f"⬇|{source.name} пропускает ход.")

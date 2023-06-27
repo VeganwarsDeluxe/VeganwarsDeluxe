@@ -3,8 +3,11 @@ from core.TargetType import Allies, Everyone
 
 
 class Hitin(FreeItem):
+    id = 'hitin'
+    name = 'Хитин'
+
     def __init__(self, source):
-        super().__init__(source, name='Хитин', id='hitin', target_type=Everyone())
+        super().__init__(source, target_type=Everyone())
 
     def use(self):
         self.target.get_skill('armor').add(2, 100)

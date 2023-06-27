@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Fist(Weapon):
-    id = 10
+    id = 'fist'
     name = 'Кулаки'
     description = 'Ближний бой. Оружие для настоящих боев!'
 

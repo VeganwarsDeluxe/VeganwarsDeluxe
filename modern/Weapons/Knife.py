@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Knife(Weapon):
-    id = 3
+    id = 'knife'
     name = 'Нож'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждый удар накладывает кровотечение на цель.'
 

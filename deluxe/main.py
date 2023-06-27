@@ -191,7 +191,7 @@ def act_callback_handler(c):
     if weapon_id == 'random':
         weapon = random.choice(modern.all_weapons)(player)
     else:
-        weapon = mm.get_weapon(int(weapon_id), player)
+        weapon = mm.get_weapon(weapon_id, player)
     player.weapon = weapon
     player.chose_weapon = True
     if not game.not_chosen_weapon:

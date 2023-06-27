@@ -4,16 +4,18 @@ import random
 
 
 class ThrowingKnife(DecisiveItem):
-    def __init__(self, source):
-        super().__init__(source, id='throwingknife', target_type=Enemies())
-
-    @property
-    def hit_chance(self):
-        return 40 + self.source.energy * 10
+    id = 'throwingknife'
 
     @property
     def name(self):
         return f'Метательный нож ({self.hit_chance}%)'
+
+    def __init__(self, source):
+        super().__init__(source, target_type=Enemies())
+
+    @property
+    def hit_chance(self):
+        return 40 + self.source.energy * 10
 
     @name.setter
     def name(self, value):

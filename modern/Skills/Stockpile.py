@@ -18,7 +18,10 @@ class Stockpile(Skill):
             for _ in range(2):
                 item = random.choice(modern.game_items_pool)(self.source)
                 pool = list(filter(lambda i: i(self.source).id not in given, modern.game_items_pool))
+                pool = list(filter(lambda i: i.id not in [playerItem.id for playerItem in self.source.items], pool))
                 if pool:
                     item = random.choice(pool)(self.source)
+                else:
+                    random.choice(modern.game_items_pool)(self.source)
                 given.append(item.id)
                 self.source.items.append(item)

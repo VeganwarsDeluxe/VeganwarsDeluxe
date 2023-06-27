@@ -3,8 +3,11 @@ from core.TargetType import Allies, Enemies
 
 
 class FlashGrenade(DecisiveItem):
+    id = 'flashgrenade'
+    name = 'Световая граната'
+
     def __init__(self, source):
-        super().__init__(source, name='Световая граната', id='flashgrenade', target_type=Enemies())
+        super().__init__(source, target_type=Enemies())
 
     def use(self):
         self.target.energy -= 8

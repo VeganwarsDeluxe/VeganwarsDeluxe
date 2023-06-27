@@ -4,7 +4,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Flamethrower(Weapon):
-    id = 8
+    id = 'flamethrower'
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 

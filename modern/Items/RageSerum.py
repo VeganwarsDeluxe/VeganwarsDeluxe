@@ -4,8 +4,11 @@ from core.TargetType import Allies, Everyone
 
 
 class RageSerum(FreeItem):
+    id = 'rage-serum'
+    name = 'Сыворотка бешенства'
+
     def __init__(self, source):
-        super().__init__(source, name='Сыворотка бешенства', id='rage-serum', target_type=Everyone())
+        super().__init__(source, target_type=Everyone())
 
     def use(self):
         self.source.session.say(f"💉|{self.source.name} использует сыворотку бешенства на {self.target.name}!")

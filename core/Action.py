@@ -2,12 +2,11 @@ from core.TargetType import TargetType
 
 
 class Action:
-    def __init__(self, func, source, target_type, decisive=True, name='Action', id='action', priority=0):
+    id = 'action'
+    name = 'Action'
+
+    def __init__(self, source, target_type, priority=0):
         self.priority: int = priority  # TODO: Revise priorities of all actions
-        self.decisive: bool = decisive
-        self.name = name
-        self.id = id
-        self.func = func
         self.data = dict()
 
         self.target_type: TargetType = target_type
@@ -17,6 +16,9 @@ class Action:
 
         self.canceled = False
         self.type = 'action'
+
+    def func(self, source, target):
+        pass
 
     def __call__(self):  # Abstract "Run" method for overriding
         if self.canceled:
@@ -62,8 +64,8 @@ class Action:
 
 
 class DecisiveAction(Action):
-    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
-        super().__init__(func, source, target_type=target_type, decisive=True, name=name, id=id, priority=priority)
+    def __init__(self, source, target_type, priority=0):
+        super().__init__(source, target_type=target_type, priority=priority)
 
     @property
     def cost(self):
@@ -71,8 +73,8 @@ class DecisiveAction(Action):
 
 
 class FreeAction(Action):
-    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
-        super().__init__(func, source, target_type=target_type, decisive=False, name=name, id=id, priority=priority)
+    def __init__(self, source, target_type, priority=0):
+        super().__init__(source, target_type=target_type, priority=priority)
 
     @property
     def cost(self):
@@ -80,8 +82,8 @@ class FreeAction(Action):
 
 
 class ImmediateAction(Action):
-    def __init__(self, func, source, target_type, name='Action', id='action', priority=0):
-        super().__init__(func, source, target_type=target_type, decisive=False, name=name, id=id, priority=priority)
+    def __init__(self, source, target_type, priority=0):
+        super().__init__(source, target_type=target_type, priority=priority)
 
     @property
     def cost(self):

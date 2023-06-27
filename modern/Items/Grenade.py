@@ -5,8 +5,11 @@ from core.TargetType import Enemies
 
 
 class Grenade(DecisiveItem):
+    id = 'grenade'
+    name = 'Граната'
+
     def __init__(self, source):
-        super().__init__(source, name='Граната', id='grenade', target_type=Enemies())
+        super().__init__(source, target_type=Enemies())
 
         self.damage = 3
         self.range = 2

@@ -6,7 +6,7 @@ from core.TargetType import TargetType
 
 
 class Bulava(Weapon):
-    id = 13
+    id = 'bulava'
     name = 'Булава'
     description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
                   'вы получаете +1 урона.'

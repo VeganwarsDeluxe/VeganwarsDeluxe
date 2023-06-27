@@ -6,7 +6,7 @@ from core.TargetType import TargetType, Enemies
 
 
 class Molot(Weapon):
-    id = 39
+    id = 'molot'
     name = 'Молот'
     description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \
                   'получает +1 к урону.'

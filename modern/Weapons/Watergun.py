@@ -5,7 +5,7 @@ from core.TargetType import Enemies, Allies
 
 
 class Saber(Weapon):
-    id = 32
+    id = 'watergun'
     name = 'Водомет'
     description = 'Дальний бой, урон 1-3. Способность: создаёт водяной щит вокруг цели, из-за чего та не ' \
                   'может загореться три хода, восстанавливает 2 энергии в ход и получает +1 урона.'
@@ -45,8 +45,11 @@ class Saber(Weapon):
 
 
 class WaterShield(State):
+    id = 'watershield'
+    name = 'Водяной щит'
+
     def __init__(self, source):
-        super().__init__(source, id='watershield', name='Водяной щит', constant=True)
+        super().__init__(source, constant=True)
         self.active = False
         self.turn = 0
 

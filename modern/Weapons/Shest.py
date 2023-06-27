@@ -4,7 +4,7 @@ from core.Action import DecisiveAction
 
 
 class Shest(Weapon):
-    id = 45
+    id = 'shest'
     name = 'Шест'
     description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
                   'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'

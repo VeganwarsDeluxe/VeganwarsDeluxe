@@ -2,7 +2,7 @@ from .Drobovik import Drobovik
 
 
 class Obrez(Drobovik):
-    id = 4
+    id = 'obrez'
     name = 'Обрез'
     description = 'Дальний бой, урон 1-4, точность средняя. Атакуя цель, находящуюся с вами в ближнем ' \
                   'бою, вы получаете +1 к урону.'

@@ -3,8 +3,11 @@ from core.TargetType import Allies, Everyone
 
 
 class Shield(DecisiveItem):
+    id = 'shield'
+    name = 'Щит'
+
     def __init__(self, source):
-        super().__init__(source, name='Щит', id='shield', target_type=Allies())
+        super().__init__(source, target_type=Allies())
 
     def use(self):
         if self.target == self.source:

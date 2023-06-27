@@ -3,8 +3,8 @@ from core.Action import DecisiveAction
 from core.TargetType import Enemies
 
 
-class Weapon(object):
-    id = None
+class Weapon:
+    id = 'None'
     name = 'None'
     description = 'Описание еще не написано.'
 
@@ -16,11 +16,25 @@ class Weapon(object):
         self.ranged = False
         self.accuracybonus = 0
 
+        self.attack_action_class = self.attack_action()
+
+    def attack_action(weapon):
+        class Attack(DecisiveAction):
+            id = 'attack'
+            name = 'Атака'
+
+            def __init__(self, source):
+                super().__init__(source, Enemies(distance=not weapon.ranged))
+
+            def func(self, source, target):
+                weapon.attack(source, target)
+
+        return Attack
+
     @property
     def actions(self):
         return [
-            DecisiveAction(self.attack, self.owner,
-                           target_type=Enemies(distance=not self.ranged), name='Атака', id='attack')
+            self.attack_action_class(self.owner)
         ]
 
     def calculate_damage(self, source, target):

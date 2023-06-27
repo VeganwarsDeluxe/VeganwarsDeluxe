@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Pistol(Weapon):
-    id = 1
+    id = 'pistol'
     name = 'Пистолет'
     description = 'Дальний бой, урон 1-3, точность наивысшая.'
 

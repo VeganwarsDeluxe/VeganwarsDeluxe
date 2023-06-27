@@ -3,7 +3,7 @@ import random
 
 
 class BaseballBat(Weapon):
-    id = 2
+    id = 'axe'
     name = 'Бита'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс оглушить цель.'
 

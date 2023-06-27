@@ -5,7 +5,7 @@ from modern.Weapons.Fist import Fist
 
 
 class Chain(Weapon):
-    id = 16
+    id = 'chain'
     name = 'Цепь'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
                   'рук. Если враг перезаряжается, шанс равен 100%.'

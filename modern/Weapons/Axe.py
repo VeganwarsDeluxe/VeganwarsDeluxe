@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Axe(Weapon):
-    id = 12
+    id = 'axe'
     name = 'Топор'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс покалечить цель, ' \
                   'после чего ей становится легче снять больше, чем одну жизнь.'

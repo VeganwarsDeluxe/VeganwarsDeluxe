@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Tesak(Weapon):
-    id = 61
+    id = 'tesak'
     name = "Тесак"
     description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
                   'по цели бонус уменьшается на 1.'

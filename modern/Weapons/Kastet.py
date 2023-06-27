@@ -3,7 +3,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Kastet(Weapon):
-    id = 14
+    id = 'kastet'
     name = 'Кастет'
     description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'
 

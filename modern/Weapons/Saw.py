@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Saw(Weapon):
-    id = 28
+    id = 'saw'
     name = 'Пиломет'
     description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
                   'увеличивающий урон от атак по цели на 1.'

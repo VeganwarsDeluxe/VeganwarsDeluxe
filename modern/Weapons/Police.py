@@ -2,7 +2,7 @@ from core.Weapons.Weapon import Weapon
 
 
 class Police(Weapon):
-    id = 29
+    id = 'policebat'
     name = 'Полицейская дубинка'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждая атака отнимает у цели 1 энергии.'
 

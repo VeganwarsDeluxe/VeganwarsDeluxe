@@ -3,8 +3,11 @@ from core.TargetType import Allies, Everyone
 
 
 class Jet(FreeItem):
+    id = 'jet'
+    name = 'Джет'
+
     def __init__(self, source):
-        super().__init__(source, name='Джет', id='jet', target_type=Allies())
+        super().__init__(source, target_type=Allies())
 
     def use(self):
         self.source.session.say(f"💉|{self.source.name} использует джет на {self.target.name}! Его энергия будет"

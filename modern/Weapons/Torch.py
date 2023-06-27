@@ -3,7 +3,7 @@ import random
 
 
 class Torch(Weapon):
-    id = 7
+    id = 'torch'
     name = 'Факел'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'
 

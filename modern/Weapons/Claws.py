@@ -4,7 +4,7 @@ from core.TargetType import TargetType, OwnOnly
 
 
 class Claws(Weapon):
-    id = 26
+    id = 'claws'
     name = 'Стальные когти'
     description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \
                   'но затрачивая 4 энергии за атаку.'

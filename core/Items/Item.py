@@ -2,9 +2,12 @@ from core.Action import Action
 from core.TargetType import TargetType
 
 
-class Item(Action):  # TODO: Make your mind about implementation
-    def __init__(self, source, name='Item', id='item', target_type=TargetType()):
-        super().__init__(None, source, target_type=target_type, name=name, id=id)
+class Item(Action):
+    id = 'item'
+    name = 'Item'
+
+    def __init__(self, source, target_type=TargetType(), priority=-1):
+        super().__init__(source, target_type=target_type, priority=priority)
         self.target = None
         self.priority = -1
         self.type = 'item'
@@ -24,8 +27,8 @@ class Item(Action):  # TODO: Make your mind about implementation
 
 
 class FreeItem(Item):
-    def __init__(self, source, name='Item', id='item', target_type=TargetType()):
-        super().__init__(source=source, name=name, id=id, target_type=target_type)
+    def __init__(self, source, target_type=TargetType(), priority=-1):
+        super().__init__(source, target_type=target_type, priority=priority)
 
     @property
     def cost(self):
@@ -33,8 +36,8 @@ class FreeItem(Item):
 
 
 class ImmediateItem(Item):
-    def __init__(self, source, name='Item', id='item', target_type=TargetType()):
-        super().__init__(source=source, name=name, id=id, target_type=target_type)
+    def __init__(self, source, target_type=TargetType(), priority=-1):
+        super().__init__(source, target_type=target_type, priority=priority)
 
     @property
     def cost(self):
@@ -42,6 +45,5 @@ class ImmediateItem(Item):
 
 
 class DecisiveItem(Item):
-    def __init__(self, source, name='Item', id='item', target_type=TargetType()):
-        super().__init__(source=source, name=name, id=id, target_type=target_type)
-
+    def __init__(self, source, target_type=TargetType(), priority=-1):
+        super().__init__(source, target_type=target_type, priority=priority)
