@@ -23,7 +23,6 @@ class Cow(Dummy):
             EatGrassReload(self), WalkAway(self), Silence(self), Run(self),
             CowApproach(self) if random.choice([True, False]) else Silence(self),
         ])
-        self.item_queue.append(Milk(self)) if self.action.id == 'silence' else None
 
 
 class CowApproach(DecisiveAction):
@@ -46,6 +45,9 @@ class Silence(DecisiveAction):
 
     def __init__(self, source):
         super().__init__(source, OwnOnly())
+
+    def func(self, source, target):
+        source.item_queue.append(Milk(self))
 
 
 class Run(DecisiveAction):
@@ -93,7 +95,7 @@ class Milk(FreeItem):
         super().__init__(source, target_type=OwnOnly())
 
     def use(self):
-        if self.source.team == 'cows':
+        if self.source.action.id == 'cow_silence':
             return
         self.target.energy = self.target.max_energy
         self.target.session.say(f'🥛|{self.source.name} пьет молоко! '

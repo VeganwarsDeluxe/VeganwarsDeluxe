@@ -318,7 +318,7 @@ class Matchmaker:
 
     def send_skill_choice_buttons(self, player, number=5, cycle=1):
         game = player.session
-        skills = []
+        skills = [modern.Mimic, modern.Thief]
         for _ in range(number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
             variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))

@@ -1,5 +1,5 @@
 from core.Skills.Skill import Skill
-from core.Action import DecisiveAction
+from core.Action import DecisiveAction, FreeAction
 from core.TargetType import TargetType, Enemies
 
 
@@ -22,7 +22,7 @@ class Thief(Skill):
         ]
 
 
-class Steal(DecisiveAction):
+class Steal(FreeAction):
     id = 'steal'
     name = 'Украсть предмет'
 
@@ -31,7 +31,7 @@ class Steal(DecisiveAction):
         self.skill = skill
 
     def func(self, source, target):
-        self.skill.cooldown_turn = source.session.turn + 3
+        self.skill.cooldown_turn = source.session.turn + 0  # 3
         success = False
         for item in [item for item in target.item_queue]:
             success = True

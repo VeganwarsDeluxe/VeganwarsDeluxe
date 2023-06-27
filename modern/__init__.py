@@ -31,6 +31,7 @@ from modern.Skills.Medic import Medic
 from modern.Skills.Stockpile import Stockpile
 from modern.Skills.ShieldGen import ShieldGen
 from modern.Skills.Alchemist import Alchemist
+from modern.Skills.Mimic import Mimic
 
 from modern.States.Aflame import Aflame
 from modern.States.DamageThreshold import DamageThreshold
@@ -54,7 +55,7 @@ from modern.Items.Shield import Shield
 from modern.Items.RageSerum import RageSerum
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor]
-all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist]
+all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic]
 all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
                Police, Saber, Sword, Bow, PortalGun]
