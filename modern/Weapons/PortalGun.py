@@ -6,7 +6,7 @@ from core.Action import DecisiveAction
 from core.TargetType import Enemies, Allies, Everyone
 
 
-class PortalGun(Weapon):
+class PortalGun(Weapon):  # TODO: Fix or delete
     id = 'portalgun'
     name = 'Портальная пушка'
     description = 'Дальний бой, урон 1-2.'
@@ -26,12 +26,12 @@ class PortalGun(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         actions = [
-            DecisiveAction(self.retreat, self.owner, target_type=Everyone(),
-                           name='🔵|Создать портал', id='retreat_portal'),
-            DecisiveAction(self.teleport_approach, self.owner, target_type=Everyone(),
-                           name='🟠|Создать портал', id='approach_portal'),
-            DecisiveAction(self.knock_down_portal, self.owner, target_type=Enemies(),
-                           name='🔴|Создать портал', id='knock_down_portal')
+            # DecisiveAction(self.retreat, self.owner, target_type=Everyone(),
+            #                name='🔵|Создать портал', id='retreat_portal'),
+            # DecisiveAction(self.teleport_approach, self.owner, target_type=Everyone(),
+            #                name='🟠|Создать портал', id='approach_portal'),
+            # DecisiveAction(self.knock_down_portal, self.owner, target_type=Enemies(),
+            #                name='🔴|Создать портал', id='knock_down_portal')
         ]
         return [random.choice(actions)] + super().actions
 

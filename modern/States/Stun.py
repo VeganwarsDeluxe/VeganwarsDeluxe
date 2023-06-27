@@ -33,7 +33,16 @@ class Stun(State):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.lay_stun, self.source, target_type=OwnOnly(), name='Лежать в стане', id='lay_stun')
+            LayStun(self.source)
         ]
 
 
+class LayStun(DecisiveAction):
+    id = 'lay_stun'
+    name = 'Лежать в стане'
+
+    def __init__(self, source):
+        super().__init__(source, OwnOnly())
+
+    def func(self, source, target):
+        pass

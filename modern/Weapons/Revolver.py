@@ -25,10 +25,18 @@ class Revolver(Weapon):
     @property
     def actions(self):
         return [
-            DecisiveAction(self.suicide, self.owner, target_type=OwnOnly(),
-                           name='Застрелится', id='shoot_yourself', priority=3)
+            ShootYourself(self.owner, self)
         ] + super().actions
 
-    def suicide(self, source, target):
+
+class ShootYourself(DecisiveAction):
+    id = 'shoot_yourself'
+    name = 'Застрелится'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, OwnOnly(), priority=3)
+        self.weapon = weapon
+
+    def func(self, source, target):
         source.session.say(f"🎇|{source.name} застрелился!")
         source.hp = 0

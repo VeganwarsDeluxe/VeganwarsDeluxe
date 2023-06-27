@@ -16,25 +16,10 @@ class Weapon:
         self.ranged = False
         self.accuracybonus = 0
 
-        self.attack_action_class = self.attack_action()
-
-    def attack_action(weapon):
-        class Attack(DecisiveAction):
-            id = 'attack'
-            name = 'Атака'
-
-            def __init__(self, source):
-                super().__init__(source, Enemies(distance=not weapon.ranged))
-
-            def func(self, source, target):
-                weapon.attack(source, target)
-
-        return Attack
-
     @property
     def actions(self):
         return [
-            self.attack_action_class(self.owner)
+            Attack(self.owner, self)
         ]
 
     def calculate_damage(self, source, target):
@@ -82,3 +67,15 @@ class Weapon:
                                f'Нанесено {damage} урона.')
         else:
             source.session.say(f'💨|{source.name} {attack_text} {target.name} используя {self.name}, но не попадает.')
+
+
+class Attack(DecisiveAction):
+    id = 'attack'
+    name = 'Атака'
+
+    def __init__(self, source, weapon, priority=0):
+        super().__init__(source, Enemies(distance=not weapon.ranged), priority=priority)
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.weapon.attack(source, target)

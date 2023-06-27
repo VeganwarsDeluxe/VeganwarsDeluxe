@@ -52,15 +52,24 @@ class Aflame(State):
         self.flame += flame
         self.dealer = source
 
-    def extinguish(self, source, target):
-        self.flame = 0
-        self.extinguished = False
-        source.session.say(f'💨|{source.name} тушит себя.')
-
     @property
     def actions(self):
         if not self.flame:
             return []
         return [
-            DecisiveAction(self.extinguish, self.source, target_type=OwnOnly(), name='Потушится', id='extinguish')
+            Extinguish(self.source, self)
         ]
+
+
+class Extinguish(DecisiveAction):
+    id = 'extinguish'
+    name = 'Потушится'
+
+    def __init__(self, source, state):
+        super().__init__(source, OwnOnly())
+        self.state = state
+
+    def func(self, source, target):
+        self.state.flame = 0
+        self.state.extinguished = False
+        source.session.say(f'💨|{source.name} тушит себя.')

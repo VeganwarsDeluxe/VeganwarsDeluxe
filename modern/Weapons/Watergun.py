@@ -25,23 +25,31 @@ class Saber(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return [
-            DecisiveAction(self.water_shield, self.owner, target_type=Allies(),
-                           name='Водяной щит', id='watershield')
+            CreateWaterShield(self.owner, self)
         ] + super().actions
 
-    def water_shield(self, source, target):
+    def attack(self, source, target):
+        return super().attack(source, target)
+
+
+class CreateWaterShield(DecisiveAction):
+    id = 'watershield'
+    name = 'Водяной щит'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Allies())
+        self.weapon = weapon
+
+    def func(self, source, target):
         state = target.get_skill('watershield')
         if not state:
             state = WaterShield(target)
             target.skills.append(state)
 
-        self.cooldown_turn = source.session.turn + 5
+        self.weapon.cooldown_turn = source.session.turn + 5
         state.turn = source.session.turn + 3
         state.active = True
         source.session.say(f'💧|{source.name} создаёт водяной щит вокруг {target.name}.')
-
-    def attack(self, source, target):
-        return super().attack(source, target)
 
 
 class WaterShield(State):

@@ -25,10 +25,7 @@ class Molot(Weapon):
     def actions(self):
         if self.owner.session.turn < self.cooldown_turn or self.owner.energy < 4:
             return super().actions
-        return [
-            DecisiveAction(self.true_strike, self.owner, target_type=Enemies(distance=1),
-                           name='Точный удар', id='true_strike')
-        ] + super().actions
+        return [TrueStrike(self.owner, self)] + super().actions
 
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
@@ -38,13 +35,6 @@ class Molot(Weapon):
             source.session.say(f'🔨|{source.name} наносит точный удар по {target.name}! Нанесено {damage} урона.')
         else:
             super().attack_text(source, target, damage)
-
-    def true_strike(self, source, target):
-        self.cooldown_turn = source.session.turn + 6
-        self.owner.energy -= 4
-        self.strike = True
-        damage = self.attack(source, target)
-        self.strike = False
     
     def calculate_damage(self, source, target):
         if not self.strike:
@@ -57,3 +47,19 @@ class Molot(Weapon):
 
     def attack(self, source, target):
         return super().attack(source, target)
+
+
+class TrueStrike(DecisiveAction):
+    id = 'true_strike'
+    name = 'Точный удар'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Enemies(distance=1))
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.weapon.cooldown_turn = source.session.turn + 6
+        self.weapon.owner.energy -= 4
+        self.weapon.strike = True
+        self.weapon.attack(source, target)
+        self.weapon.strike = False

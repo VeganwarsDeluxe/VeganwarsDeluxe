@@ -13,8 +13,25 @@ class ShieldGen(Skill):
 
         self.cooldown_turn = 0
 
-    def shield(self, source, target):
-        self.cooldown_turn = source.session.turn + 5
+    @property
+    def actions(self):
+        if self.source.session.turn < self.cooldown_turn:
+            return []
+        return [
+            ShieldGenAction(self.source, self)
+        ]
+
+
+class ShieldGenAction(DecisiveAction):
+    id = 'shield-gen'
+    name = 'Щит | Генератор'
+
+    def __init__(self, source, skill):
+        super().__init__(source, Allies(), priority=-2)
+        self.skill = skill
+
+    def func(self, source, target):
+        self.skill.cooldown_turn = source.session.turn + 5
         if target == source:
             target.session.say(f"🔵|{source.name} использует щит. Урон отражен!")
         else:
@@ -31,12 +48,3 @@ class ShieldGen(Skill):
             if not damage:
                 return
             attack.data.update({'damage': 0})
-
-    @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return []
-        return [
-            DecisiveAction(self.shield, self.source, target_type=Allies(),
-                           name='Щит | Генератор', id='shield-gen', priority=-2)
-        ]

@@ -15,16 +15,23 @@ class Dodge(State):
         if source.session.event.moment == 'post-tick':
             self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
-    def dodge(self, source, target):
-        self.dodge_cooldown = 5
-        source.session.say(f"💨|{source.name} перекатывается.")
-
     @property
     def actions(self):
         if not self.dodge_cooldown == 0:
             return []
         return [
-            DecisiveAction(self.dodge, self.source, target_type=OwnOnly(), name='Перекат', id='dodge')
+            DodgeAction(self.source, self)
         ]
 
 
+class DodgeAction(DecisiveAction):
+    id = 'dodge'
+    name = 'Перекат'
+
+    def __init__(self, source, state):
+        super().__init__(source, OwnOnly())
+        self.state = state
+
+    def func(self, source, target):
+        self.state.dodge_cooldown = 5
+        source.session.say(f"💨|{source.name} перекатывается.")

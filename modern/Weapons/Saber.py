@@ -23,12 +23,23 @@ class Saber(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return [
-            DecisiveAction(self.parry, self.owner, target_type=Enemies(),
-                           name='Парировать', id='parry', priority=-5)
+            Parry(self.owner, self)
         ] + super().actions
 
-    def parry(self, source, target):
-        self.cooldown_turn = source.session.turn + 5
+    def attack(self, source, target):
+        return super().attack(source, target)
+
+
+class Parry(DecisiveAction):
+    id = 'Парировать'
+    name = 'parry'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Enemies(), priority=-5)
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.weapon.cooldown_turn = source.session.turn + 5
         source.session.say(f'🗡|{source.name} готовится парировать.')
 
         @source.session.handlers.at(turn=source.session.turn, events='post-attack')
@@ -48,6 +59,3 @@ class Saber(Weapon):
                                f' {target.name} теряет всю энергию!')
             target.energy = 0
             target.action.data.update({'damage': 0})
-
-    def attack(self, source, target):
-        return super().attack(source, target)

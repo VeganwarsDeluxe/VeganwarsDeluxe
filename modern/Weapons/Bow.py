@@ -26,15 +26,21 @@ class Bow(Weapon):
     def actions(self):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
-        return [
-            DecisiveAction(self.fire_arrow, self.owner, target_type=Enemies(),
-                           name='Огненная стрела', id='fire_arrow')
-        ] + super().actions
+        return [FireArrow(self.owner, self)] + super().actions
 
-    def fire_arrow(self, source, target):
-        self.cooldown_turn = source.session.turn + 5
-        damage = self.calculate_damage(source, target)
-        source.energy = max(source.energy - self.energycost, 0)
+
+class FireArrow(DecisiveAction):
+    id = 'fire_arrow'
+    name = 'Огненная стрела'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Enemies())
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.weapon.cooldown_turn = source.session.turn + 5
+        damage = self.weapon.calculate_damage(source, target)
+        source.energy = max(source.energy - self.weapon.energycost, 0)
         if not damage:
             source.session.say(f'💨|{source.name} поджигает стрелу и запускает ее в {target.name}, но не попадает.')
             return

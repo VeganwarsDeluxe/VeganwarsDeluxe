@@ -18,16 +18,23 @@ class Knockdown(State):
             source.remove_action('attack')
             source.remove_action('dodge')
 
-    def stand_up(self, source, target):
-        self.active = False
-        source.session.say(f'⬆️|{source.name} поднимается с земли.')
-
     @property
     def actions(self):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.stand_up, self.source, target_type=OwnOnly(), name='Поднятся с земли', id='stand_up')
+            StandUp(self.source, self)
         ]
 
 
+class StandUp(DecisiveAction):
+    id = 'stand_up'
+    name = 'Поднятся с земли'
+
+    def __init__(self, source, state):
+        super().__init__(source, OwnOnly())
+        self.state = state
+
+    def func(self, source, target):
+        self.state.active = False
+        source.session.say(f'⬆️|{source.name} поднимается с земли.')

@@ -23,13 +23,21 @@ class Shest(Weapon):
         if self.owner.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            DecisiveAction(self.knock_down, self.owner,
-                           target_type=Enemies(), name='Сбить с ног', id='knock_down')
+            KnockDown(self.owner, self)
         ]
 
-    def knock_down(self, source, target):
-        self.cooldown_turn = source.session.turn + 6
-        damage = self.attack(source, target)
+
+class KnockDown(DecisiveAction):
+    id = 'knock_down'
+    name = 'Сбить с ног'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Enemies())
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.weapon.cooldown_turn = source.session.turn + 6
+        damage = self.weapon.attack(source, target)
         if not damage:
             source.session.say(f'🚷💨|{source.name} не удалось сбить {target.name} с ног!')
             return

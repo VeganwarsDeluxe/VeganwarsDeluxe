@@ -20,20 +20,31 @@ class Claws(Weapon):
 
     @property
     def actions(self):
-        text = 'Выдвинуть когти' if not self.claws else 'Задвинуть когти'
         return super().actions + [
-            ImmediateAction(self.switch_claws, self.owner, OwnOnly(), text, 'switch_claws')
+            SwitchClaws(self.owner, self)
         ]
 
-    def switch_claws(self, source, target):
-        if not self.claws:
-            self.cubes = 4
-            self.dmgbonus = 1
-            self.energycost = 3
-            self.accuracybonus = 1
+
+class SwitchClaws(ImmediateAction):
+    id = 'switch_claws'
+
+    @property
+    def name(self):
+        return 'Выдвинуть когти' if not self.weapon.claws else 'Задвинуть когти'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, OwnOnly())
+        self.weapon = weapon
+
+    def func(self, source, target):
+        if not self.weapon.claws:
+            self.weapon.cubes = 4
+            self.weapon.dmgbonus = 1
+            self.weapon.energycost = 3
+            self.weapon.accuracybonus = 1
         else:
-            self.cubes = 3
-            self.dmgbonus = 0
-            self.energycost = 2
-        self.claws = not self.claws
-        source.session.say(f"⚙️|{source.name} {'выдвигает' if not self.claws else 'задвигает'} когти!")
+            self.weapon.cubes = 3
+            self.weapon.dmgbonus = 0
+            self.weapon.energycost = 2
+        self.weapon.claws = not self.weapon.claws
+        source.session.say(f"⚙️|{source.name} {'выдвигает' if not self.weapon.claws else 'задвигает'} когти!")

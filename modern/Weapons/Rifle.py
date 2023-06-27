@@ -23,16 +23,7 @@ class Rifle(Weapon):
 
     @property
     def actions(self):
-        main_target, level = self.main_target
-        if main_target and level == 2:
-            return super().actions
-        return [DecisiveAction(self.aim_rifle, self.owner,
-                               target_type=Enemies(), name='Вьіцелить', id='aim_rifle')] + super().actions
-
-    def aim_rifle(self, source, target):
-        main_target, level = self.main_target
-        self.main_target = target, min(2, level+1)
-        source.session.say(f'🎯|{source.name} целится.')
+        return [AimRifle(self.owner, self)] + super().actions
     
     def calculate_damage(self, source, target):
         main_target, level = self.main_target
@@ -55,3 +46,17 @@ class Rifle(Weapon):
         damage = super().attack(source, target)
         self.main_target = None, 0
         return damage
+
+
+class AimRifle(DecisiveAction):
+    id = 'aim_rifle'
+    name = 'Выцелить'
+
+    def __init__(self, source, weapon):
+        super().__init__(source, Enemies())
+        self.weapon = weapon
+
+    def func(self, source, target):
+        main_target, level = self.weapon.main_target
+        self.weapon.main_target = target, min(2, level + 1)
+        source.session.say(f'🎯|{source.name} целится.')

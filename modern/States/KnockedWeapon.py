@@ -18,17 +18,24 @@ class KnockedWeapon(State):
     def active(self):
         return self.weapon
 
-    def pick_up(self, source, target):
-        source.weapon = self.weapon
-        source.session.say(f'🤚{source.name} подбирает потерянное оружие.')
-        self.weapon = None
-
     @property
     def actions(self):
         if not self.active:
             return []
         return [
-            DecisiveAction(self.pick_up, self.source, target_type=OwnOnly(), name='Подобрать оружие', id='pick_up')
+            PickUp(self.source, self)
         ]
 
 
+class PickUp(DecisiveAction):
+    id = 'pick_up'
+    name = 'Подобрать оружие'
+
+    def __init__(self, source, state):
+        super().__init__(source, OwnOnly())
+        self.state = state
+
+    def func(self, source, target):
+        source.weapon = self.state.weapon
+        source.session.say(f'🤚{source.name} подбирает потерянное оружие.')
+        self.state.weapon = None
