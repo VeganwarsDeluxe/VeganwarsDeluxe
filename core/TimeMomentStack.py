@@ -1,4 +1,4 @@
-class Event:
+class TimeMomentStack:
     def __init__(self):
         self.event = []
 
@@ -9,7 +9,7 @@ class Event:
         if self.event:
             self.event.pop(-1)
 
-    def now(self, event):
+    def start(self, event):
         self.event.append(event)
 
     @property
@@ -17,7 +17,7 @@ class Event:
         return len(self.event)
 
     @property
-    def moment(self):
+    def top(self):
         return self.event[-1] if self.event else None
 
     def __str__(self):

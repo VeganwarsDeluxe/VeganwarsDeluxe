@@ -20,10 +20,10 @@ class Chain(Weapon):
 
     @property
     def actions(self):
-        if self.owner.session.turn < self.cooldown_turn:
+        if self.source.session.turn < self.cooldown_turn:
             return super().actions
         return super().actions + [
-            KnockWeapon(self.owner, self)
+            KnockWeapon(self.source, self)
         ]
 
 

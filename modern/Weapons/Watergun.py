@@ -22,10 +22,10 @@ class Saber(Weapon):
 
     @property
     def actions(self):
-        if self.owner.session.turn < self.cooldown_turn:
+        if self.source.session.turn < self.cooldown_turn:
             return super().actions
         return [
-            CreateWaterShield(self.owner, self)
+            CreateWaterShield(self.source, self)
         ] + super().actions
 
     def attack(self, source, target):
@@ -67,11 +67,11 @@ class WaterShield(State):
         aflame = self.source.get_skill('aflame')
         aflame.extinguished = True
         aflame.flame = 1
-        if self.source.session.event.moment == 'attack':
+        if self.source.session.event.top == 'attack':
             damage = self.source.action.data.get('damage')
             if damage:
                 self.source.action.data.update({'damage': damage + 1})
-        if self.source.session.event.moment != 'post-damages':
+        if self.source.session.event.top != 'post-damages':
             return
         self.source.say(f'🔋|{self.source.name} получает 2 энергии.')
         self.source.energy += 2

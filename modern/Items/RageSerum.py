@@ -14,7 +14,7 @@ class RageSerum(FreeItem):
         self.source.session.say(f"💉|{self.source.name} использует сыворотку бешенства на {self.target.name}!")
 
         @self.source.session.handlers.now(events='post-action')
-        def serum_attack():
+        def serum_attack(message):
             if self.target.dead:
                 return
             attack = self.target.get_action('attack', default=True)

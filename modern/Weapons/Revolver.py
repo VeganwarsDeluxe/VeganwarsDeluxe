@@ -25,7 +25,7 @@ class Revolver(Weapon):
     @property
     def actions(self):
         return [
-            ShootYourself(self.owner, self)
+            ShootYourself(self.source, self)
         ] + super().actions
 
 

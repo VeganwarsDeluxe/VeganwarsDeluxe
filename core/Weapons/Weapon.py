@@ -8,8 +8,8 @@ class Weapon:
     name = 'None'
     description = 'Описание еще не написано.'
 
-    def __init__(self, owner):
-        self.owner = owner
+    def __init__(self, source):
+        self.source = source
         self.energycost = 2
         self.cubes = 2
         self.dmgbonus = 0
@@ -19,7 +19,7 @@ class Weapon:
     @property
     def actions(self):
         return [
-            Attack(self.owner, self)
+            Attack(self.source, self)
         ]
 
     def calculate_damage(self, source, target):
@@ -46,13 +46,13 @@ class Weapon:
         source.energy = max(source.energy - self.energycost, 0)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.stage('attack')                                   # 7.1 Pre-Attack stage
+        source.session.publish('attack')  # 7.1 Pre-Attack stage
         damage = source.action.data.get('damage')
 
         self.attack_text(source, target, damage)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.stage('post-attack')  # 7.2 Post-Attack stage
+        source.session.publish('post-attack')  # 7.2 Post-Attack stage
         damage = source.action.data.get('damage')
 
         target.inbound_dmg.add(source, damage)

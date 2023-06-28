@@ -17,16 +17,16 @@ class Aflame(State):
     def __call__(self):
         source = self.source
 
-        if self.source.session.event.moment == 'post-action':  # Extinguishing logic
+        if self.source.session.event.top == 'post-action':  # Extinguishing logic
             if self.source.action.id == 'skip' and self.flame:
                 self.source.session.say(f'💨|{self.source.name} потушил себя.')
                 self.timer = 0
                 self.flame = 0
                 self.extinguished = False
-        if source.session.event.moment == 'post-update' and self.flame:
+        if source.session.event.top == 'post-update' and self.flame:
             source.remove_action('skip')
 
-        if source.session.event.moment != 'pre-damages':
+        if source.session.event.top != 'pre-damages':
             return
         if not self.flame:
             return

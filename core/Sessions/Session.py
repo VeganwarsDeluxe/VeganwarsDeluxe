@@ -1,27 +1,19 @@
 from core.Entities.Entity import Entity
-from core.Handler import HandlerManager
-from core.Event import Event
+from core.Handler import EventManager
+from core.Message import Message
+from core.TimeMomentStack import TimeMomentStack
+from uuid import uuid4
 
 
 class Session:
     def __init__(self):
+        self.id = uuid4()
         self.turn = 1
         self.active = True
 
         self.entities: list[Entity] = []
 
-        self.handlers: HandlerManager = HandlerManager(self)
-        self.event: Event = Event()
-
-    def stage(self, stage):  # TODO: Rename to event
-        self.event.now(stage)
-
-        for entity in self.entities:
-            for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
-                skill()
-        self.handlers.event()
-
-        self.event.end()
+        self.handlers: EventManager = EventManager(self)
 
     def say(self, text, n=True):
         print(text, end=('\n' if n else ''))
@@ -45,7 +37,7 @@ class Session:
             entity.tick_turn()
 
     def update_actions(self):
-        self.stage('pre-update')
+        self.stage(Message(self.id, self.turn, 'pre-update'))
         for entity in self.entities:
             entity.update_actions()
         self.stage('post-update')

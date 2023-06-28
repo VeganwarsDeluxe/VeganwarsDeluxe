@@ -10,7 +10,7 @@ class DamageThreshold(State):
 
     def __call__(self):
         source = self.source
-        if source.session.event.moment != 'hp-loss':
+        if source.session.event.top != 'hp-loss':
             return
         damage = source.cache.get('hp_loss_damage')
         if not damage:

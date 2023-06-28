@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class TargetType:
     def __init__(self, distance=0, team=0, aliveness=1, own=2):
         """
@@ -14,6 +17,30 @@ class TargetType:
 
     def __str__(self):
         return f"D: {self.distance} | T: {self.team} | A: {self.aliveness} | O: {self.own}"
+
+
+class Distance(Enum):
+    ANY = 0
+    NEARBY_ONLY = 1
+    DISTANT_ONLY = 2
+
+
+class Team(Enum):
+    ANY = 0
+    ALLIES_ONLY = 1
+    ENEMIES_ONLY = 2
+
+
+class Aliveness(Enum):
+    ANY = 0
+    ALIVE_ONLY = 1
+    DEAD_ONLY = 2
+
+
+class Own(Enum):
+    ANY = 0
+    SELF_ONLY = 1
+    SELF_EXCLUDED = 2
 
 
 class Allies(TargetType):

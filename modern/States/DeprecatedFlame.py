@@ -14,14 +14,14 @@ class Aflame(State):
 
     def __call__(self):
         source = self.source
-        if source.session.event.moment == 'post-action':
+        if source.session.event.top == 'post-action':
             if source.action.id == 'skip' and self.flame:
                 source.session.say(f'💨|{source.name} потушил себя.')
                 self.flame = 0
                 self.extinguished = False
-        if source.session.event.moment == 'post-update' and self.flame:
+        if source.session.event.top == 'post-update' and self.flame:
             source.remove_action('skip')
-        if source.session.event.moment != 'pre-damages':
+        if source.session.event.top != 'pre-damages':
             return
         if not self.flame:
             return

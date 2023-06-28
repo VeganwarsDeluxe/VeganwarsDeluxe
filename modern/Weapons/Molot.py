@@ -23,9 +23,9 @@ class Molot(Weapon):
 
     @property
     def actions(self):
-        if self.owner.session.turn < self.cooldown_turn or self.owner.energy < 4:
+        if self.source.session.turn < self.cooldown_turn or self.source.energy < 4:
             return super().actions
-        return [TrueStrike(self.owner, self)] + super().actions
+        return [TrueStrike(self.source, self)] + super().actions
 
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
@@ -59,7 +59,7 @@ class TrueStrike(DecisiveAction):
 
     def func(self, source, target):
         self.weapon.cooldown_turn = source.session.turn + 6
-        self.weapon.owner.energy -= 4
+        self.weapon.source.energy -= 4
         self.weapon.strike = True
         self.weapon.attack(source, target)
         self.weapon.strike = False

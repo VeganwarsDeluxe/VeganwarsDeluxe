@@ -14,7 +14,7 @@ class Hitin(FreeItem):
         self.target.session.say(f'💉|{self.source.name} использует хитин на {self.target.name}!')
 
         @self.source.session.handlers.at(turn=self.source.session.turn + 2, events='post-damages')
-        def hitin_knockout():
+        def hitin_knockout(message):
             self.target.get_skill('armor').remove((2, 100))
             self.target.get_skill('stun').stun += 1
             self.source.session.say(f'🌀|{self.target.name} теряет эффект хитина. Игрок оглушен!')

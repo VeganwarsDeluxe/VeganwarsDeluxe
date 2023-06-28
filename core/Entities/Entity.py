@@ -85,11 +85,6 @@ class Entity:
         return target.team == self.team
 
     @property
-    def targets(self):
-        return self.nearby_entities if not self.weapon.ranged else \
-            [entity for entity in self.session.entities if entity != self]
-
-    @property
     def default_actions(self):
         actions = [
             SkipTurnAction(self),
@@ -110,6 +105,11 @@ class Entity:
     @property
     def approached(self):
         return self.nearby_entities == list(filter(lambda t: t != self, self.session.entities))
+
+    @property
+    def targets(self):
+        return self.nearby_entities if not self.weapon.ranged else \
+            [entity for entity in self.session.entities if entity != self]
 
     def update_actions(self):
         self.actions = self.default_actions

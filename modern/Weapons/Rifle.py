@@ -23,7 +23,7 @@ class Rifle(Weapon):
 
     @property
     def actions(self):
-        return [AimRifle(self.owner, self)] + super().actions
+        return [AimRifle(self.source, self)] + super().actions
     
     def calculate_damage(self, source, target):
         main_target, level = self.main_target

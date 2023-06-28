@@ -21,7 +21,7 @@ class Claws(Weapon):
     @property
     def actions(self):
         return super().actions + [
-            SwitchClaws(self.owner, self)
+            SwitchClaws(self.source, self)
         ]
 
 

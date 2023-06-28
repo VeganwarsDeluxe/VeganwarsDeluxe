@@ -11,7 +11,7 @@ class Bleeding(State):
 
     def __call__(self):
         source = self.source
-        if source.session.event.moment != 'pre-damages':
+        if source.session.event.top != 'pre-damages':
             return
         if not self.active:
             return

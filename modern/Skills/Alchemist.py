@@ -14,5 +14,5 @@ class Alchemist(Skill):
     def __call__(self):
         if self.source.session.turn == 1:
             @self.source.session.handlers.every(turns=9, events='pre-move')
-            def give_serum():
+            def give_serum(message):
                 self.source.items.append(RageSerum(self.source))
