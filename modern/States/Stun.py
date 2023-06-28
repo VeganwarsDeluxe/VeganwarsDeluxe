@@ -10,16 +10,18 @@ class Stun(State):
         super().__init__(source, constant=True)
         self.stun = 0
 
-    def __call__(self):
-        source = self.source
-        if not self.active:
-            return
-        if source.session.event.top == 'post-update':
-            source.actions = self.actions
-        if source.session.event.top == 'post-damages':
-            if self.stun == 1:
-                source.session.say(f'🌀|{source.name} приходит в себя.')
-            self.stun -= 1
+    def register(self):
+        @self.source.session.event_manager.every(events=True)
+        def func(message):
+            source = self.source
+            if not self.active:
+                return
+            if source.session.event.top == 'post-update':
+                source.actions = self.actions
+            if source.session.event.top == 'post-damages':
+                if self.stun == 1:
+                    source.session.say(f'🌀|{source.name} приходит в себя.')
+                self.stun -= 1
 
     @property
     def active(self):

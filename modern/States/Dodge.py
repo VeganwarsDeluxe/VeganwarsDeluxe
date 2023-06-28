@@ -7,13 +7,11 @@ class Dodge(State):
     id = 'dodge'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source, stage='post-tick')
         self.dodge_cooldown = 0
 
     def __call__(self):
-        source = self.source
-        if source.session.event.top == 'post-tick':
-            self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
+        self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
     @property
     def actions(self):

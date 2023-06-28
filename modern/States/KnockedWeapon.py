@@ -10,10 +10,6 @@ class KnockedWeapon(State):
         super().__init__(source, constant=True)
         self.weapon = None
 
-    def __call__(self):
-        source = self.source
-        pass
-
     @property
     def active(self):
         return self.weapon

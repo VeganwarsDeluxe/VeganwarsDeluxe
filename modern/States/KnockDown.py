@@ -10,13 +10,15 @@ class Knockdown(State):
         super().__init__(source, constant=True)
         self.active = False
 
-    def __call__(self):
-        source = self.source
-        if not self.active:
-            return
-        if source.session.event.top == 'post-update':
-            source.remove_action('attack')
-            source.remove_action('dodge')
+    def register(self):
+        @self.source.session.event_manager.every(events=True)
+        def func(message):
+            source = self.source
+            if not self.active:
+                return
+            if source.session.event.top == 'post-update':
+                source.remove_action('attack')
+                source.remove_action('dodge')
 
     @property
     def actions(self):

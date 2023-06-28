@@ -12,6 +12,9 @@ class Matchmaker:
         self.bot = bot
         self.games = {}
 
+    def start_game(self, game):
+        self.pre_move(game.chat_id)
+
     def pre_move(self, chat_id):
         game = self.games.get(chat_id)
         game.update_actions()

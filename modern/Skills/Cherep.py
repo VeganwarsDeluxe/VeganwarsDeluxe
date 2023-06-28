@@ -11,8 +11,9 @@ class Cherep(Skill):
     def __init__(self, source):
         super().__init__(source, stage='pre-move')
 
-    def __call__(self):
-        if self.source.session.turn == 1:
+    def register(self):
+        @self.source.session.event_manager.every(events='attack')
+        def func(message):
             threshold = self.source.get_skill('damage-threshold')
             threshold.threshold += 1
 

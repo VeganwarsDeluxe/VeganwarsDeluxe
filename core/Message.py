@@ -5,6 +5,11 @@ class Message:
         self.current_event = current_event
 
 
+class PreMoveMessage(Message):
+    def __init__(self, session_id, turn):
+        super().__init__(session_id, turn, 'pre-move')
+
+
 class PreUpdateMessage(Message):
     def __init__(self, session_id, turn):
         super().__init__(session_id, turn, 'pre-update')

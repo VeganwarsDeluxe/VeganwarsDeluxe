@@ -15,7 +15,7 @@ class Shield(DecisiveItem):
         else:
             self.target.session.say(f"🔵|{self.source.name} использует щит на {self.target.name}. Урон отражен!")
 
-        @self.source.session.handlers.at(turn=self.source.session.turn, events='post-attack')
+        @self.source.session.event_manager.at(turn=self.source.session.turn, events='post-attack')
         def shield_block():
             attack = self.source.session.event.action
             if not attack.target:

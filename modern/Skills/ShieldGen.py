@@ -37,7 +37,7 @@ class ShieldGenAction(DecisiveAction):
         else:
             target.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @source.session.handlers.at(turn=source.session.turn, events='post-attack')
+        @source.session.event_manager.at(turn=source.session.turn, events='post-attack')
         def shield_block(message):
             attack = source.session.event.action
             if not attack.target:

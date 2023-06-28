@@ -1,12 +1,8 @@
-from typing import Union
-
-from core.Message import Message
 from core.TimeMomentStack import TimeMomentStack
 
 
 class EventManager:
-    def __init__(self, session):
-        self.session = session
+    def __init__(self):
         self.handlers: list[Handler] = []
 
         self.time_stack: TimeMomentStack = TimeMomentStack()
@@ -62,16 +58,10 @@ class EventManager:
 
         return decorator_func
 
-    def publish(self, stage):
-        self.time_stack.start(stage)
+    def publish(self, message):
+        self.time_stack.start(message.current_event)
 
-        for entity in self.session.entities:
-            for skill in filter(lambda s: s.is_triggered(stage), entity.skills):
-                skill()
-
-        self.trigger_handlers(
-            Message(self.session.id, self.session.turn, self.time_stack.top)
-        )
+        self.trigger_handlers(message)
 
         self.time_stack.end()
 

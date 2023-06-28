@@ -42,7 +42,7 @@ class Parry(DecisiveAction):
         self.weapon.cooldown_turn = source.session.turn + 5
         source.session.say(f'🗡|{source.name} готовится парировать.')
 
-        @source.session.handlers.at(turn=source.session.turn, events='post-attack')
+        @source.session.event_manager.at(turn=source.session.turn, events='post-attack')
         def parry():
             if target.action.id != 'attack':
                 return

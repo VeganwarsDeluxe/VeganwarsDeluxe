@@ -1,5 +1,6 @@
 import random
 from core.Action import DecisiveAction
+from core.Message import AttackMessage, PostAttackMessage
 from core.TargetType import Enemies
 
 
@@ -46,13 +47,15 @@ class Weapon:
         source.energy = max(source.energy - self.energycost, 0)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.publish('attack')  # 7.1 Pre-Attack stage
+        self.source.session.event_manager.publish(
+            AttackMessage(self.id, self.source.session.turn))  # 7.1 Pre-Attack stage
         damage = source.action.data.get('damage')
 
         self.attack_text(source, target, damage)
 
         source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        source.session.publish('post-attack')  # 7.2 Post-Attack stage
+        self.source.session.event_manager.publish(
+            PostAttackMessage(self.id, self.source.session.turn))  # 7.2 Post-Attack stage
         damage = source.action.data.get('damage')
 
         target.inbound_dmg.add(source, damage)

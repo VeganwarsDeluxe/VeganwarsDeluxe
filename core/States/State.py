@@ -7,12 +7,12 @@ class State:
         self.constant = constant
         self.stage = stage
 
-    def is_triggered(self, stage):
-        return self.constant or self.stage == stage or self.stage == stage.split('$')[-1]
+    def register(self):
+        pass
+
+    def is_triggered(self, message):
+        return self.constant or self.stage == message.current_event
 
     @property
     def actions(self):
         return []
-
-    def __call__(self):
-        pass

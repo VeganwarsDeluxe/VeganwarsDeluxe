@@ -11,19 +11,17 @@ class Biceps(Skill):
     def __init__(self, source):
         super().__init__(source, stage='attack')
 
-    @property
-    def triggers(self):
-        return ['attack']
-
-    def __call__(self):
-        attack = self.source.session.event.action
-        if self.source.weapon.ranged:
-            return
-        if random.randint(0, 100) > 30:
-            return
-        damage = attack.data.get('damage')
-        if not damage:
-            return
-        self.source.session.say(f'❗️', n=False)
-        damage *= 2
-        attack.data.update({'damage': damage})
+    def register(self):
+        @self.source.session.event_manager.every(events='attack')
+        def func(message):
+            attack = self.source.session.event.action
+            if self.source.weapon.ranged:
+                return
+            if random.randint(0, 100) > 30:
+                return
+            damage = attack.data.get('damage')
+            if not damage:
+                return
+            self.source.session.say(f'❗️', n=False)
+            damage *= 2
+            attack.data.update({'damage': damage})

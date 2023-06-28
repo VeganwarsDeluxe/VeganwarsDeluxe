@@ -11,8 +11,7 @@ class Alchemist(Skill):
     def __init__(self, source):
         super().__init__(source, stage='pre-move')
 
-    def __call__(self):
-        if self.source.session.turn == 1:
-            @self.source.session.handlers.every(turns=9, events='pre-move')
-            def give_serum(message):
-                self.source.items.append(RageSerum(self.source))
+    def register(self):
+        @self.source.session.event_manager.every(turns=9, events='pre-move')
+        def func(message):
+            self.source.items.append(RageSerum(self.source))

@@ -9,10 +9,12 @@ class Armor(State):
         super().__init__(source, stage='post-attack')
         self.armor = []
 
-    def __call__(self):
-        attack = self.source.session.event.action
-        if attack.target == self.source:
-            self.negate_damage(attack)
+    def register(self):
+        @self.source.session.event_manager.every(events='post-attack')
+        def func(message):
+            attack = self.source.session.event.action
+            if attack.target == self.source:
+                self.negate_damage(attack)
 
     def negate_damage(self, attack):
         damage = attack.data.get('damage')

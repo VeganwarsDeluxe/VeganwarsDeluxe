@@ -10,6 +10,5 @@ class Medic(Skill):
     def __init__(self, source):
         super().__init__(source, stage='pre-move')
 
-    def __call__(self):
-        if self.source.session.turn == 1:
-            self.source.items.append(Stimulator(self.source))
+    def register(self):
+        self.source.items.append(Stimulator(self.source))

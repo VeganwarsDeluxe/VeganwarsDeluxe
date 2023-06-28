@@ -1,5 +1,6 @@
 import random
 from core.Items.Item import DecisiveItem, FreeItem
+from core.Message import PostActionMessage
 from core.TargetType import Allies, Everyone
 
 
@@ -13,7 +14,7 @@ class RageSerum(FreeItem):
     def use(self):
         self.source.session.say(f"💉|{self.source.name} использует сыворотку бешенства на {self.target.name}!")
 
-        @self.source.session.handlers.now(events='post-action')
+        @self.source.session.event_manager.now(events='post-action')
         def serum_attack(message):
             if self.target.dead:
                 return

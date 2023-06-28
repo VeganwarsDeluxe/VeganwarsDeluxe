@@ -222,7 +222,7 @@ def act_callback_handler(c):
     if int(cycle) >= game.skill_cycles:
         player.chose_skills = True
     else:
-        mm.send_skill_choice_buttons(player, game.skill_number, int(cycle)+1)
+        mm.send_skill_choice_buttons(player, game.skill_number, int(cycle) + 1)
 
     bot.edit_message_text(f'Выбран скилл: {skill.name}', c.message.chat.id, c.message.message_id)
 
@@ -231,7 +231,7 @@ def act_callback_handler(c):
         for player in game.alive_entities:
             tts += f'\n{player.name}: {player.weapon.name}'
         bot.send_message(game.chat_id, tts)
-        mm.pre_move(game.chat_id)
+        mm.start_game(game)
 
 
 @bot.callback_query_handler(func=lambda c: c.data.startswith('ci'))
