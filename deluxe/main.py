@@ -10,7 +10,6 @@ from deluxe.game.Entities.Cow import Cow
 
 
 #       Handler imports
-# import deluxe.bot.rating
 
 
 @bot.message_handler(commands=['do'])
