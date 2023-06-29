@@ -9,7 +9,7 @@ class ShieldGen(Skill):
     description = 'Вы получаете сгенерированный щит, работающий как обычный. Этот щит восстанавливается 5 ходов.'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
 
         self.cooldown_turn = 0
 

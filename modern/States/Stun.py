@@ -1,3 +1,4 @@
+from core.Message import PostUpdatesMessage, PostDamagesMessage
 from core.States.State import State
 from core.Action import DecisiveAction
 from core.TargetType import TargetType, OwnOnly
@@ -7,21 +8,23 @@ class Stun(State):
     id = 'stun'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.stun = 0
 
-    def register(self):
-        @self.source.session.event_manager.every(events=True)
-        def func(message):
-            source = self.source
+    def register(self, session_id):
+        @self.event_manager.every(session_id, event=PostUpdatesMessage)
+        def func(message: PostUpdatesMessage):
             if not self.active:
                 return
-            if source.session.event.top == 'post-update':
-                source.actions = self.actions
-            if source.session.event.top == 'post-damages':
-                if self.stun == 1:
-                    source.session.say(f'🌀|{source.name} приходит в себя.')
-                self.stun -= 1
+            self.source.actions = self.actions
+
+        @self.event_manager.every(session_id, event=PostDamagesMessage)
+        def func(message: PostDamagesMessage):
+            if not self.active:
+                return
+            if self.stun == 1:
+                self.source.session.say(f'🌀|{self.source.name} приходит в себя.')
+            self.stun -= 1
 
     @property
     def active(self):

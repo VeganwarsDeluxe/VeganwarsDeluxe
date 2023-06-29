@@ -10,7 +10,7 @@ class Thief(Skill):
                   'получите этот предмет. Дает +1 точности на дальнобойние оружия. (еще не дает)'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.cooldown_turn = 0
 
     @property

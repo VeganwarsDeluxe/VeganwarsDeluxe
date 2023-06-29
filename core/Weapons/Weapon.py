@@ -46,17 +46,15 @@ class Weapon:
         damage = self.calculate_damage(source, target)
         source.energy = max(source.energy - self.energycost, 0)
 
-        source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        self.source.session.event_manager.publish(
-            AttackMessage(self.id, self.source.session.turn))  # 7.1 Pre-Attack stage
-        damage = source.action.data.get('damage')
+        message = AttackMessage(source.session.id, self.source.session.turn, source, target, damage)
+        self.source.session.event_manager.publish(message)  # 7.1 Pre-Attack stage
+        damage = message.damage
 
         self.attack_text(source, target, damage)
 
-        source.action.data.update({'damage': damage, 'source': source, 'target': target})
-        self.source.session.event_manager.publish(
-            PostAttackMessage(self.id, self.source.session.turn))  # 7.2 Post-Attack stage
-        damage = source.action.data.get('damage')
+        message = PostAttackMessage(source.session.id, self.source.session.turn, source, target, damage)
+        self.source.session.event_manager.publish(message)  # 7.2 Post-Attack stage
+        damage = message.damage
 
         target.inbound_dmg.add(source, damage)
         source.outbound_dmg.add(target, damage)

@@ -1,9 +1,8 @@
-from core.Entities.Entity import Entity
 from core.Events import EventManager
-from core.Message import Message, PreUpdateMessage, PostUpdateMessage, HPLossMessage, PreActionMessage, \
-    PostActionMessage, PreDamagesMessage, PostDamagesMessage, PostTickMessage, PostDeathMessage
-from core.TimeMomentStack import TimeMomentStack
+from core.Message import Message, PreUpdatesMessage, PostUpdatesMessage, HPLossMessage, PreActionsMessage, \
+    PostActionsMessage, PreDamagesMessage, PostDamagesMessage, PostTickMessage, PostDeathsMessage
 from uuid import uuid4
+from core.Entities.Entity import Entity
 
 
 class Session:
@@ -14,7 +13,7 @@ class Session:
 
         self.entities: list[Entity] = []
 
-        self.event_manager: EventManager = EventManager(self)
+        self.event_manager: EventManager = EventManager()
 
     def say(self, text, n=True):
         print(text, end=('\n' if n else ''))
@@ -38,10 +37,10 @@ class Session:
             entity.tick_turn()
 
     def update_actions(self):
-        self.event_manager.publish(PreUpdateMessage(self.id, self.turn))
+        self.event_manager.publish(PreUpdatesMessage(self.id, self.turn))
         for entity in self.entities:
             entity.update_actions()
-        self.event_manager.publish(PostUpdateMessage(self.id, self.turn))
+        self.event_manager.publish(PostUpdatesMessage(self.id, self.turn))
 
     def pre_move(self):
         for entity in self.entities:
@@ -50,7 +49,7 @@ class Session:
     def start(self):
         for entity in self.entities:
             for state in entity.skills:
-                state.register()
+                state.register(self.id)
 
     def cancel_damages(self, source):
         for entity in self.entities:
@@ -58,13 +57,12 @@ class Session:
 
     def lose_hp(self, entity, damage):
         hp_loss = (damage // 6) + 1
-        entity.cache.update({'hp_loss': hp_loss, 'hp_loss_damage': damage})
 
-        self.event_manager.publish(HPLossMessage(self.id, self.turn))
+        message = HPLossMessage(self.id, self.turn, entity, damage, hp_loss)
+        self.event_manager.publish(message)
 
-        hp_loss = entity.cache.get('hp_loss')
-        entity.hp -= hp_loss
-        self.say(f"{entity.hearts}|{entity.name} теряет {hp_loss} ХП. Остается {entity.hp} ХП.")
+        entity.hp -= message.hp_loss
+        self.say(f"{entity.hearts}|{entity.name} теряет {message.hp_loss} ХП. Остается {entity.hp} ХП.")
 
     def calculate_damages(self):  # TODO: Revise just in case, I am worried
         for entity in self.entities:  # Cancelling round
@@ -117,9 +115,9 @@ class Session:
             action() if not action.canceled else None
 
     def move(self):  # 0. Pre-move stage
-        self.event_manager.publish(PreActionMessage(self.id, self.turn))  # 1. Pre-action stage
+        self.event_manager.publish(PreActionsMessage(self.id, self.turn))  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
-        self.event_manager.publish(PostActionMessage(self.id, self.turn))  # 3. Post-action stage
+        self.event_manager.publish(PostActionsMessage(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
         self.event_manager.publish(PreDamagesMessage(self.id, self.turn))
         self.say(f'\nРезультаты хода {self.turn}:')
@@ -128,7 +126,7 @@ class Session:
         self.tick()  # 6. Tick stage
         self.event_manager.publish(PostTickMessage(self.id, self.turn))  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        self.event_manager.publish(PostDeathMessage(self.id, self.turn))  # 9. Post-death stage
+        self.event_manager.publish(PostDeathsMessage(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

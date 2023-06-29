@@ -10,7 +10,7 @@ class Mimic(Skill):
                   'получите возможность его повторить!'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.cooldown_turn = 0
 
     @property

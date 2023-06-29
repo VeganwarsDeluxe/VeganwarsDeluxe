@@ -1,17 +1,17 @@
+from core.Events import EventManager
+from core.Message import Message, PreActionsMessage
+
+
 class State:
     id = None
     name = 'None'
 
-    def __init__(self, source, constant=False, stage='pre-action'):
+    def __init__(self, source):
         self.source = source
-        self.constant = constant
-        self.stage = stage
+        self.event_manager = EventManager()
 
-    def register(self):
+    def register(self, session_id):
         pass
-
-    def is_triggered(self, message):
-        return self.constant or self.stage == message.current_event
 
     @property
     def actions(self):

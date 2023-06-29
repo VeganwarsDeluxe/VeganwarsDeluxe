@@ -19,6 +19,8 @@ class ExtendedBot(TeleBot):
             if 'Too Many Requests' in e.description:
                 time.sleep(2)
                 return self.send_message(*args, **kwargs)
+        except:
+            pass
 
     def get_deep_link(self, data: str):
         return f"https://t.me/{self.user.username}?start={data}"

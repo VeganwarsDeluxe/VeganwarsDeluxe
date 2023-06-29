@@ -1,3 +1,4 @@
+from core.Message import PostTickMessage
 from core.States.State import State
 from core.Action import DecisiveAction
 from core.TargetType import TargetType, OwnOnly
@@ -7,11 +8,13 @@ class Dodge(State):
     id = 'dodge'
 
     def __init__(self, source):
-        super().__init__(source, stage='post-tick')
+        super().__init__(source)
         self.dodge_cooldown = 0
 
-    def __call__(self):
-        self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
+    def register(self, session_id):
+        @self.event_manager.every(session_id, event=PostTickMessage)
+        def func(message: PostTickMessage):
+            self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
     @property
     def actions(self):

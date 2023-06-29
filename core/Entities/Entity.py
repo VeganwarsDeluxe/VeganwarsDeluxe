@@ -1,6 +1,5 @@
 from core.Action import DecisiveAction, Action
 from core.Weapons.Weapon import Weapon
-from core.Skills.Skill import Skill
 from core.Items.Item import Item
 from core.TargetType import OwnOnly
 from core.DamageHolder import DamageHolder
@@ -20,7 +19,7 @@ class Entity:
         self.max_energy: int = 0
 
         self.weapon: Weapon = Weapon(self)
-        self.skills: list[Skill] = []
+        self.skills = []
         self.items: list[Item] = []
 
         self.nearby_entities: list[Entity] = []
@@ -30,7 +29,6 @@ class Entity:
         # Temporary
         self.inbound_dmg = DamageHolder()
         self.outbound_dmg = DamageHolder()
-        self.cache = {}
 
         self.pre_move()
         self.actions: list[Action] = []

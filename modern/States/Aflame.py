@@ -1,4 +1,6 @@
 from core.Action import DecisiveAction
+from core.Message import Message, PostActionsMessage, PostUpdatesMessage, PreDamagesMessage, AttackMessage, \
+    PostAttackMessage
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -7,29 +9,32 @@ class Aflame(State):
     id = 'aflame'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.flame = 0
         self.dealer = self.source
         self.extinguished = False
 
         self.timer = 0
 
-    def register(self):
+    def register(self, session_id):
         source = self.source
 
-        @self.source.session.event_manager.every(events=True)
-        def func(message):
-            if self.source.session.event.top == 'post-action':  # Extinguishing logic
-                if self.source.action.id == 'skip' and self.flame:
-                    self.source.session.say(f'💨|{self.source.name} потушил себя.')
-                    self.timer = 0
-                    self.flame = 0
-                    self.extinguished = False
-            if source.session.event.top == 'post-update' and self.flame:
-                source.remove_action('skip')
+        @self.event_manager.every(session_id, event=PostActionsMessage)
+        def func(message: PostActionsMessage):
+            if self.source.action.id == 'skip' and self.flame:
+                self.source.session.say(f'💨|{self.source.name} потушил себя.')
+                self.timer = 0
+                self.flame = 0
+                self.extinguished = False
 
-            if source.session.event.top != 'pre-damages':
+        @self.event_manager.every(session_id, event=PostUpdatesMessage)
+        def func(message: PostUpdatesMessage):
+            if not self.flame:
                 return
+            self.source.remove_action('skip')
+
+        @self.event_manager.every(session_id, event=PreDamagesMessage)
+        def func(message: PreDamagesMessage):
             if not self.flame:
                 return
             if self.extinguished:
@@ -42,13 +47,21 @@ class Aflame(State):
                 self.extinguished = False
             damage = self.flame
 
-            source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')  # Damage logic
+            message = AttackMessage(message.session_id, message.turn, self.dealer, self.source, damage)
+            self.source.session.event_manager.publish(message)
+            damage = message.damage
+
+            source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
+
+            message = PostAttackMessage(message.session_id, self.source.session.turn, self.dealer, self.source, damage)
+            self.source.session.event_manager.publish(message)
+            damage = message.damage
+
             source.inbound_dmg.add(self.dealer, damage)
             source.outbound_dmg.add(self.dealer, damage)
             if self.flame > 1:
                 source.session.say(f'🔥|{source.name} горит. Теряет {self.flame - 1} энергии.')
                 source.energy -= self.flame - 1
-
             if self.timer <= 1:
                 self.extinguished = True
             else:

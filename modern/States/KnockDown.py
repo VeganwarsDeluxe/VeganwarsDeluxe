@@ -1,3 +1,4 @@
+from core.Message import PostUpdatesMessage
 from core.States.State import State
 from core.Action import DecisiveAction
 from core.TargetType import TargetType, OwnOnly
@@ -7,18 +8,16 @@ class Knockdown(State):
     id = 'knockdown'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.active = False
 
-    def register(self):
-        @self.source.session.event_manager.every(events=True)
-        def func(message):
-            source = self.source
+    def register(self, session_id):
+        @self.event_manager.every(session_id, event=PostUpdatesMessage)
+        def func(message: PostUpdatesMessage):
             if not self.active:
                 return
-            if source.session.event.top == 'post-update':
-                source.remove_action('attack')
-                source.remove_action('dodge')
+            self.source.remove_action('attack')
+            self.source.remove_action('dodge')
 
     @property
     def actions(self):

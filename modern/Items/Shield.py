@@ -1,4 +1,5 @@
 from core.Items.Item import DecisiveItem, FreeItem
+from core.Message import PostAttackMessage
 from core.TargetType import Allies, Everyone
 
 
@@ -15,14 +16,9 @@ class Shield(DecisiveItem):
         else:
             self.target.session.say(f"🔵|{self.source.name} использует щит на {self.target.name}. Урон отражен!")
 
-        @self.source.session.event_manager.at(turn=self.source.session.turn, events='post-attack')
-        def shield_block():
-            attack = self.source.session.event.action
-            if not attack.target:
+        @self.source.session.event_manager.at(self.source.session.id, turn=self.source.session.turn,
+                                              event=PostAttackMessage)
+        def shield_block(message: PostAttackMessage):
+            if message.target != self.target:
                 return
-            if attack.target != self.target:
-                return
-            damage = attack.data.get('damage')
-            if not damage:
-                return
-            attack.data.update({'damage': 0})
+            message.damage = 0

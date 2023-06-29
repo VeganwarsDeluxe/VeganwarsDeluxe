@@ -7,7 +7,6 @@ class Action:
 
     def __init__(self, source, target_type, priority=0):
         self.priority: int = priority  # TODO: Revise priorities of all actions
-        self.data = dict()
 
         self.target_type: TargetType = target_type
 
@@ -23,7 +22,6 @@ class Action:
     def __call__(self):  # Abstract "Run" method for overriding
         if self.canceled:
             return
-        self.source.session.event.action = self
         return self.func(self.source, self.target)
 
     @property

@@ -7,7 +7,7 @@ class KnockedWeapon(State):
     id = 'knocked-weapon'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.weapon = None
 
     @property

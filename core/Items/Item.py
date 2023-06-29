@@ -15,7 +15,6 @@ class Item(Action):
     def __call__(self):
         if self.canceled:
             return
-        self.source.session.event.item = self
         self.use()
 
     def use(self):

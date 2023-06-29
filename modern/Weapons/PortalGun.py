@@ -33,7 +33,7 @@ class PortalGun(Weapon):  # TODO: Fix or delete
             # DecisiveAction(self.knock_down_portal, self.owner, target_type=Enemies(),
             #                name='🔴|Создать портал', id='knock_down_portal')
         ]
-        return [random.choice(actions)] + super().actions
+        # return super().actions + [random.choice(actions)]
 
     def attack_text(self, source, target, damage):
         attack_emoji = "⚡️"

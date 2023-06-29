@@ -1,3 +1,4 @@
+from core.Message import PreMoveMessage
 from core.Skills.Skill import Skill
 from modern.Items.RageSerum import RageSerum
 
@@ -8,10 +9,7 @@ class Alchemist(Skill):
     description = 'В начале игры и каждые 9 ходов дает вам сыворотку бешенства, применение ' \
                   'которой заставляет выбранную цель атаковать дополнительно к своему действию..'
 
-    def __init__(self, source):
-        super().__init__(source, stage='pre-move')
-
-    def register(self):
-        @self.source.session.event_manager.every(turns=9, events='pre-move')
-        def func(message):
+    def register(self, session_id):
+        @self.event_manager.every(session_id, turns=9, event=PreMoveMessage)
+        def func(message: PreMoveMessage):
             self.source.items.append(RageSerum(self.source))

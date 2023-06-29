@@ -9,10 +9,7 @@ class Stockpile(Skill):
     name = 'Запасливый'
     description = 'В начале матча вы получаете два дополнительных предмета.'
 
-    def __init__(self, source):
-        super().__init__(source, stage='pre-move')
-
-    def register(self):
+    def register(self, session_id):
         given = []
         for _ in range(2):
             item = random.choice(modern.game_items_pool)(self.source)

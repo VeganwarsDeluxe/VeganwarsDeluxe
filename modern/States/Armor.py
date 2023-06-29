@@ -1,4 +1,6 @@
 import random
+
+from core.Message import PostAttackMessage
 from core.States.State import State
 
 
@@ -6,25 +8,23 @@ class Armor(State):
     id = 'armor'
 
     def __init__(self, source):
-        super().__init__(source, stage='post-attack')
+        super().__init__(source)
         self.armor = []
 
-    def register(self):
-        @self.source.session.event_manager.every(events='post-attack')
-        def func(message):
-            attack = self.source.session.event.action
-            if attack.target == self.source:
-                self.negate_damage(attack)
+    def register(self, session_id):
+        @self.event_manager.every(session_id, event=PostAttackMessage)
+        def func(message: PostAttackMessage):
+            if message.target == self.source:
+                self.negate_damage(message)
 
-    def negate_damage(self, attack):
-        damage = attack.data.get('damage')
-        if not damage:
+    def negate_damage(self, message: PostAttackMessage):
+        if not message.damage:
             return
-        armor = min(damage, self.roll_armor())
+        armor = min(message.damage, self.roll_armor())
         if not armor:
             return
         self.source.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
-        attack.data.update({'damage': damage - armor})
+        message.damage -= armor
 
     def add(self, value: int, chance=100):
         self.armor.append((value, chance))

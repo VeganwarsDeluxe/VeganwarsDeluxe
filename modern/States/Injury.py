@@ -1,3 +1,4 @@
+from core.Message import AttackMessage
 from core.States.State import State
 
 
@@ -5,25 +6,16 @@ class Injury(State):
     id = 'injury'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.injury = 0
 
-    def register(self):
-        @self.source.session.event_manager.every(events=True)
-        def func(message):
-            source = self.source
-            if source.session.event.top != 'attack':
-                return
+    def register(self, session_id):
+        @self.event_manager.every(session_id, events=AttackMessage)
+        def func(message: AttackMessage):
             if not self.injury:
                 return
-            damage = 0
-            entity = source
-            for entity in source.session.entities:
-                if entity.action.data.get('target') == source:
-                    damage = entity.action.data.get('damage')
-                    break
+            if message.target != self.source:
                 return
-            if damage == 0:
+            if not message.damage:
                 return
-            # source.say(f'От ранения урон увеличен c {damage} до {damage + self.injury}!')
-            entity.action.data.update({'damage': damage + self.injury})
+            message.damage += self.injury

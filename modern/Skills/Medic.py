@@ -7,8 +7,5 @@ class Medic(Skill):
     name = 'Медик'
     description = 'В начале боя вы получаете стимулятор, восстанавливающий 2 хп при использовании.'
 
-    def __init__(self, source):
-        super().__init__(source, stage='pre-move')
-
-    def register(self):
+    def register(self, session_id):
         self.source.items.append(Stimulator(self.source))

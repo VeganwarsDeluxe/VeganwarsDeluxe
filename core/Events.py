@@ -1,113 +1,109 @@
-from core.TimeMomentStack import TimeMomentStack
+import typing
+
+from core.Message import Message
 
 
 class EventManager:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls, *args, **kwargs)
+        return cls._instance
+
     def __init__(self):
-        self.handlers: list[Handler] = []
+        self._handlers: list[Handler] = []
 
-        self.time_stack: TimeMomentStack = TimeMomentStack()
-
-    def every(self, turns, start=1, events=True):
+    def every(self, session_id, turns, start=1, events=Message):
         """
-        @session.handlers.every(2, events='post-attack')
+        @session.handlers.every(session_id, 2, events='post-attack')
         def func(message):
             self.owner.say('I say this every 2 turns at post-attack!')
         """
 
         def decorator_func(func):
-            self.handlers.append(
-                ScheduledHandler(func, events, start=start, interval=turns, repeats=-1)
+            self._handlers.append(
+                ScheduledHandler(session_id, func, events, start=start, interval=turns, repeats=-1)
             )
             return func
 
         return decorator_func
 
-    def at(self, turn, events=True):
+    def at(self, session_id, turn, event=Message):
         def decorator_func(func):
-            self.handlers.append(
-                SingleTurnHandler(func, events, turn)
+            self._handlers.append(
+                SingleTurnHandler(session_id, func, event, turn)
             )
             return func
 
         return decorator_func
 
-    def now(self, events=True):
+    def now(self, session_id, event=Message):
         def decorator_func(func):
-            self.handlers.append(
-                Handler(func, events, repeats=1)
+            self._handlers.append(
+                Handler(session_id, func, event, repeats=1)
             )
             return func
 
         return decorator_func
 
-    def at_event(self, events=True):
+    def at_event(self, session_id, event=Message):
         def decorator_func(func):
-            self.handlers.append(
-                Handler(func, events)
+            self._handlers.append(
+                Handler(session_id, func, event)
             )
             return func
 
         return decorator_func
 
-    def constantly(self):
+    def constantly(self, session_id):
         def decorator_func(func):
-            self.handlers.append(
-                Handler(func, True)
+            self._handlers.append(
+                Handler(session_id, func, Message)
             )
             return func
 
         return decorator_func
 
-    def publish(self, message):
-        self.time_stack.start(message.current_event)
-
-        self.trigger_handlers(message)
-
-        self.time_stack.end()
-
-    def trigger_handlers(self, message):
-        for handler in self.handlers:
+    def publish(self, message: Message):
+        for handler in self._handlers:
             handler(message)
 
 
 class Handler:
-    def __init__(self, func, events, repeats=-1):
-        self.func = func
-        self.events = events
+    def __init__(self, session_id, func, events: typing.Type[Message], repeats=-1):
+        self.session_id = session_id
 
+        self.func = func
+        self.event: typing.Type[Message] = events
         self.repeats = repeats
-        self.last_executed = 0
         self.times_executed = set()
 
-    def is_triggered(self, message):
+    def is_triggered(self, message: Message):
+        if message.session_id != self.session_id:
+            return False
         if self.repeats != -1 and len(self.times_executed) >= self.repeats:
             if message.turn not in self.times_executed:
                 return False
         return self.is_event_triggered(message)
 
     def is_event_triggered(self, message):
-        if self.events is True:
-            return True
-        if message.current_event == self.events:
-            return True
-        return False
+        return isinstance(message, self.event)
 
     def __call__(self, message):
         if self.is_triggered(message):
             self.func(message)
-
-            self.last_executed = message.turn
             self.times_executed.add(message.turn)
 
 
 class ConstantHandler(Handler):
-    def __init__(self, func):
-        super().__init__(func, events=True)
+    def __init__(self, session_id, func):
+        super().__init__(session_id, func, events=Message)
 
 
 class ScheduledHandler(Handler):
-    def __init__(self, func, events, start, interval, repeats=-1):
-        super().__init__(func, events, repeats=repeats)
+    def __init__(self, session_id, func, events, start, interval, repeats=-1):
+        super().__init__(session_id, func, events, repeats=repeats)
 
         self.start = start
         self.interval = interval
@@ -124,5 +120,5 @@ class ScheduledHandler(Handler):
 
 
 class SingleTurnHandler(ScheduledHandler):
-    def __init__(self, func, events, turn):
-        super().__init__(func, events, start=turn, interval=1, repeats=1)
+    def __init__(self, session_id, func, events, turn):
+        super().__init__(session_id, func, events, start=turn, interval=1, repeats=1)

@@ -1,6 +1,7 @@
 import random
 from telebot import types
 
+from core.Message import PreMoveMessage
 from .TelegramSession import TelegramSession
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 import modern
@@ -18,7 +19,7 @@ class Matchmaker:
     def pre_move(self, chat_id):
         game = self.games.get(chat_id)
         game.update_actions()
-        game.pre_move(), game.stage('pre-move')
+        game.pre_move(), game.event_manager.publish(PreMoveMessage(game.id, game.turn))
         if not game.active:
             if list(game.alive_entities):
                 tts = f'Игра окончена! Победила команда {list(game.alive_entities)[0].name}!'
@@ -29,7 +30,7 @@ class Matchmaker:
                 if player.id == game.chat_id:
                     continue
                 try:
-                    if player.id == game.chat_id:
+                    if player.id == game.chat_id or player.npc:
                         continue
                     self.bot.send_message(player.id, tts)
                 except:
@@ -203,7 +204,7 @@ class Matchmaker:
                 self.bot.send_message(game.chat_id, tts)
                 for player in game.entities:
                     try:
-                        if player.id == game.chat_id:
+                        if player.id == game.chat_id or player.npc:
                             continue
                         self.bot.send_message(player.id, tts)
                     except:

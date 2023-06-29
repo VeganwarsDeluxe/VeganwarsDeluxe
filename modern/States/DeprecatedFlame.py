@@ -7,13 +7,13 @@ class Aflame(State):
     id = 'aflame'
 
     def __init__(self, source):
-        super().__init__(source, constant=True)
+        super().__init__(source)
         self.flame = 0
         self.dealer = self.source
         self.extinguished = False
 
-    def register(self):
-        @self.source.session.event_manager.every(events=True)
+    def register(self, session_id):
+        @self.event_manager.every(session_id, events=True)
         def func(message):
             source = self.source
             if source.session.event.top == 'post-action':

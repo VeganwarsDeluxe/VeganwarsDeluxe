@@ -1,65 +1,78 @@
 class Message:
-    def __init__(self, session_id, turn, current_event):
+    def __init__(self, session_id, turn):
         self.session_id = session_id
         self.turn = turn
-        self.current_event = current_event
+
+    def __str__(self):
+        return type(self).__name__
 
 
 class PreMoveMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'pre-move')
+        super().__init__(session_id, turn)
 
 
-class PreUpdateMessage(Message):
+class PreUpdatesMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'pre-update')
+        super().__init__(session_id, turn)
 
 
-class PostUpdateMessage(Message):
+class PostUpdatesMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-update')
+        super().__init__(session_id, turn)
 
 
 class HPLossMessage(Message):
+    def __init__(self, session_id, turn, source, damage, hp_loss):
+        super().__init__(session_id, turn)
+        self.source = source
+        self.damage = damage
+        self.hp_loss = hp_loss
+
+
+class PreActionsMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'hp-loss')
+        super().__init__(session_id, turn)
 
 
-class PreActionMessage(Message):
+class PostActionsMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'pre-action')
-
-
-class PostActionMessage(Message):
-    def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-action')
+        super().__init__(session_id, turn)
 
 
 class PreDamagesMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'pre-damages')
+        super().__init__(session_id, turn)
 
 
 class PostDamagesMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-damages')
+        super().__init__(session_id, turn)
 
 
 class PostTickMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-tick')
+        super().__init__(session_id, turn)
 
 
-class PostDeathMessage(Message):
+class PostDeathsMessage(Message):
     def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-death')
+        super().__init__(session_id, turn)
 
 
 class AttackMessage(Message):
-    def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'attack')
+    def __init__(self, session_id, turn, source, target, damage):
+        super().__init__(session_id, turn)
+
+        self.source = source
+        self.target = target
+        self.damage = damage
 
 
 class PostAttackMessage(Message):
-    def __init__(self, session_id, turn):
-        super().__init__(session_id, turn, 'post-attack')
+    def __init__(self, session_id, turn, source, target, damage):
+        super().__init__(session_id, turn)
+
+        self.source = source
+        self.target = target
+        self.damage = damage
