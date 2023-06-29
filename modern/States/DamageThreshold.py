@@ -1,4 +1,4 @@
-from core.Message import HPLossMessage
+from core.Event import HPLossEvent
 from core.States.State import State
 
 
@@ -10,8 +10,8 @@ class DamageThreshold(State):
         self.threshold = 6
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, event=HPLossMessage)
-        def func(message: HPLossMessage):
+        @self.event_manager.every(session_id, event=HPLossEvent)
+        def func(message: HPLossEvent):
             if not message.damage:
                 return
             message.hp_loss = (message.damage // self.threshold) + 1

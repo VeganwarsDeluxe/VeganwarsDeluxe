@@ -1,6 +1,6 @@
 from core.Action import DecisiveAction
-from core.Message import PostActionsMessage, PostUpdatesMessage, PreDamagesMessage, AttackMessage, \
-    PostAttackMessage
+from core.Event import PostActionsEvent, PostUpdatesEvent, PreDamagesEvent, AttackEvent, \
+    PostAttackEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -19,22 +19,22 @@ class Aflame(State):
     def register(self, session_id):
         source = self.source
 
-        @self.event_manager.every(session_id, event=PostActionsMessage)
-        def func(message: PostActionsMessage):
+        @self.event_manager.every(session_id, event=PostActionsEvent)
+        def func(message: PostActionsEvent):
             if self.source.action.id == 'skip' and self.flame:
                 self.source.session.say(f'💨|{self.source.name} потушил себя.')
                 self.timer = 0
                 self.flame = 0
                 self.extinguished = False
 
-        @self.event_manager.every(session_id, event=PostUpdatesMessage)
-        def func(message: PostUpdatesMessage):
+        @self.event_manager.every(session_id, event=PostUpdatesEvent)
+        def func(message: PostUpdatesEvent):
             if not self.flame:
                 return
             self.source.remove_action('skip')
 
-        @self.event_manager.every(session_id, event=PreDamagesMessage)
-        def func(message: PreDamagesMessage):
+        @self.event_manager.every(session_id, event=PreDamagesEvent)
+        def func(message: PreDamagesEvent):
             if not self.flame:
                 return
             if self.extinguished:
@@ -47,13 +47,13 @@ class Aflame(State):
                 self.extinguished = False
             damage = self.flame
 
-            message = AttackMessage(message.session_id, message.turn, self.dealer, self.source, damage)
+            message = AttackEvent(message.session_id, message.turn, self.dealer, self.source, damage)
             self.source.session.event_manager.publish(message)
             damage = message.damage
 
             source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
 
-            message = PostAttackMessage(message.session_id, self.source.session.turn, self.dealer, self.source, damage)
+            message = PostAttackEvent(message.session_id, self.source.session.turn, self.dealer, self.source, damage)
             self.source.session.event_manager.publish(message)
             damage = message.damage
 

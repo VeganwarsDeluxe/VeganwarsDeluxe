@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Message import PostUpdatesMessage, PostDamagesMessage
+from core.Event import PostUpdatesEvent, PostDamagesEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -12,14 +12,14 @@ class Stun(State):
         self.stun = 0
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, event=PostUpdatesMessage)
-        def func(message: PostUpdatesMessage):
+        @self.event_manager.every(session_id, event=PostUpdatesEvent)
+        def func(message: PostUpdatesEvent):
             if not self.active:
                 return
             self.source.actions = self.actions
 
-        @self.event_manager.every(session_id, event=PostDamagesMessage)
-        def func(message: PostDamagesMessage):
+        @self.event_manager.every(session_id, event=PostDamagesEvent)
+        def func(message: PostDamagesEvent):
             if not self.active:
                 return
             if self.stun == 1:

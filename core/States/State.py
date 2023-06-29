@@ -1,4 +1,4 @@
-from core.Events import EventManager
+from core.EventManager import EventManager
 
 
 class State:

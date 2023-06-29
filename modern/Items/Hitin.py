@@ -1,5 +1,5 @@
 from core.Items.Item import FreeItem
-from core.Message import PostDamagesMessage
+from core.Event import PostDamagesEvent
 from core.TargetType import Everyone
 
 
@@ -16,8 +16,8 @@ class Hitin(FreeItem):
 
         # TODO: self.source.session.turn
         @self.source.session.event_manager.at(self.source.session.id, turn=self.source.session.turn + 2,
-                                              event=PostDamagesMessage)
-        def hitin_knockout(message: PostDamagesMessage):
+                                              event=PostDamagesEvent)
+        def hitin_knockout(message: PostDamagesEvent):
             self.target.get_skill('armor').remove((2, 100))
             self.target.get_skill('stun').stun += 1
             self.source.session.say(f'🌀|{self.target.name} теряет эффект хитина. Игрок оглушен!')

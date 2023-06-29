@@ -1,9 +1,9 @@
 from uuid import uuid4
 
 from core.Entities.Entity import Entity
-from core.Events import EventManager
-from core.Message import PreUpdatesMessage, PostUpdatesMessage, HPLossMessage, PreActionsMessage, \
-    PostActionsMessage, PreDamagesMessage, PostDamagesMessage, PostTickMessage, PostDeathsMessage
+from core.EventManager import EventManager
+from core.Event import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
+    PostActionsEvent, PreDamagesEvent, PostDamagesEvent, PostTickEvent, PostDeathsEvent
 
 
 class Session:
@@ -38,10 +38,10 @@ class Session:
             entity.tick_turn()
 
     def update_actions(self):
-        self.event_manager.publish(PreUpdatesMessage(self.id, self.turn))
+        self.event_manager.publish(PreUpdatesEvent(self.id, self.turn))
         for entity in self.entities:
             entity.update_actions()
-        self.event_manager.publish(PostUpdatesMessage(self.id, self.turn))
+        self.event_manager.publish(PostUpdatesEvent(self.id, self.turn))
 
     def pre_move(self):
         for entity in self.entities:
@@ -59,7 +59,7 @@ class Session:
     def lose_hp(self, entity, damage):
         hp_loss = (damage // 6) + 1
 
-        message = HPLossMessage(self.id, self.turn, entity, damage, hp_loss)
+        message = HPLossEvent(self.id, self.turn, entity, damage, hp_loss)
         self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
@@ -116,18 +116,18 @@ class Session:
             action() if not action.canceled else None
 
     def move(self):  # 0. Pre-move stage
-        self.event_manager.publish(PreActionsMessage(self.id, self.turn))  # 1. Pre-action stage
+        self.event_manager.publish(PreActionsEvent(self.id, self.turn))  # 1. Pre-action stage
         self.call_actions()  # 2. Action stage
-        self.event_manager.publish(PostActionsMessage(self.id, self.turn))  # 3. Post-action stage
+        self.event_manager.publish(PostActionsEvent(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
-        self.event_manager.publish(PreDamagesMessage(self.id, self.turn))
+        self.event_manager.publish(PreDamagesEvent(self.id, self.turn))
         self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
-        self.event_manager.publish(PostDamagesMessage(self.id, self.turn))  # 5. Post-damages stage
+        self.event_manager.publish(PostDamagesEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        self.event_manager.publish(PostTickMessage(self.id, self.turn))  # 7. Post-tick stage
+        self.event_manager.publish(PostTickEvent(self.id, self.turn))  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        self.event_manager.publish(PostDeathsMessage(self.id, self.turn))  # 9. Post-death stage
+        self.event_manager.publish(PostDeathsEvent(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

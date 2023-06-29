@@ -1,20 +1,13 @@
-import typing
+from typing import Type
+from core import Singleton
+from core.Event import Event
 
-from core.Message import Message
 
-
-class EventManager:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance
-
+class EventManager(Singleton):
     def __init__(self):
         self._handlers: list[Handler] = []
 
-    def every(self, session_id, turns, start=1, events=Message):
+    def every(self, session_id, turns: int, start: int = 1, events: Type[Event] = Event):
         """
         @session.handlers.every(session_id, 2, events='post-attack')
         def func(message):
@@ -29,7 +22,7 @@ class EventManager:
 
         return decorator_func
 
-    def at(self, session_id, turn, event=Message):
+    def at(self, session_id, turn, event=Event):
         def decorator_func(func):
             self._handlers.append(
                 SingleTurnHandler(session_id, func, event, turn)
@@ -38,7 +31,7 @@ class EventManager:
 
         return decorator_func
 
-    def now(self, session_id, event=Message):
+    def now(self, session_id, event=Event):
         def decorator_func(func):
             self._handlers.append(
                 Handler(session_id, func, event, repeats=1)
@@ -47,7 +40,7 @@ class EventManager:
 
         return decorator_func
 
-    def at_event(self, session_id, event=Message):
+    def at_event(self, session_id, event=Event):
         def decorator_func(func):
             self._handlers.append(
                 Handler(session_id, func, event)
@@ -59,27 +52,27 @@ class EventManager:
     def constantly(self, session_id):
         def decorator_func(func):
             self._handlers.append(
-                Handler(session_id, func, Message)
+                Handler(session_id, func, Event)
             )
             return func
 
         return decorator_func
 
-    def publish(self, message: Message):
+    def publish(self, message: Event):
         for handler in self._handlers:
             handler(message)
 
 
 class Handler:
-    def __init__(self, session_id, func, events: typing.Type[Message], repeats=-1):
+    def __init__(self, session_id, func, events: Type[Event], repeats=-1):
         self.session_id = session_id
 
         self.func = func
-        self.event: typing.Type[Message] = events
+        self.event: Type[Event] = events
         self.repeats = repeats
         self.times_executed = set()
 
-    def is_triggered(self, message: Message):
+    def is_triggered(self, message: Event):
         if message.session_id != self.session_id:
             return False
         if self.repeats != -1 and len(self.times_executed) >= self.repeats:
@@ -98,7 +91,7 @@ class Handler:
 
 class ConstantHandler(Handler):
     def __init__(self, session_id, func):
-        super().__init__(session_id, func, events=Message)
+        super().__init__(session_id, func, events=Event)
 
 
 class ScheduledHandler(Handler):

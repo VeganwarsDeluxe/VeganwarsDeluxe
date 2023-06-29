@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Message import PostUpdatesMessage
+from core.Event import PostUpdatesEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -12,8 +12,8 @@ class Knockdown(State):
         self.active = False
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, event=PostUpdatesMessage)
-        def func(message: PostUpdatesMessage):
+        @self.event_manager.every(session_id, event=PostUpdatesEvent)
+        def func(message: PostUpdatesEvent):
             if not self.active:
                 return
             self.source.remove_action('attack')

@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Message import PostTickMessage
+from core.Event import PostTickEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -12,8 +12,8 @@ class Dodge(State):
         self.dodge_cooldown = 0
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, event=PostTickMessage)
-        def func(message: PostTickMessage):
+        @self.event_manager.every(session_id, event=PostTickEvent)
+        def func(message: PostTickEvent):
             self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
     @property
