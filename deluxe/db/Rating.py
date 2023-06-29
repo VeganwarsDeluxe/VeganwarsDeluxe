@@ -52,12 +52,12 @@ class RatingManager:
         except:
             pass
 
-    def get_user(self, id, name, username):
+    def get_user(self, user_id, name, username):
         try:
-            Player.objects(id=id).update_one(upsert=True, name=name, username=username)
-            user = Player.objects.get(id=id)
+            Player.objects(id=user_id).update_one(upsert=True, name=name, username=username)
+            user = Player.objects.get(id=user_id)
         except:
-            user = Player(id=id, name=name, username=username)
+            user = Player(id=user_id, name=name, username=username)
             user.save()
         return user
 

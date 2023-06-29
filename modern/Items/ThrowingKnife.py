@@ -1,6 +1,7 @@
-from core.Items.Item import DecisiveItem
-from core.TargetType import Allies, Enemies
 import random
+
+from core.Items.Item import DecisiveItem
+from core.TargetType import Enemies
 
 
 class ThrowingKnife(DecisiveItem):

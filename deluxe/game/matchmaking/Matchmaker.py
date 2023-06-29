@@ -53,7 +53,7 @@ class Matchmaker:
     def get_act_buttons(self, player, game):
         first_row = []
         second_row = []
-        all = []
+        all_buttons = []
         items = []
         approach = []
         skip = []
@@ -68,7 +68,7 @@ class Matchmaker:
             elif action.id in ['skip', 'extinguish']:
                 skip.append(button)
             else:
-                all.append(button)
+                all_buttons.append(button)
 
         for item in player.items:
             items.append(types.InlineKeyboardButton(text=item.name, callback_data=f"item_{game.chat_id}_{item.id}"))
@@ -89,14 +89,14 @@ class Matchmaker:
         return kb
 
     def get_additional_buttons(self, player, game):
-        all = []
+        all_buttons = []
         items = []
         for action in player.actions:
             button = types.InlineKeyboardButton(text=action.name, callback_data=f"act_{game.chat_id}_{action.id}")
             if action.id in ['attack', 'reload', 'approach', 'dodge', 'skip', 'extinguish']:
                 pass
             else:
-                all.append(button)
+                all_buttons.append(button)
 
         item_count = {}
         for item in player.items:
@@ -110,7 +110,7 @@ class Matchmaker:
             ))
 
         kb = types.InlineKeyboardMarkup()
-        for button in all:
+        for button in all_buttons:
             kb.add(button)
         for button in items:
             kb.add(button)

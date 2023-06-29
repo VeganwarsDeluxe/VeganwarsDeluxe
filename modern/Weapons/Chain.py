@@ -1,6 +1,6 @@
-from core.TargetType import TargetType, Enemies
-from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
+from core.TargetType import Enemies, Distance
+from core.Weapons.Weapon import Weapon
 from modern.Weapons.Fist import Fist
 
 
@@ -32,7 +32,7 @@ class KnockWeapon(DecisiveAction):
     name = 'Выбить оружие'
 
     def __init__(self, source, weapon):
-        super().__init__(source, Enemies(distance=1))
+        super().__init__(source, Enemies(distance=Distance.ANY))
         self.weapon = weapon
 
     def func(self, source, target):

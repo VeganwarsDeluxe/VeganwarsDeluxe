@@ -1,5 +1,4 @@
 from core.Events import EventManager
-from core.Message import Message, PreActionsMessage
 
 
 class State:

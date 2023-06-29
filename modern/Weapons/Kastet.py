@@ -1,4 +1,3 @@
-import random
 from core.Weapons.Weapon import Weapon
 
 

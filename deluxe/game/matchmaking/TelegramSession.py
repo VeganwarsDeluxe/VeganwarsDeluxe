@@ -20,8 +20,8 @@ class TelegramSession(Session):
         self.items_given = 2
         self.cowed = False
 
-    def get_player(self, id):
-        result = [p for p in self.entities if p.id == id]
+    def get_player(self, user_id):
+        result = [p for p in self.entities if p.id == user_id]
         if result:
             return result[0]
 

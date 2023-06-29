@@ -1,8 +1,6 @@
 from core.Weapons.Weapon import Weapon
 from core.Action import DecisiveAction
-import random
-
-from core.TargetType import TargetType, Enemies
+from core.TargetType import Enemies, Distance
 
 
 class Molot(Weapon):
@@ -54,7 +52,7 @@ class TrueStrike(DecisiveAction):
     name = 'Точный удар'
 
     def __init__(self, source, weapon):
-        super().__init__(source, Enemies(distance=1))
+        super().__init__(source, Enemies(distance=Distance.NEARBY_ONLY))
         self.weapon = weapon
 
     def func(self, source, target):

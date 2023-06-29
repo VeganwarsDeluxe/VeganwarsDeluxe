@@ -1,6 +1,6 @@
+from core.Action import ImmediateAction
+from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon
-from core.Action import FreeAction, ImmediateAction
-from core.TargetType import TargetType, OwnOnly
 
 
 class Claws(Weapon):

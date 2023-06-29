@@ -1,7 +1,8 @@
 import random
-from core.Items.Item import DecisiveItem, FreeItem
+
+from core.Items.Item import FreeItem
 from core.Message import PostActionsMessage
-from core.TargetType import Allies, Everyone
+from core.TargetType import Everyone
 
 
 class RageSerum(FreeItem):

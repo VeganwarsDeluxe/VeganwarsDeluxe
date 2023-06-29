@@ -1,7 +1,7 @@
+import random
+
 from core.Message import AttackMessage
 from core.Skills.Skill import Skill
-from core.Entities.Entity import Entity
-import random
 
 
 class Biceps(Skill):

@@ -1,6 +1,5 @@
 from core.Message import PreMoveMessage
 from core.Skills.Skill import Skill
-from core.Entities.Entity import Entity
 
 
 class Dvuzhil(Skill):

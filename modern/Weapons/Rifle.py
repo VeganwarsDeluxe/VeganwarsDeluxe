@@ -1,8 +1,8 @@
-from core.Weapons.Weapon import Weapon
-from core.Action import DecisiveAction
 import random
 
-from core.TargetType import TargetType, Enemies
+from core.Action import DecisiveAction
+from core.TargetType import Enemies
+from core.Weapons.Weapon import Weapon
 
 
 class Rifle(Weapon):

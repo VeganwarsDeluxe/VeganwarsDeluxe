@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Message import Message, PostActionsMessage, PostUpdatesMessage, PreDamagesMessage, AttackMessage, \
+from core.Message import PostActionsMessage, PostUpdatesMessage, PreDamagesMessage, AttackMessage, \
     PostAttackMessage
 from core.States.State import State
 from core.TargetType import OwnOnly

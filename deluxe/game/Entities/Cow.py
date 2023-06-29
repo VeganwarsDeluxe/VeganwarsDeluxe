@@ -1,9 +1,9 @@
-from core.Items.Item import FreeItem
-from core.TargetType import TargetType, OwnOnly
-from .Dummy import Dummy
-import modern
-from core.Action import DecisiveAction
 import random
+
+from core.Action import DecisiveAction
+from core.Items.Item import FreeItem
+from core.TargetType import OwnOnly
+from .Dummy import Dummy
 
 
 class Cow(Dummy):

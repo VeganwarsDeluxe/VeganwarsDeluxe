@@ -1,6 +1,6 @@
-from core.Skills.Skill import Skill
 from core.Action import DecisiveAction
-from core.TargetType import TargetType, Enemies, Allies
+from core.Skills.Skill import Skill
+from core.TargetType import Allies
 
 
 class ShieldGen(Skill):

@@ -47,30 +47,30 @@ class Entity:
     def energies(self):
         return '⚡️' * self.energy if self.energy < 8 else f"⚡️x{self.energy}"
 
-    def get_action(self, id: str, default=False):
+    def get_action(self, action_id: str, default=False):
         pool = self.actions
         if default:
             pool = self.default_actions
-        action = list(filter(lambda a: a.id == id, pool))
+        action = list(filter(lambda a: a.id == action_id, pool))
         if action:
             action = action[0]
             action.source = self
             return action
 
-    def get_item(self, id: str):
-        items = list(filter(lambda i: i.id == id, self.items))
+    def get_item(self, item_id: str):
+        items = list(filter(lambda i: i.id == item_id, self.items))
         if items:
             item = items[0]
             item.source = self
             return item
 
-    def remove_action(self, id: str):
-        action = self.get_action(id)
+    def remove_action(self, item_id: str):
+        action = self.get_action(item_id)
         if not action:
             return
         self.actions.remove(action)
 
-    def get_skill(self, id: str):
+    def get_skill(self, item_id: str):
         result = list(filter(lambda s: s.id == id, self.skills))
         if result:
             return result[0]
@@ -115,7 +115,6 @@ class Entity:
     def pre_move(self):
         self.outbound_dmg.clear()
         self.inbound_dmg.clear()
-        self.cache = {}
         self.item_queue = []
         self.action_queue = []
 

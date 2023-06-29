@@ -1,7 +1,7 @@
+from core.Action import DecisiveAction
 from core.Message import PostUpdatesMessage
 from core.States.State import State
-from core.Action import DecisiveAction
-from core.TargetType import TargetType, OwnOnly
+from core.TargetType import OwnOnly
 
 
 class Knockdown(State):

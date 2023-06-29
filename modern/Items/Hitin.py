@@ -1,6 +1,6 @@
-from core.Items.Item import DecisiveItem, FreeItem
+from core.Items.Item import FreeItem
 from core.Message import PostDamagesMessage
-from core.TargetType import Allies, Everyone
+from core.TargetType import Everyone
 
 
 class Hitin(FreeItem):

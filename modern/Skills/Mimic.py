@@ -1,6 +1,6 @@
+from core.Action import FreeAction
 from core.Skills.Skill import Skill
-from core.Action import DecisiveAction, FreeAction
-from core.TargetType import TargetType, Enemies
+from core.TargetType import Enemies
 
 
 class Mimic(Skill):

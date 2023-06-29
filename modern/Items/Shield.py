@@ -1,6 +1,6 @@
-from core.Items.Item import DecisiveItem, FreeItem
+from core.Items.Item import DecisiveItem
 from core.Message import PostAttackMessage
-from core.TargetType import Allies, Everyone
+from core.TargetType import Allies
 
 
 class Shield(DecisiveItem):

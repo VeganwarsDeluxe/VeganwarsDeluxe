@@ -1,8 +1,9 @@
-from core.Events import EventManager
-from core.Message import Message, PreUpdatesMessage, PostUpdatesMessage, HPLossMessage, PreActionsMessage, \
-    PostActionsMessage, PreDamagesMessage, PostDamagesMessage, PostTickMessage, PostDeathsMessage
 from uuid import uuid4
+
 from core.Entities.Entity import Entity
+from core.Events import EventManager
+from core.Message import PreUpdatesMessage, PostUpdatesMessage, HPLossMessage, PreActionsMessage, \
+    PostActionsMessage, PreDamagesMessage, PostDamagesMessage, PostTickMessage, PostDeathsMessage
 
 
 class Session:

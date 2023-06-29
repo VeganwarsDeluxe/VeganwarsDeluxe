@@ -1,6 +1,6 @@
-from core.States.State import State
 from core.Action import DecisiveAction
-from core.TargetType import TargetType, OwnOnly
+from core.States.State import State
+from core.TargetType import OwnOnly
 
 
 class KnockedWeapon(State):

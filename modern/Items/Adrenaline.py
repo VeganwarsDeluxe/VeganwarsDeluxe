@@ -1,4 +1,4 @@
-from core.Items.Item import DecisiveItem, FreeItem
+from core.Items.Item import FreeItem
 from core.TargetType import Allies
 
 

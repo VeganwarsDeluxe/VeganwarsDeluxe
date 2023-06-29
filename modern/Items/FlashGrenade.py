@@ -1,5 +1,5 @@
 from core.Items.Item import DecisiveItem
-from core.TargetType import Allies, Enemies
+from core.TargetType import Enemies
 
 
 class FlashGrenade(DecisiveItem):

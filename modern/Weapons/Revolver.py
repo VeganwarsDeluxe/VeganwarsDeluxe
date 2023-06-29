@@ -1,5 +1,3 @@
-import random
-
 from core.Action import DecisiveAction
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon
