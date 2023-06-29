@@ -8,8 +8,9 @@ from config import admin
 from deluxe.bot import bot, mm, cm
 from deluxe.game.Entities.Cow import Cow
 
+
 #       Handler imports
-import deluxe.bot.rating
+# import deluxe.bot.rating
 
 
 @bot.message_handler(commands=['do'])

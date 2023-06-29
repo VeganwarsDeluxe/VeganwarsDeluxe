@@ -1,9 +1,4 @@
-import random
-
 from core.Weapons.Weapon import Weapon
-from core.States.State import State
-from core.Action import DecisiveAction
-from core.TargetType import Enemies, Allies, Everyone
 
 
 class PortalGun(Weapon):  # TODO: Fix or delete
