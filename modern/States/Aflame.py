@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Events import PostActionsEvent, PostUpdatesEvent, PreDamagesEvent, AttackEvent, \
+from core.Events.Events import PostActionsEvent, PostUpdatesEvent, PreDamagesEvent, AttackEvent, \
     PostAttackEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
@@ -19,7 +19,7 @@ class Aflame(State):
     def register(self, session_id):
         source = self.source
 
-        @self.event_manager.every(session_id, event=PostActionsEvent)
+        @self.event_manager.at_event(session_id, event=PostActionsEvent)
         def func(message: PostActionsEvent):
             if self.source.action.id == 'skip' and self.flame:
                 self.source.session.say(f'💨|{self.source.name} потушил себя.')
@@ -27,13 +27,13 @@ class Aflame(State):
                 self.flame = 0
                 self.extinguished = False
 
-        @self.event_manager.every(session_id, event=PostUpdatesEvent)
+        @self.event_manager.at_event(session_id, event=PostUpdatesEvent)
         def func(message: PostUpdatesEvent):
             if not self.flame:
                 return
             self.source.remove_action('skip')
 
-        @self.event_manager.every(session_id, event=PreDamagesEvent)
+        @self.event_manager.at_event(session_id, event=PreDamagesEvent)
         def func(message: PreDamagesEvent):
             if not self.flame:
                 return

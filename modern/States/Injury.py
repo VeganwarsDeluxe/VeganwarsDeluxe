@@ -1,4 +1,4 @@
-from core.Events import AttackEvent
+from core.Events.Events import AttackEvent
 from core.States.State import State
 
 
@@ -10,7 +10,7 @@ class Injury(State):
         self.injury = 0
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, events=AttackEvent)
+        @self.event_manager.at_event(session_id, event=AttackEvent)
         def func(message: AttackEvent):
             if not self.injury:
                 return

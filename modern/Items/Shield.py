@@ -1,5 +1,5 @@
 from core.Items.Item import DecisiveItem
-from core.Events import PostAttackEvent
+from core.Events.Events import PostAttackEvent
 from core.TargetType import Allies
 
 

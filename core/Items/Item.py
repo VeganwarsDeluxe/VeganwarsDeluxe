@@ -6,7 +6,7 @@ class Item(Action):
     id = 'item'
     name = 'Item'
 
-    def __init__(self, source, target_type=TargetType(), priority=-1):
+    def __init__(self, source, target_type, priority=-1):
         super().__init__(source, target_type=target_type, priority=priority)
         self.target = None
         self.priority = -1
@@ -26,7 +26,7 @@ class Item(Action):
 
 
 class FreeItem(Item):
-    def __init__(self, source, target_type=TargetType(), priority=-1):
+    def __init__(self, source, target_type, priority=-1):
         super().__init__(source, target_type=target_type, priority=priority)
 
     @property
@@ -35,7 +35,7 @@ class FreeItem(Item):
 
 
 class ImmediateItem(Item):
-    def __init__(self, source, target_type=TargetType(), priority=-1):
+    def __init__(self, source, target_type, priority=-1):
         super().__init__(source, target_type=target_type, priority=priority)
 
     @property
@@ -44,5 +44,5 @@ class ImmediateItem(Item):
 
 
 class DecisiveItem(Item):
-    def __init__(self, source, target_type=TargetType(), priority=-1):
+    def __init__(self, source, target_type, priority=-1):
         super().__init__(source, target_type=target_type, priority=priority)

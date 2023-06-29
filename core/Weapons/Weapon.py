@@ -1,6 +1,6 @@
 import random
 from core.Action import DecisiveAction
-from core.Events import AttackEvent, PostAttackEvent
+from core.Events.Events import AttackEvent, PostAttackEvent
 from core.TargetType import Enemies
 
 

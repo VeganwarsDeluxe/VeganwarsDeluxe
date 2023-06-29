@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from core.Entities.Entity import Entity
 from core.Events.EventManager import EventManager
-from core.Events import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
+from core.Events.Events import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
     PostActionsEvent, PreDamagesEvent, PostDamagesEvent, PostTickEvent, PostDeathsEvent, DeathEvent
 
 
@@ -100,7 +100,7 @@ class Session:
 
         if len(self.alive_teams) > 1:  # If there is more than 1 team alive (no-team is also a team)
             return
-        if self.alive_teams[0] is None:  # If there is only no-team entities
+        if len(self.alive_teams) == 1 and None in self.alive_teams:  # If there is only no-team entities
             if len(list(self.alive_entities)) > 1:  # If there is more than one player
                 return
         self.stop()

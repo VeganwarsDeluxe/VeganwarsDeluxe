@@ -70,8 +70,8 @@ class Entity:
             return
         self.actions.remove(action)
 
-    def get_skill(self, item_id: str):
-        result = list(filter(lambda s: s.id == id, self.skills))
+    def get_skill(self, skill_id: str):
+        result = list(filter(lambda s: s.id == skill_id, self.skills))
         if result:
             return result[0]
 

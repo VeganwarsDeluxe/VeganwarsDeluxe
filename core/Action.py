@@ -11,7 +11,7 @@ class Action:
         self.target_type: TargetType = target_type
 
         self.source = source
-        self.target = None
+        self.target = source
 
         self.canceled = False
         self.type = 'action'

@@ -1,6 +1,6 @@
 from typing import Type
 
-from core.Events import Event
+from core.Events.Events import Event
 
 
 class Handler:

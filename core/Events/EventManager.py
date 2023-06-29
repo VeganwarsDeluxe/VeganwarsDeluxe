@@ -14,7 +14,7 @@ class EventManager(Singleton):
                 continue
             handler(message)
 
-    def every(self, session_id, turns: int, start: int = 1, events: Type[Event] = Event):
+    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = Event):
         """
         @event_manager.every(session_id, turns=2, event=PostAttackEvent)
         def func(message: PostAttackEvent):
@@ -22,7 +22,7 @@ class EventManager(Singleton):
         """
 
         def decorator_func(func):
-            handler = ScheduledHandler(session_id, func, events, start=start, interval=turns, repeats=-1)
+            handler = ScheduledHandler(session_id, func, event, start=start, interval=turns, repeats=-1)
             self._handlers.append(handler)
             return func
         return decorator_func

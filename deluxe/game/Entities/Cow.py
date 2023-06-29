@@ -8,9 +8,9 @@ from .Dummy import Dummy
 
 class Cow(Dummy):
     def __init__(self, session):
-        super().__init__(session, name='Корова|🐮')
+        super().__init__(session, name='СуперКорова|🐮')
 
-        self.hp = 1
+        self.hp = 10
         self.max_hp = 1
         self.max_energy = 5
 

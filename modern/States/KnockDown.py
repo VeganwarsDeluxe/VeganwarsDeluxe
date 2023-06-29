@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Events import PostUpdatesEvent
+from core.Events.Events import PostUpdatesEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -12,7 +12,7 @@ class Knockdown(State):
         self.active = False
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, event=PostUpdatesEvent)
+        @self.event_manager.at_event(session_id, event=PostUpdatesEvent)
         def func(message: PostUpdatesEvent):
             if not self.active:
                 return

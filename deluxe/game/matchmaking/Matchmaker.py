@@ -1,7 +1,7 @@
 import random
 from telebot import types
 
-from core.Events import PreMoveEvent
+from core.Events.Events import PreMoveEvent
 from .TelegramSession import TelegramSession
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 import modern
@@ -14,6 +14,7 @@ class Matchmaker:
         self.games = {}
 
     def start_game(self, game):
+        game.start()
         self.pre_move(game.chat_id)
 
     def pre_move(self, chat_id):
@@ -304,7 +305,7 @@ class Matchmaker:
             self.pre_move(game.chat_id)
 
     def send_weapon_choice_buttons(self, player, number=3):
-        weapons = [modern.Bow]
+        weapons = [modern.Saw]
         for _ in range(number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
             if not variants:
@@ -322,7 +323,7 @@ class Matchmaker:
 
     def send_skill_choice_buttons(self, player, number=5, cycle=1):
         game = player.session
-        skills = [modern.Mimic, modern.Thief]
+        skills = [modern.Medic]
         for _ in range(number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
             variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))

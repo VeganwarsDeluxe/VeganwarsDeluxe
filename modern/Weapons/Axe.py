@@ -1,4 +1,5 @@
 from core.Weapons.Weapon import Weapon
+from modern.States.DamageThreshold import DamageThreshold
 
 
 class Axe(Weapon):
@@ -18,7 +19,7 @@ class Axe(Weapon):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        threshold = target.get_skill('damage-threshold')
+        threshold = target.get_skill(DamageThreshold.id)
         source.session.say(f'🤕|{target.name} покалечен!')
 
         threshold.threshold += 1
