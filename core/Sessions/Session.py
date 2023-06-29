@@ -2,8 +2,9 @@ from uuid import uuid4
 
 from core.Entities.Entity import Entity
 from core.Events.EventManager import EventManager
-from core.Events.Events import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
-    PostActionsEvent, PreDamagesEvent, PostDamagesEvent, PostTickEvent, PostDeathsEvent, DeathEvent
+from core.Events.Events import PreUpdatesGameEvent, PostUpdatesGameEvent, HPLossGameEvent, PreActionsGameEvent, \
+    PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
+    DeathGameEvent, CallActionsEvent
 
 
 class Session:
@@ -35,10 +36,10 @@ class Session:
             entity.tick_turn()
 
     def update_actions(self):
-        self.event_manager.publish(PreUpdatesEvent(self.id, self.turn))
+        self.event_manager.publish(PreUpdatesGameEvent(self.id, self.turn))
         for entity in self.entities:
             entity.update_actions()
-        self.event_manager.publish(PostUpdatesEvent(self.id, self.turn))
+        self.event_manager.publish(PostUpdatesGameEvent(self.id, self.turn))
 
     def pre_move(self):
         for entity in self.entities:
@@ -56,7 +57,7 @@ class Session:
     def lose_hp(self, entity, damage):
         hp_loss = (damage // 6) + 1
 
-        message = HPLossEvent(self.id, self.turn, entity, damage, hp_loss)
+        message = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
         self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
@@ -91,7 +92,7 @@ class Session:
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
-            self.event_manager.publish(DeathEvent(self.id, self.turn, entity))
+            self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
 
     def finish(self):
         if not len(self.alive_teams):  # If everyone is dead
@@ -117,18 +118,18 @@ class Session:
             action() if not action.canceled else None
 
     def move(self):  # 0. Pre-move stage
-        self.event_manager.publish(PreActionsEvent(self.id, self.turn))  # 1. Pre-action stage
-        self.call_actions()  # 2. Action stage
-        self.event_manager.publish(PostActionsEvent(self.id, self.turn))  # 3. Post-action stage
+        self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
+        self.event_manager.publish(CallActionsEvent(self.id, self.turn))  # 2. Action stage
+        self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
-        self.event_manager.publish(PreDamagesEvent(self.id, self.turn))
+        self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
         self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
-        self.event_manager.publish(PostDamagesEvent(self.id, self.turn))  # 5. Post-damages stage
+        self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        self.event_manager.publish(PostTickEvent(self.id, self.turn))  # 7. Post-tick stage
+        self.event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        self.event_manager.publish(PostDeathsEvent(self.id, self.turn))  # 9. Post-death stage
+        self.event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

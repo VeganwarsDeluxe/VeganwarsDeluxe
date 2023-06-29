@@ -6,10 +6,19 @@ class SessionManager(Singleton):
     def __init__(self):
         self.sessions: list[Session] = []
 
-    def get_session(self, session_id: int):
-        return list(filter(lambda s: s.id == session_id, self.sessions))[0]
+        self.attached_event = lambda session_id: session_id
 
-    def create_session(self):
-        session = Session()
+    def get_session(self, session_id):
+        result = list(filter(lambda s: s.id == session_id, self.sessions))
+        if result:
+            return result[0]
+
+    def attach_session(self, session: Session):
         self.sessions.append(session)
+        self.attached_event(session.id)
         return session
+
+    def delete_session(self, session_id):
+        session = self.get_session(session_id)
+        if session and session in self.sessions:
+            self.sessions.remove(session)

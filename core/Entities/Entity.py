@@ -30,11 +30,9 @@ class Entity:
         self.inbound_dmg = DamageHolder()
         self.outbound_dmg = DamageHolder()
 
-        self.pre_move()
         self.actions: list[Action] = []
 
-        self.action_queue: list[Action] = []
-        self.item_queue: list[Item] = []
+
 
         self.action: Action = self.default_actions[0]
         self.target: Entity = self
@@ -153,8 +151,7 @@ class ReloadAction(DecisiveAction):
 
     def func(self, source, target):
         source.energy = source.max_energy
-        source.session.say(f"🕓|{source.name} перезаряжается. "
-                           f"Энергия восстановлена до максимальной! ({source.max_energy})")
+        source.session.say(source.weapon.reload_text(source))
 
 
 class SkipTurnAction(DecisiveAction):

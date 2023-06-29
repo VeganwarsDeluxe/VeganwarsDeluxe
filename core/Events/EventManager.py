@@ -1,6 +1,6 @@
 from typing import Type
 from core import Singleton
-from core.Events.Events import Event
+from core.Events.Events import GameEvent, Event
 from core.Events.Handlers import Handler, ScheduledHandler, SingleTurnHandler, ConstantHandler
 
 
@@ -14,7 +14,7 @@ class EventManager(Singleton):
                 continue
             handler(message)
 
-    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = Event):
+    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = GameEvent):
         """
         @event_manager.every(session_id, turns=2, event=PostAttackEvent)
         def func(message: PostAttackEvent):

@@ -1,4 +1,4 @@
-from core.Events.Events import AttackEvent
+from core.Events.Events import AttackGameEvent
 from core.Skills.Skill import Skill
 
 

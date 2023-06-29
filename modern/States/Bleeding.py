@@ -1,4 +1,4 @@
-from core.Events.Events import PreDamagesEvent
+from core.Events.Events import PreDamagesGameEvent
 from core.States.State import State
 
 
@@ -11,8 +11,8 @@ class Bleeding(State):
         self.active = False
 
     def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=PreDamagesEvent)
-        def func(message: PreDamagesEvent):
+        @self.event_manager.at_event(session_id, event=PreDamagesGameEvent)
+        def func(message: PreDamagesGameEvent):
             if not self.active:
                 return
             if self.bleeding <= 0:

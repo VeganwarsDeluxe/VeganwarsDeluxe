@@ -1,3 +1,5 @@
+from core.Entities import Entity
+from core.Sessions import Session
 from core.TargetType import TargetType, Own
 
 
@@ -5,13 +7,14 @@ class Action:
     id = 'action'
     name = 'Action'
 
-    def __init__(self, source, target_type, priority=0):
+    def __init__(self, session: Session, source: Entity, target_type: TargetType, priority=0):
         self.priority: int = priority  # TODO: Revise priorities of all actions
 
         self.target_type: TargetType = target_type
 
-        self.source = source
-        self.target = source
+        self.session: Session = session
+        self.source: Entity = source
+        self.target: Entity = source
 
         self.canceled = False
         self.type = 'action'
@@ -67,7 +70,7 @@ class DecisiveAction(Action):
 
     @property
     def cost(self):
-        return 1
+        return True
 
 
 class FreeAction(Action):
@@ -76,13 +79,4 @@ class FreeAction(Action):
 
     @property
     def cost(self):
-        return 0
-
-
-class ImmediateAction(Action):
-    def __init__(self, source, target_type, priority=0):
-        super().__init__(source, target_type=target_type, priority=priority)
-
-    @property
-    def cost(self):
-        return -1
+        return False

@@ -1,4 +1,4 @@
-from core.Events.Events import AttackEvent
+from core.Events.Events import AttackGameEvent
 from core.States.State import State
 
 
@@ -10,8 +10,8 @@ class Injury(State):
         self.injury = 0
 
     def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=AttackEvent)
-        def func(message: AttackEvent):
+        @self.event_manager.at_event(session_id, event=AttackGameEvent)
+        def func(message: AttackGameEvent):
             if not self.injury:
                 return
             if message.target != self.source:

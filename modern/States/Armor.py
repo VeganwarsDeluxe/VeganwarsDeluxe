@@ -1,6 +1,6 @@
 import random
 
-from core.Events.Events import PostAttackEvent
+from core.Events.Events import PostAttackGameEvent
 from core.States.State import State
 
 
@@ -12,12 +12,12 @@ class Armor(State):
         self.armor = []
 
     def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=PostAttackEvent)
-        def func(message: PostAttackEvent):
+        @self.event_manager.at_event(session_id, event=PostAttackGameEvent)
+        def func(message: PostAttackGameEvent):
             if message.target == self.source:
                 self.negate_damage(message)
 
-    def negate_damage(self, message: PostAttackEvent):
+    def negate_damage(self, message: PostAttackGameEvent):
         if not message.damage:
             return
         armor = min(message.damage, self.roll_armor())

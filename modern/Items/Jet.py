@@ -1,5 +1,5 @@
 from core.Items.Item import FreeItem
-from core.Events.Events import PostDamagesEvent
+from core.Events.Events import PostDamagesGameEvent
 from core.TargetType import Allies
 
 
@@ -15,8 +15,8 @@ class Jet(FreeItem):
                                 f" полностью восстановлена через 2 хода.")
 
         @self.source.session.event_manager.at(self.source.session.id, turn=self.source.session.turn + 2,
-                                              event=PostDamagesEvent)
-        def jet_reload(message: PostDamagesEvent):
+                                              event=PostDamagesGameEvent)
+        def jet_reload(message: PostDamagesGameEvent):
             self.target.energy = self.target.max_energy
             self.source.session.say(f"💉|Энергия {self.target.name} восстановлена до максимальной! "
                                     f"({self.target.max_energy})")

@@ -1,8 +1,26 @@
 from core.Action import DecisiveAction
-from core.Events.Events import PostActionsEvent, PostUpdatesEvent, PreDamagesEvent, AttackEvent, \
-    PostAttackEvent
+from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttackGameEvent, \
+    PostAttackGameEvent, GameEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
+
+
+class FireAttackGameEvent(GameEvent):
+    def __init__(self, session_id, turn, source, target, damage):
+        super().__init__(session_id, turn)
+
+        self.source = source
+        self.target = target
+        self.damage = damage
+
+
+class PostFireAttackGameEvent(GameEvent):
+    def __init__(self, session_id, turn, source, target, damage):
+        super().__init__(session_id, turn)
+
+        self.source = source
+        self.target = target
+        self.damage = damage
 
 
 class Aflame(State):
@@ -19,22 +37,22 @@ class Aflame(State):
     def register(self, session_id):
         source = self.source
 
-        @self.event_manager.at_event(session_id, event=PostActionsEvent)
-        def func(message: PostActionsEvent):
+        @self.event_manager.at_event(session_id, event=PostActionsGameEvent)
+        def func(message: PostActionsGameEvent):
             if self.source.action.id == 'skip' and self.flame:
                 self.source.session.say(f'💨|{self.source.name} потушил себя.')
                 self.timer = 0
                 self.flame = 0
                 self.extinguished = False
 
-        @self.event_manager.at_event(session_id, event=PostUpdatesEvent)
-        def func(message: PostUpdatesEvent):
+        @self.event_manager.at_event(session_id, event=PostUpdatesGameEvent)
+        def func(message: PostUpdatesGameEvent):
             if not self.flame:
                 return
             self.source.remove_action('skip')
 
-        @self.event_manager.at_event(session_id, event=PreDamagesEvent)
-        def func(message: PreDamagesEvent):
+        @self.event_manager.at_event(session_id, event=PreDamagesGameEvent)
+        def func(message: PreDamagesGameEvent):
             if not self.flame:
                 return
             if self.extinguished:
@@ -47,13 +65,14 @@ class Aflame(State):
                 self.extinguished = False
             damage = self.flame
 
-            message = AttackEvent(message.session_id, message.turn, self.dealer, self.source, damage)
+            message = FireAttackGameEvent(message.session_id, message.turn, self.dealer, self.source, damage)
             self.source.session.event_manager.publish(message)
             damage = message.damage
 
             source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
 
-            message = PostAttackEvent(message.session_id, self.source.session.turn, self.dealer, self.source, damage)
+            message = PostFireAttackGameEvent(message.session_id, self.source.session.turn, self.dealer, self.source,
+                                              damage)
             self.source.session.event_manager.publish(message)
             damage = message.damage
 

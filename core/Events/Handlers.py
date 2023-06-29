@@ -1,6 +1,6 @@
 from typing import Type
 
-from core.Events.Events import Event
+from core.Events.Events import GameEvent, Event
 
 
 class Handler:
@@ -24,7 +24,7 @@ class Handler:
                 return False
         return self.event_check(message)
 
-    def event_check(self, message):
+    def event_check(self, message: Event):
         return isinstance(message, self.event)
 
     def __call__(self, message):

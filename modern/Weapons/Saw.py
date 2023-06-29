@@ -1,4 +1,4 @@
-from core.Events.Events import PostTickEvent
+from core.Events.Events import PostTickGameEvent
 from core.Weapons.Weapon import Weapon
 from modern.States.Injury import Injury
 
@@ -23,8 +23,8 @@ class Saw(Weapon):
             return damage
         source.session.say(f'{target.name} ранен! ({target.get_skill(Injury.id).injury})')
 
-        @source.session.event_manager.now(source.session.id, PostTickEvent)
-        def func(message: PostTickEvent):
+        @source.session.event_manager.now(source.session.id, PostTickGameEvent)
+        def func(message: PostTickGameEvent):
             injury = target.get_skill(Injury.id)
             injury.injury += 1
 

@@ -1,4 +1,4 @@
-from core.Events.Events import PreMoveEvent
+from core.Events.Events import PreMoveGameEvent
 from core.Skills.Skill import Skill
 from modern.Items.RageSerum import RageSerum
 
@@ -10,6 +10,6 @@ class Alchemist(Skill):
                   'которой заставляет выбранную цель атаковать дополнительно к своему действию..'
 
     def register(self, session_id):
-        @self.event_manager.every(session_id, turns=9, event=PreMoveEvent)
-        def func(message: PreMoveEvent):
+        @self.event_manager.every(session_id, turns=9, event=PreMoveGameEvent)
+        def func(message: PreMoveGameEvent):
             self.source.items.append(RageSerum(self.source))

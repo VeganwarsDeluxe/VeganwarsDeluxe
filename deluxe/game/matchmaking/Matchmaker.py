@@ -1,26 +1,30 @@
 import random
 from telebot import types
 
-from core.Events.Events import PreMoveEvent
+from core.Events.Events import PreMoveGameEvent
+from core.SessionManager import SessionManager
 from .TelegramSession import TelegramSession
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 import modern
 from core.Skills.Skill import Skill
 
 
+# TODO: Refactor
+
+
 class Matchmaker:
     def __init__(self, bot):
         self.bot = bot
-        self.games = {}
+        self.session_manager = SessionManager()
 
     def start_game(self, game):
         game.start()
         self.pre_move(game.chat_id)
 
     def pre_move(self, chat_id):
-        game = self.games.get(chat_id)
+        game = self.get_game(chat_id)
         game.update_actions()
-        game.pre_move(), game.event_manager.publish(PreMoveEvent(game.id, game.turn))
+        game.pre_move(), game.event_manager.publish(PreMoveGameEvent(game.id, game.turn))
         if not game.active:
             if list(game.alive_entities):
                 tts = f'Игра окончена! Победила команда {list(game.alive_entities)[0].name}!'
@@ -36,7 +40,7 @@ class Matchmaker:
                     self.bot.send_message(player.id, tts)
                 except:
                     pass
-            del self.games[chat_id]
+            self.session_manager.delete_session(chat_id)
             return
 
         for player in game.alive_entities:
@@ -185,10 +189,6 @@ class Matchmaker:
         action.target = player
         player.target = player
         if action.cost < 1:
-            if action.cost == -1:
-                action()
-                player.action_queue.remove(action)
-                player.update_actions()
             self.send_act_buttons(player, game)
             return
         player.ready = True
@@ -241,14 +241,15 @@ class Matchmaker:
         return weapons[0](player) if weapons else modern.Fist(player)
 
     def get_game(self, chat_id):
-        return self.games.get(chat_id)
+        return self.session_manager.get_session(chat_id)
 
     def create_game(self, chat_id):
-        self.games.update({chat_id: TelegramSession(chat_id)})
+        session = TelegramSession(chat_id)
+        self.session_manager.attach_session(session)
         return self.get_game(chat_id)
 
     def join_game(self, chat_id, user_id, user_name):
-        game = self.games.get(chat_id)
+        game = self.get_game(chat_id)
 
         player = TelegramEntity(game, user_name, user_id)
         player.energy, player.max_energy, player.hp, player.max_hp = 5, 5, 4, 4
@@ -265,7 +266,7 @@ class Matchmaker:
                                    reply_markup=kb)
 
     def choose_items(self, chat_id):
-        game = self.games.get(chat_id)
+        game = self.get_game(chat_id)
         for player in game.not_chosen_items:
             given = []
             for _ in range(game.items_given):
@@ -282,7 +283,7 @@ class Matchmaker:
                                              f'{", ".join([item.name for item in player.items])}')
 
     def choose_weapons(self, chat_id):
-        game = self.games.get(chat_id)
+        game = self.get_game(chat_id)
         for player in game.not_chosen_weapon:
             if player.npc:
                 continue
@@ -292,7 +293,7 @@ class Matchmaker:
             self.choose_skills(int(chat_id))
 
     def choose_skills(self, chat_id):
-        game = self.games.get(chat_id)
+        game = self.get_game(chat_id)
         for player in game.not_chosen_skills:
             if player.npc:
                 continue

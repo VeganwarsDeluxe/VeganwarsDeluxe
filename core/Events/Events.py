@@ -7,13 +7,37 @@ class Event:
         return type(self).__name__
 
 
-class DeathEvent(Event):
+class CallActionsEvent(Event):
+    pass
+
+
+class AddAction(Event):
+    pass
+
+
+class RemoveAction(Event):
+    pass
+
+
+class ActionEvent(Event):
+    def __init__(self, session_id, turn, source_id, target_id):
+        super().__init__(session_id, turn)
+        self.source_id = source_id
+        self.target_id = target_id
+
+
+class GameEvent(Event):
+    def __init__(self, session_id, turn):
+        super().__init__(session_id, turn)
+
+
+class DeathGameEvent(GameEvent):
     def __init__(self, session_id, turn, entity):
         super().__init__(session_id, turn)
         self.entity = entity
 
 
-class HPLossEvent(Event):
+class HPLossGameEvent(GameEvent):
     def __init__(self, session_id, turn, source, damage, hp_loss):
         super().__init__(session_id, turn)
         self.source = source
@@ -21,7 +45,7 @@ class HPLossEvent(Event):
         self.hp_loss = hp_loss
 
 
-class AttackEvent(Event):
+class AttackGameEvent(GameEvent):
     def __init__(self, session_id, turn, source, target, damage):
         super().__init__(session_id, turn)
 
@@ -30,7 +54,7 @@ class AttackEvent(Event):
         self.damage = damage
 
 
-class PostAttackEvent(Event):
+class PostAttackGameEvent(GameEvent):
     def __init__(self, session_id, turn, source, target, damage):
         super().__init__(session_id, turn)
 
@@ -39,37 +63,37 @@ class PostAttackEvent(Event):
         self.damage = damage
 
 
-class PreMoveEvent(Event):
+class PreMoveGameEvent(GameEvent):
     pass
 
 
-class PreUpdatesEvent(Event):
+class PreUpdatesGameEvent(GameEvent):
     pass
 
 
-class PostUpdatesEvent(Event):
+class PostUpdatesGameEvent(GameEvent):
     pass
 
 
-class PreActionsEvent(Event):
+class PreActionsGameEvent(GameEvent):
     pass
 
 
-class PostActionsEvent(Event):
+class PostActionsGameEvent(GameEvent):
     pass
 
 
-class PreDamagesEvent(Event):
+class PreDamagesGameEvent(GameEvent):
     pass
 
 
-class PostDamagesEvent(Event):
+class PostDamagesGameEvent(GameEvent):
     pass
 
 
-class PostTickEvent(Event):
+class PostTickGameEvent(GameEvent):
     pass
 
 
-class PostDeathsEvent(Event):
+class PostDeathsGameEvent(GameEvent):
     pass

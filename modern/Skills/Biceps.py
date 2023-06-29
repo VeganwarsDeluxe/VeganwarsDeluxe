@@ -1,6 +1,6 @@
 import random
 
-from core.Events.Events import AttackEvent
+from core.Events.Events import AttackGameEvent
 from core.Skills.Skill import Skill
 
 
@@ -10,8 +10,8 @@ class Biceps(Skill):
     description = 'Даёт шанс нанести удвоенный урон.'
 
     def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=AttackEvent)
-        def func(message: AttackEvent):
+        @self.event_manager.at_event(session_id, event=AttackGameEvent)
+        def func(message: AttackGameEvent):
             if message.source.weapon.ranged:
                 return
             if random.randint(0, 100) > 30:

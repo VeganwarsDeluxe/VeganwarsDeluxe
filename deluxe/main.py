@@ -52,7 +52,7 @@ def vd_prepare_handler(m):
         bot.reply_to(m, 'Игра и так не запущена!')
         return
     mm.create_game(m.chat.id)
-    del mm.games[m.chat.id]
+    mm.session_manager.delete_session(m.chat.id)
     bot.reply_to(m, 'Игра удалена.')
 
 
