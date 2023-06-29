@@ -7,8 +7,8 @@ class Bulava(Weapon):
     description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
                   'вы получаете +1 урона.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
@@ -16,7 +16,7 @@ class Bulava(Weapon):
 
         self.main_target = None, 0
         self.last_attack_turn = 0
-        
+
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         if not damage:

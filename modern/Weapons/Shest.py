@@ -9,8 +9,8 @@ class Shest(Weapon):
     description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
                   'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2

@@ -1,4 +1,4 @@
-from core.Event import PreDamagesEvent
+from core.Events import PreDamagesEvent
 from core.States.State import State
 
 

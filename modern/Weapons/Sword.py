@@ -6,8 +6,8 @@ class Sword(Weapon):
     name = 'Меч'
     description = 'Ближний бой, урон 1-3.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.name = 'Меч'
         self.cubes = 3
         self.accuracybonus = 2

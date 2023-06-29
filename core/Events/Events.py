@@ -7,6 +7,12 @@ class Event:
         return type(self).__name__
 
 
+class DeathEvent(Event):
+    def __init__(self, session_id, turn, entity):
+        super().__init__(session_id, turn)
+        self.entity = entity
+
+
 class HPLossEvent(Event):
     def __init__(self, session_id, turn, source, damage, hp_loss):
         super().__init__(session_id, turn)

@@ -1,6 +1,6 @@
 import random
 
-from core.Event import AttackEvent
+from core.Events import AttackEvent
 from core.Skills.Skill import Skill
 
 

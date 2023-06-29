@@ -7,8 +7,8 @@ class Saw(Weapon):
     description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
                   'увеличивающий урон от атак по цели на 1.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 2
         self.accuracybonus = 3
         self.energycost = 3

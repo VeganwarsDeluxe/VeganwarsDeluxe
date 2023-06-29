@@ -10,8 +10,8 @@ class Chain(Weapon):
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
                   'рук. Если враг перезаряжается, шанс равен 100%.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2

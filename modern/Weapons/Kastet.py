@@ -6,8 +6,8 @@ class Kastet(Weapon):
     name = 'Кастет'
     description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
@@ -17,5 +17,5 @@ class Kastet(Weapon):
         damage = super().attack(source, target)
         if target.action.id == 'reloading':
             source.session.say(f'⚡️|{target.name} теряет 4 енергии!')
-            target.energy = max(target.energy-4, 0)
+            target.energy = max(target.energy - 4, 0)
         return damage

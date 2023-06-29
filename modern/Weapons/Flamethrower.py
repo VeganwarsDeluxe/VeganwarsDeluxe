@@ -8,8 +8,8 @@ class Flamethrower(Weapon):
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.ranged = True
         self.energycost = 4
         self.cubes = 1

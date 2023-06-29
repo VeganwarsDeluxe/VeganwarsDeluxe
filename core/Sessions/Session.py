@@ -1,9 +1,9 @@
 from uuid import uuid4
 
 from core.Entities.Entity import Entity
-from core.EventManager import EventManager
-from core.Event import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
-    PostActionsEvent, PreDamagesEvent, PostDamagesEvent, PostTickEvent, PostDeathsEvent
+from core.Events.EventManager import EventManager
+from core.Events import PreUpdatesEvent, PostUpdatesEvent, HPLossEvent, PreActionsEvent, \
+    PostActionsEvent, PreDamagesEvent, PostDamagesEvent, PostTickEvent, PostDeathsEvent, DeathEvent
 
 
 class Session:
@@ -20,17 +20,14 @@ class Session:
         print(text, end=('\n' if n else ''))
 
     @property
-    def alive_entities(self):
-        for entity in self.entities:
-            if not entity.dead:
-                yield entity
+    def alive_entities(self) -> list[Entity]:
+        return list(filter(lambda e: not e.dead, self.entities))
 
     @property
-    def alive_teams(self):
-        teams = []
+    def alive_teams(self) -> set:
+        teams = set()
         for entity in self.alive_entities:
-            if entity.team not in teams:
-                teams.append(entity.team)
+            teams.add(entity.team)
         return teams
 
     def tick(self):
@@ -86,11 +83,15 @@ class Session:
 
     def death(self):
         for entity in self.alive_entities:
-            if entity.hp <= 0:
-                self.say(f'☠️|{entity.name} теряет сознание.')
-                entity.dead = True
-                for alive_entity in self.entities:
-                    alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
+            if entity.hp > 0:
+                continue
+
+            self.say(f'☠️|{entity.name} теряет сознание.')
+            entity.dead = True
+            for alive_entity in self.entities:
+                alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
+
+            self.event_manager.publish(DeathEvent(self.id, self.turn, entity))
 
     def finish(self):
         if not len(self.alive_teams):  # If everyone is dead

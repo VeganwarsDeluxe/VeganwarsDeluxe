@@ -1,7 +1,7 @@
 import random
 from telebot import types
 
-from core.Event import PreMoveEvent
+from core.Events import PreMoveEvent
 from .TelegramSession import TelegramSession
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 import modern

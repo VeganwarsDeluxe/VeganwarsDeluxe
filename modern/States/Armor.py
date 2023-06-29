@@ -1,6 +1,6 @@
 import random
 
-from core.Event import PostAttackEvent
+from core.Events import PostAttackEvent
 from core.States.State import State
 
 

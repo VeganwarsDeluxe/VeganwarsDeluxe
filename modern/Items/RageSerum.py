@@ -1,7 +1,7 @@
 import random
 
 from core.Items.Item import FreeItem
-from core.Event import PostActionsEvent
+from core.Events import PostActionsEvent
 from core.TargetType import Everyone
 
 

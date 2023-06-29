@@ -6,8 +6,8 @@ class Police(Weapon):
     name = 'Полицейская дубинка'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждая атака отнимает у цели 1 энергии.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
@@ -17,7 +17,7 @@ class Police(Weapon):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        target.energy = max(target.energy-1, 0)
+        target.energy = max(target.energy - 1, 0)
         source.session.say(f'⚡️|{target.name} теряет 1 енергию!')
         return damage
 

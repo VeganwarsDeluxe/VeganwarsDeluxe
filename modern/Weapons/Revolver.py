@@ -8,8 +8,8 @@ class Revolver(Weapon):
     name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.ranged = True
         self.cubes = 3
         self.dmgbonus = 0

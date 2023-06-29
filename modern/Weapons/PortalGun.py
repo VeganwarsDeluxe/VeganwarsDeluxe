@@ -6,8 +6,8 @@ class PortalGun(Weapon):  # TODO: Fix or delete
     name = 'Портальная пушка'
     description = 'Дальний бой, урон 1-2.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 2
         self.accuracybonus = 1
         self.energycost = 3

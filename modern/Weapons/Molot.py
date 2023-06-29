@@ -9,8 +9,8 @@ class Molot(Weapon):
     description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \
                   'получает +1 к урону.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2

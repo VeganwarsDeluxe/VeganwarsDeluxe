@@ -1,4 +1,4 @@
-from core.Event import PreMoveEvent
+from core.Events import PreMoveEvent
 from core.Skills.Skill import Skill
 
 

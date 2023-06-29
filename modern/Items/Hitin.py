@@ -1,5 +1,5 @@
 from core.Items.Item import FreeItem
-from core.Event import PostDamagesEvent
+from core.Events import PostDamagesEvent
 from core.TargetType import Everyone
 
 

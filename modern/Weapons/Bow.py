@@ -9,8 +9,8 @@ class Bow(Weapon):
     description = 'Дальний бой, урон 1-3, точность средняя. Способность: поджигает стрелу, которая не ' \
                   'наносит урон, но накладывает на цель 2 эффекта горения.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 1
         self.energycost = 3

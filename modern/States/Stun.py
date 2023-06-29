@@ -1,5 +1,5 @@
 from core.Action import DecisiveAction
-from core.Event import PostUpdatesEvent, PostDamagesEvent
+from core.Events import PostUpdatesEvent, PostDamagesEvent
 from core.States.State import State
 from core.TargetType import OwnOnly
 

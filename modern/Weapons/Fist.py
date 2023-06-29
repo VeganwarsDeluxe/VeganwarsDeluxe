@@ -6,7 +6,7 @@ class Fist(Weapon):
     name = 'Кулаки'
     description = 'Ближний бой. Оружие для настоящих боев!'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.accuracybonus = 2
         self.cubes = 2

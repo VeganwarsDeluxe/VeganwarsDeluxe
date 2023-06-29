@@ -1,4 +1,4 @@
-from core.Event import HPLossEvent
+from core.Events import HPLossEvent
 from core.States.State import State
 
 

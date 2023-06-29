@@ -11,8 +11,8 @@ class Rifle(Weapon):
     description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
                   ' чтобы повысить точность против выбранного персонажа'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.ranged = True
         self.cubes = 1
         self.accuracybonus = -4

@@ -9,8 +9,8 @@ class Saber(Weapon):
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: можно выбрать любого врага. ' \
                   'Если тот атаковал, урон от его атаки полностью блокируется, а энергия цели снижается до 0.'
 
-    def __init__(self, owner):
-        super().__init__(owner)
+    def __init__(self, source):
+        super().__init__(source)
         self.cubes = 3
         self.accuracybonus = 2
         self.energycost = 2
