@@ -1,6 +1,6 @@
 import random
 
-from core.Action import DecisiveAction
+from core.Actions.Action import DecisiveAction
 from core.TargetType import Enemies
 from core.Weapons.Weapon import Weapon
 

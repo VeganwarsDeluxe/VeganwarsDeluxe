@@ -1,4 +1,4 @@
-from core.Action import DecisiveAction
+from core.Actions.Action import DecisiveAction
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import Weapon
 from modern.Weapons.Fist import Fist

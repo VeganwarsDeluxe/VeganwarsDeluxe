@@ -1,0 +1,80 @@
+from core import Singleton
+from core.Actions.Action import Action
+from core.Entities.Entity import Entity
+from core.Events.EventManager import EventManager
+from core.Events.Events import CallActionsGameEvent, AttachSessionEvent
+from core.Items import ItemAction
+from core.Items.Item import Item
+from core.SessionManager import SessionManager
+from core.Sessions import Session
+from typing import Union
+
+from core.States import State
+from core.Weapons import Weapon
+
+ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
+
+
+class ActionManager(Singleton):
+    def __init__(self):
+        self.action_queue: list[Action] = []
+        self.item_queue: list[ItemAction] = []
+
+        self.all_actions: dict[ActionOwnerType, list[type[Action]]] = {}
+        self.actions: dict[tuple[Session, Entity], list[Action]] = {}
+        self.session_manager = SessionManager()
+        self.event_manager = EventManager()
+
+        @self.event_manager.at_event(event=AttachSessionEvent)
+        def func(event: AttachSessionEvent):
+            self.register(event.session_id)
+
+    # Decorator
+    def register_action(self, action: type[Action], cls: ActionOwnerType):
+        if cls not in self.all_actions:
+            self.all_actions.update({cls: []})
+        self.all_actions[cls].append(action)
+        return action
+
+    def update_actions(self, session: Session):
+        for entity in session.entities:
+            entity_actions = self.actions[(session, entity)]
+            entity_actions.clear()
+
+            entity_type = type(entity)
+            if entity_type in self.all_actions:
+                entity_actions.extend(action(session, entity) for action in self.all_actions[entity_type])
+
+            weapon_type = type(entity.weapon)
+            if weapon_type in self.all_actions:
+                entity_actions.extend(action(session, entity) for action in self.all_actions[weapon_type])
+
+            for state in entity.skills:
+                state_type = type(state)
+                if state_type in self.all_actions:
+                    entity_actions.extend(action(session, entity) for action in self.all_actions[state_type])
+
+            for item in entity.items:
+                item_type = type(item)
+                if item_type in self.all_actions:
+                    entity_actions.extend(action(session, entity) for action in self.all_actions[item_type])
+
+    def get_action(self, session: Session, entity: Entity, action_id: str):
+        return list(filter(lambda a: action_id == a.id, self.actions[(session, entity)]))[0]
+
+    def queue_action(self, session: Session, entity: Entity, action_id: str) -> bool:
+        action: Action = self.get_action(session, entity, action_id)
+        self.action_queue.append(action)
+        return not action.cost
+
+    def register(self, session_id):
+        @self.event_manager.at_event(session_id, event=CallActionsGameEvent)
+        def func(event: CallActionsGameEvent):
+            for action in self.action_queue:
+                if action.session.id != session_id:
+                    continue
+                action()
+            self.action_queue.clear()
+
+
+action_manager = ActionManager()

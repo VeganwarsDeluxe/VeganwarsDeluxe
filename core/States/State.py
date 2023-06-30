@@ -11,7 +11,3 @@ class State:
 
     def register(self, session_id):
         pass
-
-    @property
-    def actions(self):
-        return []

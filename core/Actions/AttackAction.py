@@ -1,29 +1,29 @@
 import random
 
-from core.Action import DecisiveAction
+from core.Actions.Action import DecisiveAction
 from core.Entities import Entity
 from core.Events.Events import PostAttackGameEvent, AttackGameEvent
 from core.TargetType import Enemies
 from core.Weapons import Weapon
 
 
-class WeaponStrategy:
-    def __init__(self, weapon: Weapon, source: Entity):
-        self.weapon = weapon
-        self.source = source
+class Attack(DecisiveAction):
+    id = 'attack'
+    name = 'Атака'
 
-    @property
-    def actions(self):
-        return [
-            Attack(self.source, self.weapon)
-        ]
+    def __init__(self, source: Entity, weapon: Weapon, priority=0):
+        super().__init__(source, Enemies(distance=not weapon.ranged), priority=priority)
+        self.weapon = weapon
+
+    def func(self, source, target):
+        self.attack(source, target)
 
     def calculate_damage(self, source, target):
         """
         Mostly universal formulas for weapon damage.
         """
         damage = 0
-        energy = source.energy + self.weapon.accuracybonus if (source.energy > 0) else 0
+        energy = source.energy + self.weapon.accuracy_bonus if (source.energy > 0) else 0
         cubes = self.weapon.cubes - (target.action.id == 'dodge') * 5
         for _ in range(cubes):
             x = random.randint(1, 10)
@@ -31,7 +31,7 @@ class WeaponStrategy:
                 damage += 1
         if not damage:
             return 0
-        damage += self.weapon.dmgbonus
+        damage += self.weapon.damage_bonus
         return damage
 
     def attack(self, source, target):
@@ -39,7 +39,7 @@ class WeaponStrategy:
         Actually performs attack on target, dealing damage.
         """
         damage = self.calculate_damage(source, target)
-        source.energy = max(source.energy - self.weapon.energycost, 0)
+        source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
         message = AttackGameEvent(source.session.id, self.source.session.turn, source, target, damage)
         self.source.session.event_manager.publish(message)  # 7.1 Pre-Attack stage
@@ -73,15 +73,3 @@ class WeaponStrategy:
         else:
             tts = f"😤|{source.name}️ переводит дух. Энергия восстановлена до максимальной! ({source.max_energy})"
         return tts
-
-
-class Attack(DecisiveAction):
-    id = 'attack'
-    name = 'Атака'
-
-    def __init__(self, source, weapon, priority=0):
-        super().__init__(source, Enemies(distance=not weapon.ranged), priority=priority)
-        self.weapon = weapon
-
-    def func(self, source, target):
-        self.weapon.attack(source, target)

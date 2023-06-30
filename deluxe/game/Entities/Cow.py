@@ -1,7 +1,7 @@
 import random
 
-from core.Action import DecisiveAction
-from core.Items.Item import FreeItem
+from core.Actions.Action import DecisiveAction
+from core.Items.ItemAction import FreeItem
 from core.TargetType import OwnOnly
 from .Dummy import Dummy
 

@@ -1,4 +1,4 @@
-from core.Items.Item import DecisiveItem
+from core.Items.ItemAction import DecisiveItem
 import random
 
 from core.TargetType import Enemies
@@ -28,8 +28,8 @@ class Grenade(DecisiveItem):
             self.source.outbound_dmg.add(self.source, damage)
             targets.append(target)
         self.source.energy = max(self.source.energy - 2, 0)
-        self.source.session.say(f'💣|{self.source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
-                                f'{",".join([t.name for t in targets])}.')
+        self.session.say(f'💣|{self.source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
+                         f'{",".join([t.name for t in targets])}.')
 
     @property
     def blocked(self):

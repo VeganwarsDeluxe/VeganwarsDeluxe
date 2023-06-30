@@ -9,3 +9,4 @@ class Weapon:
         self.damage_bonus = damage_bonus
         self.ranged = ranged
         self.accuracy_bonus = accuracy_bonus
+

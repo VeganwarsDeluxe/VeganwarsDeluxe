@@ -1,4 +1,4 @@
-from core.Action import ImmediateAction
+from core.Actions.Action import FreeAction
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon
 
@@ -25,7 +25,7 @@ class Claws(Weapon):
         ]
 
 
-class SwitchClaws(ImmediateAction):
+class SwitchClaws(FreeAction):
     id = 'switch_claws'
 
     @property

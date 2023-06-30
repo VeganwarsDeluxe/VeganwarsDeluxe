@@ -1,4 +1,4 @@
-from core.Items.Item import DecisiveItem
+from core.Items.ItemAction import DecisiveItem
 import random
 
 from core.TargetType import Enemies

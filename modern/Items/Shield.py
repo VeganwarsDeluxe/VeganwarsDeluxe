@@ -1,4 +1,4 @@
-from core.Items.Item import DecisiveItem
+from core.Items.ItemAction import DecisiveItem
 from core.Events.Events import PostAttackGameEvent
 from core.TargetType import Allies
 

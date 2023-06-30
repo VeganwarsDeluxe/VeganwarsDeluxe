@@ -10,11 +10,12 @@ class EventManager(Singleton):
 
     def publish(self, message: Event):
         for handler in self._handlers:
-            if message.session_id != handler.session_id:
-                continue
+            if isinstance(message, GameEvent):
+                if message.session_id != handler.session_id:
+                    continue
             handler(message)
 
-    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = GameEvent):
+    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = Event):
         """
         @event_manager.every(session_id, turns=2, event=PostAttackEvent)
         def func(message: PostAttackEvent):
@@ -57,7 +58,7 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def at_event(self, session_id, event=Event):
+    def at_event(self, session_id=None, event=Event):
         def decorator_func(func):
             handler = Handler(session_id, func, event)
             self._handlers.append(handler)

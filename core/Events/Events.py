@@ -1,34 +1,36 @@
 class Event:
-    def __init__(self, session_id, turn):
-        self.session_id = session_id
-        self.turn = turn
-
     def __str__(self):
         return type(self).__name__
 
 
-class CallActionsEvent(Event):
-    pass
+class AttachSessionEvent(Event):
+    def __init__(self, session_id):
+        self.session_id = session_id
 
 
-class AddAction(Event):
-    pass
+class GameEvent(Event):
+    def __init__(self, session_id, turn):
+        self.session_id = session_id
+        self.turn = turn
 
 
-class RemoveAction(Event):
-    pass
-
-
-class ActionEvent(Event):
+class ActionGameEvent(GameEvent):
     def __init__(self, session_id, turn, source_id, target_id):
         super().__init__(session_id, turn)
         self.source_id = source_id
         self.target_id = target_id
 
 
-class GameEvent(Event):
-    def __init__(self, session_id, turn):
-        super().__init__(session_id, turn)
+class AddAction(GameEvent):
+    pass
+
+
+class RemoveAction(GameEvent):
+    pass
+
+
+class CallActionsGameEvent(GameEvent):
+    pass
 
 
 class DeathGameEvent(GameEvent):

@@ -17,7 +17,7 @@ class Session:
 
         self.event_manager: EventManager = EventManager()
 
-    def say(self, text, n=True):
+    def say(self, text, n=True):  # TODO: Adopt magic say pattern from goatexchanger
         print(text, end=('\n' if n else ''))
 
     @property
@@ -106,7 +106,7 @@ class Session:
                 return
         self.stop()
 
-    def call_actions(self):  # TODO: Revise action calling
+    def call_actions(self):  # TODO: Remove, deprecated beacause of CallActionsEvent
         all_actions = []
         for entity in self.alive_entities:
             for item in entity.item_queue:

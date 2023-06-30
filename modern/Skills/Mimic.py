@@ -1,4 +1,4 @@
-from core.Action import FreeAction
+from core.Actions.Action import FreeAction
 from core.Skills.Skill import Skill
 from core.TargetType import Enemies
 
