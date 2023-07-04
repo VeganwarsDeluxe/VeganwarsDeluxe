@@ -1,6 +1,9 @@
-from core.Actions.Action import FreeAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Sessions import Session
 from core.Skills.Skill import Skill
-from core.TargetType import Enemies
+from core.TargetType import Everyone
 
 
 class Mimic(Skill):
@@ -13,30 +16,28 @@ class Mimic(Skill):
         super().__init__(source)
         self.cooldown_turn = 0
 
-    @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return []
-        return [
-            CopyAction(self.source, self)
-        ]
 
-
-class CopyAction(FreeAction):
+@AttachedAction(Mimic)
+class CopyAction(DecisiveStateAction):
     id = 'copyAction'
     name = 'Запомнить действие'
+    priority = -2
+    target_type = Everyone()
 
-    def __init__(self, source, skill):
-        super().__init__(source, Enemies(), priority=-2)
-        self.skill = skill
+    def __init__(self, session: Session, source: Entity, skill: Mimic):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
-        self.skill.cooldown_turn = source.session.turn + 0
+        self.state.cooldown_turn = self.session.turn + 6
         success = False
         if target.action.type == 'action':
             success = True
-            source.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
-            # target.action.source = source
+            self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
             source.items.append(target.action)
         if not success:
-            source.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+            self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')

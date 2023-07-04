@@ -16,11 +16,11 @@ class Bleeding(State):
             if not self.active:
                 return
             if self.bleeding <= 0:
-                self.source.session.say(f'🩸|{self.source.name} теряет ХП от '
-                                        f'кровотечения! Осталось {self.source.hp - 1} ХП.')
+                self.session.say(f'🩸|{self.source.name} теряет ХП от '
+                                 f'кровотечения! Осталось {self.source.hp - 1} ХП.')
                 self.source.hp -= 1
                 self.active = False
                 self.bleeding = 3
                 return
-            self.source.session.say(f'🩸|{self.source.name} истекает кровью! ({self.bleeding})')
+            self.session.say(f'🩸|{self.source.name} истекает кровью! ({self.bleeding})')
             self.bleeding -= 1

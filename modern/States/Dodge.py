@@ -35,4 +35,4 @@ class DodgeAction(DecisiveAction):
 
     def func(self, source, target):
         self.state.dodge_cooldown = 5
-        source.session.say(f"💨|{source.name} перекатывается.")
+        self.session.say(f"💨|{source.name} перекатывается.")

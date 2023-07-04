@@ -23,7 +23,7 @@ class Stun(State):
             if not self.active:
                 return
             if self.stun == 1:
-                self.source.session.say(f'🌀|{self.source.name} приходит в себя.')
+                self.session.say(f'🌀|{self.source.name} приходит в себя.')
             self.stun -= 1
 
     @property

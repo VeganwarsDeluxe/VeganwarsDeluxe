@@ -6,12 +6,10 @@ from core.TargetType import TargetType, Own, Aliveness, Team, Distance
 class Action:
     id = 'action'
     name = 'Action'
+    priority = 0  # TODO: Revise priorities of all actions
+    target_type = TargetType(0, 0, 0, 0)
 
-    def __init__(self, session: Session, source: Entity, target_type: TargetType = TargetType(0, 0, 0, 0), priority=0):
-        self.priority: int = priority  # TODO: Revise priorities of all actions
-
-        self.target_type: TargetType = target_type
-
+    def __init__(self, session: Session, source: Entity):
         self.session: Session = session
         self.source: Entity = source
         self.target: Entity = source
@@ -36,7 +34,7 @@ class Action:
         return self.get_targets(self.source, self.target_type)
 
     def get_targets(self, source, target_type: TargetType):
-        target_pool = source.session.entities
+        target_pool = self.session.entities
         if target_type.own == Own.SELF_ONLY:
             return [source]
         elif target_type.own == Own.SELF_EXCLUDED:
@@ -60,27 +58,21 @@ class Action:
         return target_pool
 
     @property
-    def cost(self):
-        return False
-
-    @property
     def blocked(self):
         return False
 
+    @property
+    def cost(self):
+        return None
+
 
 class DecisiveAction(Action):
-    def __init__(self, source, target_type, priority=0):
-        super().__init__(source, target_type=target_type, priority=priority)
-
     @property
     def cost(self):
         return True
 
 
 class FreeAction(Action):
-    def __init__(self, source, target_type, priority=0):
-        super().__init__(source, target_type=target_type, priority=priority)
-
     @property
     def cost(self):
         return False

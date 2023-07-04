@@ -1,5 +1,5 @@
 from modern.Weapons.Claws import Claws
-from modern.Weapons.Drobovik import Drobovik
+from modern.Weapons.Shotgun import Shotgun
 from modern.Weapons.Obrez import Obrez
 from modern.Weapons.Fist import Fist
 from modern.Weapons.Kastet import Kastet
@@ -21,7 +21,6 @@ from modern.Weapons.Police import Police
 from modern.Weapons.Saber import Saber
 from modern.Weapons.Sword import Sword
 from modern.Weapons.Bow import Bow
-from modern.Weapons.PortalGun import PortalGun
 
 from modern.Skills.Biceps import Biceps
 from modern.Skills.Dvuzhil import Dvuzhil
@@ -56,9 +55,9 @@ from modern.Items.RageSerum import RageSerum
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic]
-all_weapons = [Claws, Drobovik, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
+all_weapons = [Claws, Shotgun, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
-               Police, Saber, Sword, Bow, PortalGun]
+               Police, Saber, Sword, Bow]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield, RageSerum]
 
 game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]

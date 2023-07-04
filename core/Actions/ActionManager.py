@@ -1,9 +1,11 @@
 from core import Singleton
 from core.Actions.Action import Action
+from core.Actions.WeaponAction import WeaponAction
+from core.Actions.StateAction import StateAction
 from core.Entities.Entity import Entity
 from core.Events.EventManager import EventManager
 from core.Events.Events import CallActionsGameEvent, AttachSessionEvent
-from core.Items import ItemAction
+from core.Actions import ItemAction
 from core.Items.Item import Item
 from core.SessionManager import SessionManager
 from core.Sessions import Session
@@ -30,11 +32,14 @@ class ActionManager(Singleton):
             self.register(event.session_id)
 
     # Decorator
-    def register_action(self, action: type[Action], cls: ActionOwnerType):
-        if cls not in self.all_actions:
-            self.all_actions.update({cls: []})
-        self.all_actions[cls].append(action)
-        return action
+    def register_action(self, cls: ActionOwnerType):
+        def decorator_func(action: type[Action]):
+            if cls not in self.all_actions:
+                self.all_actions.update({cls: []})
+            self.all_actions[cls].append(action)
+            return action
+
+        return decorator_func
 
     def update_actions(self, session: Session):
         for entity in session.entities:
@@ -43,21 +48,29 @@ class ActionManager(Singleton):
 
             entity_type = type(entity)
             if entity_type in self.all_actions:
-                entity_actions.extend(action(session, entity) for action in self.all_actions[entity_type])
+                for action in self.all_actions[entity_type]:
+                    action: type[Action]
+                    entity_actions.append(action(session, entity))
 
             weapon_type = type(entity.weapon)
             if weapon_type in self.all_actions:
-                entity_actions.extend(action(session, entity) for action in self.all_actions[weapon_type])
+                for action in self.all_actions[weapon_type]:
+                    action: type[WeaponAction]
+                    entity_actions.append(action(session, entity, entity.weapon))
 
             for state in entity.skills:
                 state_type = type(state)
                 if state_type in self.all_actions:
-                    entity_actions.extend(action(session, entity) for action in self.all_actions[state_type])
+                    for action in self.all_actions[state_type]:
+                        action: type[StateAction]
+                        entity_actions.append(action(session, entity, state))
 
             for item in entity.items:
                 item_type = type(item)
                 if item_type in self.all_actions:
-                    entity_actions.extend(action(session, entity) for action in self.all_actions[item_type])
+                    for action in self.all_actions[item_type]:
+                        action: type[ItemAction]
+                        entity_actions.append(action(session, entity, item))
 
     def get_action(self, session: Session, entity: Entity, action_id: str):
         return list(filter(lambda a: action_id == a.id, self.actions[(session, entity)]))[0]
@@ -78,3 +91,4 @@ class ActionManager(Singleton):
 
 
 action_manager = ActionManager()
+AttachedAction = action_manager.register_action

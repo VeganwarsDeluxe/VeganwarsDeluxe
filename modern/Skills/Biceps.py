@@ -18,5 +18,5 @@ class Biceps(Skill):
                 return
             if not message.damage:
                 return
-            self.source.session.say(f'❗️', n=False)
+            self.session.say(f'❗️', n=False)
             message.damage *= 2

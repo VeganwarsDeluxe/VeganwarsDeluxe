@@ -1,19 +1,36 @@
 import random
 
-from core.Actions.Action import DecisiveAction
+from core.Actions.Action import Action
 from core.Entities import Entity
 from core.Events.Events import PostAttackGameEvent, AttackGameEvent
-from core.TargetType import Enemies
+from core.Sessions import Session
+from core.TargetType import Enemies, Distance
 from core.Weapons import Weapon
 
 
-class Attack(DecisiveAction):
+class WeaponAction(Action):
+    def __init__(self, session: Session, source: Entity, weapon: Weapon):
+        super().__init__(session, source)
+        self.weapon = weapon
+
+
+class FreeWeaponAction(WeaponAction):
+    @property
+    def cost(self):
+        return False
+
+
+class DecisiveWeaponAction(WeaponAction):
+    @property
+    def cost(self):
+        return True
+
+
+class Attack(DecisiveWeaponAction):
     id = 'attack'
     name = 'Атака'
-
-    def __init__(self, source: Entity, weapon: Weapon, priority=0):
-        super().__init__(source, Enemies(distance=not weapon.ranged), priority=priority)
-        self.weapon = weapon
+    target_type = Enemies()
+    priority = 0
 
     def func(self, source, target):
         self.attack(source, target)
@@ -41,14 +58,14 @@ class Attack(DecisiveAction):
         damage = self.calculate_damage(source, target)
         source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
-        message = AttackGameEvent(source.session.id, self.source.session.turn, source, target, damage)
-        self.source.session.event_manager.publish(message)  # 7.1 Pre-Attack stage
+        message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)
+        self.session.event_manager.publish(message)  # 7.1 Pre-Attack stage
         damage = message.damage
 
         self.attack_text(source, target, damage)
 
-        message = PostAttackGameEvent(source.session.id, self.source.session.turn, source, target, damage)
-        self.source.session.event_manager.publish(message)  # 7.2 Post-Attack stage
+        message = PostAttackGameEvent(self.session.id, self.session.turn, source, target, damage)
+        self.session.event_manager.publish(message)  # 7.2 Post-Attack stage
         damage = message.damage
 
         target.inbound_dmg.add(source, damage)
@@ -59,12 +76,12 @@ class Attack(DecisiveAction):
         attack_text = 'стреляет в' if self.weapon.ranged else 'бьет'
         attack_emoji = '💥' if self.weapon.ranged else '👊'
         if damage:
-            source.session.say(
+            self.session.say(
                 f'{attack_emoji}|{source.name} {attack_text} {target.name} используя {self.weapon.name}! '
                 f'Нанесено {damage} урона.')
         else:
-            source.session.say(f'💨|{source.name} {attack_text} {target.name} используя {self.weapon.name}, '
-                               f'но не попадает.')
+            self.session.say(f'💨|{source.name} {attack_text} {target.name} используя {self.weapon.name}, '
+                             f'но не попадает.')
 
     def reload_text(self, source):
         if self.weapon.ranged:
@@ -73,3 +90,11 @@ class Attack(DecisiveAction):
         else:
             tts = f"😤|{source.name}️ переводит дух. Энергия восстановлена до максимальной! ({source.max_energy})"
         return tts
+
+
+class MeleeAttack(Attack):
+    target_type = Enemies(distance=Distance.NEARBY_ONLY)
+
+
+class RangedAttack(Attack):
+    target_type = Enemies(distance=Distance.ANY)

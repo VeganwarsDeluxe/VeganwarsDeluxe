@@ -1,24 +1,29 @@
-from core.Items.ItemAction import DecisiveItem
+from core.Actions.ActionManager import AttachedAction
+from core.Items.Item import Item
+from core.Actions.ItemAction import DecisiveItem
 from core.Events.Events import PostAttackGameEvent
 from core.TargetType import Allies
 
 
-class Shield(DecisiveItem):
+class Shield(Item):
     id = 'shield'
     name = 'Щит'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=Allies())
 
-    def use(self):
-        if self.target == self.source:
-            self.target.session.say(f"🔵|{self.source.name} использует щит. Урон отражен!")
+@AttachedAction(Shield)
+class ShieldAction(DecisiveItem):
+    id = 'shield'
+    name = 'Щит'
+    target_type = Allies()
+
+    def func(self, source, target):
+        if target == source:
+            self.session.say(f"🔵|{source.name} использует щит. Урон отражен!")
         else:
-            self.target.session.say(f"🔵|{self.source.name} использует щит на {self.target.name}. Урон отражен!")
+            self.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @self.source.session.event_manager.at(self.source.session.id, turn=self.source.session.turn,
-                                              event=PostAttackGameEvent)
-        def shield_block(message: PostAttackGameEvent):
-            if message.target != self.target:
+        @self.session.event_manager.at(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
+        def shield_block(event: PostAttackGameEvent):
+            if event.target != target:
                 return
-            message.damage = 0
+            event.damage = 0

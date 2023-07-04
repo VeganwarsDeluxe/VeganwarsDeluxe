@@ -1,4 +1,5 @@
-from core.Actions.Action import DecisiveAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon
 
@@ -8,33 +9,29 @@ class Revolver(Weapon):
     name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.ranged = True
         self.cubes = 3
-        self.dmgbonus = 0
-        self.energycost = 3
-        self.accuracybonus = 2
+        self.damage_bonus = 0
+        self.energy_cost = 3
+        self.accuracy_bonus = 2
 
+
+@AttachedAction(Revolver)
+class RevolverAttack(Attack):
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         return damage if not damage else 3
 
-    @property
-    def actions(self):
-        return [
-            ShootYourself(self.source, self)
-        ] + super().actions
 
-
-class ShootYourself(DecisiveAction):
+@AttachedAction(Revolver)
+class ShootYourself(DecisiveWeaponAction):
     id = 'shoot_yourself'
     name = 'Застрелится'
-
-    def __init__(self, source, weapon):
-        super().__init__(source, OwnOnly(), priority=3)
-        self.weapon = weapon
+    priority = 3
+    target_type = OwnOnly()
 
     def func(self, source, target):
-        source.session.say(f"🎇|{source.name} застрелился!")
+        self.session.say(f"🎇|{source.name} застрелился!")
         source.hp = 0

@@ -1,5 +1,6 @@
 import random
-
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import Attack
 from core.Weapons.Weapon import Weapon
 
 
@@ -8,13 +9,16 @@ class Flamethrower(Weapon):
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.ranged = True
-        self.energycost = 4
+        self.energy_cost = 4
         self.cubes = 1
-        self.accuracybonus = 2
+        self.accuracy_bonus = 2
 
+
+@AttachedAction(Flamethrower)
+class FlamethrowerAttack(Attack):
     def calculate_damage(self, source, target):
         """
         Mostly universal formulas for weapon damage.
@@ -38,4 +42,3 @@ class Flamethrower(Weapon):
         aflame = target.get_skill('aflame')
         aflame.add_flame(source, 1)
         return damage
-

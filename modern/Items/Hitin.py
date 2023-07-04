@@ -1,23 +1,27 @@
-from core.Items.ItemAction import FreeItem
+from core.Actions.ActionManager import AttachedAction
+from core.Items.Item import Item
+from core.Actions.ItemAction import FreeItem
 from core.Events.Events import PostDamagesGameEvent
 from core.TargetType import Everyone
 
 
-class Hitin(FreeItem):
+class Hitin(Item):
     id = 'hitin'
     name = 'Хитин'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=Everyone())
 
-    def use(self, source, target):
+@AttachedAction(Hitin)
+class HitinAction(FreeItem):
+    id = 'hitin'
+    name = 'Хитин'
+    target_type = Everyone()
+
+    def func(self, source, target):
         target.get_skill('armor').add(2, 100)
-        target.session.say(f'💉|{self.source.name} использует хитин на {target.name}!')
+        self.session.say(f'💉|{source.name} использует хитин на {target.name}!')
 
-        # TODO: self.source.session.turn
-        @self.source.session.event_manager.at(self.source.session.id, turn=self.source.session.turn + 2,
-                                              event=PostDamagesGameEvent)
+        @self.session.event_manager.at(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent)
         def hitin_knockout(message: PostDamagesGameEvent):
             target.get_skill('armor').remove((2, 100))
             target.get_skill('stun').stun += 1
-            source.session.say(f'🌀|{self.target.name} теряет эффект хитина. Игрок оглушен!')
+            self.session.say(f'🌀|{target.name} теряет эффект хитина. Игрок оглушен!')

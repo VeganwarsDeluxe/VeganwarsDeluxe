@@ -33,5 +33,5 @@ class PickUp(DecisiveAction):
 
     def func(self, source, target):
         source.weapon = self.state.weapon
-        source.session.say(f'🤚{source.name} подбирает потерянное оружие.')
+        self.session.say(f'🤚{source.name} подбирает потерянное оружие.')
         self.state.weapon = None

@@ -39,7 +39,7 @@ class Aflame(State):
         @self.event_manager.at_event(session_id, event=PostActionsGameEvent)
         def func(message: PostActionsGameEvent):
             if self.source.action.id == 'skip' and self.flame:
-                self.source.session.say(f'💨|{self.source.name} потушил себя.')
+                self.session.say(f'💨|{self.source.name} потушил себя.')
                 self.timer = 0
                 self.flame = 0
                 self.extinguished = False
@@ -58,27 +58,27 @@ class Aflame(State):
                 self.flame = 0
                 self.extinguished = False
                 self.timer = 0
-                source.session.say(f'🔥|Огонь на {source.name} потух!')
+                self.session.say(f'🔥|Огонь на {source.name} потух!')
                 return
             else:
                 self.extinguished = False
             damage = self.flame
 
             message = FireAttackGameEvent(message.session_id, message.turn, self.dealer, self.source, damage)
-            self.source.session.event_manager.publish(message)
+            self.session.event_manager.publish(message)
             damage = message.damage
 
-            source.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
+            self.session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
 
-            message = PostFireAttackGameEvent(message.session_id, self.source.session.turn, self.dealer, self.source,
+            message = PostFireAttackGameEvent(message.session_id, self.session.turn, self.dealer, self.source,
                                               damage)
-            self.source.session.event_manager.publish(message)
+            self.session.event_manager.publish(message)
             damage = message.damage
 
             source.inbound_dmg.add(self.dealer, damage)
             source.outbound_dmg.add(self.dealer, damage)
             if self.flame > 1:
-                source.session.say(f'🔥|{source.name} горит. Теряет {self.flame - 1} энергии.')
+                self.session.say(f'🔥|{source.name} горит. Теряет {self.flame - 1} энергии.')
                 source.energy -= self.flame - 1
             if self.timer <= 1:
                 self.extinguished = True
@@ -88,9 +88,9 @@ class Aflame(State):
     def add_flame(self, source, flame):
         self.timer = 2
         if self.flame == 0:
-            source.session.say(f'🔥|{self.source.name} загорелся!')
+            self.session.say(f'🔥|{self.source.name} загорелся!')
         else:
-            source.session.say(f'🔥|Огонь {self.source.name} усиливается!')
+            self.session.say(f'🔥|Огонь {self.source.name} усиливается!')
         self.flame += flame
         self.dealer = source
 
@@ -114,4 +114,4 @@ class Extinguish(DecisiveAction):
     def func(self, source, target):
         self.state.flame = 0
         self.state.extinguished = False
-        source.session.say(f'💨|{source.name} тушит себя.')
+        self.session.say(f'💨|{source.name} тушит себя.')

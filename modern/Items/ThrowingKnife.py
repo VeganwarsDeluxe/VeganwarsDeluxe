@@ -1,33 +1,34 @@
 import random
 
-from core.Items.ItemAction import DecisiveItem
+from core.Actions.ActionManager import AttachedAction
+from core.Items.Item import Item
+from core.Actions.ItemAction import DecisiveItem
 from core.TargetType import Enemies
 
 
-class ThrowingKnife(DecisiveItem):
+class ThrowingKnife(Item):
     id = 'throwingknife'
+    name = 'Метательный нож'
+
+
+@AttachedAction(ThrowingKnife)
+class ThrowingKnifeAction(DecisiveItem):
+    id = 'throwingknife'
+    target_type = Enemies()
 
     @property
     def name(self):
         return f'Метательный нож ({self.hit_chance}%)'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=Enemies())
-
     @property
     def hit_chance(self):
         return 40 + self.source.energy * 10
 
-    @name.setter
-    def name(self, value):
-        pass
-
-    def use(self):
+    def func(self, source, target):
         if random.randint(0, 100) > self.hit_chance:
-            self.source.session.say(f"💨|{self.source.name} кидает метательный нож "
-                                    f"в {self.target.name}, но не попадает.")
+            self.session.say(f"💨|{source.name} кидает метательный нож в {target.name}, но не попадает.")
             return
-        bleeding = self.target.get_skill('bleeding')
+        bleeding = target.get_skill('bleeding')
         bleeding.active = True
-        self.target.session.say(f'🔪|{self.source.name} кидает метательный нож в {self.target.name}.'
-                                f'\n❣️|{self.target.name} истекает кровью!')
+        self.session.say(f'🔪|{source.name} кидает метательный нож в {target.name}.\n'
+                         f'❣️|{target.name} истекает кровью!')

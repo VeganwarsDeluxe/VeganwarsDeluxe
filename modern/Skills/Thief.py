@@ -1,4 +1,6 @@
-from core.Actions.Action import FreeAction
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Enemies
 
@@ -13,39 +15,33 @@ class Thief(Skill):
         super().__init__(source)
         self.cooldown_turn = 0
 
-    @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return []
-        return [
-            Steal(self.source, self)
-        ]
 
-
-class Steal(FreeAction):
+class Steal(DecisiveStateAction):
     id = 'steal'
     name = 'Украсть предмет'
+    priority = -2
+    target_type = Enemies()
 
-    def __init__(self, source, skill):
-        super().__init__(source, Enemies(), priority=-2)
-        self.skill = skill
+    def __init__(self, session: Session, source: Entity, skill: Thief):
+        super().__init__(session, source, skill)
+        self.state = skill
 
     def func(self, source, target):
-        self.skill.cooldown_turn = source.session.turn + 0  # 3
+        self.state.cooldown_turn = self.session.turn + 3
         success = False
         for item in [item for item in target.item_queue]:
             success = True
-            source.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+            self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
             target.item_queue.remove(item)
             source.items.append(item)
             item.source = source
             item.canceled = True
         if target.action.type == 'item':
             success = True
-            source.session.say(f'😏|{target.name} хотел использовать '
-                               f'{target.action.name}, но вор {source.name} его украл!')
+            self.session.say(f'😏|{target.name} хотел использовать '
+                             f'{target.action.name}, но вор {source.name} его украл!')
             target.action.source = source
             source.items.append(target.action)
             target.action.canceled = True
         if not success:
-            source.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
+            self.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')

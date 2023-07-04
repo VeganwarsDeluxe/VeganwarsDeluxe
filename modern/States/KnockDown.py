@@ -38,4 +38,4 @@ class StandUp(DecisiveAction):
 
     def func(self, source, target):
         self.state.active = False
-        source.session.say(f'⬆️|{source.name} поднимается с земли.')
+        self.session.say(f'⬆️|{source.name} поднимается с земли.')

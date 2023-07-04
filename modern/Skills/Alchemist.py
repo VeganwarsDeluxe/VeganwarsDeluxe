@@ -11,5 +11,5 @@ class Alchemist(Skill):
 
     def register(self, session_id):
         @self.event_manager.every(session_id, turns=9, event=PreMoveGameEvent)
-        def func(message: PreMoveGameEvent):
-            self.source.items.append(RageSerum(self.source))
+        def func(event: PreMoveGameEvent):
+            self.source.items.append(RageSerum())

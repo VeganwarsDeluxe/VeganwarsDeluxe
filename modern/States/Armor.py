@@ -23,7 +23,7 @@ class Armor(State):
         armor = min(message.damage, self.roll_armor())
         if not armor:
             return
-        self.source.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
+        self.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
         message.damage -= armor
 
     def add(self, value: int, chance=100):

@@ -2,9 +2,9 @@ from uuid import uuid4
 
 from core.Entities.Entity import Entity
 from core.Events.EventManager import EventManager
-from core.Events.Events import PreUpdatesGameEvent, PostUpdatesGameEvent, HPLossGameEvent, PreActionsGameEvent, \
+from core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsEvent
+    DeathGameEvent, CallActionsGameEvent
 
 
 class Session:
@@ -34,12 +34,6 @@ class Session:
     def tick(self):
         for entity in self.entities:
             entity.tick_turn()
-
-    def update_actions(self):
-        self.event_manager.publish(PreUpdatesGameEvent(self.id, self.turn))
-        for entity in self.entities:
-            entity.update_actions()
-        self.event_manager.publish(PostUpdatesGameEvent(self.id, self.turn))
 
     def pre_move(self):
         for entity in self.entities:
@@ -106,20 +100,9 @@ class Session:
                 return
         self.stop()
 
-    def call_actions(self):  # TODO: Remove, deprecated beacause of CallActionsEvent
-        all_actions = []
-        for entity in self.alive_entities:
-            for item in entity.item_queue:
-                all_actions.append(item)
-            for action in entity.action_queue:
-                all_actions.append(action)
-            all_actions.append(entity.action)
-        for action in sorted(all_actions, key=lambda e: e.priority):
-            action() if not action.canceled else None
-
     def move(self):  # 0. Pre-move stage
         self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
-        self.event_manager.publish(CallActionsEvent(self.id, self.turn))  # 2. Action stage
+        self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
         self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
         self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))

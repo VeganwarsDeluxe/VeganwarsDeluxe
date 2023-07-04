@@ -1,7 +1,7 @@
 import random
 
 from core.Actions.Action import DecisiveAction
-from core.Items.ItemAction import FreeItem
+from core.Actions.ItemAction import FreeItem
 from core.TargetType import OwnOnly
 from .Dummy import Dummy
 
@@ -33,10 +33,10 @@ class CowApproach(DecisiveAction):
         super().__init__(source, OwnOnly())
 
     def func(self, source, target):
-        source.nearby_entities = list(filter(lambda t: t != source, source.session.entities))
+        source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        source.session.say(f'👣|{source.name} с интересом подходит.')
+        self.session.say(f'👣|{source.name} с интересом подходит.')
 
 
 class Silence(DecisiveAction):
@@ -58,7 +58,7 @@ class Run(DecisiveAction):
         super().__init__(source, OwnOnly())
 
     def func(self, source, target):
-        source.session.say(f'💨|{source.name} перебегает поле!')
+        self.session.say(f'💨|{source.name} перебегает поле!')
 
 
 class WalkAway(DecisiveAction):
@@ -72,7 +72,7 @@ class WalkAway(DecisiveAction):
         for entity in source.nearby_entities:
             entity.nearby_entities.remove(source) if source in entity.nearby_entities else None
         source.nearby_entities = []
-        source.session.say(f'👣|{source.name} отходит подальше.')
+        self.session.say(f'👣|{source.name} отходит подальше.')
 
 
 class EatGrassReload(DecisiveAction):
@@ -83,7 +83,7 @@ class EatGrassReload(DecisiveAction):
         super().__init__(source, OwnOnly())
 
     def func(self, source, target):
-        source.session.say(f'🌿|{source.name} щипает травку. Енергия восстановлена ({source.max_energy})!')
+        self.session.say(f'🌿|{source.name} щипает травку. Енергия восстановлена ({source.max_energy})!')
         source.energy = source.max_energy
 
 
