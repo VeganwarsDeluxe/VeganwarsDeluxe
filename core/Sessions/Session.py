@@ -22,7 +22,7 @@ class Session:
         if result:
             return result[0]
 
-    def say(self, text, n=True):  # TODO: Adopt magic say pattern from goatexchanger
+    def say(self, text, n=True):  # TODO: Adopt Context
         print(text, end=('\n' if n else ''))
 
     @property
