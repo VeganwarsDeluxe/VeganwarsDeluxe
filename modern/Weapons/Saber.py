@@ -30,8 +30,8 @@ class FistAttack(Attack):
 
 @AttachedAction(Saber)
 class Parry(DecisiveWeaponAction):
-    id = 'Парировать'
-    name = 'parry'
+    name = 'Парировать'
+    id = 'parry'
     priority = -5
     target_type = Enemies()
 

@@ -1,21 +1,30 @@
-from core.Events.Events import AttackGameEvent
+from core.Events.EventManager import event_manager, RegisterState
+from core.Events.Events import AttackGameEvent, AttachStateEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.States.State import State
 
 
 class Injury(State):
     id = 'injury'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.injury = 0
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=AttackGameEvent)
-        def func(message: AttackGameEvent):
-            if not self.injury:
-                return
-            if message.target != self.source:
-                return
-            if not message.damage:
-                return
-            message.damage += self.injury
+
+@RegisterState(Injury)
+def register(event: AttachStateEvent):
+    session: Session = session_manager.get_session(event.session_id)
+    source = session.get_entity(event.entity_id)
+    state = event.state
+
+    @event_manager.at_event(session.id, event=AttackGameEvent)
+    def func(message: AttackGameEvent):
+        if not state.injury:
+            return
+        if message.target != source:
+            return
+        if not message.damage:
+            return
+        message.damage += state.injury

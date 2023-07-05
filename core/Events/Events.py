@@ -1,3 +1,8 @@
+from typing import Generic, TypeVar
+
+from core.States import State
+
+
 class Event:
     def __str__(self):
         return type(self).__name__
@@ -6,6 +11,21 @@ class Event:
 class AttachSessionEvent(Event):
     def __init__(self, session_id):
         self.session_id = session_id
+
+
+class StartSessionEvent(Event):
+    def __init__(self, session_id):
+        self.session_id = session_id
+
+
+T = TypeVar("T")
+
+
+class AttachStateEvent(Event, Generic[T]):
+    def __init__(self, session_id, entity_id, state: T):
+        self.session_id = session_id
+        self.entity_id = entity_id
+        self.state: T = state
 
 
 class GameEvent(Event):

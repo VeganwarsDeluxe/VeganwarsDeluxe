@@ -1,37 +1,43 @@
-from core.Actions.Action import DecisiveAction
-from core.Events.Events import PostTickGameEvent
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Events.EventManager import event_manager
+from core.Events.Events import PostTickGameEvent, AttachStateEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.States.State import State
-from core.TargetType import OwnOnly
 
 
 class Dodge(State):
     id = 'dodge'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.dodge_cooldown = 0
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=PostTickGameEvent)
-        def func(message: PostTickGameEvent):
-            self.dodge_cooldown = max(0, self.dodge_cooldown - 1)
 
-    @property
-    def actions(self):
-        if not self.dodge_cooldown == 0:
-            return []
-        return [
-            DodgeAction(self.source, self)
-        ]
+@event_manager.at_event(event=AttachStateEvent[Dodge])
+def register(event):
+    session: Session = session_manager.get_session(event.session_id)
+    state = event.state
+
+    @event_manager.at_event(session.id, event=PostTickGameEvent)
+    def func(message: PostTickGameEvent):
+        state.dodge_cooldown = max(0, state.dodge_cooldown - 1)
 
 
-class DodgeAction(DecisiveAction):
+@AttachedAction(Dodge)
+class DodgeAction(DecisiveStateAction):
     id = 'dodge'
     name = 'Перекат'
 
-    def __init__(self, source, state):
-        super().__init__(source, OwnOnly())
-        self.state = state
+    def __init__(self, session: Session, source: Entity, skill: Dodge):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return self.state.dodge_cooldown == 0
 
     def func(self, source, target):
         self.state.dodge_cooldown = 5

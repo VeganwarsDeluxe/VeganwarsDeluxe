@@ -1,3 +1,6 @@
+from core.Events.EventManager import event_manager
+from core.Events.Events import AttachStateEvent
+from core.States import State
 from core.Weapons.Weapon import Weapon
 from core.Items.Item import Item
 from core.DamageHolder import DamageHolder
@@ -16,7 +19,7 @@ class Entity:
         self.max_energy: int = 0
 
         self.weapon: Weapon = Weapon(self)
-        self.skills = []
+        self.skills: list[State] = []
         self.items: list[Item] = []
 
         self.nearby_entities: list[Entity] = []
@@ -41,6 +44,10 @@ class Entity:
             item = items[0]
             item.source = self
             return item
+
+    def attach_skill(self, state: State):
+        self.skills.append(state)
+        event_manager.publish(AttachStateEvent[State])
 
     def get_skill(self, skill_id: str):
         result = list(filter(lambda s: s.id == skill_id, self.skills))

@@ -23,3 +23,6 @@ class SessionManager(Singleton):
         session = self.get_session(session_id)
         if session and session in self.sessions:
             self.sessions.remove(session)
+
+
+session_manager = SessionManager()

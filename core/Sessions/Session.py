@@ -17,6 +17,11 @@ class Session:
 
         self.event_manager: EventManager = EventManager()
 
+    def get_entity(self, entity_id):
+        result = list(filter(lambda e: e.id == entity_id, self.entities))
+        if result:
+            return result[0]
+
     def say(self, text, n=True):  # TODO: Adopt magic say pattern from goatexchanger
         print(text, end=('\n' if n else ''))
 

@@ -1,5 +1,6 @@
 from core.Actions.Action import FreeAction
 from core.Actions.ActionManager import action_manager, AttachedAction
+from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon
 
 
@@ -22,6 +23,7 @@ class Claws(Weapon):
 @AttachedAction(Claws)
 class SwitchClaws(FreeAction):
     id = 'switch_claws'
+    target_type = OwnOnly()
 
     @property
     def name(self):

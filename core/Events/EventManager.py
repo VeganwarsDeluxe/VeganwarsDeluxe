@@ -1,6 +1,6 @@
 from typing import Type
 from core import Singleton
-from core.Events.Events import GameEvent, Event
+from core.Events.Events import GameEvent, Event, AttachStateEvent
 from core.Events.Handlers import Handler, ScheduledHandler, SingleTurnHandler, ConstantHandler
 
 
@@ -26,6 +26,7 @@ class EventManager(Singleton):
             handler = ScheduledHandler(session_id, func, event, start=start, interval=turns, repeats=-1)
             self._handlers.append(handler)
             return func
+
         return decorator_func
 
     def at(self, session_id, turn, event=Event):
@@ -71,4 +72,12 @@ class EventManager(Singleton):
             handler = ConstantHandler(session_id, func)
             self._handlers.append(handler)
             return func
+
         return decorator_func
+
+
+event_manager = EventManager()
+
+
+def RegisterState(state):
+    return event_manager.at_event(event=AttachStateEvent[state])

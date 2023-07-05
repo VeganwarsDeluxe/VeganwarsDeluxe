@@ -1,6 +1,7 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
+from core.TargetType import Enemies
 from core.Weapons.Weapon import Weapon
 
 
@@ -31,6 +32,7 @@ class BowAttack(Attack):
 class FireArrow(DecisiveAction):
     id = 'fire_arrow'
     name = 'Огненная стрела'
+    target_type = Enemies()
 
     @property
     def hidden(self) -> bool:
@@ -45,4 +47,4 @@ class FireArrow(DecisiveAction):
             return
         self.session.say(f'☄️|{source.name} поджигает стрелу и запускает ее в {target.name}!')
         aflame = target.get_skill('aflame')
-        aflame.add_flame(source, 2)
+        aflame.add_flame(self.session, self.source, source, 2)

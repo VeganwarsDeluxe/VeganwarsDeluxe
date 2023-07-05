@@ -1,5 +1,11 @@
 from core.Actions.Action import DecisiveAction
-from core.Events.Events import PostUpdatesGameEvent
+from core.Actions.ActionManager import AttachedAction, action_manager
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Events.EventManager import event_manager, RegisterState
+from core.Events.Events import PostUpdatesGameEvent, AttachStateEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.States.State import State
 from core.TargetType import OwnOnly
 
@@ -7,34 +13,39 @@ from core.TargetType import OwnOnly
 class Knockdown(State):
     id = 'knockdown'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.active = False
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=PostUpdatesGameEvent)
-        def func(message: PostUpdatesGameEvent):
-            if not self.active:
-                return
-            self.source.remove_action('attack')
-            self.source.remove_action('dodge')
 
-    @property
-    def actions(self):
-        if not self.active:
-            return []
-        return [
-            StandUp(self.source, self)
-        ]
+@RegisterState(Knockdown)
+def register(event: AttachStateEvent):
+    session: Session = session_manager.get_session(event.session_id)
+    source = session.get_entity(event.entity_id)
+    state = event.state
+
+    @event_manager.at_event(session.id, event=PostUpdatesGameEvent)
+    def func(message: PostUpdatesGameEvent):
+        if not state.active:
+            return
+        # TODO: Removal by Action Manager
+        source.remove_action('attack')
+        source.remove_action('dodge')
 
 
-class StandUp(DecisiveAction):
+@AttachedAction(Knockdown)
+class StandUp(DecisiveStateAction):
     id = 'stand_up'
     name = 'Поднятся с земли'
+    target_type = OwnOnly()
 
-    def __init__(self, source, state):
-        super().__init__(source, OwnOnly())
-        self.state = state
+    def __init__(self, session: Session, source: Entity, skill: Knockdown):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return not self.state.active
 
     def func(self, source, target):
         self.state.active = False

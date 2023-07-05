@@ -1,6 +1,9 @@
 import random
 
-from core.Events.Events import AttackGameEvent
+from core.Events.EventManager import RegisterState, event_manager
+from core.Events.Events import AttackGameEvent, AttachStateEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.Skills.Skill import Skill
 
 
@@ -9,14 +12,18 @@ class Biceps(Skill):
     name = 'Бицепс'
     description = 'Даёт шанс нанести удвоенный урон.'
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=AttackGameEvent)
-        def func(message: AttackGameEvent):
-            if message.source.weapon.ranged:
-                return
-            if random.randint(0, 100) > 30:
-                return
-            if not message.damage:
-                return
-            self.session.say(f'❗️', n=False)
-            message.damage *= 2
+
+@RegisterState(Biceps)
+def register(event: AttachStateEvent[Biceps]):
+    session: Session = session_manager.get_session(event.session_id)
+
+    @event_manager.at_event(session.id, event=AttackGameEvent)
+    def func(message: AttackGameEvent):
+        if message.source.weapon.ranged:
+            return
+        if random.randint(0, 100) > 30:
+            return
+        if not message.damage:
+            return
+        session.say(f'❗️', n=False)
+        message.damage *= 2

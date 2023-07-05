@@ -1,3 +1,4 @@
+from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Sessions import Session
@@ -16,6 +17,7 @@ class Thief(Skill):
         self.cooldown_turn = 0
 
 
+@AttachedAction(Thief)
 class Steal(DecisiveStateAction):
     id = 'steal'
     name = 'Украсть предмет'

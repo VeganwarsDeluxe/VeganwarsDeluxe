@@ -1,17 +1,25 @@
-from core.Events.Events import HPLossGameEvent
+from core.Events.EventManager import event_manager
+from core.Events.Events import HPLossGameEvent, AttachStateEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.States.State import State
 
 
 class DamageThreshold(State):
     id = 'damage-threshold'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.threshold = 6
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=HPLossGameEvent)
-        def func(message: HPLossGameEvent):
-            if not message.damage:
-                return
-            message.hp_loss = (message.damage // self.threshold) + 1
+
+@event_manager.at_event(event=AttachStateEvent[DamageThreshold])
+def register(event):
+    session: Session = session_manager.get_session(event.session_id)
+    state = event.state
+
+    @event_manager.at_event(session.id, event=HPLossGameEvent)
+    def func(message: HPLossGameEvent):
+        if not message.damage:
+            return
+        message.hp_loss = (message.damage // state.threshold) + 1

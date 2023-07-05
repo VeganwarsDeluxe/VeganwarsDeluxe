@@ -1,35 +1,30 @@
-from core.Actions.Action import DecisiveAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Sessions import Session
 from core.States.State import State
-from core.TargetType import OwnOnly
 
 
 class KnockedWeapon(State):
     id = 'knocked-weapon'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.weapon = None
 
-    @property
-    def active(self):
-        return self.weapon
 
-    @property
-    def actions(self):
-        if not self.active:
-            return []
-        return [
-            PickUp(self.source, self)
-        ]
-
-
-class PickUp(DecisiveAction):
+@AttachedAction(KnockedWeapon)
+class PickUp(DecisiveStateAction):
     id = 'pick_up'
     name = 'Подобрать оружие'
 
-    def __init__(self, source, state):
-        super().__init__(source, OwnOnly())
-        self.state = state
+    def __init__(self, session: Session, source: Entity, skill: KnockedWeapon):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return not self.state.weapon
 
     def func(self, source, target):
         source.weapon = self.state.weapon
