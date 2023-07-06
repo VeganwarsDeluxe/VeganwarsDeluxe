@@ -25,8 +25,8 @@ def h(m):
         return
     EWP_a = 1 / (1 + (10 ** ((b.rating - a.rating) / 400)))
     EWP_b = 1 / (1 + (10 ** ((a.rating - b.rating) / 400)))
-    C_a = round(1/EWP_a, 2)
-    C_b = round(1/EWP_b, 2)
+    C_a = round(1 / EWP_a, 2) - 1
+    C_b = round(1 / EWP_b, 2) - 1
     bot.reply_to(m, f'{a.name} {C_a} | {C_b} {b.name}')
 
 
