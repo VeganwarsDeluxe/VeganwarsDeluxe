@@ -1,10 +1,10 @@
 from core.Actions.Action import FreeAction
 from core.Actions.ActionManager import action_manager, AttachedAction
 from core.TargetType import OwnOnly
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Claws(Weapon):
+class Claws(MeleeWeapon):
     id = 'claws'
     name = 'Стальные когти'
     description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \

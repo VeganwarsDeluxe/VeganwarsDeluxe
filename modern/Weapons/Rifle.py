@@ -5,10 +5,10 @@ from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 
 
-class Rifle(Weapon):
+class Rifle(RangedWeapon):
     id = 'sniperRifle'
     name = 'Снайперская винтовка'
     description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
@@ -16,7 +16,6 @@ class Rifle(Weapon):
 
     def __init__(self):
         super().__init__()
-        self.ranged = True
         self.cubes = 1
         self.accuracy_bonus = -4
         self.energy_cost = 5

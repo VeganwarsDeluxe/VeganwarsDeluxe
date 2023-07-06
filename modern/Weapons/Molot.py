@@ -2,11 +2,11 @@ from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
 from core.Entities import Entity
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies, Distance
 
 
-class Molot(Weapon):
+class Molot(MeleeWeapon):
     id = 'molot'
     name = 'Молот'
     description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \

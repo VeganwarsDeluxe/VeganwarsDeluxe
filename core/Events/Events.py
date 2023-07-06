@@ -1,6 +1,5 @@
 from typing import Generic, TypeVar
-
-from core.States import State
+T = TypeVar("T")
 
 
 class Event:
@@ -16,9 +15,6 @@ class AttachSessionEvent(Event):
 class StartSessionEvent(Event):
     def __init__(self, session_id):
         self.session_id = session_id
-
-
-T = TypeVar("T")
 
 
 class AttachStateEvent(Event, Generic[T]):
@@ -42,14 +38,6 @@ class ActionGameEvent(GameEvent):
 
 
 class AddAction(GameEvent):
-    pass
-
-
-class RemoveAction(GameEvent):
-    pass
-
-
-class CallActionsGameEvent(GameEvent):
     pass
 
 
@@ -83,6 +71,10 @@ class PostAttackGameEvent(GameEvent):
         self.source = source
         self.target = target
         self.damage = damage
+
+
+class CallActionsGameEvent(GameEvent):
+    pass
 
 
 class PreMoveGameEvent(GameEvent):

@@ -1,8 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
+from core.Weapons.Weapon import RangedWeapon
 from .Shotgun import ShotgunAttack, Shotgun
 
 
-class Obrez(Shotgun):
+class Obrez(RangedWeapon):
     id = 'obrez'
     name = 'Обрез'
     description = 'Дальний бой, урон 1-4, точность средняя. Атакуя цель, находящуюся с вами в ближнем ' \
@@ -13,7 +14,6 @@ class Obrez(Shotgun):
         self.energy_cost = 3
         self.accuracy_bonus = 0
         self.cubes = 4
-        self.ranged = True
 
 
 @AttachedAction(Obrez)

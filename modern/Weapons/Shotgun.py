@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 
 
-class Shotgun(Weapon):
+class Shotgun(RangedWeapon):
     id = 'shotgun'
     name = 'Дробовик'
     description = 'Дальний бой, урон 2-7, точность низкая, затраты энергии: 4. Атакуя цель, находящуюся с ' \
@@ -14,7 +14,6 @@ class Shotgun(Weapon):
         self.energy_cost = 4
         self.damage_bonus = 1
         self.cubes = 6
-        self.ranged = True
         self.accuracy_bonus = -2
 
 

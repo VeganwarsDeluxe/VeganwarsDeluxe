@@ -2,10 +2,10 @@ from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import RangedWeapon
 
 
-class Bow(Weapon):
+class Bow(RangedWeapon):
     id = 'bow'
     name = 'Лук'
     description = 'Дальний бой, урон 1-3, точность средняя. Способность: поджигает стрелу, которая не ' \
@@ -17,7 +17,6 @@ class Bow(Weapon):
         self.accuracy_bonus = 1
         self.energy_cost = 3
         self.damage_bonus = 0
-        self.ranged = True
 
         self.cooldown_turn = 0
         self.strike = False

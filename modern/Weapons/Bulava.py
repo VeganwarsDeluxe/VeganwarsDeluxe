@@ -2,10 +2,10 @@ from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
 from core.Entities import Entity
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Bulava(Weapon):
+class Bulava(MeleeWeapon):
     id = 'bulava'
     name = 'Булава'
     description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \

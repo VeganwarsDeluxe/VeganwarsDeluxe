@@ -4,10 +4,10 @@ from core.Actions.WeaponAction import DecisiveWeaponAction
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Shest(Weapon):
+class Shest(MeleeWeapon):
     id = 'shest'
     name = 'Шест'
     description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \

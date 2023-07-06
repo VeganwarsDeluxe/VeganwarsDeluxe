@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Knife(Weapon):
+class Knife(MeleeWeapon):
     id = 'knife'
     name = 'Нож'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждый удар накладывает кровотечение на цель.'

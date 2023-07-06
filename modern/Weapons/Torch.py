@@ -1,10 +1,10 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 import random
 
 
-class Torch(Weapon):
+class Torch(MeleeWeapon):
     id = 'torch'
     name = 'Факел'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'

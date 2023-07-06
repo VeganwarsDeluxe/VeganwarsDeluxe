@@ -3,11 +3,11 @@ from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
 from core.Entities import Entity
 from core.Events.Events import PostAttackGameEvent
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies
 
 
-class Saber(Weapon):
+class Saber(MeleeWeapon):
     id = 'saber'
     name = 'Сабля'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: можно выбрать любого врага. ' \

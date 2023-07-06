@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Sword(Weapon):
+class Sword(MeleeWeapon):
     id = 'sword'
     name = 'Меч'
     description = 'Ближний бой, урон 1-3.'

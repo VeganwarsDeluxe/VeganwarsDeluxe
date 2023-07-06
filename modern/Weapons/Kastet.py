@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Kastet(Weapon):
+class Kastet(MeleeWeapon):
     id = 'kastet'
     name = 'Кастет'
     description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'

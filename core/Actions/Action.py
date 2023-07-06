@@ -1,4 +1,6 @@
 from core.Entities import Entity
+from core.Events.EventManager import event_manager
+from core.Events.Events import PreMoveGameEvent
 from core.Sessions import Session
 from core.TargetType import TargetType, Own, Aliveness, Team, Distance
 
@@ -16,6 +18,7 @@ class Action:
 
         self.canceled = False
         self.type = 'action'
+        self.removed = False
 
     def func(self, source, target):
         pass

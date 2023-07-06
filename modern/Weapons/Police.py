@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 
 
-class Police(Weapon):
+class Police(MeleeWeapon):
     id = 'policebat'
     name = 'Полицейская дубинка'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждая атака отнимает у цели 1 энергии.'

@@ -28,9 +28,8 @@ def register(event: AttachStateEvent):
     def func(message: PostUpdatesGameEvent):
         if not state.active:
             return
-        # TODO: Removal by Action Manager
-        source.remove_action('attack')
-        source.remove_action('dodge')
+        action_manager.remove_action('attack')
+        action_manager.remove_action('dodge')
 
 
 @AttachedAction(Knockdown)

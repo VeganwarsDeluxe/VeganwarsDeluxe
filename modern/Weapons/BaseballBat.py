@@ -1,10 +1,11 @@
 from core.Actions.ActionManager import action_manager
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
 import random
 
+from core.Weapons.Weapon import MeleeWeapon
 
-class BaseballBat(Weapon):
+
+class BaseballBat(MeleeWeapon):
     id = 'axe'
     name = 'Бита'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс оглушить цель.'

@@ -1,17 +1,16 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
 from core.TargetType import OwnOnly
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 
 
-class Revolver(Weapon):
+class Revolver(RangedWeapon):
     id = 'revolver'
     name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 
     def __init__(self):
         super().__init__()
-        self.ranged = True
         self.cubes = 3
         self.damage_bonus = 0
         self.energy_cost = 3

@@ -1,11 +1,11 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
 from core.Events.Events import PostTickGameEvent
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 from modern.States.Injury import Injury
 
 
-class Saw(Weapon):
+class Saw(RangedWeapon):
     id = 'saw'
     name = 'Пиломет'
     description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
@@ -17,7 +17,6 @@ class Saw(Weapon):
         self.accuracy_bonus = 3
         self.energy_cost = 3
         self.damage_bonus = 0
-        self.ranged = True
 
 
 @AttachedAction(Saw)

@@ -1,11 +1,11 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
 from core.TargetType import Enemies, Distance
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 from modern.Weapons.Fist import Fist
 
 
-class Chain(Weapon):
+class Chain(MeleeWeapon):
     id = 'chain'
     name = 'Цепь'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \

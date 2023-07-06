@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.EventManager import event_manager, RegisterState
@@ -26,8 +26,9 @@ def register(event: AttachStateEvent[Stun]):
     def func(message: PostUpdatesGameEvent):
         if not state.stun:
             return
-        # TODO: Use Action Manager
-        # source.actions = self.actions
+        for action in action_manager.get_actions(session, source):
+            if action.id != 'lay_stun':
+                action.removed = True
 
     @event_manager.at_event(session.id, event=PostDamagesGameEvent)
     def func(message: PostDamagesGameEvent):

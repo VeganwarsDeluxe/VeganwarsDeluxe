@@ -1,17 +1,16 @@
 import random
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 
 
-class Flamethrower(Weapon):
+class Flamethrower(RangedWeapon):
     id = 'flamethrower'
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
     def __init__(self):
         super().__init__()
-        self.ranged = True
         self.energy_cost = 4
         self.cubes = 1
         self.accuracy_bonus = 2
