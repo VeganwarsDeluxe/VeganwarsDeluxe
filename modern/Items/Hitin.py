@@ -15,6 +15,7 @@ class HitinAction(FreeItem):
     id = 'hitin'
     name = 'Хитин'
     target_type = Everyone()
+    priority = -2
 
     def func(self, source, target):
         target.get_skill('armor').add(2, 100)

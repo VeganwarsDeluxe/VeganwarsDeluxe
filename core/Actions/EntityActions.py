@@ -33,6 +33,7 @@ class SkipTurnAction(DecisiveAction):
     id = 'skip'
     name = 'Пропустить'
     target_type = OwnOnly()
+    priority = 2
 
     def func(self, source, target):
         self.session.say(f"⬇|{source.name} пропускает ход.")

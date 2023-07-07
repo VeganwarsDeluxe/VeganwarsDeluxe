@@ -18,6 +18,8 @@ class Police(MeleeWeapon):
 
 @AttachedAction(Police)
 class PoliceAttack(Attack):
+    priority = -1
+
     def attack(self, source, target):
         damage = super().attack(source, target)
         if not damage:

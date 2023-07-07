@@ -22,6 +22,7 @@ class ShieldGenAction(FreeStateAction):
     id = 'shield-gen'
     name = 'Щит | Генератор'
     target_type = Allies()
+    priority = -2
 
     def __init__(self, session: Session, source: Entity, skill: ShieldGen):
         super().__init__(session, source, skill)

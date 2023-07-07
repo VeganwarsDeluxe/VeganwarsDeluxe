@@ -14,6 +14,7 @@ class StimulatorAction(DecisiveItem):
     id = 'stimulator'
     name = 'Стимулятор'
     target_type = Allies()
+    priority = -2
 
     def func(self, source, target):
         target.hp = min(target.hp + 2, target.max_hp)

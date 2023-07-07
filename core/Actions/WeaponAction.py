@@ -30,26 +30,35 @@ class Attack(DecisiveWeaponAction):
     id = 'attack'
     name = 'Атака'
     target_type = Enemies()
-    priority = 0
 
     def func(self, source, target):
         self.attack(source, target)
 
-    def calculate_damage(self, source, target):
+    def calculate_damage(self, source: Entity, target: Entity):
         """
         Mostly universal formulas for weapon damage.
         """
         damage = 0
-        energy = source.energy + self.weapon.accuracy_bonus if (source.energy > 0) else 0
-        cubes = self.weapon.cubes - (target.action.id == 'dodge') * 5
-        for _ in range(cubes):
-            x = random.randint(1, 10)
-            if x <= energy:
+        if source.energy <= 0:
+            total_accuracy = 0
+        else:
+            total_accuracy = source.energy + self.weapon.accuracy_bonus \
+                             + target.inbound_accuracy_bonus + source.outbound_accuracy_bonus
+        for _ in range(self.weapon.cubes):
+            dice_result = random.randint(1, 10)
+            if dice_result <= total_accuracy:
                 damage += 1
         if not damage:
-            return 0
+            return 0  # You missed!
         damage += self.weapon.damage_bonus
         return damage
+
+    def hit_chance(self, source):
+        if source.energy <= 0:
+            return 0
+        total_accuracy = source.energy + self.weapon.accuracy_bonus + source.outbound_accuracy_bonus
+        cubes = self.weapon.cubes
+        return int(max((1 - ((1 - total_accuracy / 10) ** cubes)) * 100, 0))
 
     def attack(self, source, target):
         """

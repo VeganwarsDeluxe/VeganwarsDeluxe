@@ -24,6 +24,7 @@ class Chain(MeleeWeapon):
 class KnockWeapon(DecisiveAction):
     id = 'knock_weapon'
     name = 'Выбить оружие'
+    priority = -1
     target_type = Enemies(distance=Distance.ANY)
 
     def hidden(self) -> bool:

@@ -30,6 +30,9 @@ class Entity:
         self.inbound_dmg = DamageHolder()
         self.outbound_dmg = DamageHolder()
 
+        self.outbound_accuracy_bonus = 0
+        self.inbound_accuracy_bonus = 0
+
     @property
     def hearts(self):
         return '♥️' * self.hp if self.hp < 8 else f"♥️x{self.hp}"
@@ -65,15 +68,8 @@ class Entity:
         self.outbound_dmg.clear()
         self.inbound_dmg.clear()
 
+        self.outbound_accuracy_bonus = 0
+        self.inbound_accuracy_bonus = 0
+
     def tick_turn(self):
         pass
-
-    """
-    @property
-    def hit_chance(self, *args):
-        if self.energy <= 0:
-            return 0
-        energy = self.energy + self.weapon.accuracybonus if self.energy else 0
-        cubes = self.weapon.cubes
-        return int(max((1 - ((1 - energy / 10) ** cubes)) * 100, 0))
-    """

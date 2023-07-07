@@ -62,7 +62,7 @@ class Session:
         entity.hp -= message.hp_loss
         self.say(f"{entity.hearts}|{entity.name} теряет {message.hp_loss} ХП. Остается {entity.hp} ХП.")
 
-    def calculate_damages(self):  # TODO: Revise just in case, I am worried
+    def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
                 self.say(f'💨|{entity.name} теряет излишек энергии.')

@@ -32,20 +32,11 @@ class RifleAttack(Attack):
 
     def calculate_damage(self, source, target):
         main_target, level = self.weapon.main_target
-        accuracy_bonus = self.weapon.accuracy_bonus
         if main_target == target:
-            accuracy_bonus = 2 if level == 1 else 5
-        damage = 0
-        energy = source.energy + accuracy_bonus if source.energy else 0
-        cubes = self.weapon.cubes - (target.action.id == 'dodge') * 5
-        for _ in range(cubes):
-            x = random.randint(1, 10)
-            if x <= energy:
-                damage += 1
-        if not damage:
-            return 0
-        damage += self.weapon.damage_bonus
-        return damage
+            self.weapon.accuracy_bonus = 2 if level == 1 else 5
+        else:
+            self.weapon.accuracy_bonus = -4
+        return super().calculate_damage(source, target)
 
     def attack(self, source, target):
         damage = super().attack(source, target)

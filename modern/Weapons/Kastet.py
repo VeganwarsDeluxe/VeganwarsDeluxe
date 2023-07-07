@@ -18,6 +18,8 @@ class Kastet(MeleeWeapon):
 
 @AttachedAction(Kastet)
 class KastetAttack(Attack):
+    priority = -1
+
     def attack(self, source, target):
         damage = super().attack(source, target)
         if target.action.id == 'reloading':

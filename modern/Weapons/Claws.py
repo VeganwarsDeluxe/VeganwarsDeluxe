@@ -24,6 +24,7 @@ class Claws(MeleeWeapon):
 class SwitchClaws(FreeAction):
     id = 'switch_claws'
     target_type = OwnOnly()
+    priority = -10
 
     @property
     def name(self):
@@ -32,12 +33,13 @@ class SwitchClaws(FreeAction):
     def func(self, source, target):
         if not self.weapon.claws:
             self.weapon.cubes = 4
-            self.weapon.dmgbonus = 1
-            self.weapon.energycost = 3
-            self.weapon.accuracybonus = 1
+            self.weapon.damage_bonus = 1
+            self.weapon.energy_cost = 3
+            self.weapon.accuracy_bonus = 1
         else:
             self.weapon.cubes = 3
-            self.weapon.dmgbonus = 0
-            self.weapon.energycost = 2
+            self.weapon.damage_bonus = 0
+            self.weapon.energy_cost = 2
+            self.weapon.accuracy_bonus = 2
         self.weapon.claws = not self.weapon.claws
         self.session.say(f"⚙️|{source.name} {'выдвигает' if not self.weapon.claws else 'задвигает'} когти!")

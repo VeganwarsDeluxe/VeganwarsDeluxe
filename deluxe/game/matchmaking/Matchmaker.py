@@ -1,6 +1,7 @@
 import random
 from telebot import types
 
+from core.Actions.ActionManager import action_manager
 from core.Events.Events import PreMoveGameEvent
 from core.SessionManager import SessionManager
 from .TelegramSession import TelegramSession
@@ -23,7 +24,7 @@ class Matchmaker:
 
     def pre_move(self, chat_id):
         game = self.get_game(chat_id)
-        game.update_actions()
+        action_manager.update_actions(game)
         game.pre_move(), game.event_manager.publish(PreMoveGameEvent(game.id, game.turn))
         if not game.active:
             if list(game.alive_entities):

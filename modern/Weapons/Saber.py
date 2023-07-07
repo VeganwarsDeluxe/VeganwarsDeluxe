@@ -32,7 +32,7 @@ class FistAttack(Attack):
 class Parry(DecisiveWeaponAction):
     name = 'Парировать'
     id = 'parry'
-    priority = -5
+    priority = -4
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Saber):

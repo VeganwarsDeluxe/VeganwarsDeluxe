@@ -25,6 +25,8 @@ class Molot(MeleeWeapon):
 
 @AttachedAction(Molot)
 class MolotAttack(Attack):
+    priority = -3
+
     def __init__(self, session: Session, source: Entity, weapon: Molot):
         super().__init__(session, source, weapon)
         self.weapon: Molot = weapon

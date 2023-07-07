@@ -15,6 +15,7 @@ class ShieldAction(DecisiveItem):
     id = 'shield'
     name = 'Щит'
     target_type = Allies()
+    priority = -2
 
     def func(self, source, target):
         if target == source:

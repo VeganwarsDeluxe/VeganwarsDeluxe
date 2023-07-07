@@ -8,7 +8,7 @@ from core.TargetType import TargetType, Own, Aliveness, Team, Distance
 class Action:
     id = 'action'
     name = 'Action'
-    priority = 0  # TODO: Revise priorities of all actions
+    priority = 0
     target_type = TargetType(0, 0, 0, 0)
 
     def __init__(self, session: Session, source: Entity):

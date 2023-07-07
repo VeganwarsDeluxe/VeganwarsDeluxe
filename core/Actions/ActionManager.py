@@ -20,7 +20,6 @@ ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
 class ActionManager(Singleton):
     def __init__(self):
         self.action_queue: list[Action] = []
-        self.item_queue: list[ItemAction] = []
 
         self.all_actions: dict[ActionOwnerType, list[type[Action]]] = {}
         self.actions: dict[tuple[Session, Entity], list[Action]] = {}

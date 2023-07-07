@@ -22,13 +22,16 @@ class Tesak(MeleeWeapon):
 
 
 @AttachedAction(Tesak)
-class RifleAttack(Attack):
+class TesakAttack(Attack):
     def __init__(self, session: Session, source: Entity, weapon: Tesak):
         super().__init__(session, source, weapon)
         self.weapon: Tesak = weapon
 
     def calculate_damage(self, source, target):
-        return super().calculate_damage(source, target) + self.tesak_bonus
+        damage = super().calculate_damage(source, target)
+        if not damage:
+            return
+        return damage + self.tesak_bonus
 
     def attack(self, source, target):
         damage = super().attack(source, target)

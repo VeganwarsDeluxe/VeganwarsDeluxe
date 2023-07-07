@@ -14,6 +14,7 @@ class FlashGrenadeAction(DecisiveItem):
     id = 'flash_grenade'
     name = 'Световая граната'
     target_type = Enemies()
+    priority = -1
 
     def func(self, source, target):
         target.energy -= 8

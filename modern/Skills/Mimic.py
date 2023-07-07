@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Sessions import Session
@@ -17,8 +17,8 @@ class Mimic(Skill):
         self.cooldown_turn = 0
 
 
-@AttachedAction(Mimic)
-class CopyAction(DecisiveStateAction):
+#  @AttachedAction(Mimic)
+class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
     name = 'Запомнить действие'
     priority = -2
@@ -34,10 +34,19 @@ class CopyAction(DecisiveStateAction):
 
     def func(self, source, target):
         self.state.cooldown_turn = self.session.turn + 6
-        success = False
-        if target.action.type == 'action':
-            success = True
-            self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
-            source.items.append(target.action)
-        if not success:
+
+        action_pool = []
+        for action in action_manager.action_queue:
+            if action.type == 'item':
+                continue
+            if action.source != target:
+                continue
+            action_pool.append(action)
+
+        if not action_pool:
             self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+            return
+
+        self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
+
+        # Implement logic here

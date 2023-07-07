@@ -14,6 +14,7 @@ class AdrenalineAction(FreeItem):
     id = 'adrenaline'
     name = 'Адреналин'
     target_type = Allies()
+    priority = -2
 
     def func(self, source, target):
         target.energy += 3
