@@ -1,7 +1,8 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
 from core.Entities import Entity
-from core.Events.Events import PostAttackGameEvent
+from core.Events.DamageEvents import PostAttackGameEvent
+from core.Events.EventManager import event_manager
 from core.Sessions import Session
 from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies
@@ -47,7 +48,7 @@ class Parry(DecisiveWeaponAction):
         self.weapon.cooldown_turn = self.session.turn + 5
         self.session.say(f'🗡|{source.name} готовится парировать.')
 
-        @self.session.event_manager.now(self.session.id, event=PostAttackGameEvent)
+        @event_manager.now(self.session.id, event=PostAttackGameEvent)
         def parry(event: PostAttackGameEvent):
             if target != event.source:
                 return

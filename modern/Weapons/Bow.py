@@ -1,6 +1,6 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
 from core.TargetType import Enemies
 from core.Weapons.Weapon import RangedWeapon
 
@@ -28,7 +28,7 @@ class BowAttack(Attack):
 
 
 @AttachedAction(Bow)
-class FireArrow(DecisiveAction):
+class FireArrow(DecisiveWeaponAction):
     id = 'fire_arrow'
     name = 'Огненная стрела'
     target_type = Enemies()
@@ -39,11 +39,11 @@ class FireArrow(DecisiveAction):
 
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 5
-        damage = self.weapon.calculate_damage(source, target)
+        damage = self.calculate_damage(source, target)
         source.energy = max(source.energy - self.weapon.energycost, 0)
         if not damage:
             self.session.say(f'💨|{source.name} поджигает стрелу и запускает ее в {target.name}, но не попадает.')
             return
         self.session.say(f'☄️|{source.name} поджигает стрелу и запускает ее в {target.name}!')
         aflame = target.get_skill('aflame')
-        aflame.add_flame(self.session, self.source, source, 2)
+        aflame.add_flame(self.session, target, source, 2)

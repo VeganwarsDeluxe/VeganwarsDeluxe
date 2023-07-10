@@ -1,5 +1,6 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import Weapon, MeleeWeapon
 from modern.Weapons.Fist import Fist
@@ -11,8 +12,8 @@ class Chain(MeleeWeapon):
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: с шансом выбивает оружие врага из ' \
                   'рук. Если враг перезаряжается, шанс равен 100%.'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.cubes = 3
         self.accuracy_bonus = 2
         self.energy_cost = 2
@@ -21,7 +22,12 @@ class Chain(MeleeWeapon):
 
 
 @AttachedAction(Chain)
-class KnockWeapon(DecisiveAction):
+class ChainAttack(Attack):
+    pass
+
+
+@AttachedAction(Chain)
+class KnockWeapon(DecisiveWeaponAction):
     id = 'knock_weapon'
     name = 'Выбить оружие'
     priority = -1

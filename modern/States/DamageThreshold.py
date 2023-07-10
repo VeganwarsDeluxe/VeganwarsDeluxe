@@ -1,4 +1,4 @@
-from core.Events.EventManager import event_manager
+from core.Events.EventManager import event_manager, RegisterState
 from core.Events.Events import HPLossGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -13,7 +13,7 @@ class DamageThreshold(State):
         self.threshold = 6
 
 
-@event_manager.at_event(event=AttachStateEvent[DamageThreshold])
+@RegisterState(DamageThreshold)
 def register(event):
     session: Session = session_manager.get_session(event.session_id)
     state = event.state

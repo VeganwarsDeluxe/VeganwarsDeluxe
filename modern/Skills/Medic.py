@@ -13,7 +13,7 @@ class Medic(Skill):
 
 
 @RegisterState(Medic)
-def register(event: AttachStateEvent[Medic]):
+def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 

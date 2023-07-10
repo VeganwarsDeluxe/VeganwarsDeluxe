@@ -1,8 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction
 from core.Entities import Entity
+from core.Events.DamageEvents import AttackGameEvent
 from core.Events.EventManager import event_manager
-from core.Events.Events import PreDamagesGameEvent, AttackGameEvent
+from core.Events.Events import PreDamagesGameEvent
 from core.Sessions import Session
 from core.TargetType import Allies
 from core.Weapons.Weapon import Weapon, RangedWeapon

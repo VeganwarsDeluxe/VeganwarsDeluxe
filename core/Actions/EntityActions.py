@@ -1,5 +1,5 @@
 from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Actions.ActionManager import AttachedAction
 from core.Entities import Entity
 from core.TargetType import OwnOnly
 

@@ -1,5 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import Attack
+from core.Events.EventManager import event_manager
 from core.Events.Events import PostTickGameEvent
 from core.Weapons.Weapon import Weapon, RangedWeapon
 from modern.States.Injury import Injury
@@ -27,7 +28,7 @@ class SawAttack(Attack):
             return damage
         self.session.say(f'{target.name} ранен! ({target.get_skill(Injury.id).injury})')
 
-        @self.session.event_manager.now(self.session.id, PostTickGameEvent)
+        @event_manager.now(self.session.id, PostTickGameEvent)
         def func(event: PostTickGameEvent):
             injury = target.get_skill(Injury.id)
             injury.injury += 1

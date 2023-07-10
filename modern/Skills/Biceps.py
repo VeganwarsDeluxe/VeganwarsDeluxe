@@ -1,7 +1,8 @@
 import random
 
 from core.Events.EventManager import RegisterState, event_manager
-from core.Events.Events import AttackGameEvent, AttachStateEvent
+from core.Events.DamageEvents import AttackGameEvent
+from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
@@ -14,7 +15,7 @@ class Biceps(Skill):
 
 
 @RegisterState(Biceps)
-def register(event: AttachStateEvent[Biceps]):
+def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
 
     @event_manager.at_event(session.id, event=AttackGameEvent)

@@ -16,13 +16,13 @@ class Thief(Skill):
     description = 'Если применить эту способность на цель, которая применяет какой-либо предмет, вы ' \
                   'получите этот предмет. Дает +1 точности на дальнобойние оружия.'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.cooldown_turn = 0
 
 
 @RegisterState(Thief)
-def register(event: AttachStateEvent[Thief]):
+def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 
@@ -53,6 +53,7 @@ class Steal(DecisiveStateAction):
             if action.source != target:
                 continue
             item = action.item
+            action.canceled = True
 
             self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
             source.items.append(item)

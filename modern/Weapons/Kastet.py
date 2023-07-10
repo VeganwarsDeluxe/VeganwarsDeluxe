@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.WeaponAction import Attack
 from core.Weapons.Weapon import Weapon, MeleeWeapon
 
@@ -22,7 +22,7 @@ class KastetAttack(Attack):
 
     def attack(self, source, target):
         damage = super().attack(source, target)
-        if target.action.id == 'reloading':
+        if 'reloading' in [action.id for action in action_manager.get_queued_entity_actions(self.session, target)]:
             self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
             target.energy = max(target.energy - 4, 0)
         return damage

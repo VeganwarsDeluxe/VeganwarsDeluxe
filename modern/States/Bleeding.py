@@ -1,4 +1,4 @@
-from core.Events.EventManager import event_manager
+from core.Events.EventManager import event_manager, RegisterState
 from core.Events.Events import PreDamagesGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -14,7 +14,7 @@ class Bleeding(State):
         self.active = False
 
 
-@event_manager.at_event(event=AttachStateEvent[Bleeding])
+@RegisterState(Bleeding)
 def register(event):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)

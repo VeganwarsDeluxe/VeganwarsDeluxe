@@ -1,5 +1,6 @@
 from core.Actions.Action import FreeAction
 from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Actions.WeaponAction import FreeWeaponAction, Attack
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import Weapon, MeleeWeapon
 
@@ -21,7 +22,12 @@ class Claws(MeleeWeapon):
 
 
 @AttachedAction(Claws)
-class SwitchClaws(FreeAction):
+class ClawsAttack(Attack):
+    pass
+
+
+@AttachedAction(Claws)
+class SwitchClaws(FreeWeaponAction):
     id = 'switch_claws'
     target_type = OwnOnly()
     priority = -10

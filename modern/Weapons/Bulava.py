@@ -12,13 +12,8 @@ class Bulava(MeleeWeapon):
                   'вы получаете +1 урона.'
 
     def __init__(self):
-        super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
-
-        self.main_target = None, 0
+        super().__init__(cubes=3, accuracy_bonus=2, energy_cost=2, damage_bonus=0)
+        self.consecutive_target = None, 0
         self.last_attack_turn = 0
 
 
@@ -28,21 +23,27 @@ class BulavaAttack(Attack):
         super().__init__(session, source, weapon)
         self.weapon: Bulava = weapon
 
-    def calculate_damage(self, source, target):
+    def calculate_damage(self, source: Entity, target: Entity) -> int:
+        """
+        Calculates the damage dealt to the target, with bonus damage for consecutive attacks on the same target.
+        """
         damage = super().calculate_damage(source, target)
         if not damage:
             return damage
-        main_target, bonus = self.weapon.main_target
-        if main_target == target:
+        consecutive_target, bonus = self.weapon.consecutive_target
+        if consecutive_target == target:
             damage += bonus
         return damage
 
-    def attack(self, source, target):
+    def attack(self, source: Entity, target: Entity) -> int:
+        """
+        Attacks the target and keeps track of consecutive attacks on the same target for damage bonus.
+        """
         damage = super().attack(source, target)
-        main_target, bonus = self.weapon.main_target
-        if main_target == target and self.weapon.last_attack_turn == self.session.turn - 1:
-            self.weapon.main_target = target, bonus + 1
+        consecutive_target, bonus = self.weapon.consecutive_target
+        if consecutive_target == target and self.weapon.last_attack_turn == self.session.turn - 1:
+            self.weapon.consecutive_target = target, bonus + 1
         else:
-            self.weapon.main_target = target, 1
+            self.weapon.consecutive_target = target, 1
         self.weapon.last_attack_turn = self.session.turn
         return damage

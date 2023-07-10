@@ -8,6 +8,8 @@ class DamageHolder:
     def sum(self):
         total = 0
         for source, damage in self.damages:
+            if not damage:
+                damage = 0
             total += damage
         return total
 

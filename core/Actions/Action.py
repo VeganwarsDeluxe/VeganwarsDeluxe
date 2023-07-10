@@ -1,6 +1,4 @@
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
-from core.Events.Events import PreMoveGameEvent
 from core.Sessions import Session
 from core.TargetType import TargetType, Own, Aliveness, Team, Distance
 
@@ -38,27 +36,27 @@ class Action:
 
     def get_targets(self, source, target_type: TargetType):
         target_pool = self.session.entities
-        if target_type.own == Own.SELF_ONLY:
-            return [source]
-        elif target_type.own == Own.SELF_EXCLUDED:
-            target_pool = list(filter(lambda t: t != source, target_pool))
+        targets = []
 
-        if target_type.aliveness == Aliveness.ALIVE_ONLY:
-            target_pool = list(filter(lambda t: not t.dead, target_pool))
-        elif target_type.aliveness == Aliveness.DEAD_ONLY:
-            target_pool = list(filter(lambda t: t.dead, target_pool))
+        for target in target_pool:
+            conditions = [
+                not (target_type.own == Own.SELF_ONLY and target != source),
+                not (target_type.own == Own.SELF_EXCLUDED and target == source),
 
-        if target_type.team == Team.ALLIES_ONLY:  # Exclude enemies
-            target_pool = list(filter(lambda t: source.is_ally(t), target_pool))
-        elif target_type.team == Team.ENEMIES_ONLY:  # Exclude allies
-            target_pool = list(filter(lambda t: not source.is_ally(t), target_pool))
+                not (target_type.aliveness == Aliveness.ALIVE_ONLY and target.dead),
+                not (target_type.aliveness == Aliveness.DEAD_ONLY and not target.dead),
 
-        if target_type.distance == Distance.NEARBY_ONLY:  # Exclude distant
-            target_pool = list(filter(lambda t: t in source.nearby_entities, target_pool))
-        elif target_type.distance == Distance.DISTANT_ONLY:  # Exclude nearby
-            target_pool = list(filter(lambda t: t not in source.nearby_entities, target_pool))
+                not (target_type.team == Team.ALLIES_ONLY and not source.is_ally(target)),
+                not (target_type.team == Team.ENEMIES_ONLY and source.is_ally(target)),
 
-        return target_pool
+                not (target_type.distance == Distance.NEARBY_ONLY and target not in source.nearby_entities),
+                not (target_type.distance == Distance.DISTANT_ONLY and target in source.nearby_entities)
+            ]
+
+            if all(conditions):
+                targets.append(target)
+
+        return targets
 
     @property
     def blocked(self):

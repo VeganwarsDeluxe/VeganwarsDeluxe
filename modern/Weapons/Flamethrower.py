@@ -27,5 +27,5 @@ class FlamethrowerAttack(Attack):
         if not damage:
             return damage
         aflame = target.get_skill('aflame')
-        aflame.add_flame(self.session, self.source, source, 1)
+        aflame.add_flame(self.session, target, source, 1)
         return damage

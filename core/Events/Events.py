@@ -1,31 +1,44 @@
 from typing import Generic, TypeVar
+
+from core.States import State
+
 T = TypeVar("T")
 
 
 class Event:
+    def __init__(self, unique_type=None):
+        self.unique_type = unique_type
+
     def __str__(self):
         return type(self).__name__
 
 
 class AttachSessionEvent(Event):
     def __init__(self, session_id):
+        super().__init__()
         self.session_id = session_id
 
 
 class StartSessionEvent(Event):
     def __init__(self, session_id):
+        super().__init__()
         self.session_id = session_id
 
 
-class AttachStateEvent(Event, Generic[T]):
-    def __init__(self, session_id, entity_id, state: T):
+class AttachStateEvent(Event):
+    def __init__(self, session_id, entity_id, state: State):
+        super().__init__(type(state))
         self.session_id = session_id
         self.entity_id = entity_id
-        self.state: T = state
+        self.state: State = state
+
+    def __class_getitem__(cls, state):
+        pass
 
 
 class GameEvent(Event):
     def __init__(self, session_id, turn):
+        super().__init__()
         self.session_id = session_id
         self.turn = turn
 
@@ -53,24 +66,6 @@ class HPLossGameEvent(GameEvent):
         self.source = source
         self.damage = damage
         self.hp_loss = hp_loss
-
-
-class AttackGameEvent(GameEvent):
-    def __init__(self, session_id, turn, source, target, damage):
-        super().__init__(session_id, turn)
-
-        self.source = source
-        self.target = target
-        self.damage = damage
-
-
-class PostAttackGameEvent(GameEvent):
-    def __init__(self, session_id, turn, source, target, damage):
-        super().__init__(session_id, turn)
-
-        self.source = source
-        self.target = target
-        self.damage = damage
 
 
 class CallActionsGameEvent(GameEvent):

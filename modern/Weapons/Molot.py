@@ -58,7 +58,7 @@ class TrueStrike(DecisiveWeaponAction):
 
     @property
     def hidden(self) -> bool:
-        return self.session.turn < self.cooldown_turn or self.source.energy < 4
+        return self.session.turn < self.weapon.cooldown_turn or self.source.energy < 4
 
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6

@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent
 from core.States import State
@@ -7,9 +9,10 @@ from core.DamageHolder import DamageHolder
 
 
 class Entity:
-    def __init__(self, session_id, name=''):
+    def __init__(self, session_id: str, name=''):
         self.session_id = session_id
         self.name: str = name
+        self.id = uuid4()
 
         self.hp: int = 0
         self.max_hp: int = 0
@@ -50,7 +53,7 @@ class Entity:
 
     def attach_skill(self, state: State):
         self.skills.append(state)
-        event_manager.publish(AttachStateEvent[State])
+        event_manager.publish(AttachStateEvent)
 
     def get_skill(self, skill_id: str):
         result = list(filter(lambda s: s.id == skill_id, self.skills))

@@ -1,6 +1,6 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction
+from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies
@@ -24,7 +24,12 @@ class Shest(MeleeWeapon):
 
 
 @AttachedAction(Shest)
-class KnockDown(DecisiveWeaponAction):
+class ShestAttack(Attack):
+    pass
+
+
+@AttachedAction(Shest)
+class KnockDown(Attack):
     id = 'knock_down'
     name = 'Сбить с ног'
     target_type = Enemies()

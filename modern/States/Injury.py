@@ -1,5 +1,6 @@
+from core.Events.DamageEvents import AttackGameEvent
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import AttackGameEvent, AttachStateEvent
+from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State

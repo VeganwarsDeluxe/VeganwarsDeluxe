@@ -1,7 +1,8 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
-from core.Events.Events import PostAttackGameEvent
+from core.Events.DamageEvents import PostDamageGameEvent
+from core.Events.EventManager import event_manager
+from core.Items.Item import Item
 from core.TargetType import Allies
 
 
@@ -23,8 +24,8 @@ class ShieldAction(DecisiveItem):
         else:
             self.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @self.session.event_manager.at(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
-        def shield_block(event: PostAttackGameEvent):
+        @event_manager.now(self.session.id, event=PostDamageGameEvent)
+        def shield_block(event: PostDamageGameEvent):
             if event.target != target:
                 return
             event.damage = 0

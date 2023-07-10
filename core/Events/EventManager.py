@@ -1,77 +1,66 @@
-from typing import Type
 from core import Singleton
 from core.Events.Events import GameEvent, Event, AttachStateEvent
-from core.Events.Handlers import Handler, ScheduledHandler, SingleTurnHandler, ConstantHandler
+from core.Events.EventHandlers import EventHandler, ScheduledEventHandler, SingleTurnHandler, ConstantEventHandler
+from core.States import State
+
+from typing import Callable, Type
 
 
 class EventManager(Singleton):
     def __init__(self):
-        self._handlers: list[Handler] = []
+        self._handlers: list[EventHandler] = []
 
     def publish(self, message: Event):
         for handler in self._handlers:
-            if isinstance(message, GameEvent):
-                if message.session_id != handler.session_id:
-                    continue
+            if isinstance(message, GameEvent) and message.session_id != handler.session_id:
+                continue
             handler(message)
 
-    def every(self, session_id, turns: int, start: int = 1, event: Type[Event] = Event):
-        """
-        @event_manager.every(session_id, turns=2, event=PostAttackEvent)
-        def func(message: PostAttackEvent):
-            self.owner.say('I say this every 2 turns at post-attack!')
-        """
-
-        def decorator_func(func):
-            handler = ScheduledHandler(session_id, func, event, start=start, interval=turns, repeats=-1)
+    def every(self, session_id: str, turns: int, start: int = 1, event: Type[Event] = Event):
+        def decorator_func(callback: Callable):
+            handler = ScheduledEventHandler(session_id, callback, event, start=start, interval=turns, max_repeats=-1)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
-    def at(self, session_id, turn, event=Event):
-        """
-        @event_manager.at(session_id, turn=5, event=DeathEvent)
-        def func(message: DeathEvent):
-            message.entity.say('I say this exactly at turn 5 during death event! Also, I died.')
-        """
-
-        def decorator_func(func):
-            handler = SingleTurnHandler(session_id, func, event, turn)
+    def at(self, session_id: str, turn: int, event: Type[Event] = Event):
+        def decorator_func(callback: Callable):
+            handler = SingleTurnHandler(session_id, callback, event, turn=turn)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
-    def now(self, session_id, event=Event):
-        def decorator_func(func):
-            handler = Handler(session_id, func, event, repeats=1)
+    def now(self, session_id: str, event: Type[Event] = Event):
+        def decorator_func(callback: Callable):
+            handler = EventHandler(session_id, callback, event, max_repeats=1)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
-    def after(self, session_id, turns, event=Event, repeats=1):
-        def decorator_func(func):
-            handler = Handler(session_id, func, event, repeats=repeats, wait_for=turns)
+    def after(self, session_id: str, turns: int, event: Type[Event] = Event, repeats: int = 1):
+        def decorator_func(callback: Callable):
+            handler = EventHandler(session_id, callback, event, max_repeats=repeats, min_wait_turns=turns)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
-    def at_event(self, session_id=None, event=Event):
-        def decorator_func(func):
-            handler = Handler(session_id, func, event)
+    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None):
+        def decorator_func(callback: Callable):
+            handler = EventHandler(session_id, callback, event, unique_type=unique_type)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
-    def constantly(self, session_id):
-        def decorator_func(func):
-            handler = ConstantHandler(session_id, func)
+    def constantly(self, session_id: str):
+        def decorator_func(callback: Callable):
+            handler = ConstantEventHandler(session_id, callback)
             self._handlers.append(handler)
-            return func
+            return callback
 
         return decorator_func
 
@@ -79,5 +68,5 @@ class EventManager(Singleton):
 event_manager = EventManager()
 
 
-def RegisterState(state):
-    return event_manager.at_event(event=AttachStateEvent[state])
+def RegisterState(state: type[State]):
+    return event_manager.at_event(event=AttachStateEvent, unique_type=state)

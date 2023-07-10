@@ -1,13 +1,10 @@
 import random
-
-from core.Actions.Action import DecisiveAction
-from core.TargetType import OwnOnly
 from .TelegramEntity import TelegramEntity
 
 
 class Dummy(TelegramEntity):
-    def __init__(self, session, name):
-        super().__init__(session, user_name=name, user_id=random.randint(100000000, 99999999999))
+    def __init__(self, session_id: str, name):
+        super().__init__(session_id, user_name=name, user_id=random.randint(100000000, 99999999999))
 
         self.npc = True  # to differentiate humans and bots
 
@@ -23,6 +20,5 @@ class Dummy(TelegramEntity):
     def ready(self, value):
         pass
 
-    def choose_act(self):
-        self.action = DecisiveAction(self, OwnOnly())
+    def choose_act(self, session):
         self.ready = True

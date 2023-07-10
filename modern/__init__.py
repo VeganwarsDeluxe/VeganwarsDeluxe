@@ -1,3 +1,6 @@
+from core.Actions.ActionManager import action_manager
+from core.Actions.EntityActions import *
+
 from modern.Weapons.Claws import Claws
 from modern.Weapons.Shotgun import Shotgun
 from modern.Weapons.Obrez import Obrez

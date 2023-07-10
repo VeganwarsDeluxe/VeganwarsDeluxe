@@ -1,40 +1,49 @@
 from uuid import uuid4
 
 from core.Entities.Entity import Entity
-from core.Events.EventManager import EventManager
+from core.Events.EventManager import event_manager
 from core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsGameEvent
+    DeathGameEvent, CallActionsGameEvent, AttachStateEvent
 
 
 class Session:
+    ALIVE_ENTITIES_MSG = '💨|{name} теряет излишек энергии.'
+    HP_LOSS_MSG = "{hearts}|{name} теряет {hp_loss} ХП. Остается {hp} ХП."
+    DEATH_MSG = '☠️|{name} теряет сознание.'
+
     def __init__(self):
         self.id = uuid4()
         self.turn = 1
         self.active = True
-
         self.entities: list[Entity] = []
 
-        self.event_manager: EventManager = EventManager()
+    def get_entity(self, entity_id: str) -> Entity:
+        """
+        Get an entity by its ID.
+        """
+        result = [entity for entity in self.entities if entity.id == entity_id]
+        return result[0] if result else None
 
-    def get_entity(self, entity_id):
-        result = list(filter(lambda e: e.id == entity_id, self.entities))
-        if result:
-            return result[0]
-
-    def say(self, text, n=True):  # TODO: Adopt Context
+    def say(self, text: str, n: bool = True) -> None:
+        """
+        Print a given text with optional newline at the end.
+        """
         print(text, end=('\n' if n else ''))
 
     @property
-    def alive_entities(self) -> list[Entity]:
-        return list(filter(lambda e: not e.dead, self.entities))
+    def alive_entities(self) -> list:
+        """
+        Get the list of entities which are not dead.
+        """
+        return [entity for entity in self.entities if not entity.dead]
 
     @property
     def alive_teams(self) -> set:
-        teams = set()
-        for entity in self.alive_entities:
-            teams.add(entity.team)
-        return teams
+        """
+        Get the set of teams which have alive entities.
+        """
+        return {entity.team for entity in self.alive_entities}
 
     def tick(self):
         for entity in self.entities:
@@ -47,20 +56,23 @@ class Session:
     def start(self):
         for entity in self.entities:
             for state in entity.skills:
-                state.register(self.id)
+                event_manager.publish(AttachStateEvent(self.id, entity.id, state))
 
     def cancel_damages(self, source):
         for entity in self.entities:
             entity.inbound_dmg.cancel(source)
 
-    def lose_hp(self, entity, damage):
+    def lose_hp(self, entity: Entity, damage: int) -> None:
+        """
+        Deduct HP from the entity and print a message.
+        """
         hp_loss = (damage // 6) + 1
 
         message = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
-        self.event_manager.publish(message)
+        event_manager.publish(message)
 
         entity.hp -= message.hp_loss
-        self.say(f"{entity.hearts}|{entity.name} теряет {message.hp_loss} ХП. Остается {entity.hp} ХП.")
+        self.say(self.HP_LOSS_MSG.format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss, hp=entity.hp))
 
     def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
@@ -81,17 +93,20 @@ class Session:
     def stop(self):
         self.active = False
 
-    def death(self):
+    def death(self) -> None:
+        """
+        Handle the death of entities.
+        """
         for entity in self.alive_entities:
             if entity.hp > 0:
                 continue
 
-            self.say(f'☠️|{entity.name} теряет сознание.')
+            self.say(self.DEATH_MSG.format(name=entity.name))
             entity.dead = True
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
-            self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
+            event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
 
     def finish(self):
         if not len(self.alive_teams):  # If everyone is dead
@@ -106,18 +121,18 @@ class Session:
         self.stop()
 
     def move(self):  # 0. Pre-move stage
-        self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
-        self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
-        self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
+        event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
+        event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
+        event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
-        self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
+        event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
         self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
-        self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
+        event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        self.event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
+        event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        self.event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
+        event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

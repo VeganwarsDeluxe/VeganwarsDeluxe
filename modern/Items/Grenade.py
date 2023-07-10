@@ -1,5 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Entities import Entity
+from core.Events.DamageEvents import PostDamageGameEvent
+from core.Events.EventManager import event_manager
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
 import random
@@ -40,6 +42,11 @@ class GrenadeAction(DecisiveItem):
         source.energy = max(source.energy - 2, 0)
         self.session.say(f'💣|{source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
                          f'{",".join([t.name for t in targets])}.')
+
+    def publish_damage_event(self, source, target, damage):
+        message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
+        event_manager.publish(message)
+        return message.damage
 
     @property
     def blocked(self):

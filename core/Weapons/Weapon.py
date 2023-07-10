@@ -10,6 +10,14 @@ class Weapon:
         self.damage_bonus = damage_bonus
         self.accuracy_bonus = accuracy_bonus
 
+    def reload_text(self, source):
+        if self.ranged:
+            tts = f"🕓|{source.name} перезаряжается. " \
+                  f"Энергия восстановлена до максимальной! ({source.max_energy})"
+        else:
+            tts = f"😤|{source.name}️ переводит дух. Энергия восстановлена до максимальной! ({source.max_energy})"
+        return tts
+
 
 class MeleeWeapon(Weapon):
     ranged = False

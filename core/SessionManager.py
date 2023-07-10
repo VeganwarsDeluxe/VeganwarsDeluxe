@@ -1,5 +1,5 @@
 from core import Singleton
-from core.Events.EventManager import EventManager
+from core.Events.EventManager import EventManager, event_manager
 from core.Events.Events import AttachSessionEvent
 from core.Sessions.Session import Session
 
@@ -7,7 +7,6 @@ from core.Sessions.Session import Session
 class SessionManager(Singleton):
     def __init__(self):
         self.sessions: list[Session] = []
-        self.event_manager = EventManager()
 
     def get_session(self, session_id):
         result = list(filter(lambda s: s.id == session_id, self.sessions))
@@ -16,7 +15,7 @@ class SessionManager(Singleton):
 
     def attach_session(self, session: Session):
         self.sessions.append(session)
-        self.event_manager.publish(AttachSessionEvent(session.id))
+        event_manager.publish(AttachSessionEvent(session.id))
         return session
 
     def delete_session(self, session_id):

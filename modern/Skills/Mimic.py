@@ -12,8 +12,8 @@ class Mimic(Skill):
     description = 'Если применить эту способность на цель, которая что то делает, вы ' \
                   'получите возможность его повторить!'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.cooldown_turn = 0
 
 
@@ -37,7 +37,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
 
         action_pool = []
         for action in action_manager.action_queue:
-            if action.type == 'item':
+            if action.unique_type == 'item':
                 continue
             if action.source != target:
                 continue

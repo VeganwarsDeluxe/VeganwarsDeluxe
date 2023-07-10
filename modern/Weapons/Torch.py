@@ -23,5 +23,5 @@ class TorchAttack(Attack):
             return damage
         if random.randint(0, 100) > 50:
             aflame = target.get_skill('aflame')
-            aflame.add_flame(self.session, self.source, source, 1)
+            aflame.add_flame(self.session, target, source, 1)
         return damage
