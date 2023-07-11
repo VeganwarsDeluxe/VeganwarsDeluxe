@@ -1,4 +1,9 @@
-from core.Action import DecisiveAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.StateAction import FreeStateAction, DecisiveStateAction
+from core.Entities import Entity
+from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
+from core.Events.EventManager import event_manager
+from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Allies
 
@@ -8,43 +13,37 @@ class ShieldGen(Skill):
     name = 'Генератор щитов'
     description = 'Вы получаете сгенерированный щит, работающий как обычный. Этот щит восстанавливается 5 ходов.'
 
-    def __init__(self, source):
-        super().__init__(source)
-
+    def __init__(self):
+        super().__init__()
         self.cooldown_turn = 0
 
-    @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return []
-        return [
-            ShieldGenAction(self.source, self)
-        ]
 
-
-class ShieldGenAction(DecisiveAction):
+@AttachedAction(ShieldGen)
+class ShieldGenAction(DecisiveStateAction):
     id = 'shield-gen'
     name = 'Щит | Генератор'
+    target_type = Allies()
+    priority = -2
 
-    def __init__(self, source, skill):
-        super().__init__(source, Allies(), priority=-2)
-        self.skill = skill
+    def __init__(self, session: Session, source: Entity, skill: ShieldGen):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
-        self.skill.cooldown_turn = source.session.turn + 5
+        self.state.cooldown_turn = self.session.turn + 5
         if target == source:
-            target.session.say(f"🔵|{source.name} использует щит. Урон отражен!")
+            self.session.say(f"🔵|{source.name} использует щит. Урон отражен!")
         else:
-            target.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
+            self.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @source.session.event_manager.at(turn=source.session.turn, events='post-attack')
-        def shield_block(message):
-            attack = source.session.event.action
-            if not attack.target:
+        @event_manager.now(self.session.id, event=PostDamageGameEvent)
+        def shield_block(event: PostDamageGameEvent):
+            if event.target != target:
                 return
-            if attack.target != target:
+            if not event.damage:
                 return
-            damage = attack.data.get('damage')
-            if not damage:
-                return
-            attack.data.update({'damage': 0})
+            event.damage = 0

@@ -10,7 +10,9 @@ class TelegramSession(Session):
         self.entities: list[TelegramEntity] = []
         self.texts = ['', '']
 
-        self.chat_id = chat_id
+        self.team = 1
+
+        self.id = str(chat_id)
         self.lobby_message = None
         self.lobby = True
 
@@ -20,7 +22,12 @@ class TelegramSession(Session):
         self.items_given = 2
         self.cowed = False
 
+    @property
+    def chat_id(self):
+        return int(self.id)
+
     def get_player(self, user_id):
+        user_id = str(user_id)
         result = [p for p in self.entities if p.id == user_id]
         if result:
             return result[0]
@@ -51,3 +58,4 @@ class TelegramSession(Session):
     def pre_move(self):
         super().pre_move()
         self.texts = ['', '']
+

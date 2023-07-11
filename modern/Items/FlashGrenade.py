@@ -1,14 +1,21 @@
-from core.Items.Item import DecisiveItem
+from core.Actions.ActionManager import AttachedAction
+from core.Items.Item import Item
+from core.Actions.ItemAction import DecisiveItem
 from core.TargetType import Enemies
 
 
-class FlashGrenade(DecisiveItem):
-    id = 'flashgrenade'
+class FlashGrenade(Item):
+    id = 'flash_grenade'
     name = 'Световая граната'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=Enemies())
 
-    def use(self):
-        self.target.energy -= 8
-        self.target.session.say(f'😵|{self.source.name} кидает световую гранату в {self.target.name}. (-8 Энергии)')
+@AttachedAction(FlashGrenade)
+class FlashGrenadeAction(DecisiveItem):
+    id = 'flash_grenade'
+    name = 'Световая граната'
+    target_type = Enemies()
+    priority = -1
+
+    def func(self, source, target):
+        target.energy -= 8
+        self.session.say(f'😵|{self.source.name} кидает световую гранату в {target.name}. (-8 Энергии)')

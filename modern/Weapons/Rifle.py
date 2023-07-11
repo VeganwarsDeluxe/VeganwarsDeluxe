@@ -1,62 +1,60 @@
 import random
 
-from core.Action import DecisiveAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Entities import Entity
+from core.Sessions import Session
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon
+from core.Weapons.Weapon import Weapon, RangedWeapon
 
 
-class Rifle(Weapon):
+class Rifle(RangedWeapon):
     id = 'sniperRifle'
     name = 'Снайперская винтовка'
     description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
                   ' чтобы повысить точность против выбранного персонажа'
 
-    def __init__(self, source):
-        super().__init__(source)
-        self.ranged = True
+    def __init__(self):
+        super().__init__()
         self.cubes = 1
-        self.accuracybonus = -4
-        self.energycost = 5
-        self.dmgbonus = 7
+        self.accuracy_bonus = -4
+        self.energy_cost = 5
+        self.damage_bonus = 7
 
         self.main_target = None, 0
 
-    @property
-    def actions(self):
-        return [AimRifle(self.source, self)] + super().actions
-    
+
+@AttachedAction(Rifle)
+class RifleAttack(Attack):
+    def __init__(self, session: Session, source: Entity, weapon: Rifle):
+        super().__init__(session, source, weapon)
+        self.weapon: Rifle = weapon
+
     def calculate_damage(self, source, target):
-        main_target, level = self.main_target
-        accuracybonus = self.accuracybonus
+        main_target, level = self.weapon.main_target
         if main_target == target:
-            accuracybonus = 2 if level == 1 else 5
-        damage = 0
-        energy = source.energy + accuracybonus if source.energy else 0
-        cubes = self.cubes - (target.action.id == 'dodge') * 5
-        for _ in range(cubes):
-            x = random.randint(1, 10)
-            if x <= energy:
-                damage += 1
-        if not damage:
-            return 0
-        damage += self.dmgbonus
-        return damage
+            self.weapon.accuracy_bonus = 2 if level == 1 else 5
+        else:
+            self.weapon.accuracy_bonus = -4
+        return super().calculate_damage(source, target)
 
     def attack(self, source, target):
         damage = super().attack(source, target)
-        self.main_target = None, 0
+        self.weapon.main_target = None, 0
         return damage
 
 
-class AimRifle(DecisiveAction):
+@AttachedAction(Rifle)
+class AimRifle(DecisiveWeaponAction):
     id = 'aim_rifle'
     name = 'Выцелить'
+    target_type = Enemies()
 
-    def __init__(self, source, weapon):
-        super().__init__(source, Enemies())
-        self.weapon = weapon
+    def __init__(self, session: Session, source: Entity, weapon: Rifle):
+        super().__init__(session, source, weapon)
+        self.weapon: Rifle = weapon
 
     def func(self, source, target):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
-        source.session.say(f'🎯|{source.name} целится.')
+        self.session.say(f'🎯|{source.name} целится.')

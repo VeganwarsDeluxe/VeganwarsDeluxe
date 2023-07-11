@@ -1,16 +1,22 @@
-from core.Items.Item import DecisiveItem
+from core.Actions.ActionManager import AttachedAction
+from core.Items.Item import Item
+from core.Actions.ItemAction import DecisiveItem
 from core.TargetType import Allies
 
 
-class Stimulator(DecisiveItem):
+class Stimulator(Item):
     id = 'stimulator'
     name = 'Стимулятор'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=Allies())
 
-    def use(self):
-        self.target.hp = min(self.target.hp + 2, self.target.max_hp)
-        self.target.session.say(f'💉|{self.source.name} использует стимулятор на {self.target.name}!')
-        self.target.session.say(
-            f'{self.target.hearts}💉|{self.target.name} получает 2 хп. Остается {self.target.hp} хп.')
+@AttachedAction(Stimulator)
+class StimulatorAction(DecisiveItem):
+    id = 'stimulator'
+    name = 'Стимулятор'
+    target_type = Allies()
+    priority = -2
+
+    def func(self, source, target):
+        target.hp = min(target.hp + 2, target.max_hp)
+        self.session.say(f'💉|{source.name} использует стимулятор на {target.name}!')
+        self.session.say(f'{target.hearts}💉|{target.name} получает 2 хп. Остается {target.hp} хп.')

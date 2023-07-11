@@ -1,29 +1,27 @@
 import random
 
-from core.Events.Events import PostAttackEvent
+from core.Entities import Entity
+from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
+from core.Events.EventManager import event_manager, RegisterState
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.States.State import State
 
 
 class Armor(State):
     id = 'armor'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.armor = []
 
-    def register(self, session_id):
-        @self.event_manager.at_event(session_id, event=PostAttackEvent)
-        def func(message: PostAttackEvent):
-            if message.target == self.source:
-                self.negate_damage(message)
-
-    def negate_damage(self, message: PostAttackEvent):
+    def negate_damage(self, session: Session, source: Entity, message: PostAttackGameEvent):
         if not message.damage:
             return
         armor = min(message.damage, self.roll_armor())
         if not armor:
             return
-        self.source.session.say(f'🛡|Броня {self.source.name} снимает {armor} урона.')
+        session.say(f'🛡|Броня {source.name} снимает {armor} урона.')
         message.damage -= armor
 
     def add(self, value: int, chance=100):
@@ -41,3 +39,15 @@ class Armor(State):
                     continue
                 result += 1
         return result
+
+
+@RegisterState(Armor)
+def register(event):
+    session: Session = session_manager.get_session(event.session_id)
+    source = session.get_entity(event.entity_id)
+    state = event.state
+
+    @event_manager.at_event(session.id, event=PostAttackGameEvent)
+    def func(message: PostDamageGameEvent):
+        if message.target == source:
+            state.negate_damage(session, source, message)

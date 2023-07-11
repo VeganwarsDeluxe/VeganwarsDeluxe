@@ -1,19 +1,66 @@
+from typing import Generic, TypeVar
+
+from core.States import State
+
+T = TypeVar("T")
+
+
 class Event:
-    def __init__(self, session_id, turn):
-        self.session_id = session_id
-        self.turn = turn
+    def __init__(self, unique_type=None):
+        self.unique_type = unique_type
 
     def __str__(self):
         return type(self).__name__
 
 
-class DeathEvent(Event):
+class AttachSessionEvent(Event):
+    def __init__(self, session_id):
+        super().__init__()
+        self.session_id = session_id
+
+
+class StartSessionEvent(Event):
+    def __init__(self, session_id):
+        super().__init__()
+        self.session_id = session_id
+
+
+class AttachStateEvent(Event):
+    def __init__(self, session_id, entity_id, state: State):
+        super().__init__(type(state))
+        self.session_id = session_id
+        self.entity_id = entity_id
+        self.state: State = state
+
+    def __class_getitem__(cls, state):
+        pass
+
+
+class GameEvent(Event):
+    def __init__(self, session_id, turn):
+        super().__init__()
+        self.session_id = session_id
+        self.turn = turn
+
+
+class ActionGameEvent(GameEvent):
+    def __init__(self, session_id, turn, source_id, target_id):
+        super().__init__(session_id, turn)
+        self.source_id = source_id
+        self.target_id = target_id
+
+
+class AddAction(GameEvent):
+    pass
+
+
+class DeathGameEvent(GameEvent):
     def __init__(self, session_id, turn, entity):
         super().__init__(session_id, turn)
         self.entity = entity
 
 
-class HPLossEvent(Event):
+class HPLossGameEvent(GameEvent):
     def __init__(self, session_id, turn, source, damage, hp_loss):
         super().__init__(session_id, turn)
         self.source = source
@@ -21,55 +68,41 @@ class HPLossEvent(Event):
         self.hp_loss = hp_loss
 
 
-class AttackEvent(Event):
-    def __init__(self, session_id, turn, source, target, damage):
-        super().__init__(session_id, turn)
-
-        self.source = source
-        self.target = target
-        self.damage = damage
-
-
-class PostAttackEvent(Event):
-    def __init__(self, session_id, turn, source, target, damage):
-        super().__init__(session_id, turn)
-
-        self.source = source
-        self.target = target
-        self.damage = damage
-
-
-class PreMoveEvent(Event):
+class CallActionsGameEvent(GameEvent):
     pass
 
 
-class PreUpdatesEvent(Event):
+class PreMoveGameEvent(GameEvent):
     pass
 
 
-class PostUpdatesEvent(Event):
+class PreUpdatesGameEvent(GameEvent):
     pass
 
 
-class PreActionsEvent(Event):
+class PostUpdatesGameEvent(GameEvent):
     pass
 
 
-class PostActionsEvent(Event):
+class PreActionsGameEvent(GameEvent):
     pass
 
 
-class PreDamagesEvent(Event):
+class PostActionsGameEvent(GameEvent):
     pass
 
 
-class PostDamagesEvent(Event):
+class PreDamagesGameEvent(GameEvent):
     pass
 
 
-class PostTickEvent(Event):
+class PostDamagesGameEvent(GameEvent):
     pass
 
 
-class PostDeathsEvent(Event):
+class PostTickGameEvent(GameEvent):
+    pass
+
+
+class PostDeathsGameEvent(GameEvent):
     pass

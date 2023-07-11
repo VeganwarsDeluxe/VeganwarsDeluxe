@@ -1,61 +1,63 @@
-from core.Weapons.Weapon import Weapon
-from core.Action import DecisiveAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Entities import Entity
+from core.Events.DamageEvents import PostAttackGameEvent
+from core.Events.EventManager import event_manager
+from core.Sessions import Session
+from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies
 
 
-class Saber(Weapon):
+class Saber(MeleeWeapon):
     id = 'saber'
     name = 'Сабля'
     description = 'Ближний бой, урон 1-3, точность высокая. Способность: можно выбрать любого врага. ' \
                   'Если тот атаковал, урон от его атаки полностью блокируется, а энергия цели снижается до 0.'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.cubes = 3
-        self.accuracybonus = 2
-        self.energycost = 2
-        self.dmgbonus = 0
+        self.accuracy_bonus = 2
+        self.energy_cost = 2
+        self.damage_bonus = 0
 
         self.cooldown_turn = 0
 
+
+@AttachedAction(Saber)
+class FistAttack(Attack):
+    pass
+
+
+@AttachedAction(Saber)
+class Parry(DecisiveWeaponAction):
+    name = 'Парировать'
+    id = 'parry'
+    priority = -4
+    target_type = Enemies()
+
+    def __init__(self, session: Session, source: Entity, weapon: Saber):
+        super().__init__(session, source, weapon)
+        self.weapon: Saber = weapon
+
     @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return super().actions
-        return [
-            Parry(self.source, self)
-        ] + super().actions
-
-    def attack(self, source, target):
-        return super().attack(source, target)
-
-
-class Parry(DecisiveAction):
-    id = 'Парировать'
-    name = 'parry'
-
-    def __init__(self, source, weapon):
-        super().__init__(source, Enemies(), priority=-5)
-        self.weapon = weapon
+    def hidden(self) -> bool:
+        return self.session.turn < self.weapon.cooldown_turn
 
     def func(self, source, target):
-        self.weapon.cooldown_turn = source.session.turn + 5
-        source.session.say(f'🗡|{source.name} готовится парировать.')
+        self.weapon.cooldown_turn = self.session.turn + 5
+        self.session.say(f'🗡|{source.name} готовится парировать.')
 
-        @source.session.event_manager.at(turn=source.session.turn, events='post-attack')
-        def parry():
-            if target.action.id != 'attack':
+        @event_manager.now(self.session.id, event=PostAttackGameEvent)
+        def parry(event: PostAttackGameEvent):
+            if target != event.source:
                 return
-            attack_target = target.action.data.get('target')
-            if not attack_target:
+            if event.target != source:
                 return
-            if attack_target != source:
-                return
-            damage = target.action.data.get('damage')
-            if not damage:
+            if not event.damage:
                 return
 
-            source.session.say(f'🗡|{source.name} парирует атаку {target.name}! Урон заблокирован,'
-                               f' {target.name} теряет всю энергию!')
-            target.energy = 0
-            target.action.data.update({'damage': 0})
+            self.session.say(f'🗡|{source.name} парирует атаку {target.name}! Урон заблокирован,'
+                             f' {target.name} теряет всю энергию!')
+            event.target.energy = 0
+            event.damage = 0

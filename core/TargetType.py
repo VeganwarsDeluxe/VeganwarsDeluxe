@@ -8,6 +8,9 @@ class TargetType:
         self.aliveness = aliveness
         self.own = own
 
+    def __str__(self):
+        return type(self).__name__
+
 
 class Distance(Enum):
     ANY = 0

@@ -1,6 +1,9 @@
-from core.Action import FreeAction
+from core.Actions.ActionManager import AttachedAction, action_manager
+from core.Actions.StateAction import DecisiveStateAction
+from core.Entities import Entity
+from core.Sessions import Session
 from core.Skills.Skill import Skill
-from core.TargetType import Enemies
+from core.TargetType import Everyone
 
 
 class Mimic(Skill):
@@ -9,34 +12,41 @@ class Mimic(Skill):
     description = 'Если применить эту способность на цель, которая что то делает, вы ' \
                   'получите возможность его повторить!'
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self):
+        super().__init__()
         self.cooldown_turn = 0
 
-    @property
-    def actions(self):
-        if self.source.session.turn < self.cooldown_turn:
-            return []
-        return [
-            CopyAction(self.source, self)
-        ]
 
-
-class CopyAction(FreeAction):
+#  @AttachedAction(Mimic)
+class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
     name = 'Запомнить действие'
+    priority = -2
+    target_type = Everyone()
 
-    def __init__(self, source, skill):
-        super().__init__(source, Enemies(), priority=-2)
-        self.skill = skill
+    def __init__(self, session: Session, source: Entity, skill: Mimic):
+        super().__init__(session, source, skill)
+        self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
-        self.skill.cooldown_turn = source.session.turn + 0
-        success = False
-        if target.action.type == 'action':
-            success = True
-            source.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
-            # target.action.source = source
-            source.items.append(target.action)
-        if not success:
-            source.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+        self.state.cooldown_turn = self.session.turn + 6
+
+        action_pool = []
+        for action in action_manager.action_queue:
+            if action.unique_type == 'item':
+                continue
+            if action.source != target:
+                continue
+            action_pool.append(action)
+
+        if not action_pool:
+            self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+            return
+
+        self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
+
+        # Implement logic here

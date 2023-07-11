@@ -1,102 +1,104 @@
 import random
 
-from core.Action import DecisiveAction
-from core.Items.Item import FreeItem
+from core.Actions.Action import DecisiveAction
+from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Actions.ItemAction import FreeItem
+from core.Items.Item import Item
 from core.TargetType import OwnOnly
 from .Dummy import Dummy
 
 
 class Cow(Dummy):
-    def __init__(self, session):
-        super().__init__(session, name='СуперКорова|🐮')
+    def __init__(self, session_id: str):
+        super().__init__(session_id, name='Корова|🐮')
 
-        self.hp = 10
+        self.hp = 3
         self.max_hp = 1
         self.max_energy = 5
 
         self.team = 'cows'
 
-    def choose_act(self):
-        super().choose_act()
+    def choose_act(self, session):
+        super().choose_act(session)
 
-        self.action = random.choice([
-            EatGrassReload(self), WalkAway(self), Silence(self), Run(self),
-            CowApproach(self) if random.choice([True, False]) else Silence(self),
-        ])
+        action = action_manager.get_action(session, self, random.choice(["cow_approach", "cow_silence", "cow_dodge",
+                                                                         "cow_walk_away", "reload"]))
+        action.target = random.choice(action.targets)
+        action_manager.queue_action(session, self, action.id)
 
 
+@AttachedAction(Cow)
 class CowApproach(DecisiveAction):
     id = 'cow_approach'
     name = 'Подойти'
-
-    def __init__(self, source):
-        super().__init__(source, OwnOnly())
+    target_type = OwnOnly()
 
     def func(self, source, target):
-        source.nearby_entities = list(filter(lambda t: t != source, source.session.entities))
+        source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        source.session.say(f'👣|{source.name} с интересом подходит.')
+        self.session.say(f'👣|{source.name} с интересом подходит.')
 
 
+@AttachedAction(Cow)
 class Silence(DecisiveAction):
     id = 'cow_silence'
     name = 'Тихо стоять'
-
-    def __init__(self, source):
-        super().__init__(source, OwnOnly())
+    target_type = OwnOnly()
 
     def func(self, source, target):
-        source.item_queue.append(Milk(self))
+        source.items.append(MilkItem())
 
 
+@AttachedAction(Cow)
 class Run(DecisiveAction):
     id = 'cow_dodge'
     name = 'Перебегать поле'
-
-    def __init__(self, source):
-        super().__init__(source, OwnOnly())
+    target_type = OwnOnly()
 
     def func(self, source, target):
-        source.session.say(f'💨|{source.name} перебегает поле!')
+        self.source.inbound_accuracy_bonus = -5
+        self.session.say(f'💨|{source.name} перебегает поле!')
 
 
+@AttachedAction(Cow)
 class WalkAway(DecisiveAction):
     id = 'cow_walk_away'
     name = 'Отойти'
-
-    def __init__(self, source):
-        super().__init__(source, OwnOnly())
+    target_type = OwnOnly()
 
     def func(self, source, target):
         for entity in source.nearby_entities:
             entity.nearby_entities.remove(source) if source in entity.nearby_entities else None
         source.nearby_entities = []
-        source.session.say(f'👣|{source.name} отходит подальше.')
+        self.session.say(f'👣|{source.name} отходит подальше.')
 
 
+@AttachedAction(Cow)
 class EatGrassReload(DecisiveAction):
     id = 'reload'
     name = 'Пощипать травку'
-
-    def __init__(self, source):
-        super().__init__(source, OwnOnly())
+    target_type = OwnOnly()
 
     def func(self, source, target):
-        source.session.say(f'🌿|{source.name} щипает травку. Енергия восстановлена ({source.max_energy})!')
+        self.session.say(f'🌿|{source.name} щипает травку. Енергия восстановлена ({source.max_energy})!')
         source.energy = source.max_energy
 
 
-class Milk(FreeItem):
+class MilkItem(Item):
     id = 'milk'
     name = 'Молоко'
 
-    def __init__(self, source):
-        super().__init__(source, target_type=OwnOnly())
+
+@AttachedAction(MilkItem)
+class Milk(FreeItem):
+    id = 'milk'
+    name = 'Молоко'
+    target_type = OwnOnly()
 
     def use(self):
-        if self.source.action.id == 'cow_silence':
+        if self.source.team == 'cows':
             return
         self.target.energy = self.target.max_energy
-        self.target.session.say(f'🥛|{self.source.name} пьет молоко! '
-                                f'Его енергия восстановлена!')
+        self.session.say(f'🥛|{self.source.name} пьет молоко! '
+                         f'Его енергия восстановлена!')

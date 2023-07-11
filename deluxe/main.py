@@ -5,11 +5,13 @@ from telebot import types
 
 import modern
 from config import admin
+from core.Actions.ActionManager import action_manager
+from core.TargetType import Own
 from deluxe.bot import bot, mm, cm
 from deluxe.game.Entities.Cow import Cow
-
 #       Handler imports
 import deluxe.bot.rating
+from deluxe.game.Entities.Elementalis import Elemental
 
 
 @bot.message_handler(commands=['do'])
@@ -52,7 +54,7 @@ def vd_prepare_handler(m):
         bot.reply_to(m, 'Игра и так не запущена!')
         return
     mm.create_game(m.chat.id)
-    del mm.games[m.chat.id]
+    mm.session_manager.delete_session(m.chat.id)
     bot.reply_to(m, 'Игра удалена.')
 
 
@@ -63,7 +65,7 @@ def vd_prepare_handler(m):
     if not game:
         bot.reply_to(m, 'Данная игра не запущена!')
         return
-    if m.from_user.id in game.player_ids:
+    if str(m.from_user.id) in game.player_ids:
         bot.reply_to(m, 'Вы уже в игре!')
         return
     if not game.lobby:
@@ -118,7 +120,7 @@ def vd_join_handler(m):
     if not game:
         bot.reply_to(m, 'Игра не запущена! Запустите командой /vd_prepare.')
         return
-    if m.from_user.id in game.player_ids:
+    if str(m.from_user.id) in game.player_ids:
         bot.reply_to(m, 'Вы уже в игре!')
         return
     if not game.lobby:
@@ -168,10 +170,26 @@ def vd_join_handler(m):
         return
     game.cowed = True
     for _ in range(count):
-        cow = Cow(game)
+        cow = Cow(game.id)
         game.entities.append(cow)
     mm.update_message(game)
     bot.send_message(m.chat.id, f'{count} коров прибежало!')
+
+
+@bot.message_handler(commands=['elementalis'])
+def vd_join_handler(m):
+    game = mm.get_game(m.chat.id)
+    if not game:
+        bot.reply_to(m, 'Игра не запущена! Запустите командой /vd_prepare.')
+        return
+    if game.cowed:
+        bot.reply_to(m, 'Я уже здесь.')
+        return
+    game.cowed = True
+    cow = Elemental(game.id)
+    game.entities.append(cow)
+    mm.update_message(game)
+    bot.send_message(m.chat.id, f'Хорошо.')
 
 
 @bot.callback_query_handler(func=lambda c: c.data.startswith('cw'))
@@ -189,7 +207,7 @@ def act_callback_handler(c):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
     if weapon_id == 'random':
-        weapon = random.choice(modern.all_weapons)(player)
+        weapon = random.choice(modern.all_weapons)()
     else:
         weapon = mm.get_weapon(weapon_id, player)
     player.weapon = weapon
@@ -246,28 +264,6 @@ def act_callback_handler(c):
     bot.answer_callback_query(c.id, cm.get_weapon(weapon_id).description, show_alert=True)
 
 
-@bot.callback_query_handler(func=lambda c: c.data.startswith('item_'))
-def act_callback_handler(c):
-    _, game_id, item_id = c.data.split('_', 2)
-    game = mm.get_game(int(game_id))
-    if not game:
-        bot.edit_message_text('Игра стухла!', c.message.chat.id, c.message.message_id)
-        return
-    player = game.get_player(c.from_user.id)
-    if not player:
-        bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
-        return
-    action = player.get_item(item_id)
-    if not action:
-        bot.edit_message_text('Кнопка стухла!', c.message.chat.id, c.message.message_id)
-        return
-    if action.blocked:
-        bot.answer_callback_query(c.id, "Кнопка заблокирована!", show_alert=True)
-        return
-    bot.edit_message_text(f"Выбрано: {action.name}", c.message.chat.id, c.message.message_id)
-    mm.choose_item(game, c.from_user.id, item_id)
-
-
 @bot.callback_query_handler(func=lambda c: c.data.startswith('act_'))
 def act_callback_handler(c):
     _, game_id, act_id = c.data.split('_', 2)
@@ -279,15 +275,48 @@ def act_callback_handler(c):
     if not player:
         bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
         return
-    action = player.get_action(act_id)
+    action = action_manager.get_action(game, player, act_id)
     if not action:
         bot.edit_message_text('Кнопка стухла!', c.message.chat.id, c.message.message_id)
         return
     if action.blocked:
         bot.answer_callback_query(c.id, "Кнопка заблокирована!", show_alert=True)
         return
-    bot.edit_message_text(f"Выбрано: {action.name}", c.message.chat.id, c.message.message_id)
-    mm.choose_act(game, c.from_user.id, act_id)
+
+    target = player
+    if not action.target_type.own == Own.SELF_ONLY:
+        mm.action_indexes.append(action)
+        index = len(mm.action_indexes) - 1
+        mm.choose_target(game, player, action.targets, index)
+        bot.delete_message(c.message.chat.id, c.message.message_id)
+        return
+
+    bot.edit_message_text(f"Выбрано: {action.name} на {action.target.name}", c.message.chat.id, c.message.message_id)
+    mm.choose_act(game, c.from_user.id, target.id, act_id)
+
+
+@bot.callback_query_handler(func=lambda c: c.data.startswith('tgt_'))
+def act_callback_handler(c):
+    _, game_id, target_id, index = c.data.split('_', 3)
+    game = mm.get_game(int(game_id))
+    if not game:
+        bot.edit_message_text('Игра стухла!', c.message.chat.id, c.message.message_id)
+        return
+    player = game.get_player(c.from_user.id)
+    if not player:
+        bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
+        return
+    target = game.get_player(target_id)
+    if not target:
+        bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
+        return
+    action = mm.action_indexes[int(index)]
+    if not action:
+        bot.edit_message_text('Все стухло!', c.message.chat.id, c.message.message_id)
+        return
+    action.target = target
+    bot.edit_message_text(f"Выбрано: {action.name} на {action.target.name}", c.message.chat.id, c.message.message_id)
+    mm.choose_act(game, c.from_user.id, target.id, action.id)
 
 
 @bot.callback_query_handler(func=lambda c: c.data.startswith('back_'))
@@ -319,82 +348,6 @@ def act_callback_handler(c):
         return
     kb = mm.get_additional_buttons(player, game)
     bot.edit_message_text('Дополнительно:', c.message.chat.id, c.message.message_id, reply_markup=kb)
-
-
-@bot.callback_query_handler(func=lambda c: c.data.startswith('itgt_'))
-def act_callback_handler(c):
-    _, game_id, target_id, index = c.data.split('_', 3)
-    index = int(index)
-    game = mm.get_game(int(game_id))
-    if not game:
-        bot.edit_message_text('Игра стухла!', c.message.chat.id, c.message.message_id)
-        return
-    player = game.get_player(c.from_user.id)
-    if not player:
-        bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
-        return
-    target = game.get_player(int(target_id))
-    if not target:
-        bot.edit_message_text('Цель стухла!', c.message.chat.id, c.message.message_id)
-        return
-
-    item = player.action
-    if index != -1:
-        item = player.item_queue[index]
-    item.target = target
-    item.canceled = False
-
-    bot.edit_message_text(f'Выбрано: {item.name} на {item.target.name}',
-                          c.message.chat.id, c.message.message_id)
-
-    if item.cost < 1:
-        mm.send_act_buttons(player, game)
-        return
-
-    player.items.remove(item) if item in player.items else bot.send_message(admin, 'Та за шо.')
-
-    player.ready = True
-    if not game.unready_players:
-        mm.cycle(game)
-
-
-@bot.callback_query_handler(func=lambda c: c.data.startswith('tgt_'))
-def act_callback_handler(c):
-    _, game_id, target_id, index = c.data.split('_', 3)
-    index = int(index)
-    game = mm.get_game(int(game_id))
-    if not game:
-        bot.edit_message_text('Игра стухла!', c.message.chat.id, c.message.message_id)
-        return
-    player = game.get_player(c.from_user.id)
-    if not player:
-        bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
-        return
-    target = game.get_player(int(target_id))
-    if not target:
-        bot.edit_message_text('Цель стухла!', c.message.chat.id, c.message.message_id)
-        return
-
-    action = player.action
-    if index != -1:
-        action = player.action_queue[index]
-    action.target = target
-    action.canceled = False
-
-    bot.edit_message_text(f'Выбрано: {action.name} на {target.name}',
-                          c.message.chat.id, c.message.message_id)
-
-    if action.cost < 1:
-        if action.cost == -1:
-            action()
-            player.action_queue.remove(action)
-            player.update_actions()
-        mm.send_act_buttons(player, game)
-        return
-
-    player.ready = True
-    if not game.unready_players:
-        mm.cycle(game)
 
 
 bot.infinity_polling()
