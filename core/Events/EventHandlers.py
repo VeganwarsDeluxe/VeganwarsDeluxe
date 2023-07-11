@@ -1,4 +1,4 @@
-from typing import Type, Callable
+from typing import Type, Callable, Any
 
 from core.Events.Events import GameEvent, Event
 
@@ -10,7 +10,8 @@ class EventHandler:
                  events: Type[Event],
                  max_repeats: int = -1,
                  min_wait_turns: int = 0,
-                 unique_type=None):
+                 unique_type: Any = None,
+                 priority: int = 0):
         self.session_id = session_id
 
         self.callback = callback
@@ -18,6 +19,7 @@ class EventHandler:
         self.max_repeats = max_repeats
         self.times_executed = set()
         self.unique_type = unique_type
+        self.priority = priority
 
         self.min_wait_turns = min_wait_turns
         self.turns_waited = set()

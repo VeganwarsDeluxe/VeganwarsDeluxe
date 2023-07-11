@@ -1,7 +1,7 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.DamageEvents import PreDamageGameEvent
+from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
 from core.Events.EventManager import event_manager, RegisterState
 from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, GameEvent, \
     AttachStateEvent
@@ -100,7 +100,9 @@ def perform_fire_attack(session, source, state, message):
     fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
     event_manager.publish(fire_event)
     damage = fire_event.damage
+
     session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
+
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
     event_manager.publish(post_fire_event)
     return post_fire_event.damage
@@ -110,7 +112,7 @@ class FireAttackGameEvent(PreDamageGameEvent):
     pass
 
 
-class PostFireAttackGameEvent(PreDamageGameEvent):
+class PostFireAttackGameEvent(PostDamageGameEvent):
     pass
 
 

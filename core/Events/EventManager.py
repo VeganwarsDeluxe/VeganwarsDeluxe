@@ -11,6 +11,7 @@ class EventManager(Singleton):
         self._handlers: list[EventHandler] = []
 
     def publish(self, message: Event):
+        self._handlers.sort(key=lambda h: h.priority)
         for handler in self._handlers:
             if isinstance(message, GameEvent) and message.session_id != handler.session_id:
                 continue
@@ -32,9 +33,9 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def now(self, session_id: str, event: Type[Event] = Event):
+    def now(self, session_id: str, event: Type[Event] = Event, priority=0):
         def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, max_repeats=1)
+            handler = EventHandler(session_id, callback, event, max_repeats=1, priority=priority)
             self._handlers.append(handler)
             return callback
 
@@ -48,9 +49,9 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None):
+    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None, priority=0):
         def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, unique_type=unique_type)
+            handler = EventHandler(session_id, callback, event, unique_type=unique_type, priority=priority)
             self._handlers.append(handler)
             return callback
 

@@ -22,7 +22,7 @@ class KastetAttack(Attack):
 
     def attack(self, source, target):
         damage = super().attack(source, target)
-        if 'reloading' in [action.id for action in action_manager.get_queued_entity_actions(self.session, target)]:
+        if 'reload' in [action.id for action in action_manager.get_queued_entity_actions(self.session, target)]:
             self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
             target.energy = max(target.energy - 4, 0)
         return damage

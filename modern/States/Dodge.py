@@ -32,6 +32,7 @@ class DodgeAction(DecisiveStateAction):
     id = 'dodge'
     name = 'Перекат'
     target_type = OwnOnly()
+    priority = -2
 
     def __init__(self, session: Session, source: Entity, skill: Dodge):
         super().__init__(session, source, skill)
@@ -43,5 +44,5 @@ class DodgeAction(DecisiveStateAction):
 
     def func(self, source, target):
         self.state.dodge_cooldown = 5
-        self.source.inbound_accuracy_bonus = -5
+        self.source.inbound_accuracy_bonus -= 5
         self.session.say(f"💨|{source.name} перекатывается.")
