@@ -53,6 +53,8 @@ class Steal(DecisiveStateAction):
             if action.source != target:
                 continue
             item = action.item
+            if action.canceled:
+                continue
             action.canceled = True
 
             self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
