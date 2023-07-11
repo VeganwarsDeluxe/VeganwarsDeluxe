@@ -82,7 +82,7 @@ def vd_join_handler(m):
     if not game:
         bot.reply_to(m, 'Игра не запущена! Запустите командой /vd_prepare.')
         return
-    if m.from_user.id not in game.player_ids:
+    if str(m.from_user.id) not in game.player_ids:
         if m.from_user.id != admin:
             bot.reply_to(m, 'Вас нет в игре, не вам и запускать!')
             return
@@ -101,7 +101,7 @@ def act_callback_handler(c):
     if not game:
         bot.answer_callback_query(c.id, "Игра не запущена!")
         return
-    if c.from_user.id not in game.player_ids:
+    if str(c.from_user.id) not in game.player_ids:
         if c.from_user.id != admin:
             bot.answer_callback_query(c.id, "Вас нет в игре!")
             return
