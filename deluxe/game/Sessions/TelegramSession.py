@@ -5,22 +5,20 @@ from deluxe.game.Entities.TelegramEntity import TelegramEntity
 class TelegramSession(Session):
     name = 'Basic'
 
-    def __init__(self, chat_id=None):
+    def __init__(self, chat_id):
         super().__init__()
         self.entities: list[TelegramEntity] = []
         self.texts = ['', '']
 
-        self.team = 1
-
         self.id = str(chat_id)
-        self.lobby_message = None
-        self.lobby = True
+        # self.lobby_message = None
+        # self.lobby = True
 
-        self.skill_cycles = 2
-        self.skill_number = 5
+        # self.skill_cycles = 2
+        # self.skill_number = 5
 
-        self.items_given = 2
-        self.cowed = False
+        # self.items_given = 2
+        # self.cowed = False
 
     @property
     def chat_id(self):

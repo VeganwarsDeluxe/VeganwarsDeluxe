@@ -31,6 +31,7 @@ class Attack(DecisiveWeaponAction):
     id = 'attack'
     name = 'Атака'
     target_type = Enemies()
+    priority = 0
 
     ATTACK_MESSAGE = "{attack_emoji}|{source_name} {attack_text} {target_name} используя {weapon_name}! " \
                      "Нанесено {damage} урона."

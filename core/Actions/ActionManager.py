@@ -39,7 +39,6 @@ class ActionManager(Singleton):
             if cls not in self.all_actions:
                 self.all_actions.update({cls: []})
             self.all_actions[cls].append(action)
-
             action.cls = cls
             return action
 

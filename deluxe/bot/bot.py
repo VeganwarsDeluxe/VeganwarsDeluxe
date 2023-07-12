@@ -7,7 +7,6 @@ import traceback
 
 from deluxe.db import RatingManager
 from deluxe.game.ContentManager import ContentManager
-from deluxe.game.matchmaking.Matchmaker import Matchmaker
 
 
 class ExtendedBot(TeleBot):
@@ -27,7 +26,6 @@ class ExtendedBot(TeleBot):
 
 
 bot = ExtendedBot(bot_token)
-mm = Matchmaker(bot)
 rm = RatingManager()
 
 cm = ContentManager()
