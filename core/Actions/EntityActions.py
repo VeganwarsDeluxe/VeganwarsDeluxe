@@ -10,6 +10,10 @@ class ApproachAction(DecisiveAction):
     name = 'Подойти'
     target_type = OwnOnly()
 
+    @property
+    def hidden(self) -> bool:
+        return self.source.nearby_entities == list(filter(lambda t: t != self.source, self.session.entities))
+
     def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
