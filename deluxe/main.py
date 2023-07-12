@@ -13,8 +13,10 @@ from deluxe.game.Entities.Cow import Cow
 #       Handler imports
 # import deluxe.bot.rating
 from deluxe.game.Entities.Elementalis import Elemental
-from deluxe.game.matchmaking.BasicMatch import BasicMatch
-from deluxe.game.matchmaking.Matchmaker import Matchmaker
+from deluxe.game.Matches.BasicMatch import BasicMatch
+from deluxe.game.Matches.ElementalDungeon import ElementalDungeon
+from deluxe.game.Matches.Matchmaker import Matchmaker
+from deluxe.game.Matches.TestGameMatch import TestGameMatch
 
 mm = Matchmaker(bot)
 
@@ -45,6 +47,48 @@ def vd_prepare_handler(m):
         return
 
     match = BasicMatch(m.chat.id)
+    mm.attach_match(match)
+
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(text='♿️Вступить в игру', url=bot.get_deep_link(f"jg_{m.chat.id}")))
+    kb.add(types.InlineKeyboardButton(text='▶️Запустить игру', callback_data="vd_go"))
+    m = bot.send_message(m.chat.id, f'Игра: {match.name}\n\nУчастники:', reply_markup=kb)
+    match.lobby_message = m
+
+
+@bot.message_handler(commands=['vd_testgame'])
+def vd_prepare_handler(m):
+    match = mm.get_match(m.chat.id)
+
+    if match:
+        if match.lobby:
+            bot.reply_to(match.lobby_message, 'Игра уже запущена!')
+        else:
+            bot.reply_to(m, 'Игра уже идет!')
+        return
+
+    match = TestGameMatch(m.chat.id)
+    mm.attach_match(match)
+
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(text='♿️Вступить в игру', url=bot.get_deep_link(f"jg_{m.chat.id}")))
+    kb.add(types.InlineKeyboardButton(text='▶️Запустить игру', callback_data="vd_go"))
+    m = bot.send_message(m.chat.id, f'Игра: {match.name}\n\nУчастники:', reply_markup=kb)
+    match.lobby_message = m
+
+
+@bot.message_handler(commands=['vd_elemental'])
+def vd_prepare_handler(m):
+    match = mm.get_match(m.chat.id)
+
+    if match:
+        if match.lobby:
+            bot.reply_to(match.lobby_message, 'Игра уже запущена!')
+        else:
+            bot.reply_to(m, 'Игра уже идет!')
+        return
+
+    match = ElementalDungeon(m.chat.id)
     mm.attach_match(match)
 
     kb = types.InlineKeyboardMarkup()
@@ -185,24 +229,6 @@ def vd_join_handler(m):
     bot.send_message(m.chat.id, f'{count} коров прибежало!')
 
 
-@bot.message_handler(commands=['elementalis'])
-def vd_join_handler(m):
-    match = mm.get_match(m.chat.id)
-    if not match:
-        bot.reply_to(m, 'Игра не запущена! Запустите командой /vd_prepare.')
-        return
-    if match.cowed:
-        bot.reply_to(m, 'Я уже здесь.')
-        return
-    match.cowed = True
-    cow = Elemental(match.id)
-    match.session.entities.append(cow)
-    cow = Elemental(match.id)
-    match.session.entities.append(cow)
-    mm.update_message(match)
-    bot.send_message(m.chat.id, f'Хорошо.')
-
-
 @bot.callback_query_handler(func=lambda c: c.data.startswith('cw'))
 def act_callback_handler(c):
     _, game_id, weapon_id = c.data.split('_', 2)
@@ -251,7 +277,7 @@ def act_callback_handler(c):
     if int(cycle) >= match.skill_cycles:
         player.chose_skills = True
     else:
-        match.send_skill_choice_buttons(player, match.skill_number, int(cycle) + 1)
+        match.send_skill_choice_buttons(player, int(cycle) + 1)
 
     bot.edit_message_text(f'Выбран скилл: {skill.name}', c.message.chat.id, c.message.message_id)
 

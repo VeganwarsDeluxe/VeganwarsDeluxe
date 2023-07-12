@@ -8,8 +8,8 @@ from .Dummy import Dummy
 
 
 class Elemental(Dummy):
-    def __init__(self, session_id: str):
-        super().__init__(session_id, name='Веган Елементаль|🌪')
+    def __init__(self, session_id: str, name='Веган Елементаль|🌪'):
+        super().__init__(session_id, name=name)
 
         self.hp = 9
         self.max_hp = 9

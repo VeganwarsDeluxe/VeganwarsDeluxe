@@ -16,6 +16,8 @@ class BasicMatch:
     name = "Basic"
 
     def __init__(self, chat_id):
+        self.bot = bot
+
         self.id = str(chat_id)
         self.session = self.create_session(self.id)
 
@@ -25,15 +27,18 @@ class BasicMatch:
         self.skill_cycles = 2
         self.skill_number = 5
 
+        self.weapon_number = 3
+
         self.items_given = 2
         self.cowed = False
 
         self.action_indexes = []
 
-    def join_session(self, user_id, user_name):
+    def join_session(self, user_id, user_name) -> TelegramEntity:
         player = TelegramEntity(self.session.id, user_name, user_id)
         player.energy, player.max_energy, player.hp, player.max_hp = 5, 5, 4, 4
         self.session.entities.append(player)
+        return player
 
     def create_session(self, id: str):
         session = TelegramSession(id)
@@ -286,14 +291,16 @@ class BasicMatch:
                                                    f'Выбор оружия:\n{weapons_text}')
             self.pre_move()
 
-    def send_weapon_choice_buttons(self, player, number=3):
+    def send_weapon_choice_buttons(self, player):
         weapons = []
-        for _ in range(number):
+        for _ in range(self.weapon_number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
             if not variants:
                 break
             choice = random.choice(variants)
             weapons.append(choice())
+
+        weapons.sort(key=lambda w: w.id)
 
         kb = types.InlineKeyboardMarkup()
         for weapon in weapons:
@@ -303,15 +310,17 @@ class BasicMatch:
                                           callback_data=f"cw_{self.session.chat_id}_random"))
         bot.send_message(player.user_id, 'Выберите оружие:', reply_markup=kb)
 
-    def send_skill_choice_buttons(self, player, number=5, cycle=1):
+    def send_skill_choice_buttons(self, player, cycle=1):
         skills = []
-        for _ in range(number):
+        for _ in range(self.skill_number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
             variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
             if not variants:
                 break
             choice = random.choice(variants)
             skills.append(choice())
+
+        skills.sort(key=lambda s: s.id)
 
         kb = types.InlineKeyboardMarkup()
         for skill in skills:
