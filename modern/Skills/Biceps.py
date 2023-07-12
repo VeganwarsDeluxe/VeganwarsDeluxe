@@ -20,6 +20,8 @@ def register(event: AttachStateEvent):
 
     @event_manager.at_event(session.id, event=AttackGameEvent)
     def func(message: AttackGameEvent):
+        if message.source.id != event.entity_id:
+            return
         if message.source.weapon.ranged:
             return
         if random.randint(0, 100) > 30:

@@ -58,6 +58,7 @@ class PreDeathGameEvent(GameEvent):
     def __init__(self, session_id, turn, entity):
         super().__init__(session_id, turn)
         self.entity = entity
+        self.canceled = False
 
 
 class DeathGameEvent(GameEvent):

@@ -1,20 +1,21 @@
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PreDamagesGameEvent
+from core.Events.Events import PreDamagesGameEvent, PreDeathGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
 
 
-class Bleeding(State):
-    id = 'bleeding'
+class ZombieState(State):
+    id = 'zombie-state'
 
     def __init__(self):
         super().__init__()
-        self.bleeding = 3
+        self.timer = 0
         self.active = False
+        self.deactivations = 0
 
 
-@RegisterState(Bleeding)
+@RegisterState(ZombieState)
 def register(event):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
@@ -25,11 +26,13 @@ def register(event):
         if not state.active:
             return
         if state.timer <= 0:
-            session.say(f'🩸|{source.name} теряет ХП от '
-                        f'кровотечения! Осталось {source.hp - 1} ХП.')
-            source.hp -= 1
             state.active = False
-            state.timer = 3
-            return
-        session.say(f'🩸|{source.name} истекает кровью! ({state.timer})')
+            state.deactivations += 1
         state.timer -= 1
+
+    @event_manager.at_event(session.id, event=PreDeathGameEvent)
+    def func(message: PreDeathGameEvent):
+        if message.entity != source:
+            return
+        if state.active:
+            message.canceled = True

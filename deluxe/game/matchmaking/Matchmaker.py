@@ -31,7 +31,8 @@ class Matchmaker:
         game = self.get_game(chat_id)
         self.update_game_actions(game)
         self.handle_pre_move_events(game)
-        self.check_game_status(game)
+        if not self.check_game_status(game):
+            return
         self.execute_actions(game)
         if not game.unready_players:
             self.cycle(game)
@@ -49,6 +50,8 @@ class Matchmaker:
         """Checks the status of the game and sends end game messages if needed."""
         if not game.active:
             self.send_end_game_messages(game)
+            return False
+        return True
 
     def notify_players(self, game, message):
         """Notifies all players in the game."""
@@ -200,6 +203,8 @@ class Matchmaker:
                 self.notify_players(game, message)
 
     def cycle(self, game):
+        if not self.check_game_status(game):
+            return
         game.say(f'Ход {game.turn}:')
         game.move()
         self.process_game_texts(game)
@@ -304,7 +309,7 @@ class Matchmaker:
     def send_weapon_choice_buttons(self, player, number=3):
         session = self.get_game(player.session_id)
 
-        weapons = []
+        weapons = [modern.Revolver]
         for _ in range(number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
             if not variants:
@@ -323,7 +328,7 @@ class Matchmaker:
     def send_skill_choice_buttons(self, player, number=5, cycle=1):
         game = self.get_game(player.session_id)
 
-        skills = [modern.Inquisitor, modern.Junkie, modern.Scope]
+        skills = [modern.Zombie]
         for _ in range(number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
             variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))

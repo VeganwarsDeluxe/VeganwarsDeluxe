@@ -23,6 +23,7 @@ from modern.Skills.Scope import Scope
 from modern.Skills.ShieldGen import ShieldGen
 from modern.Skills.Stockpile import Stockpile
 from modern.Skills.Thief import Thief
+from modern.Skills.Zombie import Zombie
 from modern.States.Aflame import Aflame
 from modern.States.Armor import Armor
 from modern.States.Bleeding import Bleeding
@@ -32,6 +33,7 @@ from modern.States.Injury import Injury
 from modern.States.KnockDown import Knockdown
 from modern.States.KnockedWeapon import KnockedWeapon
 from modern.States.Stun import Stun
+from modern.States.Zombie import ZombieState
 from modern.Weapons.Axe import Axe
 from modern.Weapons.BaseballBat import BaseballBat
 from modern.Weapons.Bow import Bow
@@ -56,9 +58,9 @@ from modern.Weapons.Sword import Sword
 from modern.Weapons.Tesak import Tesak
 from modern.Weapons.Torch import Torch
 
-all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor]
+all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
-              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor]
+              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
 all_weapons = [Claws, Shotgun, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
                Police, Saber, Sword, Bow]

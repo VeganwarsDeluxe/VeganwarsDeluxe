@@ -101,9 +101,10 @@ class Session:
             if entity.hp > 0:
                 continue
 
-            event_manager.publish(PreDeathGameEvent(self.id, self.turn, entity))
+            message = PreDeathGameEvent(self.id, self.turn, entity)
+            event_manager.publish(message)
 
-            if entity.hp > 0:
+            if entity.hp > 0 or message.canceled:
                 continue
 
             self.say(self.DEATH_MSG.format(name=entity.name))
