@@ -1,10 +1,9 @@
-from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Shest(MeleeWeapon):
@@ -24,12 +23,12 @@ class Shest(MeleeWeapon):
 
 
 @AttachedAction(Shest)
-class ShestAttack(Attack):
+class ShestAttack(MeleeAttack):
     pass
 
 
 @AttachedAction(Shest)
-class KnockDown(Attack):
+class KnockDown(MeleeAttack):
     id = 'knock_down'
     name = 'Сбить с ног'
     target_type = Enemies()

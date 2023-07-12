@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction, action_manager
+from core.Actions.ActionManager import action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Sessions import Session

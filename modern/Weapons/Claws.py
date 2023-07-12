@@ -1,8 +1,7 @@
-from core.Actions.Action import FreeAction
-from core.Actions.ActionManager import action_manager, AttachedAction
-from core.Actions.WeaponAction import FreeWeaponAction, Attack
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import FreeWeaponAction, MeleeAttack
 from core.TargetType import OwnOnly
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Claws(MeleeWeapon):
@@ -22,7 +21,7 @@ class Claws(MeleeWeapon):
 
 
 @AttachedAction(Claws)
-class ClawsAttack(Attack):
+class ClawsAttack(MeleeAttack):
     pass
 
 

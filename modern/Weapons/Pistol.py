@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, RangedWeapon
+from core.Actions.WeaponAction import RangedAttack
+from core.Weapons.Weapon import RangedWeapon
 
 
 class Pistol(RangedWeapon):
@@ -16,5 +16,5 @@ class Pistol(RangedWeapon):
 
 
 @AttachedAction(Pistol)
-class PistolAttack(Attack):
+class PistolAttack(RangedAttack):
     pass

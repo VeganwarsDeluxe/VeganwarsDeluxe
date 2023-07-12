@@ -4,7 +4,7 @@ from core.Entities.Entity import Entity
 from core.Events.EventManager import event_manager
 from core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsGameEvent, AttachStateEvent
+    DeathGameEvent, CallActionsGameEvent, AttachStateEvent, PreDeathGameEvent
 
 
 class Session:
@@ -98,6 +98,11 @@ class Session:
         Handle the death of entities.
         """
         for entity in self.alive_entities:
+            if entity.hp > 0:
+                continue
+
+            event_manager.publish(PreDeathGameEvent(self.id, self.turn, entity))
+
             if entity.hp > 0:
                 continue
 

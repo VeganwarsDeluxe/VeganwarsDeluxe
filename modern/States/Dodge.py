@@ -2,7 +2,7 @@ from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PostTickGameEvent, AttachStateEvent
+from core.Events.Events import PostTickGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State

@@ -1,5 +1,5 @@
 from core import Singleton
-from core.Events.EventManager import EventManager, event_manager
+from core.Events.EventManager import event_manager
 from core.Events.Events import AttachSessionEvent
 from core.Sessions.Session import Session
 

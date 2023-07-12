@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Actions.WeaponAction import MeleeAttack
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Knife(MeleeWeapon):
@@ -15,7 +15,7 @@ class Knife(MeleeWeapon):
 
 
 @AttachedAction(Knife)
-class KnifeAttack(Attack):
+class KnifeAttack(MeleeAttack):
     def attack(self, source, target):
         damage = super().attack(source, target)
         if not damage:

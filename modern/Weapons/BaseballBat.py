@@ -1,5 +1,5 @@
 from core.Actions.ActionManager import action_manager
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import MeleeAttack
 import random
 
 from core.Weapons.Weapon import MeleeWeapon
@@ -17,7 +17,7 @@ class BaseballBat(MeleeWeapon):
 
 
 @action_manager.register_action(BaseballBat)
-class BaseballBatAttack(Attack):
+class BaseballBatAttack(MeleeAttack):
     def attack(self, source, target):
         damage = super().attack(source, target)
         if not damage:

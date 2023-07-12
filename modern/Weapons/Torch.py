@@ -1,7 +1,8 @@
-from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, MeleeWeapon
 import random
+
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import MeleeAttack
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Torch(MeleeWeapon):
@@ -16,7 +17,7 @@ class Torch(MeleeWeapon):
 
 
 @AttachedAction(Torch)
-class TorchAttack(Attack):
+class TorchAttack(MeleeAttack):
     def attack(self, source, target):
         damage = super().attack(source, target)
         if not damage:

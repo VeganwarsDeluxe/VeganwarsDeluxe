@@ -3,7 +3,6 @@ from core.Events.Events import PreMoveGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.Items.RageSerum import RageSerum
 
 
 class Scope(Skill):

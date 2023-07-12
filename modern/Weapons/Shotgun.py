@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, RangedWeapon
+from core.Actions.WeaponAction import RangedAttack
+from core.Weapons.Weapon import RangedWeapon
 
 
 class Shotgun(RangedWeapon):
@@ -18,7 +18,7 @@ class Shotgun(RangedWeapon):
 
 
 @AttachedAction(Shotgun)
-class ShotgunAttack(Attack):
+class ShotgunAttack(RangedAttack):
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         if damage == 0:

@@ -1,8 +1,8 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Bulava(MeleeWeapon):
@@ -18,7 +18,7 @@ class Bulava(MeleeWeapon):
 
 
 @AttachedAction(Bulava)
-class BulavaAttack(Attack):
+class BulavaAttack(MeleeAttack):
     def __init__(self, session: Session, source: Entity, weapon: Bulava):
         super().__init__(session, source, weapon)
         self.weapon: Bulava = weapon

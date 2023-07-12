@@ -1,11 +1,11 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent
 from core.Events.EventManager import event_manager
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Saber(MeleeWeapon):
@@ -25,7 +25,7 @@ class Saber(MeleeWeapon):
 
 
 @AttachedAction(Saber)
-class FistAttack(Attack):
+class FistAttack(MeleeAttack):
     pass
 
 

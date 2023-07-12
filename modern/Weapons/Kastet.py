@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Actions.WeaponAction import MeleeAttack
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Kastet(MeleeWeapon):
@@ -17,7 +17,7 @@ class Kastet(MeleeWeapon):
 
 
 @AttachedAction(Kastet)
-class KastetAttack(Attack):
+class KastetAttack(MeleeAttack):
     priority = -1
 
     def attack(self, source, target):

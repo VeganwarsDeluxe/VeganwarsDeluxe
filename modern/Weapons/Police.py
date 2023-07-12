@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Actions.WeaponAction import MeleeAttack
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Police(MeleeWeapon):
@@ -17,7 +17,7 @@ class Police(MeleeWeapon):
 
 
 @AttachedAction(Police)
-class PoliceAttack(Attack):
+class PoliceAttack(MeleeAttack):
     priority = -1
 
     def attack(self, source, target):

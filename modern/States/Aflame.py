@@ -3,8 +3,7 @@ from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, GameEvent, \
-    AttachStateEvent
+from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State

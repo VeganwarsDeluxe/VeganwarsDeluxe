@@ -43,6 +43,10 @@ class Steal(DecisiveStateAction):
         super().__init__(session, source, skill)
         self.state = skill
 
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.state.cooldown_turn
+
     def func(self, source, target):
         self.state.cooldown_turn = self.session.turn + 3
         success = False

@@ -1,8 +1,8 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import RangedAttack
 from core.Events.EventManager import event_manager
 from core.Events.Events import PostTickGameEvent
-from core.Weapons.Weapon import Weapon, RangedWeapon
+from core.Weapons.Weapon import RangedWeapon
 from modern.States.Injury import Injury
 
 
@@ -21,7 +21,7 @@ class Saw(RangedWeapon):
 
 
 @AttachedAction(Saw)
-class SawAttack(Attack):
+class SawAttack(RangedAttack):
     def attack(self, source, target):
         damage = super().attack(source, target)
         if not damage:

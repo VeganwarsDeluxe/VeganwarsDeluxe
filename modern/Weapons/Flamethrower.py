@@ -1,5 +1,5 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import RangedAttack
 from core.Weapons.Weapon import RangedWeapon
 
 
@@ -16,7 +16,7 @@ class Flamethrower(RangedWeapon):
 
 
 @AttachedAction(Flamethrower)
-class FlamethrowerAttack(Attack):
+class FlamethrowerAttack(RangedAttack):
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         if damage:

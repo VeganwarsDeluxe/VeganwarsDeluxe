@@ -4,7 +4,6 @@ from core.Events.Events import PreMoveGameEvent, AttachStateEvent, PreActionsGam
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.Items.RageSerum import RageSerum
 
 
 class Berserk(Skill):
@@ -21,20 +20,20 @@ def register(event: AttachStateEvent):
 
     @event_manager.now(session.id, PreMoveGameEvent, priority=1)
     def pre_actions(message: PreActionsGameEvent):
-        source.max_energy = 7 - source.hp
-        source.energy = min(source.energy, source.max_energy)
+        source.max_energy = max(7 - source.hp, 2)
+        source.energy = source.max_energy
 
     @event_manager.at_event(session.id, event=HPLossGameEvent, priority=2)
     def hp_loss(message: HPLossGameEvent):
         if message.source != source:
             return
         source.max_energy += message.hp_loss
-        source.energy = min(source.energy, source.max_energy)
+        source.energy = min(source.energy+message.hp_loss, source.max_energy)
         session.say(f"😡|Берсерк {source.name} получает {message.hp_loss} энергии.")
         if source.hp == 1:
             session.say(f"😡|Берсерк {source.name} входит в боевой транс!")
 
-    @event_manager.now(session.id, event=AttackGameEvent)
+    @event_manager.at_event(session.id, event=AttackGameEvent)
     def attack_handler(attack_message: AttackGameEvent):
         if attack_message.source != source:
             return

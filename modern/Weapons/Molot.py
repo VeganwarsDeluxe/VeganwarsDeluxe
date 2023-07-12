@@ -1,9 +1,9 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon, MeleeWeapon
 from core.TargetType import Enemies, Distance
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Molot(MeleeWeapon):
@@ -24,7 +24,7 @@ class Molot(MeleeWeapon):
 
 
 @AttachedAction(Molot)
-class MolotAttack(Attack):
+class MolotAttack(MeleeAttack):
     priority = -3
 
     def __init__(self, session: Session, source: Entity, weapon: Molot):

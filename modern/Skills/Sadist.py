@@ -1,9 +1,8 @@
 from core.Events.EventManager import RegisterState, event_manager
-from core.Events.Events import PreMoveGameEvent, AttachStateEvent, HPLossGameEvent
+from core.Events.Events import AttachStateEvent, HPLossGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.Items.RageSerum import RageSerum
 
 
 class Sadist(Skill):

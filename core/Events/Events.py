@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from core.States import State
 
@@ -52,6 +52,12 @@ class ActionGameEvent(GameEvent):
 
 class AddAction(GameEvent):
     pass
+
+
+class PreDeathGameEvent(GameEvent):
+    def __init__(self, session_id, turn, entity):
+        super().__init__(session_id, turn)
+        self.entity = entity
 
 
 class DeathGameEvent(GameEvent):

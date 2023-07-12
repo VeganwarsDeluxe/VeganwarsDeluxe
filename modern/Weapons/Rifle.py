@@ -1,11 +1,9 @@
-import random
-
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction, Attack
+from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies
-from core.Weapons.Weapon import Weapon, RangedWeapon
+from core.Weapons.Weapon import RangedWeapon
 
 
 class Rifle(RangedWeapon):
@@ -25,7 +23,7 @@ class Rifle(RangedWeapon):
 
 
 @AttachedAction(Rifle)
-class RifleAttack(Attack):
+class RifleAttack(RangedAttack):
     def __init__(self, session: Session, source: Entity, weapon: Rifle):
         super().__init__(session, source, weapon)
         self.weapon: Rifle = weapon

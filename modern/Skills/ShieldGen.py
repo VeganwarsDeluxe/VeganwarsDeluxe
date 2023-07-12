@@ -1,7 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.StateAction import FreeStateAction, DecisiveStateAction
+from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
+from core.Events.DamageEvents import PostDamageGameEvent
 from core.Events.EventManager import event_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill

@@ -1,8 +1,7 @@
-from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import action_manager, AttachedAction
-from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
+from core.Actions.ActionManager import AttachedAction
+from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.TargetType import Enemies, Distance
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Weapons.Weapon import MeleeWeapon
 from modern.Weapons.Fist import Fist
 
 
@@ -22,7 +21,7 @@ class Chain(MeleeWeapon):
 
 
 @AttachedAction(Chain)
-class ChainAttack(Attack):
+class ChainAttack(MeleeAttack):
     pass
 
 
@@ -38,7 +37,7 @@ class KnockWeapon(DecisiveWeaponAction):
 
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 3
-        self.weapon.attack(source, target)
+        self.attack(source, target)
         if target.action.id != 'reload':
             self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
         else:

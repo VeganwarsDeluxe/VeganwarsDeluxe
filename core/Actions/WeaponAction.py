@@ -101,5 +101,5 @@ class MeleeAttack(Attack):
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
 
 
-class RangedAttack(Attack):
+class RangedAttack(MeleeAttack):
     target_type = Enemies(distance=Distance.ANY)

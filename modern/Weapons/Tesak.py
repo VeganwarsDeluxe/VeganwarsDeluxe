@@ -1,8 +1,8 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack
+from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
-from core.Weapons.Weapon import Weapon, MeleeWeapon
+from core.Weapons.Weapon import MeleeWeapon
 
 
 class Tesak(MeleeWeapon):
@@ -22,7 +22,7 @@ class Tesak(MeleeWeapon):
 
 
 @AttachedAction(Tesak)
-class TesakAttack(Attack):
+class TesakAttack(MeleeAttack):
     def __init__(self, session: Session, source: Entity, weapon: Tesak):
         super().__init__(session, source, weapon)
         self.weapon: Tesak = weapon

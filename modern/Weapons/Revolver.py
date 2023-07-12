@@ -1,7 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
-from core.Actions.WeaponAction import Attack, DecisiveWeaponAction
+from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.TargetType import OwnOnly
-from core.Weapons.Weapon import Weapon, RangedWeapon
+from core.Weapons.Weapon import RangedWeapon
 
 
 class Revolver(RangedWeapon):
@@ -18,7 +18,7 @@ class Revolver(RangedWeapon):
 
 
 @AttachedAction(Revolver)
-class RevolverAttack(Attack):
+class RevolverAttack(RangedAttack):
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         return damage if not damage else 3

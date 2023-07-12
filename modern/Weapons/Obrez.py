@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Weapons.Weapon import RangedWeapon
-from .Shotgun import ShotgunAttack, Shotgun
+from .Shotgun import ShotgunAttack
 
 
 class Obrez(RangedWeapon):

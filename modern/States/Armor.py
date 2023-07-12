@@ -47,7 +47,7 @@ def register(event):
     source = session.get_entity(event.entity_id)
     state = event.state
 
-    @event_manager.at_event(session.id, event=PostAttackGameEvent)
+    @event_manager.at_event(session.id, event=PostDamageGameEvent)
     def func(message: PostDamageGameEvent):
         if message.target == source:
             state.negate_damage(session, source, message)

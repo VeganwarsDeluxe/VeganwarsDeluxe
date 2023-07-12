@@ -10,7 +10,6 @@ from core.TargetType import Own
 from deluxe.bot import bot, mm, cm
 from deluxe.game.Entities.Cow import Cow
 #       Handler imports
-import deluxe.bot.rating
 from deluxe.game.Entities.Elementalis import Elemental
 
 
@@ -186,6 +185,8 @@ def vd_join_handler(m):
         bot.reply_to(m, 'Я уже здесь.')
         return
     game.cowed = True
+    cow = Elemental(game.id)
+    game.entities.append(cow)
     cow = Elemental(game.id)
     game.entities.append(cow)
     mm.update_message(game)
