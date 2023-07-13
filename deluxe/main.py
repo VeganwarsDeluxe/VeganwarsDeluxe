@@ -40,7 +40,7 @@ def vd_prepare_handler(m):
     match = mm.get_match(m.chat.id)
 
     if match:
-        if match.lobby:
+        if match.lobby and match.lobby_message:
             bot.reply_to(match.lobby_message, 'Игра уже запущена!')
         else:
             bot.reply_to(m, 'Игра уже идет!')
@@ -271,6 +271,11 @@ def act_callback_handler(c):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
     skill = cm.get_skill(skill_id)()
+    if skill_id == 'random':
+        variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], rebuild.all_skills))
+        if not variants:
+            variants = rebuild.all_skills
+        skill = random.choice(variants)()
     player.skills.append(skill)
     player.skill_cycle = int(cycle)
 

@@ -31,5 +31,5 @@ def register(event):
             state.active = False
             state.bleeding = 3
             return
-        session.say(f'🩸|{source.name} истекает кровью! ({state.timer})')
+        session.say(f'🩸|{source.name} истекает кровью! ({state.bleeding})')
         state.bleeding -= 1

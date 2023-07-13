@@ -14,8 +14,6 @@ class TelegramEntity(Entity):
         self.name = user_name
         self.npc = False  # to differentiate humans and bots
 
-        self.team = 'Human'
-
         self.chose_weapon = False
         self.chose_skills = False
         self.skill_cycle = 0
