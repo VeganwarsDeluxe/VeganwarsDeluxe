@@ -2,7 +2,7 @@ from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
 from core.Entities.Entity import Entity
 from core.TargetType import OwnOnly
-from modern import all_states
+from rebuild import all_states
 
 
 class TelegramEntity(Entity):

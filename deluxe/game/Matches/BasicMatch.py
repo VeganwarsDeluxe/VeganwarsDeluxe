@@ -2,7 +2,7 @@ import random
 
 from telebot import types
 
-import modern
+import rebuild
 from core.Actions.ActionManager import action_manager
 from core.Events.EventManager import event_manager
 from core.Events.Events import PreMoveGameEvent
@@ -156,7 +156,7 @@ class BasicMatch:
               f"{player.hearts}|{player.hp} жизней. Максимум: {player.max_hp}\n" \
               f"{player.energies}|{player.energy} энергии. Максимум: {player.max_energy}\n"
         tts += f"🎯|Вероятность попасть - {int(attack.hit_chance(player))}%\n" if attack else ''
-        if player.weapon.id == modern.Rifle.id and player.weapon.main_target[0]:
+        if player.weapon.id == rebuild.Rifle.id and player.weapon.main_target[0]:
             target, power = player.weapon.main_target
             chance = attack.hit_chance(player)
             if power == 1:
@@ -259,8 +259,8 @@ class BasicMatch:
         for player in self.session.not_chosen_items:
             given = []
             for _ in range(self.items_given):
-                item = random.choice(modern.game_items_pool)()
-                pool = list(filter(lambda i: i.id not in given, modern.game_items_pool))
+                item = random.choice(rebuild.game_items_pool)()
+                pool = list(filter(lambda i: i.id not in given, rebuild.game_items_pool))
                 if pool:
                     item = random.choice(pool)()
                 given.append(item.id)
@@ -294,7 +294,7 @@ class BasicMatch:
     def send_weapon_choice_buttons(self, player):
         weapons = []
         for _ in range(self.weapon_number):
-            variants = list(filter(lambda w: w.id not in [w.id for w in weapons], modern.all_weapons))
+            variants = list(filter(lambda w: w.id not in [w.id for w in weapons], rebuild.all_weapons))
             if not variants:
                 break
             choice = random.choice(variants)
@@ -313,7 +313,7 @@ class BasicMatch:
     def send_skill_choice_buttons(self, player, cycle=1):
         skills = []
         for _ in range(self.skill_number):
-            variants = list(filter(lambda s: s.id not in [s.id for s in skills], modern.all_skills))
+            variants = list(filter(lambda s: s.id not in [s.id for s in skills], rebuild.all_skills))
             variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
             if not variants:
                 break

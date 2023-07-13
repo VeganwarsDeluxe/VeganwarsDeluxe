@@ -7,11 +7,11 @@ from core.Events.Events import AttachStateEvent, PreActionsGameEvent, PreDamages
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.Items.Adrenaline import Adrenaline
-from modern.Items.Hitin import Hitin
-from modern.Items.Jet import Jet
-from modern.Items.RageSerum import RageSerum
-from modern.Items.Stimulator import Stimulator
+from rebuild.Items.Adrenaline import Adrenaline
+from rebuild.Items.Hitin import Hitin
+from rebuild.Items.Jet import Jet
+from rebuild.Items.RageSerum import RageSerum
+from rebuild.Items.Stimulator import Stimulator
 
 
 class Junkie(Skill):

@@ -3,7 +3,7 @@ from core.Actions.WeaponAction import RangedAttack
 from core.Events.EventManager import event_manager
 from core.Events.Events import PostTickGameEvent
 from core.Weapons.Weapon import RangedWeapon
-from modern.States.Injury import Injury
+from rebuild.States.Injury import Injury
 
 
 class Saw(RangedWeapon):

@@ -59,5 +59,5 @@ class Parry(DecisiveWeaponAction):
 
             self.session.say(f'🗡|{source.name} парирует атаку {target.name}! Урон заблокирован,'
                              f' {target.name} теряет всю энергию!')
-            event.target.energy = 0
+            target.energy = 0
             event.damage = 0

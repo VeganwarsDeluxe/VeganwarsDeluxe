@@ -1,6 +1,6 @@
 from core.Weapons.Weapon import Weapon
 from core.States.State import State
-import modern
+import rebuild
 from core.Skills.Skill import Skill
 
 from typing import Optional
@@ -8,8 +8,8 @@ from typing import Optional
 
 class ContentManager:
     def __init__(self):
-        self.all_skills = {skill.id: skill for skill in modern.all_skills}
-        self.all_weapons = {weapon.id: weapon for weapon in modern.all_weapons}
+        self.all_skills = {skill.id: skill for skill in rebuild.all_skills}
+        self.all_weapons = {weapon.id: weapon for weapon in rebuild.all_weapons}
         self.default_skill = State
         self.default_weapon = Weapon
 

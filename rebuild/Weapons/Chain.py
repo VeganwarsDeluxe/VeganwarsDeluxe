@@ -2,7 +2,7 @@ from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import MeleeWeapon
-from modern.Weapons.Fist import Fist
+from rebuild.Weapons.Fist import Fist
 
 
 class Chain(MeleeWeapon):

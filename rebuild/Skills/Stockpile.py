@@ -1,6 +1,6 @@
 import random
 
-import modern
+import rebuild
 from core.Events.EventManager import RegisterState
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
@@ -21,12 +21,12 @@ def register(event: AttachStateEvent):
 
     given = []
     for _ in range(2):
-        item = random.choice(modern.game_items_pool)()
-        pool = list(filter(lambda i: i().id not in given, modern.game_items_pool))
+        item = random.choice(rebuild.game_items_pool)()
+        pool = list(filter(lambda i: i().id not in given, rebuild.game_items_pool))
         pool = list(filter(lambda i: i.id not in [playerItem.id for playerItem in source.items], pool))
         if pool:
             item = random.choice(pool)()
         else:
-            random.choice(modern.game_items_pool)()
+            random.choice(rebuild.game_items_pool)()
         given.append(item.id)
         source.items.append(item)

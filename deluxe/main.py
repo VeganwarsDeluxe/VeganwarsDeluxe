@@ -3,7 +3,7 @@ import traceback
 
 from telebot import types
 
-import modern
+import rebuild
 from config import admin
 from core.Actions.ActionManager import action_manager
 from core.SessionManager import session_manager
@@ -244,7 +244,7 @@ def act_callback_handler(c):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
     if weapon_id == 'random':
-        weapon = random.choice(modern.all_weapons)()
+        weapon = random.choice(rebuild.all_weapons)()
     else:
         weapon = cm.get_weapon(weapon_id)()
     player.weapon = weapon

@@ -1,7 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import MeleeAttack
 from core.Weapons.Weapon import MeleeWeapon
-from modern.States.DamageThreshold import DamageThreshold
+from rebuild.States.DamageThreshold import DamageThreshold
 
 
 class Axe(MeleeWeapon):

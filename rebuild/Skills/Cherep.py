@@ -3,8 +3,8 @@ from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.States.Armor import Armor
-from modern.States.DamageThreshold import DamageThreshold
+from rebuild.States.Armor import Armor
+from rebuild.States.DamageThreshold import DamageThreshold
 
 
 class Cherep(Skill):

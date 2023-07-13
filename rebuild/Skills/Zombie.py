@@ -3,7 +3,7 @@ from core.Events.Events import AttachStateEvent, HPLossGameEvent, PreDeathGameEv
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.States.Zombie import ZombieState
+from rebuild.States.Zombie import ZombieState
 
 
 class Zombie(Skill):

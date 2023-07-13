@@ -1,6 +1,6 @@
 import random
 
-import modern
+import rebuild
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
 from core.TargetType import OwnOnly
@@ -16,14 +16,14 @@ class Elemental(Dummy):
         self.energy = 7
         self.max_energy = 7
 
-        self.items = [item() for item in modern.all_items]
-        self.skills.extend([skill() for skill in modern.all_skills])
+        self.items = [item() for item in rebuild.all_items]
+        self.skills.extend([skill() for skill in rebuild.all_skills])
 
         self.team = 'elemental'
 
     def choose_act(self, session):
         super().choose_act(session)
-        self.weapon = random.choice(modern.all_weapons)()
+        self.weapon = random.choice(rebuild.all_weapons)()
         action_manager.update_entity_actions(session, self)
 
         cost = False

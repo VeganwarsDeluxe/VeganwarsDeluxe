@@ -3,7 +3,7 @@ from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from modern.Items.Stimulator import Stimulator
+from rebuild.Items.Stimulator import Stimulator
 
 
 class Medic(Skill):

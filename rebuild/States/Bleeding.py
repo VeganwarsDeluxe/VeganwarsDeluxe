@@ -24,12 +24,12 @@ def register(event):
     def func(message: PreDamagesGameEvent):
         if not state.active:
             return
-        if state.timer <= 0:
+        if state.bleeding <= 0:
             session.say(f'🩸|{source.name} теряет ХП от '
                         f'кровотечения! Осталось {source.hp - 1} ХП.')
             source.hp -= 1
             state.active = False
-            state.timer = 3
+            state.bleeding = 3
             return
         session.say(f'🩸|{source.name} истекает кровью! ({state.timer})')
-        state.timer -= 1
+        state.bleeding -= 1
