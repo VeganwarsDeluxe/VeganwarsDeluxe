@@ -17,9 +17,11 @@ def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 
-    @event_manager.at_event(session.id, event=PreDeathGameEvent)
+    @event_manager.at_event(session.id, event=PreDeathGameEvent, priority=3)
     def func(message: PreDeathGameEvent):
         if event.entity_id != message.entity.id:
+            return
+        if message.canceled:
             return
         zombie = source.get_skill(ZombieState.id)
         if zombie.active:

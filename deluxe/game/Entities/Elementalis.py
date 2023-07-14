@@ -21,6 +21,8 @@ class Elemental(Dummy):
 
         self.team = 'elemental'
 
+        self.anger = False
+
     def choose_act(self, session):
         super().choose_act(session)
         self.weapon = random.choice(rebuild.all_weapons)()
@@ -32,9 +34,19 @@ class Elemental(Dummy):
                 action = action_manager.get_action(session, self, "reload")
             else:
                 action = random.choice(action_manager.get_available_actions(session, self))
+            if not action.targets:
+                continue
             action.target = random.choice(action.targets)
             action_manager.queue_action(session, self, action.id)
-            cost = action.cost
+            if self.hp == 1 and not self.anger:
+                self.anger = True
+                session.say("🌪|Елементаль в ЯРОСТИ!")
+                self.hp = 5
+                self.max_hp = 5
+            if self.anger:
+                cost = random.choice([True, False, False, False])
+            else:
+                cost = action.cost
 
 
 @AttachedAction(Elemental)

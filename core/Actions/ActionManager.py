@@ -107,13 +107,16 @@ class ActionManager(Singleton):
         return result
 
     def get_queued_entity_actions(self, session: Session, entity: Entity) -> list[Action]:
-        queue = [action for action in self.action_queue if action.session.id == session.id]
         result = []
-        for action in queue:
+        for action in self.get_queued_session_actions(session):
             if action.source != entity:
                 continue
             result.append(action)
         return result
+
+    def get_queued_session_actions(self, session: Session) -> list[Action]:
+        queue = [action for action in self.action_queue if action.session.id == session.id]
+        return queue
 
     def remove_action(self, session: Session, entity: Entity, action_id: str):
         actions = self.actions[(session, entity)]

@@ -25,6 +25,7 @@ class ThrowingKnifeAction(DecisiveItem):
         return 40 + self.source.energy * 10
 
     def func(self, source, target):
+        source.energy -= 1
         if random.randint(0, 100) > self.hit_chance:
             self.session.say(f"💨|{source.name} кидает метательный нож в {target.name}, но не попадает.")
             return

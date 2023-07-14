@@ -18,16 +18,16 @@ def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 
-    @event_manager.now(session.id, PreMoveGameEvent, priority=1)
+    @event_manager.at_event(session.id, PreMoveGameEvent, priority=1)
     def pre_actions(message: PreActionsGameEvent):
         source.max_energy = max(7 - source.hp, 2)
-        source.energy = source.max_energy
+        if message.turn == 1:
+            source.energy = source.max_energy
 
     @event_manager.at_event(session.id, event=HPLossGameEvent, priority=2)
     def hp_loss(message: HPLossGameEvent):
         if message.source != source:
             return
-        source.max_energy += message.hp_loss
         source.energy = min(source.energy+message.hp_loss, source.max_energy)
         session.say(f"😡|Берсерк {source.name} получает {message.hp_loss} энергии.")
         if source.hp == 1:

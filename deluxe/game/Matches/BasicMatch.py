@@ -1,5 +1,6 @@
 import random
 
+import telebot.util
 from telebot import types
 
 import rebuild
@@ -141,8 +142,9 @@ class BasicMatch:
             if not text:
                 continue
             for message in text.split('\n\n'):
-                bot.send_message(self.session.chat_id, message)
-                self.notify_players(message)
+                for tts in telebot.util.smart_split(message):
+                    bot.send_message(self.session.chat_id, message)
+                    self.notify_players(message)
 
     def send_act_buttons(self, player):
         kb = self.get_act_buttons(player)

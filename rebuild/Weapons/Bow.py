@@ -22,7 +22,7 @@ class Bow(RangedWeapon):
 
 
 @AttachedAction(Bow)
-class BowAttack(MeleeAttack):
+class BowAttack(RangedAttack):
     pass
 
 

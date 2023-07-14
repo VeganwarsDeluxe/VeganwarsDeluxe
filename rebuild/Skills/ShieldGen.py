@@ -46,4 +46,5 @@ class ShieldGenAction(DecisiveStateAction):
                 return
             if not event.damage:
                 return
+            self.session.say(f"🔵|Щит {source.name} заблокировал весь урон!")
             event.damage = 0

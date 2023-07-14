@@ -17,5 +17,5 @@ class FlashGrenadeAction(DecisiveItem):
     priority = -1
 
     def func(self, source, target):
-        target.energy -= 8
+        target.energy = max(0, target.energy - 8)
         self.session.say(f'😵|{self.source.name} кидает световую гранату в {target.name}. (-8 Энергии)')

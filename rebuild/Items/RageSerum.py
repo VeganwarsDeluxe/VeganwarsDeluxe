@@ -1,7 +1,7 @@
 import random
 
 from core.Actions.ActionManager import AttachedAction, action_manager
-from core.Actions.ItemAction import DecisiveItem
+from core.Actions.ItemAction import DecisiveItem, FreeItem
 from core.Events.EventManager import event_manager
 from core.Events.Events import PostActionsGameEvent
 from core.Items.Item import Item
@@ -14,7 +14,7 @@ class RageSerum(Item):
 
 
 @AttachedAction(RageSerum)
-class RageSerumAction(DecisiveItem):
+class RageSerumAction(FreeItem):
     id = 'rage-serum'
     name = 'Сыворотка бешенства'
     target_type = Everyone()

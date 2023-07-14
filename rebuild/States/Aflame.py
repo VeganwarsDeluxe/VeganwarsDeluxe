@@ -21,12 +21,12 @@ class Aflame(State):
 
         self.timer = 0
 
-    def add_flame(self, session, source, dealer, flame):
+    def add_flame(self, session, entity, dealer, flame):
         self.timer = 2
         if self.flame == 0:
-            session.say(f'🔥|{source.name} загорелся!')
+            session.say(f'🔥|{entity.name} загорелся!')
         else:
-            session.say(f'🔥|Огонь {source.name} усиливается!')
+            session.say(f'🔥|Огонь {entity.name} усиливается!')
         self.flame += flame
         self.dealer = dealer
 

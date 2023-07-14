@@ -31,7 +31,7 @@ def register(event: AttachStateEvent):
     source = session.get_entity(event.entity_id)
     state: Inquisitor = event.state
 
-    @event_manager.at_event(session.id, event=PreDeathGameEvent)
+    @event_manager.at_event(session.id, event=PreDeathGameEvent, priority=2)
     def hp_loss(message: PreDeathGameEvent):
         if message.entity != source:
             return
@@ -41,8 +41,9 @@ def register(event: AttachStateEvent):
             return
         if source.hp <= 0:
             source.hp = 1
-            session.say(f'😇|Высшие силы спасли {source.name}!')
+            session.say(f'😇|Высшие силы решили спасти {source.name}!')
             state.random_activated = True
+            message.canceled = True
 
 
 @AttachedAction(Inquisitor)
@@ -74,6 +75,7 @@ class Pray(DecisiveStateAction):
                 if source.hp <= 0:
                     source.hp = 1
                     self.session.say(f'😇|Высшие силы спасли {source.name}!')
+                    message.canceled = True
 
             return
 

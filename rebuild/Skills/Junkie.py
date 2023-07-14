@@ -35,16 +35,22 @@ def register(event: AttachStateEvent):
             if action.id in [Jet.id, Hitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
                 accuracy_bonus += 2
                 damage_bonus += 1
+        for action in action_manager.get_queued_session_actions(session):
+            if action.id in [Jet.id, Hitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
+                if action.target == source and not action.canceled:
+                    accuracy_bonus += 2
+                    damage_bonus += 1
 
-        source.outbound_accuracy_bonus += accuracy_bonus
+        if accuracy_bonus:
+            @event_manager.now(session.id, event=PreDamagesGameEvent)
+            def post_actions(actions_message: PreDamagesGameEvent):
+                session.say(f"🙃|{source.name} получает бонусную точность и урон!")
 
-        @event_manager.now(session.id, event=AttackGameEvent)
-        def attack_handler(attack_message: AttackGameEvent):
-            if attack_message.source != source:
-                return
-            if attack_message.damage:
-                attack_message.damage += damage_bonus
+            source.outbound_accuracy_bonus += accuracy_bonus
 
-        @event_manager.now(session.id, event=PreDamagesGameEvent)
-        def post_actions(actions_message: PreDamagesGameEvent):
-            session.say(f"🙃|{source.name} получает бонусную точность и урон!")
+            @event_manager.now(session.id, event=AttackGameEvent)
+            def attack_handler(attack_message: AttackGameEvent):
+                if attack_message.source != source:
+                    return
+                if attack_message.damage:
+                    attack_message.damage += damage_bonus

@@ -6,6 +6,8 @@ from telebot import types
 import rebuild
 from config import admin
 from core.Actions.ActionManager import action_manager
+from core.Events.EventManager import event_manager
+from core.Events.Events import Event, AttachSessionEvent, GameEvent
 from core.SessionManager import session_manager
 from core.TargetType import Own
 from deluxe.bot.bot import bot, cm
@@ -236,6 +238,9 @@ def act_callback_handler(c):
     if not match:
         bot.edit_message_text('Игра уже закончилась!', c.message.chat.id, c.message.message_id)
         return
+    if match.lobby:
+        bot.edit_message_text('Хватит спешить.', c.message.chat.id, c.message.message_id)
+        return
     player = match.session.get_player(c.from_user.id)
     if not player:
         bot.edit_message_text('Вы не в игре!', c.message.chat.id, c.message.message_id)
@@ -262,6 +267,9 @@ def act_callback_handler(c):
     match = mm.get_match(int(game_id))
     if not match:
         bot.edit_message_text('Игра уже закончилась!', c.message.chat.id, c.message.message_id)
+        return
+    if match.lobby:
+        bot.edit_message_text('Хватит спешить.', c.message.chat.id, c.message.message_id)
         return
     player = match.session.get_player(c.from_user.id)
     if not player:
@@ -352,10 +360,10 @@ def act_callback_handler(c):
     if not target:
         bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
         return
-    action = match.action_indexes[int(index)]
-    if not action:
+    if len(match.action_indexes) < int(index) + 1:
         bot.edit_message_text('Все стухло!', c.message.chat.id, c.message.message_id)
         return
+    action = match.action_indexes[int(index)]
     action.target = target
     bot.edit_message_text(f"Выбрано: {action.name} на {action.target.name}", c.message.chat.id, c.message.message_id)
     match.choose_act(c.from_user.id, target.id, action.id)

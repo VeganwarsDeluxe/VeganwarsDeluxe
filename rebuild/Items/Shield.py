@@ -28,4 +28,7 @@ class ShieldAction(DecisiveItem):
         def shield_block(event: PostDamageGameEvent):
             if event.target != target:
                 return
+            if not event.damage:
+                return
+            self.session.say(f"🔵|Щит {source.name} заблокировал весь урон!")
             event.damage = 0
