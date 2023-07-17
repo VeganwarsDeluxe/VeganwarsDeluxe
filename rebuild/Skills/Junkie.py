@@ -25,16 +25,12 @@ class Junkie(Skill):
 def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
-    source.items.append(random.choice([Jet, Hitin, Adrenaline, Stimulator])())
+    source.items.append(random.choice([Jet, Hitin, Adrenaline])())
 
-    @event_manager.now(session.id, PreActionsGameEvent)
+    @event_manager.nearest(session.id, PreActionsGameEvent)
     def pre_actions(message: PreActionsGameEvent):
         accuracy_bonus = 0
         damage_bonus = 0
-        for action in action_manager.get_queued_entity_actions(session, source):
-            if action.id in [Jet.id, Hitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
-                accuracy_bonus += 2
-                damage_bonus += 1
         for action in action_manager.get_queued_session_actions(session):
             if action.id in [Jet.id, Hitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
                 if action.target == source and not action.canceled:
@@ -42,13 +38,13 @@ def register(event: AttachStateEvent):
                     damage_bonus += 1
 
         if accuracy_bonus:
-            @event_manager.now(session.id, event=PreDamagesGameEvent)
+            @event_manager.at(session.id, turn=session.turn, event=PreDamagesGameEvent)
             def post_actions(actions_message: PreDamagesGameEvent):
                 session.say(f"🙃|{source.name} получает бонусную точность и урон!")
 
             source.outbound_accuracy_bonus += accuracy_bonus
 
-            @event_manager.now(session.id, event=AttackGameEvent)
+            @event_manager.at(session.id, turn=session.turn, event=AttackGameEvent)
             def attack_handler(attack_message: AttackGameEvent):
                 if attack_message.source != source:
                     return

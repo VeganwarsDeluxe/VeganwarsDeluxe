@@ -48,7 +48,7 @@ class Parry(DecisiveWeaponAction):
         self.weapon.cooldown_turn = self.session.turn + 5
         self.session.say(f'🗡|{source.name} готовится парировать.')
 
-        @event_manager.now(self.session.id, event=PostAttackGameEvent)
+        @event_manager.at(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
         def parry(event: PostAttackGameEvent):
             if target != event.source:
                 return

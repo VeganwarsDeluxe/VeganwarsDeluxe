@@ -22,7 +22,7 @@ class RageSerumAction(FreeItem):
     def func(self, source, target):
         self.session.say(f"💉|{source.name} использует сыворотку бешенства на {target.name}!")
 
-        @event_manager.now(self.session.id, event=PostActionsGameEvent)
+        @event_manager.nearest(self.session.id, event=PostActionsGameEvent)
         def serum_attack(message: PostActionsGameEvent):
             if target.dead:
                 return

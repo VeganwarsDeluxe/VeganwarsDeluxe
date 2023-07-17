@@ -3,18 +3,17 @@ import traceback
 
 from telebot import types
 
+#       Handler imports
+import deluxe.bot.rating
 import rebuild
 from config import admin
 from core.Actions.ActionManager import action_manager
-from core.Events.EventManager import event_manager
-from core.Events.Events import Event, AttachSessionEvent, GameEvent
 from core.SessionManager import session_manager
 from core.TargetType import Own
 from deluxe.bot.bot import bot, cm
 from deluxe.game.Entities.Cow import Cow
-#       Handler imports
-# import deluxe.bot.rating
-from deluxe.game.Entities.Elementalis import Elemental
+
+print(deluxe.bot.rating, "loaded.")
 from deluxe.game.Matches.BasicMatch import BasicMatch
 from deluxe.game.Matches.ElementalDungeon import ElementalDungeon
 from deluxe.game.Matches.Matchmaker import Matchmaker

@@ -28,7 +28,7 @@ class SawAttack(RangedAttack):
             return damage
         self.session.say(f'{target.name} ранен! ({target.get_skill(Injury.id).injury})')
 
-        @event_manager.now(self.session.id, PostTickGameEvent)
+        @event_manager.nearest(self.session.id, PostTickGameEvent)
         def func(event: PostTickGameEvent):
             injury = target.get_skill(Injury.id)
             injury.injury += 1

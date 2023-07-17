@@ -1,5 +1,8 @@
-from deluxe.bot import bot, rm
+from deluxe.bot.bot import bot
 from config import admin
+from deluxe.db.Rating import RatingManager
+
+rm = RatingManager()
 
 
 @bot.message_handler(func=lambda m: rm.process_lambda(m))

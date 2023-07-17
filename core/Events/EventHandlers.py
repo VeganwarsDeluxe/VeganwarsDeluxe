@@ -67,7 +67,10 @@ class ScheduledEventHandler(EventHandler):
     def is_valid_schedule(self, message: GameEvent) -> bool:
         if message.turn < self.start:
             return False
-        return (message.turn - self.start) % self.interval == 0
+        if self.interval != 0:
+            return (message.turn - self.start) % self.interval == 0
+        else:
+            return message.turn == self.start
 
     def __call__(self, message: Event):
         if not isinstance(message, GameEvent) or self.is_valid_schedule(message):
@@ -76,4 +79,4 @@ class ScheduledEventHandler(EventHandler):
 
 class SingleTurnHandler(ScheduledEventHandler):
     def __init__(self, session_id: str, callback: Callable, events: Type[Event], turn: int):
-        super().__init__(session_id, callback, events, start=turn, interval=1, max_repeats=1)
+        super().__init__(session_id, callback, events, start=turn, interval=0, max_repeats=1)

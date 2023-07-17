@@ -33,7 +33,7 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def now(self, session_id: str, event: Type[Event] = Event, priority=0):
+    def nearest(self, session_id: str, event: Type[Event] = Event, priority=0):
         def decorator_func(callback: Callable):
             handler = EventHandler(session_id, callback, event, max_repeats=1, priority=priority)
             self._handlers.append(handler)

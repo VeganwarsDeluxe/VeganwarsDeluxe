@@ -68,7 +68,7 @@ class Pray(DecisiveStateAction):
         if source.is_ally(target):
             self.session.say(f"🙏|{source.name} молится за {target.name}!")
 
-            @event_manager.now(self.session.id, event=PreDeathGameEvent)
+            @event_manager.at(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
             def hp_loss(message: PreDeathGameEvent):
                 if message.entity != source:
                     return

@@ -72,6 +72,7 @@ class Attack(DecisiveWeaponAction):
 
         target.inbound_dmg.add(source, damage)
         source.outbound_dmg.add(target, damage)
+        return damage
 
     def publish_attack_event(self, source, target, damage):
         message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)

@@ -37,7 +37,7 @@ class ShieldGenAction(FreeStateAction):
         else:
             self.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @event_manager.now(self.session.id, event=PostDamageGameEvent)
+        @event_manager.at(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
         def shield_block(event: PostDamageGameEvent):
             if event.target != target:
                 return

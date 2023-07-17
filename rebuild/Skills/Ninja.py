@@ -21,7 +21,7 @@ def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 
-    @event_manager.now(session.id, PostUpdatesGameEvent)
+    @event_manager.nearest(session.id, PostUpdatesGameEvent)
     def pre_actions(message: PostUpdatesGameEvent):
         action_manager.remove_action(session, source, 'dodge')
 

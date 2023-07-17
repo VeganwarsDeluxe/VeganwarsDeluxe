@@ -73,6 +73,7 @@ def register(event: AttachStateEvent):
 
         source.inbound_dmg.add(state.dealer, damage)
         source.outbound_dmg.add(state.dealer, damage)
+
         if state.flame > 1:
             session.say(f'🔥|{source.name} горит. Теряет {state.flame - 1} энергии.')
             source.energy -= state.flame - 1

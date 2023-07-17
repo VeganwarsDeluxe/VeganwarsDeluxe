@@ -34,11 +34,11 @@ class MolotAttack(MeleeAttack):
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
-    def attack_text(self, source, target, damage):
+    def send_attack_message(self, source, target, damage):
         if self.weapon.strike and damage:
             self.session.say(f'🔨|{source.name} наносит точный удар по {target.name}! Нанесено {damage} урона.')
         else:
-            super().attack_text(source, target, damage)
+            super().send_attack_message(source, target, damage)
 
     def calculate_damage(self, source, target):
         if not self.weapon.strike:

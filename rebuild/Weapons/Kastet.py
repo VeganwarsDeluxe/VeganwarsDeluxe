@@ -28,7 +28,7 @@ class KastetAttack(MeleeAttack):
             return damage
         for action in action_manager.get_queued_entity_actions(self.session, target):
             if action.id == 'reload':
-                @event_manager.now(self.session.id, event=PreDamagesGameEvent)
+                @event_manager.nearest(self.session.id, event=PreDamagesGameEvent)
                 def pre_damages(event):
                     self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
                     target.energy = max(target.energy - 4, 0)
