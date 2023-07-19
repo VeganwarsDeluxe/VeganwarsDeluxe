@@ -76,7 +76,7 @@ class WalkAway(DecisiveAction):
 
 @AttachedAction(Cow)
 class EatGrassReload(DecisiveAction):
-    id = 'reload'
+    id = 'eat_grass'
     name = 'Пощипать травку'
     target_type = OwnOnly()
 

@@ -9,7 +9,7 @@ from core.DamageHolder import DamageHolder
 
 
 class Entity:
-    def __init__(self, session_id: str, name=''):
+    def __init__(self, session_id: str = '', name=''):
         self.session_id = session_id
         self.name: str = name
         self.id = uuid4()

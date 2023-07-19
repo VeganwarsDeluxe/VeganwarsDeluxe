@@ -83,12 +83,30 @@ class PreMoveGameEvent(GameEvent):
     pass
 
 
+# Action updating events start
+
+
 class PreUpdatesGameEvent(GameEvent):
     pass
 
 
 class PostUpdatesGameEvent(GameEvent):
     pass
+
+
+class PreUpdateActionsGameEvent(GameEvent):
+    def __init__(self, session_id, turn, entity_id):
+        super().__init__(session_id, turn)
+        self.entity_id = entity_id
+
+
+class PostUpdateActionsGameEvent(GameEvent):
+    def __init__(self, session_id, turn, entity_id):
+        super().__init__(session_id, turn)
+        self.entity_id = entity_id
+
+
+# Action updating events end
 
 
 class PreActionsGameEvent(GameEvent):

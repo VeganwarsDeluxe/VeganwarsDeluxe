@@ -30,6 +30,8 @@ class ThrowingKnifeAction(DecisiveItem):
             self.session.say(f"💨|{source.name} кидает метательный нож в {target.name}, но не попадает.")
             return
         bleeding = target.get_skill('bleeding')
+        if bleeding.active:
+            bleeding.bleeding -= 1
         bleeding.active = True
         self.session.say(f'🔪|{source.name} кидает метательный нож в {target.name}.\n'
                          f'❣️|{target.name} истекает кровью!')

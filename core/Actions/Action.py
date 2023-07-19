@@ -9,7 +9,7 @@ class Action:
     priority = 0
     target_type = TargetType(0, 0, 0, 0)
 
-    def __init__(self, session: Session, source: Entity):
+    def __init__(self, session: Session, source: Entity, *args):
         self.session: Session = session
         self.source: Entity = source
         self.target: Entity = source

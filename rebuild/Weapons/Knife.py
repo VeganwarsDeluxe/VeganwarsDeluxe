@@ -21,6 +21,10 @@ class KnifeAttack(MeleeAttack):
         if not damage:
             return damage
         bleeding = target.get_skill('bleeding')
-        self.session.say(f'{target.name} истекает кровью!')
+        if bleeding.active:
+            bleeding.bleeding -= 1
+            self.session.say(f"🩸|Кровотечение усиливается!")
+        else:
+            self.session.say(f'🩸|{target.name} истекает кровью!')
         bleeding.active = True
         return damage

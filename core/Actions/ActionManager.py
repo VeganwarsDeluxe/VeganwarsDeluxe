@@ -1,3 +1,4 @@
+import typing
 from typing import Union
 
 from core import Singleton
@@ -7,7 +8,8 @@ from core.Actions.StateAction import StateAction
 from core.Actions.WeaponAction import WeaponAction
 from core.Entities.Entity import Entity
 from core.Events.EventManager import event_manager
-from core.Events.Events import CallActionsGameEvent, AttachSessionEvent, PreMoveGameEvent
+from core.Events.Events import CallActionsGameEvent, AttachSessionEvent, PreMoveGameEvent, PostUpdateActionsGameEvent, \
+    PreUpdateActionsGameEvent
 from core.Items.Item import Item
 from core.SessionManager import SessionManager
 from core.Sessions import Session
@@ -51,7 +53,14 @@ class ActionManager(Singleton):
             for action in entity_actions:
                 action.removed = False
 
+    def attach_action(self, session: Session, entity: Entity, action_id: str):
+        owner_type, action_type = self.get_action_from_all_actions(action_id)
+        action = action_type(session, entity, owner_type())
+        self.actions[(session, entity)].append(action)
+
     def update_entity_actions(self, session: Session, entity: Entity):
+        event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
+
         entity_actions = self.actions.get((session, entity))
         if not entity_actions:
             entity_actions = []
@@ -84,6 +93,8 @@ class ActionManager(Singleton):
                     action: type[ItemAction]
                     entity_actions.append(action(session, entity, item))
 
+        event_manager.publish(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
+
     def update_actions(self, session: Session):
         for entity in session.entities:
             self.update_entity_actions(session, entity)
@@ -91,6 +102,13 @@ class ActionManager(Singleton):
     def get_action(self, session: Session, entity: Entity, action_id: str):
         actions = filter(lambda a: action_id == a.id, self.get_actions(session, entity))
         return next(actions, None)
+
+    def get_action_from_all_actions(self, action_id: str) -> \
+            typing.Optional[tuple[type[ActionOwnerType], type[Action]]]:
+        for action_owner in self.all_actions:
+            for action in self.all_actions[action_owner]:
+                if action.id == action_id:
+                    return action_owner, action
 
     def get_actions(self, session: Session, entity: Entity):
         return self.actions[(session, entity)]

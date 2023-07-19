@@ -36,14 +36,15 @@ class GrenadeAction(DecisiveItem):
             if not target_pool:
                 continue
             target = random.choice(target_pool)
-            target.inbound_dmg.add(source, damage)
-            source.outbound_dmg.add(source, damage)
+            post_damage = self.publish_post_damage_event(source, target, damage)
+            target.inbound_dmg.add(source, post_damage)
+            source.outbound_dmg.add(source, post_damage)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
         self.session.say(f'💣|{source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
                          f'{",".join([t.name for t in targets])}.')
 
-    def publish_damage_event(self, source, target, damage):
+    def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
         event_manager.publish(message)
         return message.damage

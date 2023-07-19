@@ -51,7 +51,7 @@ class MolotAttack(MeleeAttack):
 
 
 @AttachedAction(Molot)
-class TrueStrike(DecisiveWeaponAction):
+class TrueStrike(MeleeAttack):
     id = 'true_strike'
     name = 'Точный удар'
     target_type = Enemies(distance=Distance.NEARBY_ONLY)

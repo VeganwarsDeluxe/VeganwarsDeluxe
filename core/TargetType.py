@@ -47,8 +47,8 @@ class Enemies(TargetType):
 
 
 class Everyone(TargetType):
-    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY):
-        super().__init__(distance=distance, team=Team.ANY, aliveness=aliveness, own=Own.SELF_INCLUDED)
+    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Own.SELF_INCLUDED):
+        super().__init__(distance=distance, team=Team.ANY, aliveness=aliveness, own=own)
 
 
 class OwnOnly(TargetType):

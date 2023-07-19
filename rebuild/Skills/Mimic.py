@@ -1,9 +1,14 @@
-from core.Actions.ActionManager import action_manager
+import random
+
+from core.Actions.ActionManager import action_manager, AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
+from core.Events.EventManager import RegisterState, event_manager
+from core.Events.Events import AttachStateEvent, PostUpdateActionsGameEvent
+from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
-from core.TargetType import Everyone
+from core.TargetType import Everyone, Own
 
 
 class Mimic(Skill):
@@ -15,14 +20,28 @@ class Mimic(Skill):
     def __init__(self):
         super().__init__()
         self.cooldown_turn = 0
+        self.memorized_action = None
 
 
-#  @AttachedAction(Mimic)
+@RegisterState(Mimic)
+def register(event: AttachStateEvent):
+    session: Session = session_manager.get_session(event.session_id)
+    source = session.get_entity(event.entity_id)
+
+    @event_manager.at_event(session.id, event=PostUpdateActionsGameEvent)
+    def post_update_actions(update_event: PostUpdateActionsGameEvent):
+        if update_event.entity_id != source.id:
+            return
+        if event.state.memorized_action:
+            action_manager.attach_action(session, source, event.state.memorized_action)
+
+
+@AttachedAction(Mimic)
 class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
     name = 'Запомнить действие'
     priority = -2
-    target_type = Everyone()
+    target_type = Everyone(own=Own.SELF_EXCLUDED)
 
     def __init__(self, session: Session, source: Entity, skill: Mimic):
         super().__init__(session, source, skill)
@@ -37,7 +56,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
 
         action_pool = []
         for action in action_manager.action_queue:
-            if action.unique_type == 'item':
+            if action.type == 'item':
                 continue
             if action.source != target:
                 continue
@@ -49,4 +68,5 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
 
         self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
 
-        # Implement logic here
+        action = random.choice(action_pool)
+        self.state.memorized_action = action.id

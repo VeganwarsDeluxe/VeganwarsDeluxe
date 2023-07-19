@@ -1,4 +1,6 @@
-from core.Actions.ActionManager import AttachedAction
+import random
+
+from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import MeleeWeapon
@@ -26,22 +28,25 @@ class ChainAttack(MeleeAttack):
 
 
 @AttachedAction(Chain)
-class KnockWeapon(DecisiveWeaponAction):
+class KnockWeapon(MeleeAttack):
     id = 'knock_weapon'
     name = 'Выбить оружие'
     priority = -1
     target_type = Enemies(distance=Distance.ANY)
 
+    @property
     def hidden(self) -> bool:
-        return self.session.turn < self.cooldown_turn
+        return self.session.turn < self.weapon.cooldown_turn
 
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 3
         self.attack(source, target)
-        if target.action.id != 'reload':
-            self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
-        else:
+        source_reloading = 'reload' not in [a.id for a in
+                                            action_manager.get_queued_entity_actions(self.session, target)]
+        if source_reloading or random.randint(1, 100) <= 10:
             self.session.say(f'⛓|{source.name} выбил оружие из рук {target.name}!')
             state = target.get_skill('knocked-weapon')
             state.weapon = target.weapon
             target.weapon = Fist()
+        else:
+            self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')

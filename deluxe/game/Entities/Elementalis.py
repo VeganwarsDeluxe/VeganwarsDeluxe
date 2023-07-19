@@ -62,7 +62,7 @@ class WarpReality(DecisiveAction):
 
 @AttachedAction(Elemental)
 class Singularity(DecisiveAction):
-    id = 'reload'
+    id = 'reload_singularity'
     name = 'Перезагрузить сингулярность'
     target_type = OwnOnly()
 
