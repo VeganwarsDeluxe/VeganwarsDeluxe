@@ -2,7 +2,7 @@ from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PostUpdatesGameEvent, AttachStateEvent
+from core.Events.Events import PostUpdatesGameEvent, AttachStateEvent, PostUpdateActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -23,12 +23,12 @@ def register(event: AttachStateEvent):
     source = session.get_entity(event.entity_id)
     state = event.state
 
-    @event_manager.at_event(session.id, event=PostUpdatesGameEvent)
-    def func(message: PostUpdatesGameEvent):
+    @event_manager.at_event(session.id, event=PostUpdateActionsGameEvent)
+    def func(message: PostUpdateActionsGameEvent):
         if not state.active:
             return
-        action_manager.remove_action('attack')
-        action_manager.remove_action('dodge')
+        action_manager.remove_action(session, source, 'attack')
+        action_manager.remove_action(session, source, 'dodge')
 
 
 @AttachedAction(Knockdown)

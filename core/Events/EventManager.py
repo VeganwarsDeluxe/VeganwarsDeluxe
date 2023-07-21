@@ -25,9 +25,9 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def at(self, session_id: str, turn: int, event: Type[Event] = Event):
+    def at(self, session_id: str, turn: int, event: Type[Event] = Event, priority: int = 0):
         def decorator_func(callback: Callable):
-            handler = SingleTurnHandler(session_id, callback, event, turn=turn)
+            handler = SingleTurnHandler(session_id, callback, event, turn=turn, priority=priority)
             self._handlers.append(handler)
             return callback
 

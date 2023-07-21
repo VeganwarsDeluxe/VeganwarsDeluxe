@@ -3,7 +3,7 @@ import math
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Events.EventManager import RegisterState, event_manager
-from core.Events.Events import AttachStateEvent, PostUpdatesGameEvent
+from core.Events.Events import AttachStateEvent, PostUpdatesGameEvent, PostUpdateActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
@@ -21,14 +21,16 @@ def register(event: AttachStateEvent):
     session: Session = session_manager.get_session(event.session_id)
     source = session.get_entity(event.entity_id)
 
-    @event_manager.nearest(session.id, PostUpdatesGameEvent)
-    def pre_actions(message: PostUpdatesGameEvent):
+    @event_manager.nearest(session.id, PostUpdateActionsGameEvent)
+    def pre_actions(message: PostUpdateActionsGameEvent):
+        if message.entity_id != source.id:
+            return
         action_manager.remove_action(session, source, 'dodge')
 
 
 @AttachedAction(Ninja)
 class NinjaAction(DecisiveStateAction):
-    id = 'ninja_dodge'
+    id = 'dodge'
     name = 'Перекат'
     target_type = OwnOnly()
     priority = -2

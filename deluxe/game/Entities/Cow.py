@@ -21,10 +21,16 @@ class Cow(Dummy):
     def choose_act(self, session):
         super().choose_act(session)
 
-        action = action_manager.get_action(session, self, random.choice(["cow_approach", "cow_silence", "cow_dodge",
-                                                                         "cow_walk_away", "reload"]))
-        action.target = random.choice(action.targets)
-        action_manager.queue_action(session, self, action.id)
+        while True:
+            action = action_manager.get_action(session, self, random.choice(["cow_approach", "cow_silence", "cow_dodge",
+                                                                             "cow_walk_away", "reload"]))
+            if not action:
+                continue
+            if not action.targets:
+                continue
+            action.target = random.choice(action.targets)
+            action_manager.queue_action(session, self, action.id)
+            break
 
 
 @AttachedAction(Cow)

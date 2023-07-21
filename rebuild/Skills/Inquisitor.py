@@ -33,6 +33,8 @@ def register(event: AttachStateEvent):
 
     @event_manager.at_event(session.id, event=PreDeathGameEvent, priority=2)
     def hp_loss(message: PreDeathGameEvent):
+        if message.canceled:
+            return
         if message.entity != source:
             return
         if random.randint(0, 100) > 30:

@@ -3,6 +3,10 @@ import random
 import rebuild
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Events.EventManager import event_manager
+from core.Events.Events import PreDeathGameEvent
+from core.SessionManager import session_manager
+from core.Sessions import Session
 from core.TargetType import OwnOnly
 from .Dummy import Dummy
 
@@ -23,6 +27,19 @@ class Elemental(Dummy):
 
         self.anger = False
 
+        @event_manager.at_event(self.session_id, event=PreDeathGameEvent, priority=5)
+        def hp_loss(message: PreDeathGameEvent):
+            if message.canceled:
+                return
+            session: Session = session_manager.get_session(message.session_id)
+            if message.entity != self:
+                return
+            self.hp = 5
+            self.max_hp = 5
+            self.anger = True
+            session.say("🌪|Елементаль в ЯРОСТИ!")
+            message.canceled = True
+
     def choose_act(self, session):
         super().choose_act(session)
         self.weapon = random.choice(rebuild.all_weapons)()
@@ -38,11 +55,6 @@ class Elemental(Dummy):
                 continue
             action.target = random.choice(action.targets)
             action_manager.queue_action(session, self, action.id)
-            if self.hp == 1 and not self.anger:
-                self.anger = True
-                session.say("🌪|Елементаль в ЯРОСТИ!")
-                self.hp = 5
-                self.max_hp = 5
             if self.anger:
                 cost = random.choice([True, False, False, False])
             else:

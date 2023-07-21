@@ -58,8 +58,11 @@ class ScheduledEventHandler(EventHandler):
                  start: int,
                  interval: int,
                  max_repeats: int = -1,
-                 min_wait_turns: int = 0):
-        super().__init__(session_id, callback, events, max_repeats=max_repeats, min_wait_turns=min_wait_turns)
+                 min_wait_turns: int = 0,
+                 priority: int = 0
+                 ):
+        super().__init__(session_id, callback, events, max_repeats=max_repeats, min_wait_turns=min_wait_turns,
+                         priority=priority)
 
         self.start = start
         self.interval = interval
@@ -78,5 +81,5 @@ class ScheduledEventHandler(EventHandler):
 
 
 class SingleTurnHandler(ScheduledEventHandler):
-    def __init__(self, session_id: str, callback: Callable, events: Type[Event], turn: int):
-        super().__init__(session_id, callback, events, start=turn, interval=0, max_repeats=1)
+    def __init__(self, session_id: str, callback: Callable, events: Type[Event], turn: int, priority: int = 0):
+        super().__init__(session_id, callback, events, start=turn, interval=0, max_repeats=1, priority=priority)

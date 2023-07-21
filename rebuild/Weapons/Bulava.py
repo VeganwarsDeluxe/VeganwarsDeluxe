@@ -39,11 +39,11 @@ class BulavaAttack(MeleeAttack):
         """
         Attacks the target and keeps track of consecutive attacks on the same target for damage bonus.
         """
-        damage = super().attack(source, target)
         consecutive_target, bonus = self.weapon.consecutive_target
         if consecutive_target == target and self.weapon.last_attack_turn == self.session.turn - 1:
             self.weapon.consecutive_target = target, bonus + 1
         else:
             self.weapon.consecutive_target = target, 1
         self.weapon.last_attack_turn = self.session.turn
+        damage = super().attack(source, target)
         return damage

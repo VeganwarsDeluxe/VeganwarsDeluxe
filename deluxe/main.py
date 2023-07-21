@@ -99,6 +99,48 @@ def vd_prepare_handler(m):
     match.lobby_message = m
 
 
+@bot.message_handler(commands=['vd_rebuild_collection'])
+def vd_prepare_handler(m):
+    if True:
+        return
+
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(text='Обычная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Обычная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Рандомная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Рандомная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Тестовая', callback_data="kek"),
+           types.InlineKeyboardButton(text='Тестовая командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Рапирная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Рапирная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Битва против крыс', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Битва боссов', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Носорог', callback_data="kek"),
+           types.InlineKeyboardButton(text='Вурдалаки', callback_data="kek"),
+           types.InlineKeyboardButton(text='Тьма', callback_data="kek"))
+    bot.send_message(m.chat.id, f'Коллекция: Rebuild Edition\n\nВыбор игры:', reply_markup=kb)
+
+
+@bot.message_handler(commands=['vd_classic_collection'])
+def vd_prepare_handler(m):
+    if True:
+        return
+
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(text='Обычная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Обычная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Рандомная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Рандомная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Тестовая', callback_data="kek"),
+           types.InlineKeyboardButton(text='Тестовая командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Кастомная', callback_data="kek"),
+           types.InlineKeyboardButton(text='Кастомная командная', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Битва против крыс', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Битва против волков', callback_data="kek"))
+    kb.add(types.InlineKeyboardButton(text='Битва с носорогом', callback_data="kek"))
+    bot.send_message(m.chat.id, f'Коллекция: Classic Edition\n\nВыбор игры:', reply_markup=kb)
+
+
 @bot.message_handler(commands=['vd_delete'])
 def vd_prepare_handler(m):
     match = mm.get_match(m.chat.id)

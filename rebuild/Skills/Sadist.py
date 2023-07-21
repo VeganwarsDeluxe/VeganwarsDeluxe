@@ -19,5 +19,5 @@ def register(event: AttachStateEvent):
     @event_manager.at_event(session.id, event=HPLossGameEvent, priority=2)
     def func(message: HPLossGameEvent):
         if source in message.source.inbound_dmg.contributors():
-            source.energy += message.hp_loss
+            source.energy = min(source.energy + message.hp_loss, source.max_energy)
             session.say(f'😃|Садист {source.name} получает {message.hp_loss} энергии.')
