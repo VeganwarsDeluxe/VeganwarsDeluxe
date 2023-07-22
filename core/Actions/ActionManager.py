@@ -55,7 +55,10 @@ class ActionManager(Singleton):
 
     def attach_action(self, session: Session, entity: Entity, action_id: str):
         owner_type, action_type = self.get_action_from_all_actions(action_id)
-        action = action_type(session, entity, owner_type())
+        if isinstance(owner_type, Entity):
+            action = action_type(session, entity)
+        else:
+            action = action_type(session, entity, owner_type())
         self.actions[(session, entity)].append(action)
 
     def update_entity_actions(self, session: Session, entity: Entity):
@@ -137,8 +140,7 @@ class ActionManager(Singleton):
         return queue
 
     def remove_action(self, session: Session, entity: Entity, action_id: str):
-        actions = self.actions[(session, entity)]
-        action = next((a for a in actions if a.id == action_id), None)
+        action = self.get_action(session, entity, action_id)
         if action:
             action.removed = True
         return action

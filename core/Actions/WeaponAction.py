@@ -1,3 +1,4 @@
+import math
 import random
 
 from core.Actions.Action import Action
@@ -50,6 +51,8 @@ class Attack(DecisiveWeaponAction):
         total_accuracy = source.energy + self.weapon.accuracy_bonus \
                          + target.inbound_accuracy_bonus + source.outbound_accuracy_bonus
         damage = sum(1 for _ in range(self.weapon.cubes) if random.randint(1, 10) <= total_accuracy)
+        if total_accuracy > 10:
+            damage = int(math.floor(damage * total_accuracy / 10))
         return damage + self.weapon.damage_bonus if damage else 0
 
     def hit_chance(self, source) -> int:

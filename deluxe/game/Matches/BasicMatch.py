@@ -142,9 +142,27 @@ class BasicMatch:
             if not text:
                 continue
             for message in text.split('\n\n'):
-                for tts in telebot.util.smart_split(message):
-                    bot.send_message(self.session.chat_id, message)
-                    self.notify_players(message)
+                new_message = self.merge_lines(message)
+
+                for tts in telebot.util.smart_split(new_message):
+                    bot.send_message(self.session.chat_id, tts)
+                    self.notify_players(tts)
+
+    def merge_lines(self, text):
+        new_message = ''
+
+        previous_line = ''
+        counter = 0
+        for line in text.split('\n'):
+            if line == previous_line:
+                counter += 1
+                continue
+            elif counter > 1:
+                new_message += f'Сообщение сверху повторилось {counter} раз.\n'
+            previous_line = line
+            counter = 0
+            new_message += line + '\n'
+        return new_message
 
     def send_act_buttons(self, player):
         kb = self.get_act_buttons(player)
@@ -294,7 +312,7 @@ class BasicMatch:
             self.pre_move()
 
     def send_weapon_choice_buttons(self, player):
-        weapons = []
+        weapons = [rebuild.SynchroElectroHammer()]
         for _ in range(self.weapon_number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], rebuild.all_weapons))
             if not variants:

@@ -8,6 +8,7 @@ from rebuild.Items.RageSerum import RageSerum
 from rebuild.Items.Shield import Shield
 from rebuild.Items.Stimulator import Stimulator
 from rebuild.Items.ThrowingKnife import ThrowingKnife
+
 from rebuild.Skills.Alchemist import Alchemist
 from rebuild.Skills.Berserk import Berserk
 from rebuild.Skills.Biceps import Biceps
@@ -24,6 +25,7 @@ from rebuild.Skills.ShieldGen import ShieldGen
 from rebuild.Skills.Stockpile import Stockpile
 from rebuild.Skills.Thief import Thief
 from rebuild.Skills.Zombie import Zombie
+
 from rebuild.States.Aflame import Aflame
 from rebuild.States.Armor import Armor
 from rebuild.States.Bleeding import Bleeding
@@ -34,6 +36,7 @@ from rebuild.States.KnockDown import Knockdown
 from rebuild.States.KnockedWeapon import KnockedWeapon
 from rebuild.States.Stun import Stun
 from rebuild.States.Zombie import ZombieState
+
 from rebuild.Weapons.Axe import Axe
 from rebuild.Weapons.BaseballBat import BaseballBat
 from rebuild.Weapons.Bow import Bow
@@ -57,13 +60,14 @@ from rebuild.Weapons.Shotgun import Shotgun
 from rebuild.Weapons.Sword import Sword
 from rebuild.Weapons.Tesak import Tesak
 from rebuild.Weapons.Torch import Torch
+from rebuild.Weapons.SynchroElectroHammer import SynchroElectroHammer
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
               Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
 all_weapons = [Claws, Shotgun, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
-               Police, Saber, Sword, Bow]
+               Police, Saber, Sword, Bow, SynchroElectroHammer]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield, RageSerum]
 
 game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]

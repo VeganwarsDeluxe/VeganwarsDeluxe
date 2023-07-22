@@ -16,7 +16,7 @@ class ExtendedBot(TeleBot):
         except ApiTelegramException as e:
             print(traceback.format_exc())
             if 'Too Many Requests' in e.description:
-                time.sleep(2)
+                time.sleep(5)
                 return self.send_message(*args, **kwargs)
         except:
             pass

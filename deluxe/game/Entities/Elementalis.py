@@ -34,6 +34,8 @@ class Elemental(Dummy):
             session: Session = session_manager.get_session(message.session_id)
             if message.entity != self:
                 return
+            if self.anger:
+                return
             self.hp = 5
             self.max_hp = 5
             self.anger = True
@@ -50,6 +52,8 @@ class Elemental(Dummy):
             if self.energy <= 0:
                 action = action_manager.get_action(session, self, "reload")
             else:
+                action = random.choice(action_manager.get_available_actions(session, self))
+            if not action:
                 action = random.choice(action_manager.get_available_actions(session, self))
             if not action.targets:
                 continue
