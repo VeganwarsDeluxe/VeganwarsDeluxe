@@ -62,12 +62,13 @@ class Attack(DecisiveWeaponAction):
         cubes = self.weapon.cubes
         return int(max((1 - ((1 - total_accuracy / 10) ** cubes)) * 100, 0))
 
-    def attack(self, source, target):
+    def attack(self, source, target, pay_energy=True):
         """
         Actually performs attack on target, dealing damage.
         """
         damage = self.calculate_damage(source, target)
-        source.energy = max(source.energy - self.weapon.energy_cost, 0)
+        if pay_energy:
+            source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
         damage = self.publish_attack_event(source, target, damage)
         self.send_attack_message(source, target, damage)

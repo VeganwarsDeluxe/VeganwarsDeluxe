@@ -25,20 +25,12 @@ class Molot(MeleeWeapon):
 
 @AttachedAction(Molot)
 class MolotAttack(MeleeAttack):
-    priority = -3
-
     def __init__(self, session: Session, source: Entity, weapon: Molot):
         super().__init__(session, source, weapon)
         self.weapon: Molot = weapon
 
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
-
-    def send_attack_message(self, source, target, damage):
-        if self.weapon.strike and damage:
-            self.session.say(f'🔨|{source.name} наносит точный удар по {target.name}! Нанесено {damage} урона.')
-        else:
-            super().send_attack_message(source, target, damage)
 
     def calculate_damage(self, source, target):
         if not self.weapon.strike:
@@ -55,14 +47,22 @@ class TrueStrike(MeleeAttack):
     id = 'true_strike'
     name = 'Точный удар'
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
+    priority = -3
 
     @property
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn or self.source.energy < 4
 
+    def energy_bonus(self, source):
+        return (source.max_energy - source.energy) // 2
+
+    def calculate_damage(self, source, target):
+        damage = self.cubes + self.dmgbonus
+        if not super().calculate_damage(source, target):
+            return damage
+        return damage + self.energy_bonus(source)
+
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
         source.energy -= 4
-        self.weapon.strike = True
-        self.attack(source, target)
-        self.weapon.strike = False
+        self.attack(source, target, pay_energy=False)

@@ -312,7 +312,7 @@ class BasicMatch:
             self.pre_move()
 
     def send_weapon_choice_buttons(self, player):
-        weapons = [rebuild.SynchroElectroHammer()]
+        weapons = []
         for _ in range(self.weapon_number):
             variants = list(filter(lambda w: w.id not in [w.id for w in weapons], rebuild.all_weapons))
             if not variants:

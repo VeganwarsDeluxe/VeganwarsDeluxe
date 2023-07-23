@@ -60,14 +60,14 @@ from rebuild.Weapons.Shotgun import Shotgun
 from rebuild.Weapons.Sword import Sword
 from rebuild.Weapons.Tesak import Tesak
 from rebuild.Weapons.Torch import Torch
-from rebuild.Weapons.SynchroElectroHammer import SynchroElectroHammer
+# from rebuild.Weapons.SynchroElectroHammer import SynchroElectroHammer
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
               Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
 all_weapons = [Claws, Shotgun, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
-               Police, Saber, Sword, Bow, SynchroElectroHammer]
+               Police, Saber, Sword, Bow]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield, RageSerum]
 
 game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]
