@@ -21,7 +21,7 @@ class Entity:
         self.energy: int = 0
         self.max_energy: int = 0
 
-        self.weapon: Weapon = Weapon(self)
+        self.weapon: Weapon = Weapon()
         self.skills: list[State] = []
         self.items: list[Item] = []
 

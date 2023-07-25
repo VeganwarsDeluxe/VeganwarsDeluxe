@@ -11,8 +11,13 @@ class Bulava(MeleeWeapon):
     description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
                   'вы получаете +1 урона.'
 
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
+
     def __init__(self):
-        super().__init__(cubes=3, accuracy_bonus=2, energy_cost=2, damage_bonus=0)
+        super().__init__()
         self.consecutive_target = None, 0
         self.last_attack_turn = 0
 
@@ -35,7 +40,7 @@ class BulavaAttack(MeleeAttack):
             damage += bonus
         return damage
 
-    def attack(self, source: Entity, target: Entity) -> int:
+    def func(self, source: Entity, target: Entity) -> int:
         """
         Attacks the target and keeps track of consecutive attacks on the same target for damage bonus.
         """

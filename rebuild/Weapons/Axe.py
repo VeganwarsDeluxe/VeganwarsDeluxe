@@ -10,17 +10,15 @@ class Axe(MeleeWeapon):
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс покалечить цель, ' \
                   'после чего ей становится легче снять больше, чем одну жизнь.'
 
-    def __init__(self):
-        super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
 
 
 @AttachedAction(Axe)
 class AxeAttack(MeleeAttack):
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage

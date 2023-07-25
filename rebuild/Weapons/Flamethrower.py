@@ -8,11 +8,9 @@ class Flamethrower(RangedWeapon):
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
-    def __init__(self):
-        super().__init__()
-        self.energy_cost = 4
-        self.cubes = 2
-        self.accuracy_bonus = 2
+    energy_cost = 4
+    cubes = 2
+    accuracy_bonus = 2
 
 
 @AttachedAction(Flamethrower)
@@ -22,7 +20,7 @@ class FlamethrowerAttack(RangedAttack):
         if damage:
             return 1
 
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage

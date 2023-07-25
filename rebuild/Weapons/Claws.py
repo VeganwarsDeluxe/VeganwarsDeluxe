@@ -10,13 +10,13 @@ class Claws(MeleeWeapon):
     description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \
                   'но затрачивая 4 энергии за атаку.'
 
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
+
     def __init__(self):
         super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
-
         self.claws = False
 
 

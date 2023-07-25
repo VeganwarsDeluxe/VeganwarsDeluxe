@@ -15,13 +15,13 @@ class WaterGun(RangedWeapon):
     description = 'Дальний бой, урон 1-3. Способность: создаёт водяной щит вокруг цели, из-за чего та не ' \
                   'может загореться три хода, восстанавливает 2 энергии в ход и получает +1 урона.'
 
+    cubes = 3
+    accuracy_bonus = 1
+    energy_cost = 3
+    damage_bonus = 0
+
     def __init__(self, source):
         super().__init__(source)
-        self.cubes = 3
-        self.accuracy_bonus = 1
-        self.energy_cost = 3
-        self.damage_bonus = 0
-
         self.cooldown_turn = 0
 
 

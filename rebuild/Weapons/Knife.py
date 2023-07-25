@@ -8,15 +8,13 @@ class Knife(MeleeWeapon):
     name = 'Нож'
     description = 'Ближний бой, урон 1-3, точность высокая. Каждый удар накладывает кровотечение на цель.'
 
-    def __init__(self):
-        super().__init__()
-        self.accuracy_bonus = 2
-        self.cubes = 3
+    accuracy_bonus = 2
+    cubes = 3
 
 
 @AttachedAction(Knife)
 class KnifeAttack(MeleeAttack):
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage

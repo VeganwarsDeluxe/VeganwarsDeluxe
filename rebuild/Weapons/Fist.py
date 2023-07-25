@@ -8,9 +8,7 @@ class Fist(MeleeWeapon):
     name = 'Кулаки'
     description = 'Ближний бой. Оружие для настоящих боев!'
 
-    def __init__(self):
-        super().__init__()
-        self.accuracy_bonus = 2
+    accuracy_bonus = 2
 
 
 @AttachedAction(Fist)

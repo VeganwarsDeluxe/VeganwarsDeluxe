@@ -10,13 +10,13 @@ class Bow(RangedWeapon):
     description = 'Дальний бой, урон 1-3, точность средняя. Способность: поджигает стрелу, которая не ' \
                   'наносит урон, но накладывает на цель 2 эффекта горения.'
 
+    cubes = 3
+    accuracy_bonus = 1
+    energy_cost = 3
+    damage_bonus = 0
+
     def __init__(self):
         super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 1
-        self.energy_cost = 3
-        self.damage_bonus = 0
-
         self.cooldown_turn = 0
         self.strike = False
 

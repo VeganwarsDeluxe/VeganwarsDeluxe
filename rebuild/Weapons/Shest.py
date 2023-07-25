@@ -12,13 +12,13 @@ class Shest(MeleeWeapon):
     description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
                   'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
 
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
+
     def __init__(self):
         super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
-
         self.cooldown_turn = 0
 
 

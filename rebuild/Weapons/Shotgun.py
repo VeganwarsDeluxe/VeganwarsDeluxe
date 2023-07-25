@@ -9,12 +9,10 @@ class Shotgun(RangedWeapon):
     description = 'Дальний бой, урон 2-7, точность низкая, затраты энергии: 4. Атакуя цель, находящуюся с ' \
                   'вами в ближнем бою, вы получаете +1 к урону.'
 
-    def __init__(self):
-        super().__init__()
-        self.energy_cost = 4
-        self.damage_bonus = 1
-        self.cubes = 6
-        self.accuracy_bonus = -2
+    energy_cost = 4
+    damage_bonus = 1
+    cubes = 6
+    accuracy_bonus = -2
 
 
 @AttachedAction(Shotgun)

@@ -18,7 +18,7 @@ class Torch(MeleeWeapon):
 
 @AttachedAction(Torch)
 class TorchAttack(MeleeAttack):
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage

@@ -9,12 +9,10 @@ class Revolver(RangedWeapon):
     name = 'Револьвер'
     description = 'Дальний бой, урон 3-3, точность средняя.'
 
-    def __init__(self):
-        super().__init__()
-        self.cubes = 3
-        self.damage_bonus = 0
-        self.energy_cost = 3
-        self.accuracy_bonus = 2
+    cubes = 3
+    damage_bonus = 0
+    energy_cost = 3
+    accuracy_bonus = 2
 
 
 @AttachedAction(Revolver)

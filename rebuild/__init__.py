@@ -45,10 +45,10 @@ from rebuild.Weapons.Chain import Chain
 from rebuild.Weapons.Claws import Claws
 from rebuild.Weapons.Fist import Fist
 from rebuild.Weapons.Flamethrower import Flamethrower
-from rebuild.Weapons.Kastet import Kastet
+from rebuild.Weapons.Knuckles import Knuckles
 from rebuild.Weapons.Knife import Knife
 from rebuild.Weapons.Molot import Molot
-from rebuild.Weapons.Obrez import Obrez
+from rebuild.Weapons.SawedOffShotgun import SawedOffShotgun
 from rebuild.Weapons.Pistol import Pistol
 from rebuild.Weapons.Police import Police
 from rebuild.Weapons.Revolver import Revolver
@@ -57,17 +57,16 @@ from rebuild.Weapons.Saber import Saber
 from rebuild.Weapons.Saw import Saw
 from rebuild.Weapons.Shest import Shest
 from rebuild.Weapons.Shotgun import Shotgun
-from rebuild.Weapons.Sword import Sword
-from rebuild.Weapons.Tesak import Tesak
+from rebuild.Weapons.Hatchet import Hatchet
 from rebuild.Weapons.Torch import Torch
 # from rebuild.Weapons.SynchroElectroHammer import SynchroElectroHammer
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
               Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
-all_weapons = [Claws, Shotgun, Obrez, Fist, Kastet, Tesak, Chain, BaseballBat, Rifle, Torch,
+all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
-               Police, Saber, Sword, Bow]
+               Police, Saber, Bow]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield, RageSerum]
 
 game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]

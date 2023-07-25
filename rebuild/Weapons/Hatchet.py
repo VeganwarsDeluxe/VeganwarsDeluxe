@@ -5,36 +5,36 @@ from core.Sessions import Session
 from core.Weapons.Weapon import MeleeWeapon
 
 
-class Tesak(MeleeWeapon):
-    id = 'tesak'
+class Hatchet(MeleeWeapon):
+    id = 'hatchet'
     name = "Тесак"
     description = 'Ближний бой, урон 1-3. Имеет изначальный бонус урона 3, за каждое попадание ' \
                   'по цели бонус уменьшается на 1.'
 
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
+
     def __init__(self):
         super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
-
-        self.tesak_bonus = 4
+        self.hatchet_bonus = 4
 
 
-@AttachedAction(Tesak)
-class TesakAttack(MeleeAttack):
-    def __init__(self, session: Session, source: Entity, weapon: Tesak):
+@AttachedAction(Hatchet)
+class HatchetAttack(MeleeAttack):
+    def __init__(self, session: Session, source: Entity, weapon: Hatchet):
         super().__init__(session, source, weapon)
-        self.weapon: Tesak = weapon
+        self.weapon: Hatchet = weapon
 
     def calculate_damage(self, source, target):
         damage = super().calculate_damage(source, target)
         if not damage:
             return
-        return damage + self.weapon.tesak_bonus
+        return damage + self.weapon.hatchet_bonus
 
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if damage:
-            self.weapon.tesak_bonus = max(self.weapon.tesak_bonus - 1, 0)
+            self.weapon.hatchet_bonus = max(self.weapon.hatchet_bonus - 1, 0)
         return damage

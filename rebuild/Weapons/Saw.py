@@ -12,17 +12,15 @@ class Saw(RangedWeapon):
     description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
                   'увеличивающий урон от атак по цели на 1.'
 
-    def __init__(self):
-        super().__init__()
-        self.cubes = 2
-        self.accuracy_bonus = 3
-        self.energy_cost = 3
-        self.damage_bonus = 0
+    cubes = 2
+    accuracy_bonus = 3
+    energy_cost = 3
+    damage_bonus = 0
 
 
 @AttachedAction(Saw)
 class SawAttack(RangedAttack):
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage

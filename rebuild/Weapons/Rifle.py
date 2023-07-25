@@ -12,13 +12,13 @@ class Rifle(RangedWeapon):
     description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
                   ' чтобы повысить точность против выбранного персонажа'
 
+    cubes = 1
+    accuracy_bonus = -4
+    energy_cost = 5
+    damage_bonus = 7
+
     def __init__(self):
         super().__init__()
-        self.cubes = 1
-        self.accuracy_bonus = -4
-        self.energy_cost = 5
-        self.damage_bonus = 7
-
         self.main_target = None, 0
 
 
@@ -36,7 +36,7 @@ class RifleAttack(RangedAttack):
             self.weapon.accuracy_bonus = -4
         return super().calculate_damage(source, target)
 
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         self.weapon.main_target = None, 0
         return damage

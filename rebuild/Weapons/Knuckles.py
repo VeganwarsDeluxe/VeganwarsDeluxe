@@ -5,24 +5,22 @@ from core.Events.Events import PreDamagesGameEvent
 from core.Weapons.Weapon import MeleeWeapon
 
 
-class Kastet(MeleeWeapon):
-    id = 'kastet'
+class Knuckles(MeleeWeapon):
+    id = 'knuckles'
     name = 'Кастет'
     description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'
 
-    def __init__(self):
-        super().__init__()
-        self.cubes = 3
-        self.accuracy_bonus = 2
-        self.energy_cost = 2
-        self.damage_bonus = 0
+    cubes = 3
+    accuracy_bonus = 2
+    energy_cost = 2
+    damage_bonus = 0
 
 
-@AttachedAction(Kastet)
-class KastetAttack(MeleeAttack):
+@AttachedAction(Knuckles)
+class KnucklesAttack(MeleeAttack):
     priority = -1
 
-    def attack(self, source, target):
+    def func(self, source, target):
         damage = super().attack(source, target)
         if not damage:
             return damage
