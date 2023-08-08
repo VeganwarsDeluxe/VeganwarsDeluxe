@@ -2,7 +2,7 @@ from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PostTickGameEvent
+from core.Events.Events import PostTickGameEvent, GameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -15,6 +15,13 @@ class Dodge(State):
     def __init__(self):
         super().__init__()
         self.dodge_cooldown = 0
+
+
+class DodgeGameEvent(GameEvent):
+    def __init__(self, session_id, turn, entity, bonus):
+        super().__init__(session_id, turn)
+        self.entity = entity
+        self.bonus = bonus
 
 
 @RegisterState(Dodge)
@@ -44,5 +51,9 @@ class DodgeAction(DecisiveStateAction):
 
     def func(self, source, target):
         self.state.dodge_cooldown = 5
-        self.source.inbound_accuracy_bonus -= 5
+        bonus = -5
+        message = DodgeGameEvent(self.session.id, self.session.turn, source, bonus)
+        event_manager.publish(message)
+        bonus = message.bonus
+        self.source.inbound_accuracy_bonus += bonus
         self.session.say(f"💨|{source.name} перекатывается.")

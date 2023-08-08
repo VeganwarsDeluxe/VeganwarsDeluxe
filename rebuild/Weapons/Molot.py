@@ -57,7 +57,7 @@ class TrueStrike(MeleeAttack):
         return (source.max_energy - source.energy) // 2
 
     def calculate_damage(self, source, target):
-        damage = self.cubes + self.dmgbonus
+        damage = self.weapon.cubes + self.weapon.damage_bonus
         if not super().calculate_damage(source, target):
             return damage
         return damage + self.energy_bonus(source)
