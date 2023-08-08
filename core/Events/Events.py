@@ -32,9 +32,6 @@ class AttachStateEvent(Event):
         self.entity_id = entity_id
         self.state: State = state
 
-    def __class_getitem__(cls, state):
-        pass
-
 
 class GameEvent(Event):
     def __init__(self, session_id, turn):

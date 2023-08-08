@@ -67,47 +67,7 @@ class BasicMatch:
         bot.send_message(self.session.chat_id, tts)
         session_manager.delete_session(self.session.id)
 
-    def get_additional_buttons(self, player):
-        action_manager.update_entity_actions(self.session, player)
 
-        all_buttons = []
-        items = []
-        for action in action_manager.get_available_actions(self.session, player):
-            name = action.name
-            if action.type == 'item':
-                items.append(action)
-                continue
-            button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
-            if action.id in ['attack', 'reload', 'approach', 'dodge', 'skip', 'extinguish']:
-                pass
-            else:
-                all_buttons.append(button)
-
-        item_count = {}
-        for item_action in items:
-            if item_action.item.id not in item_count:
-                item_count[item_action.item.id] = 0
-            item_count[item_action.item.id] += 1
-
-        item_buttons = []
-        added_items = []
-        for action in items:
-            if action.item.id in added_items:
-                continue
-            name = f"{action.name} ({item_count[action.item.id]})"
-            button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
-            item_buttons.append(button)
-            added_items.append(action.item.id)
-
-        kb = types.InlineKeyboardMarkup()
-        for button in all_buttons:
-            kb.add(button)
-        for button in item_buttons:
-            kb.add(button)
-        kb.add(types.InlineKeyboardButton(
-            text='Назад', callback_data=f"back_{self.session.chat_id}"
-        ))
-        return kb
 
     def choose_target(self, player, targets, index=0):
         kb = types.InlineKeyboardMarkup()
@@ -213,41 +173,89 @@ class BasicMatch:
             else:
                 self.send_act_buttons(player)
 
-    def get_act_buttons(self, player):
+    def map_buttons(self, player):
         action_manager.update_entity_actions(self.session, player)
 
-        first_row = []
-        second_row = []
-        all_buttons = []
-        approach = []
-        skip = []
+        buttons = {
+            'first_row': [],
+            'second_row': [],
+            'additional': [],
+            'approach_row': [],
+            'skip_row': []
+        }
         for action in action_manager.get_available_actions(self.session, player):
             name = action.name
             button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
             if action.id in ['attack', 'reload']:
-                first_row.append(button)
+                buttons['first_row'].append(button)
             elif action.id in ['dodge']:
-                second_row.append(button)
+                buttons['second_row'].append(button)
             elif action.id in ['approach']:
-                approach.append(button)
+                buttons['approach_row'].append(button)
             elif action.id in ['skip', 'extinguish']:
-                skip.append(button)
+                buttons['skip_row'].append(button)
             else:
-                all_buttons.append(button)
+                buttons['additional'].append(button)
+        return buttons
+
+    def get_act_buttons(self, player):
+        buttons = self.map_buttons(player)
 
         kb = types.InlineKeyboardMarkup()
-        first_row.reverse()
-        second_row.append(
+        buttons['first_row'].reverse()
+        buttons['second_row'].append(
             types.InlineKeyboardButton(text='Инфо', callback_data='ci_777')
         )
 
-        kb.add(*first_row)
-        kb.add(*second_row)
+        kb.add(*buttons['first_row'])
+        kb.add(*buttons['second_row'])
         kb.add(types.InlineKeyboardButton(
             text='Дополнительно', callback_data=f"more_{self.session.chat_id}"
         ))
-        kb.add(*approach)
-        kb.add(*skip)
+        kb.add(*buttons['approach_row'])
+        kb.add(*buttons['skip_row'])
+        return kb
+
+    def get_additional_buttons(self, player):
+        action_manager.update_entity_actions(self.session, player)
+
+        all_buttons = []
+        items = []
+        for action in action_manager.get_available_actions(self.session, player):
+            name = action.name
+            if action.type == 'item':
+                items.append(action)
+                continue
+            button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
+            if action.id in ['attack', 'reload', 'approach', 'dodge', 'skip', 'extinguish']:
+                pass
+            else:
+                all_buttons.append(button)
+
+        item_count = {}
+        for item_action in items:
+            if item_action.item.id not in item_count:
+                item_count[item_action.item.id] = 0
+            item_count[item_action.item.id] += 1
+
+        item_buttons = []
+        added_items = []
+        for action in items:
+            if action.item.id in added_items:
+                continue
+            name = f"{action.name} ({item_count[action.item.id]})"
+            button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
+            item_buttons.append(button)
+            added_items.append(action.item.id)
+
+        kb = types.InlineKeyboardMarkup()
+        for button in all_buttons:
+            kb.add(button)
+        for button in item_buttons:
+            kb.add(button)
+        kb.add(types.InlineKeyboardButton(
+            text='Назад', callback_data=f"back_{self.session.chat_id}"
+        ))
         return kb
 
     def check_game_status(self):
@@ -318,7 +326,7 @@ class BasicMatch:
             if not variants:
                 break
             choice = random.choice(variants)
-            weapons.append(choice())
+            weapons.append(choice)
 
         weapons.sort(key=lambda w: w.id)
 
@@ -338,7 +346,7 @@ class BasicMatch:
             if not variants:
                 break
             choice = random.choice(variants)
-            skills.append(choice())
+            skills.append(choice)
 
         skills.sort(key=lambda s: s.id)
 

@@ -1,5 +1,5 @@
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PreDamagesGameEvent
+from core.Events.Events import PreDamagesGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -20,10 +20,8 @@ def register(event):
     source = session.get_entity(event.entity_id)
     state = event.state
 
-    @event_manager.at_event(session.id, event=PreDamagesGameEvent)
+    @event_manager.at_event(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
     def func(message: PreDamagesGameEvent):
-        if not state.active:
-            return
         if state.bleeding <= 0:
             session.say(f'🩸|{source.name} теряет ХП от '
                         f'кровотечения! Осталось {source.hp - 1} ХП.')

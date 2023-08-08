@@ -17,41 +17,44 @@ class EventManager(Singleton):
                 continue
             handler(message)
 
-    def every(self, session_id: str, turns: int, start: int = 1, event: Type[Event] = Event):
+    def every(self, session_id: str, turns: int, start: int = 1, event: Type[Event] = Event, filters=None):
         def decorator_func(callback: Callable):
-            handler = ScheduledEventHandler(session_id, callback, event, start=start, interval=turns, max_repeats=-1)
+            handler = ScheduledEventHandler(session_id, callback, event, start=start, interval=turns, max_repeats=-1,
+                                            filters=filters)
             self._handlers.append(handler)
             return callback
 
         return decorator_func
 
-    def at(self, session_id: str, turn: int, event: Type[Event] = Event, priority: int = 0):
+    def at(self, session_id: str, turn: int, event: Type[Event] = Event, priority: int = 0, filters=None):
         def decorator_func(callback: Callable):
-            handler = SingleTurnHandler(session_id, callback, event, turn=turn, priority=priority)
+            handler = SingleTurnHandler(session_id, callback, event, turn=turn, priority=priority, filters=filters)
             self._handlers.append(handler)
             return callback
 
         return decorator_func
 
-    def nearest(self, session_id: str, event: Type[Event] = Event, priority=0):
+    def nearest(self, session_id: str, event: Type[Event] = Event, priority=0, filters=None):
         def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, max_repeats=1, priority=priority)
+            handler = EventHandler(session_id, callback, event, max_repeats=1, priority=priority, filters=filters)
             self._handlers.append(handler)
             return callback
 
         return decorator_func
 
-    def after(self, session_id: str, turns: int, event: Type[Event] = Event, repeats: int = 1):
+    def after(self, session_id: str, turns: int, event: Type[Event] = Event, repeats: int = 1, filters=None):
         def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, max_repeats=repeats, min_wait_turns=turns)
+            handler = EventHandler(session_id, callback, event, max_repeats=repeats, min_wait_turns=turns,
+                                   filters=filters)
             self._handlers.append(handler)
             return callback
 
         return decorator_func
 
-    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None, priority=0):
+    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None, priority=0, filters=None):
         def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, unique_type=unique_type, priority=priority)
+            handler = EventHandler(session_id, callback, event, unique_type=unique_type, priority=priority,
+                                   filters=filters)
             self._handlers.append(handler)
             return callback
 
