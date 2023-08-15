@@ -21,7 +21,7 @@ class Entity:
         self.energy: int = 0
         self.max_energy: int = 0
 
-        self.weapon: Weapon = Weapon()
+        self.weapon: Weapon = Weapon(session_id, self.id)
         self.skills: list[State] = []
         self.items: list[Item] = []
 
@@ -35,6 +35,8 @@ class Entity:
 
         self.outbound_accuracy_bonus = 0
         self.inbound_accuracy_bonus = 0
+
+        self.notifications = ""
 
     @property
     def hearts(self):
@@ -73,6 +75,8 @@ class Entity:
 
         self.outbound_accuracy_bonus = 0
         self.inbound_accuracy_bonus = 0
+
+        self.notifications = ""
 
     def tick_turn(self):
         pass

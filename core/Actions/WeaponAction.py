@@ -55,13 +55,6 @@ class Attack(DecisiveWeaponAction):
             damage = int(math.floor(damage * total_accuracy / 10))
         return damage + self.weapon.damage_bonus if damage else 0
 
-    def hit_chance(self, source) -> int:
-        if source.energy <= 0:
-            return 0
-        total_accuracy = source.energy + self.weapon.accuracy_bonus + source.outbound_accuracy_bonus
-        cubes = self.weapon.cubes
-        return int(max((1 - ((1 - total_accuracy / 10) ** cubes)) * 100, 0))
-
     def attack(self, source, target, pay_energy=True):
         """
         Actually performs attack on target, dealing damage.

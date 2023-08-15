@@ -290,9 +290,9 @@ def act_callback_handler(c):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
     if weapon_id == 'random':
-        weapon = random.choice(rebuild.all_weapons)()
+        weapon = random.choice(rebuild.all_weapons)(game_id, player.id)
     else:
-        weapon = cm.get_weapon(weapon_id)()
+        weapon = cm.get_weapon(weapon_id)(game_id, player.id)
     player.weapon = weapon
     player.chose_weapon = True
     if not match.session.not_chosen_weapon:

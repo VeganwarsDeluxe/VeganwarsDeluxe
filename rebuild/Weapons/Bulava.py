@@ -16,8 +16,8 @@ class Bulava(MeleeWeapon):
     energy_cost = 2
     damage_bonus = 0
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session_id: str, entity_id: str):
+        super().__init__(session_id, entity_id)
         self.consecutive_target = None, 0
         self.last_attack_turn = 0
 

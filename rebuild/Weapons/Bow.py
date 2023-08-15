@@ -15,8 +15,8 @@ class Bow(RangedWeapon):
     energy_cost = 3
     damage_bonus = 0
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session_id: str, entity_id: str):
+        super().__init__(session_id, entity_id)
         self.cooldown_turn = 0
         self.strike = False
 

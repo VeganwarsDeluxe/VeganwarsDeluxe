@@ -130,20 +130,13 @@ class BasicMatch:
         bot.send_message(player.user_id, tts, reply_markup=kb)
 
     def get_act_text(self, player):
-        attack = action_manager.get_action(self.session, player, 'attack')
-
         tts = f"Ход {self.session.turn}\n" \
               f"{player.hearts}|{player.hp} жизней. Максимум: {player.max_hp}\n" \
               f"{player.energies}|{player.energy} энергии. Максимум: {player.max_energy}\n"
-        tts += f"🎯|Вероятность попасть - {int(attack.hit_chance(player))}%\n" if attack else ''
-        if player.weapon.id == rebuild.Rifle.id and player.weapon.main_target[0]:
-            target, power = player.weapon.main_target
-            chance = attack.hit_chance(player)
-            if power == 1:
-                chance += 60
-            elif power == 2:
-                chance += 90
-            tts += f'🎯|Вероятность попасть в {target.name}|🎃 - {chance}%'
+        tts += f"🎯|Вероятность попасть - {int(player.weapon.hit_chance(player))}%\n" if player.weapon else ''
+
+        tts += player.notifications
+
         return tts
 
     def start_game(self):

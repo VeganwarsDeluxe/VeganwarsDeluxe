@@ -20,8 +20,8 @@ class WaterGun(RangedWeapon):
     energy_cost = 3
     damage_bonus = 0
 
-    def __init__(self, source):
-        super().__init__(source)
+    def __init__(self, session_id: str, entity_id: str):
+        super().__init__(session_id, entity_id)
         self.cooldown_turn = 0
 
 
