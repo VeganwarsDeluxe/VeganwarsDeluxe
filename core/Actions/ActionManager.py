@@ -147,6 +147,9 @@ class ActionManager(Singleton):
 
     def queue_action(self, session: Session, entity: Entity, action_id: str) -> bool:
         action: Action = self.get_action(session, entity, action_id)
+        return self.queue_action_instance(action)
+
+    def queue_action_instance(self, action: Action) -> bool:
         self.action_queue.append(action)
         return not action.cost
 

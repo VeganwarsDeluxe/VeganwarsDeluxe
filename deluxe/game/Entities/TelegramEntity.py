@@ -1,6 +1,8 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
+from core.Actions.EntityActions import SkipActionGameEvent
 from core.Entities.Entity import Entity
+from core.Events.EventManager import event_manager
 from core.TargetType import OwnOnly
 from rebuild import all_states
 
@@ -73,4 +75,6 @@ class SkipTurnAction(DecisiveAction):
     priority = 2
 
     def func(self, source, target):
-        self.session.say(f"⬇|{source.name} пропускает ход.")
+        message = event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
+        if not message.no_text:
+            self.session.say(f"⬇|{source.name} пропускает ход.")

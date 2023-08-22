@@ -16,6 +16,7 @@ class EventManager(Singleton):
             if isinstance(message, GameEvent) and message.session_id != handler.session_id:
                 continue
             handler(message)
+        return message
 
     def every(self, session_id: str, turns: int, start: int = 1, event: Type[Event] = Event, filters=None):
         def decorator_func(callback: Callable):

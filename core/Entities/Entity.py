@@ -12,7 +12,7 @@ class Entity:
     def __init__(self, session_id: str = '', name=''):
         self.session_id = session_id
         self.name: str = name
-        self.id = uuid4()
+        self.id = str(uuid4())
 
         self.hp: int = 0
         self.max_hp: int = 0

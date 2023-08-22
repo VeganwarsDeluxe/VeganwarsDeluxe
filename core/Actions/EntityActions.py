@@ -1,6 +1,8 @@
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import AttachedAction
 from core.Entities import Entity
+from core.Events.EventManager import event_manager
+from core.Events.Events import GameEvent
 from core.TargetType import OwnOnly
 
 
@@ -32,6 +34,13 @@ class ReloadAction(DecisiveAction):
         self.session.say(source.weapon.reload_text(source))
 
 
+class SkipActionGameEvent(GameEvent):
+    def __init__(self, session_id, turn, entity_id):
+        super().__init__(session_id, turn)
+        self.entity_id = entity_id
+        self.no_text = False
+
+
 @AttachedAction(Entity)
 class SkipTurnAction(DecisiveAction):
     id = 'skip'
@@ -40,4 +49,6 @@ class SkipTurnAction(DecisiveAction):
     priority = 2
 
     def func(self, source, target):
-        self.session.say(f"⬇|{source.name} пропускает ход.")
+        message = event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
+        if not message.no_text:
+            self.session.say(f"⬇|{source.name} пропускает ход.")

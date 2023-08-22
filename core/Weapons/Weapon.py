@@ -1,3 +1,6 @@
+import functools
+
+
 class Weapon:
     id = 'None'
     name = 'None'
@@ -8,6 +11,12 @@ class Weapon:
     cubes = 2
     damage_bonus = 0
     accuracy_bonus = 0
+
+    @classmethod
+    @property
+    @functools.cache
+    def melee(cls):
+        return not cls.ranged
 
     def __init__(self, session_id: str, entity_id: str):
         self.session_id = session_id

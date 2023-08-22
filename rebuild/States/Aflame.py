@@ -1,9 +1,11 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
+from core.Actions.EntityActions import SkipActionGameEvent
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
 from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttachStateEvent
+from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttachStateEvent, \
+    PostUpdateActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -23,6 +25,7 @@ class Aflame(State):
 
     def add_flame(self, session, entity, dealer, flame):
         self.timer = 2
+        self.extinguished = False
         if self.flame == 0:
             session.say(f'🔥|{entity.name} загорелся!')
         else:
@@ -49,13 +52,16 @@ def register(event: AttachStateEvent):
         state.flame = 0
         state.extinguished = False
 
-    @event_manager.at_event(session.id, event=PostUpdatesGameEvent)
-    def handle_post_updates_event(message: PostUpdatesGameEvent):
+    @event_manager.at_event(session.id, event=PostUpdateActionsGameEvent)
+    def handle_post_updates_event(message: PostUpdateActionsGameEvent):
         """
         Handle events after updates have been performed.
         """
+        if event.entity_id != source.id:
+            return
         if state.flame:
-            action_manager.remove_action(session, source, 'skip')
+            action = action_manager.get_action(session, source, 'skip')
+            action.name = 'Потушиться'
 
     @event_manager.at_event(session.id, event=PreDamagesGameEvent)
     def handle_pre_damages_event(message: PreDamagesGameEvent):
@@ -81,6 +87,20 @@ def register(event: AttachStateEvent):
             state.extinguished = True
         else:
             state.timer -= 1
+
+    @event_manager.at_event(session.id, event=SkipActionGameEvent)
+    def handle_pre_damages_event(message: SkipActionGameEvent):
+        """
+        Handle skip turn event,
+        """
+        if message.entity_id != source.id:
+            return
+        if state.flame == 0:
+            return
+        state.flame = 0
+        state.extinguished = False
+        session.say(f'💨|{source.name} тушит себя.')
+        message.no_text = True
 
 
 def reset_state(state, session, message):
@@ -114,23 +134,3 @@ class FireAttackGameEvent(PreDamageGameEvent):
 
 class PostFireAttackGameEvent(PostDamageGameEvent):
     pass
-
-
-@AttachedAction(Aflame)
-class Extinguish(DecisiveStateAction):
-    id = 'extinguish'
-    name = 'Потушится'
-    target_type = OwnOnly()
-
-    def __init__(self, session: Session, source: Entity, skill: Aflame):
-        super().__init__(session, source, skill)
-        self.state = skill
-
-    @property
-    def hidden(self) -> bool:
-        return not self.state.flame
-
-    def func(self, source, target):
-        self.state.flame = 0
-        self.state.extinguished = False
-        self.session.say(f'💨|{source.name} тушит себя.')
