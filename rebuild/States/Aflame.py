@@ -61,6 +61,8 @@ def register(event: AttachStateEvent):
             return
         if state.flame:
             action = action_manager.get_action(session, source, 'skip')
+            if not action:
+                return
             action.name = 'Потушиться'
 
     @event_manager.at_event(session.id, event=PreDamagesGameEvent)
