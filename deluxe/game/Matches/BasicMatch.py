@@ -31,6 +31,7 @@ class BasicMatch:
         self.weapon_number = 3
 
         self.items_given = 2
+
         self.cowed = False
 
         self.action_indexes = []
@@ -66,8 +67,6 @@ class BasicMatch:
         self.notify_players(tts)
         bot.send_message(self.session.chat_id, tts)
         session_manager.delete_session(self.session.id)
-
-
 
     def choose_target(self, player, targets, index=0):
         kb = types.InlineKeyboardMarkup()

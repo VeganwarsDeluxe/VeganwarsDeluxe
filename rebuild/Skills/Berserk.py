@@ -1,5 +1,7 @@
+from core.Context import Context
+from core.Decorators import RegisterEvent
 from core.Events.DamageEvents import AttackGameEvent
-from core.Events.EventManager import RegisterState, event_manager
+from core.Decorators import RegisterState
 from core.Events.Events import PreMoveGameEvent, AttachStateEvent, PreActionsGameEvent, HPLossGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -14,30 +16,30 @@ class Berserk(Skill):
 
 
 @RegisterState(Berserk)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
-    @event_manager.at_event(session.id, PreMoveGameEvent, priority=1)
-    def pre_actions(message: PreActionsGameEvent):
+    @RegisterEvent(session.id, PreMoveGameEvent, priority=1)
+    def pre_actions(context: Context[PreMoveGameEvent]):
         source.max_energy = max(7 - source.hp, 2)
-        if message.turn == 1:
+        if context.event.turn == 1:
             source.energy = source.max_energy
 
-    @event_manager.at_event(session.id, event=HPLossGameEvent, priority=2)
-    def hp_loss(message: HPLossGameEvent):
-        if message.source != source:
+    @RegisterEvent(session.id, event=HPLossGameEvent, priority=2)
+    def hp_loss(context: Context[HPLossGameEvent]):
+        if context.event.source != source:
             return
-        source.energy = min(source.energy+message.hp_loss, source.max_energy)
-        session.say(f"😡|Берсерк {source.name} получает {message.hp_loss} энергии.")
+        source.energy = min(source.energy+context.event.hp_loss, source.max_energy)
+        session.say(f"😡|Берсерк {source.name} получает {context.event.hp_loss} энергии.")
         if source.hp == 1:
             session.say(f"😡|Берсерк {source.name} входит в боевой транс!")
 
-    @event_manager.at_event(session.id, event=AttackGameEvent)
-    def attack_handler(attack_message: AttackGameEvent):
-        if attack_message.source != source:
+    @RegisterEvent(session.id, event=AttackGameEvent)
+    def attack_handler(attack_context: Context[AttackGameEvent]):
+        if attack_context.event.source != source:
             return
         if source.hp != 1:
             return
-        if attack_message.damage:
-            attack_message.damage += 2
+        if attack_context.event.damage:
+            attack_context.event.damage += 2

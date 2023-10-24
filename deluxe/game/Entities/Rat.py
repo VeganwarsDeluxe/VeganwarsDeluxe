@@ -34,7 +34,28 @@ class Rat(Dummy):
         if session.turn == 1:
             self.first_turn(session)
         else:
-            session.say(f"🚬|{self.name} курит и не знает что делать.")
+            self.basic_turn(session)
+
+    def not_able_to_evade(self, session):
+        return not (action_manager.is_action_available(session, self, 'dodge') or
+                    action_manager.is_action_available(session, self, 'shield') or
+                    action_manager.is_action_available(session, self, 'shield-gen'))
+
+    def basic_turn(self, session):
+        if self.hp <= 2:
+            stimulator = action_manager.is_action_available(session, self, 'stimulator')
+            if stimulator:
+                action_manager.queue_action_instance(stimulator)
+                self.items.remove(stimulator.item)
+                return
+        remaining_energy_percentage = (self.energy/self.max_energy)*100
+        if remaining_energy_percentage == 0:
+            if percentage_change(70) or self.not_able_to_evade(session):
+                action_manager.queue_action(session, self, "reload")
+                return
+            else:
+                self.evade(session)
+
 
     def first_turn(self, session):
         base_action = Action(session, self)
@@ -74,8 +95,23 @@ class Rat(Dummy):
                 self.evade(self)
 
     def evade(self, session):
-        if 'thief' not in [s.id for s in self.skills]:
-            pass
+        if action_manager.is_action_available(session, self, 'dodge'):
+            action = action_manager.get_action(session, self, "dodge")
+            action.target = self
+            return True
+        return self.use_shield(session)
+
+    def use_shield(self, session):
+        if action_manager.is_action_available(session, self, 'shield_gen'):
+            action = action_manager.get_action(session, self, "shield_gen")
+            action.target = self
+            return True
+        elif action_manager.is_action_available(session, self, 'shield'):
+            action = action_manager.get_action(session, self, "shield")
+            action.target = self
+            return True
+        else:
+            return False
 
     def throw_something(self, session, target):
         for item in self.items:

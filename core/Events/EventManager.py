@@ -10,13 +10,13 @@ class EventManager(Singleton):
     def __init__(self):
         self._handlers: list[EventHandler] = []
 
-    def publish(self, message: Event):
+    def publish(self, event: Event):
         self._handlers.sort(key=lambda h: h.priority)
         for handler in self._handlers:
-            if isinstance(message, GameEvent) and message.session_id != handler.session_id:
+            if isinstance(event, GameEvent) and event.session_id != handler.session_id:
                 continue
-            handler(message)
-        return message
+            handler(event)
+        return event
 
     def every(self, session_id: str, turns: int, start: int = 1, event: Type[Event] = Event, filters=None):
         def decorator_func(callback: Callable):
@@ -52,14 +52,11 @@ class EventManager(Singleton):
 
         return decorator_func
 
-    def at_event(self, session_id: str = None, event: Type[Event] = Event, unique_type=None, priority=0, filters=None):
-        def decorator_func(callback: Callable):
-            handler = EventHandler(session_id, callback, event, unique_type=unique_type, priority=priority,
-                                   filters=filters)
-            self._handlers.append(handler)
-            return callback
-
-        return decorator_func
+    def at_event(self, callback_wrapper, session_id: str = None, event: Type[Event] = Event, unique_type=None,
+                 priority=0, filters=None):
+        handler = EventHandler(session_id, callback_wrapper, event, unique_type=unique_type, priority=priority,
+                               filters=filters)
+        self._handlers.append(handler)
 
     def constantly(self, session_id: str):
         def decorator_func(callback: Callable):
@@ -71,7 +68,3 @@ class EventManager(Singleton):
 
 
 event_manager = EventManager()
-
-
-def RegisterState(state: type[State]):
-    return event_manager.at_event(event=AttachStateEvent, unique_type=state)

@@ -1,4 +1,5 @@
-from core.Events.EventManager import RegisterState
+from core.Context import Context
+from core.Decorators import RegisterState
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -15,9 +16,9 @@ class Cherep(Skill):
 
 
 @RegisterState(Cherep)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
     armor = source.get_skill(Armor.id)
     armor.add(1, 50)

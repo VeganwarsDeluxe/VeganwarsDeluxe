@@ -1,3 +1,5 @@
+from core.Context import Context
+from core.Decorators import RegisterEvent
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, HPLossGameEvent
@@ -13,15 +15,15 @@ class Pyromaniac(Skill):
 
 
 # @RegisterState(Pyromaniac)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
-    @event_manager.at_event(session.id, event=AttackGameEvent)
-    def func(message: HPLossGameEvent):
-        if source in message.source.inbound_dmg.contributors():
-            source.energy += message.hp_loss
-            session.say(f'😃|Садист {source.name} получает {message.hp_loss} энергии.')
+    @RegisterEvent(session.id, event=HPLossGameEvent)
+    def func(context: Context[HPLossGameEvent]):
+        if source in context.event.source.inbound_dmg.contributors():
+            source.energy += context.event.hp_loss
+            session.say(f'😃|Садист {source.name} получает {context.event.hp_loss} энергии.')
 
 
 def get_bonus(session: Session):

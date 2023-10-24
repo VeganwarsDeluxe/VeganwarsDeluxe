@@ -1,4 +1,6 @@
-from core.Events.EventManager import RegisterState, event_manager
+from core.Context import Context
+from core.Decorators import RegisterState
+from core.Events.EventManager import event_manager
 from core.Events.Events import PreMoveGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -14,9 +16,9 @@ class Alchemist(Skill):
 
 
 @RegisterState(Alchemist)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
     @event_manager.every(session.id, turns=9, event=PreMoveGameEvent)
     def func(message: PreMoveGameEvent):

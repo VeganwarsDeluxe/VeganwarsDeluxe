@@ -1,6 +1,8 @@
 import random
 
-from core.Events.EventManager import RegisterState, event_manager
+from core.Context import Context
+from core.Decorators import RegisterEvent
+from core.Decorators import RegisterState
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
@@ -15,18 +17,18 @@ class Biceps(Skill):
 
 
 @RegisterState(Biceps)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
 
-    @event_manager.at_event(session.id, event=AttackGameEvent)
-    def func(message: AttackGameEvent):
-        if message.source.id != event.entity_id:
+    @RegisterEvent(session.id, event=AttackGameEvent)
+    def func(context: Context[AttackGameEvent]):
+        if context.event.source.id != root_context.event.entity_id:
             return
-        if message.source.weapon.ranged:
+        if context.event.source.weapon.ranged:
             return
         if random.randint(0, 100) > 30:
             return
-        if not message.damage:
+        if not context.event.damage:
             return
         session.say(f'❗️', n=False)
-        message.damage *= 2
+        context.event.damage *= 2

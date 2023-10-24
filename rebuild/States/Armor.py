@@ -1,8 +1,10 @@
 import random
 
+from core.Context import Context
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
-from core.Events.EventManager import event_manager, RegisterState
+from core.Decorators import RegisterState, RegisterEvent
+from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -42,12 +44,12 @@ class Armor(State):
 
 
 @RegisterState(Armor)
-def register(event):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state = root_context.event.state
 
-    @event_manager.at_event(session.id, event=PostDamageGameEvent)
-    def func(message: PostDamageGameEvent):
-        if message.target == source:
-            state.negate_damage(session, source, message)
+    @RegisterEvent(session.id, event=PostDamageGameEvent)
+    def func(context: Context[PostDamageGameEvent]):
+        if context.event.target == source:
+            state.negate_damage(session, source, context.event)

@@ -2,10 +2,12 @@ import typing
 from typing import Union
 
 from core import Singleton
+from core.Decorators import RegisterEvent
 from core.Actions.Action import Action
 from core.Actions.ItemAction import ItemAction
 from core.Actions.StateAction import StateAction
 from core.Actions.WeaponAction import WeaponAction
+from core.Context import Context
 from core.Entities.Entity import Entity
 from core.Events.EventManager import event_manager
 from core.Events.Events import CallActionsGameEvent, AttachSessionEvent, PreMoveGameEvent, PostUpdateActionsGameEvent, \
@@ -28,13 +30,13 @@ class ActionManager(Singleton):
         self.actions: dict[tuple[Session, Entity], list[Action]] = {}
         self.session_manager = SessionManager()
 
-        @event_manager.at_event(event=AttachSessionEvent)
-        def handle_attach_session(event: AttachSessionEvent):
-            self.register(event.session_id)
+        @RegisterEvent(event=AttachSessionEvent)
+        def handle_attach_session(context: Context[AttachSessionEvent]):
+            self.register(context.session.id)
 
-        @event_manager.at_event(event=PreMoveGameEvent)
-        def handle_pre_move_game_event(event: PreMoveGameEvent):
-            self.reset_removed_actions(event.session_id)
+        @RegisterEvent(event=PreMoveGameEvent)
+        def handle_pre_move_game_event(context: Context[PreMoveGameEvent]):
+            self.reset_removed_actions(context.session.id)
 
     def register_action(self, cls: ActionOwnerType):
         def decorator_func(action: type[Action]):
@@ -127,6 +129,12 @@ class ActionManager(Singleton):
             result.append(action)
         return result
 
+    def is_action_available(self, session: Session, entity: Entity, action_id: str) -> bool:
+        for action in self.get_available_actions(session, entity):
+            if action.id == action_id:
+                return True
+        return False
+
     def get_queued_entity_actions(self, session: Session, entity: Entity) -> list[Action]:
         result = []
         for action in self.get_queued_session_actions(session):
@@ -154,8 +162,8 @@ class ActionManager(Singleton):
         return not action.cost
 
     def register(self, session_id):
-        @event_manager.at_event(session_id, event=CallActionsGameEvent)
-        def handle_call_actions_game_event(event: CallActionsGameEvent):
+        @RegisterEvent(session_id, event=CallActionsGameEvent)
+        def handle_call_actions_game_event(context: Context[CallActionsGameEvent]):
             action_queue = [action for action in self.action_queue if action.session.id == session_id]
             action_queue.sort(key=lambda a: a.priority)
             for action in action_queue:

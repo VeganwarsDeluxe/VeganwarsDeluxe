@@ -1,8 +1,10 @@
+from core.Context import Context
+from core.Decorators import RegisterEvent, RegisterState
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.ItemAction import ItemAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.EventManager import RegisterState, event_manager
+from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, PreActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -22,12 +24,12 @@ class Thief(Skill):
 
 
 @RegisterState(Thief)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
 
-    @event_manager.at_event(session.id, event=PreActionsGameEvent)
-    def func(message: PreActionsGameEvent):
+    @RegisterEvent(session.id, event=PreActionsGameEvent)
+    def func(context: Context[PreActionsGameEvent]):
         if source.weapon.ranged:
             source.outbound_accuracy_bonus += 1
 

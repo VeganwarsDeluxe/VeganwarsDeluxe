@@ -1,7 +1,8 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
+from core.Context import Context
 from core.Entities import Entity
-from core.Events.EventManager import event_manager, RegisterState
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PostUpdatesGameEvent, AttachStateEvent, PostUpdateActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -18,13 +19,13 @@ class Knockdown(State):
 
 
 @RegisterState(Knockdown)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state = root_context.event.state
 
-    @event_manager.at_event(session.id, event=PostUpdateActionsGameEvent)
-    def func(message: PostUpdateActionsGameEvent):
+    @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
+    def func(context: Context[PostUpdateActionsGameEvent]):
         if not state.active:
             return
         action_manager.remove_action(session, source, 'attack')

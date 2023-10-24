@@ -48,6 +48,6 @@ class KnockWeapon(MeleeAttack):
             self.session.say(f'⛓|{source.name} выбил оружие из рук {target.name}!')
             state = target.get_skill('knocked-weapon')
             state.weapon = target.weapon
-            target.weapon = Fist()
+            target.weapon = Fist(self.session.id, target.id)
         else:
             self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')

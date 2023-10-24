@@ -1,4 +1,5 @@
-from core.Events.EventManager import event_manager, RegisterState
+from core.Context import Context
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PreDamagesGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -15,13 +16,13 @@ class Bleeding(State):
 
 
 @RegisterState(Bleeding)
-def register(event):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state = root_context.event.state
 
-    @event_manager.at_event(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
-    def func(message: PreDamagesGameEvent):
+    @RegisterEvent(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
+    def func(context: Context[PreDamagesGameEvent]):
         if state.bleeding <= 0:
             session.say(f'🩸|{source.name} теряет ХП от '
                         f'кровотечения! Осталось {source.hp - 1} ХП.')

@@ -1,5 +1,6 @@
+from core.Context import Context
 from core.Events.DamageEvents import AttackGameEvent
-from core.Events.EventManager import event_manager, RegisterState
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -15,17 +16,17 @@ class Injury(State):
 
 
 @RegisterState(Injury)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state = root_context.event.state
 
-    @event_manager.at_event(session.id, event=AttackGameEvent)
-    def func(message: AttackGameEvent):
+    @RegisterEvent(session.id, event=AttackGameEvent)
+    def func(context: Context[AttackGameEvent]):
         if not state.injury:
             return
-        if message.target != source:
+        if context.event.target != source:
             return
-        if not message.damage:
+        if not context.event.damage:
             return
-        message.damage += state.injury
+        context.event.damage += state.injury

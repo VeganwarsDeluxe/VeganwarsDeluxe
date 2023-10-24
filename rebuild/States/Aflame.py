@@ -1,15 +1,14 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.EntityActions import SkipActionGameEvent
-from core.Actions.StateAction import DecisiveStateAction
-from core.Entities import Entity
+from core.Context import Context
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
-from core.Events.EventManager import event_manager, RegisterState
+from core.Events.EventManager import event_manager
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttachStateEvent, \
     PostUpdateActionsGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
-from core.TargetType import OwnOnly
 
 
 class Aflame(State):
@@ -35,13 +34,13 @@ class Aflame(State):
 
 
 @RegisterState(Aflame)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state: Aflame = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state: Aflame = root_context.event.state
 
-    @event_manager.at_event(session.id, event=PostActionsGameEvent)
-    def handle_post_actions_event(message: PostActionsGameEvent):
+    @RegisterEvent(session.id, event=PostActionsGameEvent)
+    def handle_post_actions_event(context: Context[PostActionsGameEvent]):
         """
         Handle events after actions have been taken.
         """
@@ -52,12 +51,12 @@ def register(event: AttachStateEvent):
         state.flame = 0
         state.extinguished = False
 
-    @event_manager.at_event(session.id, event=PostUpdateActionsGameEvent)
-    def handle_post_updates_event(message: PostUpdateActionsGameEvent):
+    @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
+    def handle_post_updates_event(context: Context[PostUpdateActionsGameEvent]):
         """
         Handle events after updates have been performed.
         """
-        if event.entity_id != source.id:
+        if root_context.event.entity_id != source.id:
             return
         if state.flame:
             action = action_manager.get_action(session, source, 'skip')
@@ -65,8 +64,8 @@ def register(event: AttachStateEvent):
                 return
             action.name = 'Потушиться'
 
-    @event_manager.at_event(session.id, event=PreDamagesGameEvent)
-    def handle_pre_damages_event(message: PreDamagesGameEvent):
+    @RegisterEvent(session.id, event=PreDamagesGameEvent)
+    def handle_pre_damages_event(context: Context[PreDamagesGameEvent]):
         """
         Handle events prior to damage calculation.
         """
@@ -77,7 +76,7 @@ def register(event: AttachStateEvent):
             reset_state(state, session, f'🔥|Огонь на {source.name} потух!')
             return
 
-        damage = perform_fire_attack(session, source, state, message)
+        damage = perform_fire_attack(session, source, state, context.event)
 
         source.inbound_dmg.add(state.dealer, damage)
         source.outbound_dmg.add(state.dealer, damage)
@@ -90,19 +89,19 @@ def register(event: AttachStateEvent):
         else:
             state.timer -= 1
 
-    @event_manager.at_event(session.id, event=SkipActionGameEvent)
-    def handle_pre_damages_event(message: SkipActionGameEvent):
+    @RegisterEvent(session.id, event=SkipActionGameEvent)
+    def handle_pre_damages_event(context: Context[SkipActionGameEvent]):
         """
         Handle skip turn event,
         """
-        if message.entity_id != source.id:
+        if context.event.entity_id != source.id:
             return
         if state.flame == 0:
             return
         state.flame = 0
         state.extinguished = False
         session.say(f'💨|{source.name} тушит себя.')
-        message.no_text = True
+        context.event.no_text = True
 
 
 def reset_state(state, session, message):

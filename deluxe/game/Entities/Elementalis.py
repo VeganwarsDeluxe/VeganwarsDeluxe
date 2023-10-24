@@ -3,6 +3,8 @@ import random
 import rebuild
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
+from core.Context import Context
+from core.Decorators import RegisterEvent
 from core.Events.EventManager import event_manager
 from core.Events.Events import PreDeathGameEvent
 from core.SessionManager import session_manager
@@ -27,12 +29,12 @@ class Elemental(Dummy):
 
         self.anger = False
 
-        @event_manager.at_event(self.session_id, event=PreDeathGameEvent, priority=5)
-        def hp_loss(message: PreDeathGameEvent):
-            if message.canceled:
+        @RegisterEvent(self.session_id, event=PreDeathGameEvent, priority=5)
+        def hp_loss(context: Context[PreDeathGameEvent]):
+            if context.event.canceled:
                 return
-            session: Session = session_manager.get_session(message.session_id)
-            if message.entity != self:
+            session: Session = session_manager.get_session(context.event.session_id)
+            if context.event.entity != self:
                 return
             if self.anger:
                 return
@@ -40,7 +42,7 @@ class Elemental(Dummy):
             self.max_hp = 5
             self.anger = True
             session.say("🌪|Елементаль в ЯРОСТИ!")
-            message.canceled = True
+            context.event.canceled = True
 
     def choose_act(self, session):
         super().choose_act(session)

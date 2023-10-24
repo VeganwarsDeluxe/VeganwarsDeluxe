@@ -1,9 +1,11 @@
 import random
 
+from core.Context import Context
+from core.Decorators import RegisterEvent, RegisterState
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.EventManager import RegisterState, event_manager
+from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, PreDeathGameEvent, PostDamagesGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -26,16 +28,16 @@ class Inquisitor(Skill):
 
 
 @RegisterState(Inquisitor)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
-    state: Inquisitor = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.session
+    source = session.get_entity(root_context.event.entity_id)
+    state: Inquisitor = root_context.event.state
 
-    @event_manager.at_event(session.id, event=PreDeathGameEvent, priority=2)
-    def hp_loss(message: PreDeathGameEvent):
-        if message.canceled:
+    @RegisterEvent(session.id, event=PreDeathGameEvent, priority=2)
+    def hp_loss(context: Context[PreDeathGameEvent]):
+        if context.event.canceled:
             return
-        if message.entity != source:
+        if context.event.entity != source:
             return
         if random.randint(0, 100) > 30:
             return
@@ -45,7 +47,7 @@ def register(event: AttachStateEvent):
             source.hp = 1
             session.say(f'😇|Высшие силы решили спасти {source.name}!')
             state.random_activated = True
-            message.canceled = True
+            context.event.canceled = True
 
 
 @AttachedAction(Inquisitor)

@@ -1,4 +1,6 @@
-from core.Events.EventManager import RegisterState, event_manager
+from core.Context import Context
+from core.Decorators import RegisterEvent, RegisterState
+from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, HPLossGameEvent, PreDeathGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -13,15 +15,15 @@ class Zombie(Skill):
 
 
 @RegisterState(Zombie)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
-    @event_manager.at_event(session.id, event=PreDeathGameEvent, priority=3)
-    def func(message: PreDeathGameEvent):
-        if event.entity_id != message.entity.id:
+    @RegisterEvent(session.id, event=PreDeathGameEvent, priority=3)
+    def func(context: Context[PreDeathGameEvent]):
+        if root_context.event.entity_id != context.event.entity.id:
             return
-        if message.canceled:
+        if context.event.canceled:
             return
         zombie = source.get_skill(ZombieState.id)
         if zombie.active:
@@ -31,4 +33,4 @@ def register(event: AttachStateEvent):
         zombie.active = True
         zombie.timer = 1
         session.say(f"😬|{source.name} продолжает сражаться, истекая кровью!")
-        message.canceled = True
+        context.event.canceled = True

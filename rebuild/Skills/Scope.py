@@ -1,4 +1,5 @@
-from core.Events.EventManager import RegisterState, event_manager
+from core.Context import Context
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PreMoveGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -12,11 +13,11 @@ class Scope(Skill):
 
 
 @RegisterState(Scope)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_event: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_event.event.session_id)
+    source = session.get_entity(root_event.event.entity_id)
 
-    @event_manager.at_event(session.id, event=PreMoveGameEvent)
-    def func(message: PreMoveGameEvent):
+    @RegisterEvent(session.id, event=PreMoveGameEvent)
+    def func(context: Context[PreMoveGameEvent]):
         if source.weapon.ranged:
             source.outbound_accuracy_bonus += 2

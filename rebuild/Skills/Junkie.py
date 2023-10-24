@@ -1,8 +1,10 @@
 import random
 
+from core.Context import Context
+from core.Decorators import RegisterEvent, RegisterState
 from core.Actions.ActionManager import action_manager
 from core.Events.DamageEvents import AttackGameEvent
-from core.Events.EventManager import RegisterState, event_manager
+from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -22,13 +24,13 @@ class Junkie(Skill):
 
 
 @RegisterState(Junkie)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = root_context.event
+    source = session.get_entity(root_context.event.entity_id)
     source.items.append(random.choice([Jet, Hitin, Adrenaline])())
 
-    @event_manager.at_event(session.id, event=PreMoveGameEvent)
-    def func(message: PreMoveGameEvent):
+    @RegisterEvent(session.id, event=PreMoveGameEvent)
+    def func(context: Context[PreMoveGameEvent]):
         source.outbound_accuracy_bonus -= 1
 
     @event_manager.nearest(session.id, PreActionsGameEvent)

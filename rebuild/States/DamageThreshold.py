@@ -1,5 +1,6 @@
-from core.Events.EventManager import event_manager, RegisterState
-from core.Events.Events import HPLossGameEvent
+from core.Context import Context
+from core.Decorators import RegisterState, RegisterEvent
+from core.Events.Events import HPLossGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
@@ -14,12 +15,12 @@ class DamageThreshold(State):
 
 
 @RegisterState(DamageThreshold)
-def register(event):
-    session: Session = session_manager.get_session(event.session_id)
-    state = event.state
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    state = root_context.event.state
 
-    @event_manager.at_event(session.id, event=HPLossGameEvent)
-    def func(message: HPLossGameEvent):
-        if not message.damage:
+    @RegisterEvent(session.id, event=HPLossGameEvent)
+    def func(context: Context[HPLossGameEvent]):
+        if not context.event.damage:
             return
-        message.hp_loss = (message.damage // state.threshold) + 1
+        context.event.hp_loss = (context.event.damage // state.threshold) + 1

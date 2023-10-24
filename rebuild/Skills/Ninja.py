@@ -1,6 +1,7 @@
 import math
 
-from core.Events.EventManager import RegisterState, event_manager
+from core.Context import Context
+from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
@@ -15,12 +16,12 @@ class Ninja(Skill):
 
 
 @RegisterState(Ninja)
-def register(event: AttachStateEvent):
-    session: Session = session_manager.get_session(event.session_id)
-    source = session.get_entity(event.entity_id)
+def register(root_context: Context[AttachStateEvent]):
+    session: Session = session_manager.get_session(root_context.event.session_id)
+    source = session.get_entity(root_context.event.entity_id)
 
-    @event_manager.at_event(session.id, DodgeGameEvent)
-    def pre_actions(message: DodgeGameEvent):
-        if message.entity.id != source.id:
+    @RegisterEvent(session.id, DodgeGameEvent)
+    def pre_actions(context: Context[DodgeGameEvent]):
+        if context.event.entity.id != source.id:
             return
-        message.bonus = -math.inf
+        context.event.bonus = -math.inf
