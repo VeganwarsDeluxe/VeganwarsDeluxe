@@ -1,5 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.ItemAction import DecisiveItem
+from core.Context import EventContext
+from core.Decorators import At
 from core.Events.DamageEvents import PostDamageGameEvent
 from core.Events.EventManager import event_manager
 from core.Items.Item import Item
@@ -24,11 +26,11 @@ class ShieldAction(DecisiveItem):
         else:
             self.session.say(f"🔵|{source.name} использует щит на {target.name}. Урон отражен!")
 
-        @event_manager.at(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
-        def shield_block(event: PostDamageGameEvent):
-            if event.target != target:
+        @At(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
+        def shield_block(context: EventContext[PostDamageGameEvent]):
+            if context.event.target != target:
                 return
-            if not event.damage:
+            if not context.event.damage:
                 return
             self.session.say(f"🔵|Щит {source.name} заблокировал весь урон!")
-            event.damage = 0
+            context.event.damage = 0

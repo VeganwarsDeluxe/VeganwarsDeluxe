@@ -9,17 +9,20 @@ from core.DamageHolder import DamageHolder
 
 
 class Entity:
-    def __init__(self, session_id: str = '', name=''):
+    def __init__(self,
+                 session_id: str = '', name: str = '',
+                 hp: int = 0, max_hp: int = 0,
+                 energy: int = 0, max_energy: int = 0):
         self.session_id = session_id
         self.name: str = name
         self.id = str(uuid4())
 
-        self.hp: int = 0
-        self.max_hp: int = 0
+        self.hp: int = hp
+        self.max_hp: int = max_hp
         self.dead = False
 
-        self.energy: int = 0
-        self.max_energy: int = 0
+        self.energy: int = energy
+        self.max_energy: int = max_energy
 
         self.weapon: Weapon = Weapon(session_id, self.id)
         self.skills: list[State] = []

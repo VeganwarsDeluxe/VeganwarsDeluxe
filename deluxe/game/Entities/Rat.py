@@ -7,7 +7,7 @@ from core.Actions.EntityActions import SkipActionGameEvent
 from core.Events.EventManager import event_manager
 from core.TargetType import Allies, Enemies, OwnOnly
 from core.Weapons import Weapon
-from core.utils import percentage_change
+from core.utils import percentage_chance
 from deluxe.game.Entities.Dummy import Dummy
 
 
@@ -50,7 +50,7 @@ class Rat(Dummy):
                 return
         remaining_energy_percentage = (self.energy/self.max_energy)*100
         if remaining_energy_percentage == 0:
-            if percentage_change(70) or self.not_able_to_evade(session):
+            if percentage_chance(70) or self.not_able_to_evade(session):
                 action_manager.queue_action(session, self, "reload")
                 return
             else:
@@ -64,17 +64,17 @@ class Rat(Dummy):
         target = random.choice(enemies)
 
         if self.weapon.melee and target.weapon.melee:
-            if percentage_change(40) and 'thief' in [s.id for s in self.skills]:
+            if percentage_chance(40) and 'thief' in [s.id for s in self.skills]:
                 self.use_thief(session, target)
             else:
-                if percentage_change(50):
+                if percentage_chance(50):
                     self.approach(session)
                 else:
                     self.throw_something(session, target)
 
         elif self.weapon.ranged and target.weapon.melee:
-            if percentage_change(80) or 'thief' not in [s.id for s in self.skills]:
-                if percentage_change(50) and 'adrenaline' in [i.id for i in self.items]:
+            if percentage_chance(80) or 'thief' not in [s.id for s in self.skills]:
+                if percentage_chance(50) and 'adrenaline' in [i.id for i in self.items]:
                     action = action_manager.get_action(session, self, "adrenaline")
                     action.target = self
                     action_manager.queue_action_instance(action)
@@ -83,13 +83,13 @@ class Rat(Dummy):
                 self.use_thief(session, target)
 
         elif self.weapon.melee and target.weapon.ranged:
-            if percentage_change(60):
+            if percentage_chance(60):
                 self.evade(self)
             else:
                 self.approach(session)
 
         elif self.weapon.ranged and target.weapon.ranged:
-            if percentage_change(80):
+            if percentage_chance(80):
                 self.attack(session, target)
             else:
                 self.evade(self)

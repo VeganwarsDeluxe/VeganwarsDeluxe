@@ -1,12 +1,10 @@
-from core.Actions.ActionManager import AttachedAction, action_manager
+from core.Actions.ActionManager import action_manager
 from core.Actions.EntityActions import SkipActionGameEvent
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
 from core.Events.EventManager import event_manager
 from core.Decorators import RegisterState, RegisterEvent
-from core.Events.Events import PostActionsGameEvent, PostUpdatesGameEvent, PreDamagesGameEvent, AttachStateEvent, \
-    PostUpdateActionsGameEvent
-from core.SessionManager import session_manager
+from core.Events.Events import PostActionsGameEvent, PreDamagesGameEvent, AttachStateEvent,  PostUpdateActionsGameEvent
 from core.Sessions import Session
 from core.States.State import State
 
@@ -34,13 +32,13 @@ class Aflame(State):
 
 
 @RegisterState(Aflame)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
-    state: Aflame = root_context.event.state
+    source = root_context.entity
+    state: Aflame = root_context.state
 
     @RegisterEvent(session.id, event=PostActionsGameEvent)
-    def handle_post_actions_event(context: Context[PostActionsGameEvent]):
+    def handle_post_actions_event(context: EventContext[PostActionsGameEvent]):
         """
         Handle events after actions have been taken.
         """
@@ -52,7 +50,7 @@ def register(root_context: Context[AttachStateEvent]):
         state.extinguished = False
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def handle_post_updates_event(context: Context[PostUpdateActionsGameEvent]):
+    def handle_post_updates_event(context: EventContext[PostUpdateActionsGameEvent]):
         """
         Handle events after updates have been performed.
         """
@@ -65,7 +63,7 @@ def register(root_context: Context[AttachStateEvent]):
             action.name = 'Потушиться'
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
-    def handle_pre_damages_event(context: Context[PreDamagesGameEvent]):
+    def handle_pre_damages_event(context: EventContext[PreDamagesGameEvent]):
         """
         Handle events prior to damage calculation.
         """
@@ -90,7 +88,7 @@ def register(root_context: Context[AttachStateEvent]):
             state.timer -= 1
 
     @RegisterEvent(session.id, event=SkipActionGameEvent)
-    def handle_pre_damages_event(context: Context[SkipActionGameEvent]):
+    def handle_pre_damages_event(context: EventContext[SkipActionGameEvent]):
         """
         Handle skip turn event,
         """

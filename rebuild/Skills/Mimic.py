@@ -1,6 +1,6 @@
 import random
 
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterEvent, RegisterState
 from core.Actions.ActionManager import action_manager, AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
@@ -26,16 +26,16 @@ class Mimic(Skill):
 
 
 @RegisterState(Mimic)
-def register(root_context: Context[AttachStateEvent]):
-    session: Session = session_manager.get_session(root_context.event.session_id)
-    source = session.get_entity(root_context.event.entity_id)
+def register(root_context: StateContext[AttachStateEvent]):
+    session: Session = root_context.session
+    source = root_context.entity
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def post_update_actions(update_context: Context[PostUpdateActionsGameEvent]):
+    def post_update_actions(update_context: EventContext[PostUpdateActionsGameEvent]):
         if update_context.event.entity_id != source.id:
             return
-        if root_context.event.state.memorized_action:
-            action_manager.attach_action(session, source, root_context.event.state.memorized_action)
+        if root_context.state.memorized_action:
+            action_manager.attach_action(session, source, root_context.state.memorized_action)
 
 
 @AttachedAction(Mimic)

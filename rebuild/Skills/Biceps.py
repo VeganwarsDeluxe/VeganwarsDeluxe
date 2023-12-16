@@ -1,11 +1,10 @@
 import random
 
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterEvent
 from core.Decorators import RegisterState
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.Events import AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 
@@ -17,11 +16,11 @@ class Biceps(Skill):
 
 
 @RegisterState(Biceps)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
 
     @RegisterEvent(session.id, event=AttackGameEvent)
-    def func(context: Context[AttackGameEvent]):
+    def func(context: EventContext[AttackGameEvent]):
         if context.event.source.id != root_context.event.entity_id:
             return
         if context.event.source.weapon.ranged:

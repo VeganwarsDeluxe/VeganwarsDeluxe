@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.StateAction import DecisiveStateAction
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Entities import Entity
 from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PostUpdatesGameEvent, PostDamagesGameEvent, AttachStateEvent
@@ -18,13 +18,13 @@ class Stun(State):
 
 
 @RegisterState(Stun)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
-    state = root_context.event.state
+    source = root_context.entity
+    state = root_context.state
 
     @RegisterEvent(session.id, event=PostUpdatesGameEvent)
-    def func(context: Context[PostUpdatesGameEvent]):
+    def func(context: EventContext[PostUpdatesGameEvent]):
         if not state.stun:
             return
         for action in action_manager.get_actions(session, source):
@@ -32,7 +32,7 @@ def register(root_context: Context[AttachStateEvent]):
                 action.removed = True
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
-    def func(context: Context[PostDamagesGameEvent]):
+    def func(context: EventContext[PostDamagesGameEvent]):
         if not state.stun:
             return
         if state.stun == 1:

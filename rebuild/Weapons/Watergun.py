@@ -1,5 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
+from core.Context import EventContext
+from core.Decorators import After
 from core.Entities import Entity
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.EventManager import event_manager
@@ -45,8 +47,8 @@ class CreateWaterShield(DecisiveWeaponAction):
         return self.session.turn < self.cooldown_turn
 
     def func(self, source, target):
-        @event_manager.after(self.session.id, 0, event=PreDamagesGameEvent, repeats=3)
-        def _(event: PreDamagesGameEvent):
+        @After(self.session.id, 0, event=PreDamagesGameEvent, repeats=3)
+        def _(context: EventContext[PreDamagesGameEvent]):
             aflame = self.source.get_skill('aflame')
             aflame.extinguished = True
             aflame.flame = 0
@@ -57,12 +59,12 @@ class CreateWaterShield(DecisiveWeaponAction):
                 self.active = False
                 self.session.say(f'💨|Водяной щит {self.source.name} испарился!')
 
-        @event_manager.after(self.session.id, 0, event=AttackGameEvent, repeats=3)
-        def _(event: AttackGameEvent):
-            if event.source != self.source:
+        @After(self.session.id, 0, event=AttackGameEvent, repeats=3)
+        def _(context: EventContext[AttackGameEvent]):
+            if context.event.source != self.source:
                 return
-            if event.damage:
-                event.damage += 1
+            if context.event.damage:
+                context.event.damage += 1
 
         self.weapon.cooldown_turn = self.session.turn + 5
         self.session.say(f'💧|{source.name} создаёт водяной щит вокруг {target.name}.')

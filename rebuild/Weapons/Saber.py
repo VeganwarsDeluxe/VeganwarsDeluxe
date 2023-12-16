@@ -1,5 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
+from core.Context import EventContext
+from core.Decorators import At
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent
 from core.Events.EventManager import event_manager
@@ -48,16 +50,16 @@ class Parry(DecisiveWeaponAction):
         self.weapon.cooldown_turn = self.session.turn + 5
         self.session.say(f'🗡|{source.name} готовится парировать.')
 
-        @event_manager.at(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
-        def parry(event: PostAttackGameEvent):
-            if target != event.source:
+        @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
+        def parry(context: EventContext[PostAttackGameEvent]):
+            if target != context.event.source:
                 return
-            if event.target != source:
+            if context.event.target != source:
                 return
-            if not event.damage:
+            if not context.event.damage:
                 return
 
             self.session.say(f'🗡|{source.name} парирует атаку {target.name}! Урон заблокирован,'
                              f' {target.name} теряет всю энергию!')
             target.energy = 0
-            event.damage = 0
+            context.event.damage = 0

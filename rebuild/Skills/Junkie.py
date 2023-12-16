@@ -1,7 +1,7 @@
 import random
 
-from core.Context import Context
-from core.Decorators import RegisterEvent, RegisterState
+from core.Context import StateContext, EventContext
+from core.Decorators import RegisterEvent, RegisterState, Nearest, At
 from core.Actions.ActionManager import action_manager
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.EventManager import event_manager
@@ -24,17 +24,17 @@ class Junkie(Skill):
 
 
 @RegisterState(Junkie)
-def register(root_context: Context[AttachStateEvent]):
-    session: Session = root_context.event
-    source = session.get_entity(root_context.event.entity_id)
+def register(root_context: StateContext[AttachStateEvent]):
+    session: Session = root_context.session
+    source = root_context.entity
     source.items.append(random.choice([Jet, Hitin, Adrenaline])())
 
     @RegisterEvent(session.id, event=PreMoveGameEvent)
-    def func(context: Context[PreMoveGameEvent]):
+    def func(context: EventContext[PreMoveGameEvent]):
         source.outbound_accuracy_bonus -= 1
 
-    @event_manager.nearest(session.id, PreActionsGameEvent)
-    def pre_actions(message: PreActionsGameEvent):
+    @RegisterEvent(session.id, PreActionsGameEvent)
+    def pre_actions(context: EventContext[PreActionsGameEvent]):
         accuracy_bonus = 0
         damage_bonus = 0
         for action in action_manager.get_queued_session_actions(session):
@@ -44,15 +44,15 @@ def register(root_context: Context[AttachStateEvent]):
                     damage_bonus += 1
 
         if accuracy_bonus:
-            @event_manager.at(session.id, turn=session.turn, event=PreDamagesGameEvent)
-            def post_actions(actions_message: PreDamagesGameEvent):
+            @At(session.id, turn=session.turn, event=PreDamagesGameEvent)
+            def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
                 session.say(f"🙃|{source.name} получает бонусную точность и урон!")
 
             source.outbound_accuracy_bonus += accuracy_bonus
 
-            @event_manager.at(session.id, turn=session.turn, event=AttackGameEvent)
-            def attack_handler(attack_message: AttackGameEvent):
-                if attack_message.source != source:
+            @At(session.id, turn=session.turn, event=AttackGameEvent)
+            def attack_handler(actions_context: EventContext[AttackGameEvent]):
+                if actions_context.event.source != source:
                     return
-                if attack_message.damage:
-                    attack_message.damage += damage_bonus
+                if actions_context.event.damage:
+                    actions_context.event.damage += damage_bonus

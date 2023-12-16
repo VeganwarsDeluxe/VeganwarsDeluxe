@@ -1,7 +1,7 @@
 import random
 
 import rebuild
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterState
 from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
@@ -16,9 +16,9 @@ class Stockpile(Skill):
 
 
 @RegisterState(Stockpile)
-def register(root_context: Context[AttachStateEvent]):
-    session: Session = session_manager.get_session(root_context.event.session_id)
-    source = session.get_entity(root_context.event.entity_id)
+def register(root_context: StateContext[AttachStateEvent]):
+    session: Session = root_context.session
+    source = root_context.entity
 
     given = []
     for _ in range(2):

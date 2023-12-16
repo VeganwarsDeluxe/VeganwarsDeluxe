@@ -1,5 +1,7 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.WeaponAction import RangedAttack
+from core.Context import EventContext
+from core.Decorators import Nearest
 from core.Events.EventManager import event_manager
 from core.Events.Events import PostTickGameEvent
 from core.Weapons.Weapon import RangedWeapon
@@ -26,8 +28,8 @@ class SawAttack(RangedAttack):
             return damage
         self.session.say(f'{target.name} ранен! ({target.get_skill(Injury.id).injury})')
 
-        @event_manager.nearest(self.session.id, PostTickGameEvent)
-        def func(event: PostTickGameEvent):
+        @Nearest(self.session.id, PostTickGameEvent)
+        def func(context: EventContext[PostTickGameEvent]):
             injury = target.get_skill(Injury.id)
             injury.injury += 1
 

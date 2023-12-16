@@ -10,8 +10,8 @@ class Torch(MeleeWeapon):
     name = 'Факел'
     description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session_id: str, entity_id: str):
+        super().__init__(session_id, entity_id)
         self.accuracy_bonus = 2
         self.cubes = 3
 

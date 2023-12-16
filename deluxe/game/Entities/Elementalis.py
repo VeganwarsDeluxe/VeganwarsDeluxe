@@ -3,7 +3,7 @@ import random
 import rebuild
 from core.Actions.Action import DecisiveAction
 from core.Actions.ActionManager import action_manager, AttachedAction
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterEvent
 from core.Events.EventManager import event_manager
 from core.Events.Events import PreDeathGameEvent
@@ -30,10 +30,10 @@ class Elemental(Dummy):
         self.anger = False
 
         @RegisterEvent(self.session_id, event=PreDeathGameEvent, priority=5)
-        def hp_loss(context: Context[PreDeathGameEvent]):
+        def hp_loss(context: EventContext[PreDeathGameEvent]):
             if context.event.canceled:
                 return
-            session: Session = session_manager.get_session(context.event.session_id)
+            session: Session = context.session
             if context.event.entity != self:
                 return
             if self.anger:

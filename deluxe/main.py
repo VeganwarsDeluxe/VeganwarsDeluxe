@@ -4,7 +4,7 @@ import traceback
 from telebot import types
 
 #       Handler imports
-import deluxe.bot.rating
+#import deluxe.bot.rating
 import rebuild
 from config import admin
 from core.Actions.ActionManager import action_manager
@@ -14,7 +14,7 @@ from deluxe.bot.bot import bot, cm
 from deluxe.game.Entities.Cow import Cow
 from deluxe.game.Matches.RatFight import RatDungeon
 
-print(deluxe.bot.rating, "loaded.")
+#print(deluxe.bot.rating, "loaded.")
 from deluxe.game.Matches.BasicMatch import BasicMatch
 from deluxe.game.Matches.ElementalDungeon import ElementalDungeon
 from deluxe.game.Matches.Matchmaker import Matchmaker

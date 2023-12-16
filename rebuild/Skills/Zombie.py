@@ -1,4 +1,4 @@
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterEvent, RegisterState
 from core.Events.EventManager import event_manager
 from core.Events.Events import AttachStateEvent, HPLossGameEvent, PreDeathGameEvent
@@ -15,12 +15,12 @@ class Zombie(Skill):
 
 
 @RegisterState(Zombie)
-def register(root_context: Context[AttachStateEvent]):
-    session: Session = session_manager.get_session(root_context.event.session_id)
-    source = session.get_entity(root_context.event.entity_id)
+def register(root_context: StateContext[AttachStateEvent]):
+    session: Session = root_context.session
+    source = root_context.entity
 
     @RegisterEvent(session.id, event=PreDeathGameEvent, priority=3)
-    def func(context: Context[PreDeathGameEvent]):
+    def func(context: EventContext[PreDeathGameEvent]):
         if root_context.event.entity_id != context.event.entity.id:
             return
         if context.event.canceled:

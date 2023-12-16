@@ -1,4 +1,4 @@
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterState, RegisterEvent
 from core.Events.Events import PreDamagesGameEvent, PreDeathGameEvent, AttachStateEvent
 from core.SessionManager import session_manager
@@ -17,13 +17,13 @@ class ZombieState(State):
 
 
 @RegisterState(ZombieState)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
-    state = root_context.event.state
+    source = root_context.entity
+    state = root_context.state
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
-    def func(context: Context[PreDamagesGameEvent]):
+    def func(context: EventContext[PreDamagesGameEvent]):
         if not state.active:
             return
         if state.timer <= 0:
@@ -32,7 +32,7 @@ def register(root_context: Context[AttachStateEvent]):
         state.timer -= 1
 
     @RegisterEvent(session.id, event=PreDeathGameEvent)
-    def func(context: Context[PreDeathGameEvent]):
+    def func(context: EventContext[PreDeathGameEvent]):
         if context.event.entity != source:
             return
         if state.active:

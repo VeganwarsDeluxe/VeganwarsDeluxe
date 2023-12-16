@@ -2,6 +2,8 @@ import random
 
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.ItemAction import DecisiveItem, FreeItem
+from core.Context import EventContext
+from core.Decorators import Nearest
 from core.Events.EventManager import event_manager
 from core.Events.Events import PostActionsGameEvent
 from core.Items.Item import Item
@@ -22,8 +24,8 @@ class RageSerumAction(FreeItem):
     def func(self, source, target):
         self.session.say(f"💉|{source.name} использует сыворотку бешенства на {target.name}!")
 
-        @event_manager.nearest(self.session.id, event=PostActionsGameEvent)
-        def serum_attack(message: PostActionsGameEvent):
+        @Nearest(self.session.id, event=PostActionsGameEvent)
+        def serum_attack(context: EventContext[PostActionsGameEvent]):
             if target.dead:
                 return
             attack = action_manager.get_action(self.session, target, 'attack')

@@ -59,7 +59,6 @@ from rebuild.Weapons.Shest import Shest
 from rebuild.Weapons.Shotgun import Shotgun
 from rebuild.Weapons.Hatchet import Hatchet
 from rebuild.Weapons.Torch import Torch
-# from rebuild.Weapons.SynchroElectroHammer import SynchroElectroHammer
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,

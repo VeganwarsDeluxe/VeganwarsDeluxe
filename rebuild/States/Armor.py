@@ -1,6 +1,6 @@
 import random
 
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
 from core.Decorators import RegisterState, RegisterEvent
@@ -8,6 +8,7 @@ from core.Events.Events import AttachStateEvent
 from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
+from core.utils import percentage_chance
 
 
 class Armor(State):
@@ -37,19 +38,18 @@ class Armor(State):
         result = 0
         for armor, chance in self.armor:
             for _ in range(armor):
-                if random.randint(0, 100) > chance:
-                    continue
-                result += 1
+                if percentage_chance(chance):
+                    result += 1
         return result
 
 
 @RegisterState(Armor)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
-    state = root_context.event.state
+    source = root_context.entity
+    state = root_context.state
 
     @RegisterEvent(session.id, event=PostDamageGameEvent)
-    def func(context: Context[PostDamageGameEvent]):
+    def func(context: EventContext[PostDamageGameEvent]):
         if context.event.target == source:
             state.negate_damage(session, source, context.event)

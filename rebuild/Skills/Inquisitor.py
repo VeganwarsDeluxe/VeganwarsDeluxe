@@ -1,7 +1,7 @@
 import random
 
-from core.Context import Context
-from core.Decorators import RegisterEvent, RegisterState
+from core.Context import StateContext, EventContext
+from core.Decorators import RegisterEvent, RegisterState, After, At
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
@@ -28,13 +28,13 @@ class Inquisitor(Skill):
 
 
 @RegisterState(Inquisitor)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
-    state: Inquisitor = root_context.event.state
+    source = root_context.entity
+    state: Inquisitor = root_context.state
 
     @RegisterEvent(session.id, event=PreDeathGameEvent, priority=2)
-    def hp_loss(context: Context[PreDeathGameEvent]):
+    def hp_loss(context: EventContext[PreDeathGameEvent]):
         if context.event.canceled:
             return
         if context.event.entity != source:
@@ -72,14 +72,14 @@ class Pray(DecisiveStateAction):
         if source.is_ally(target):
             self.session.say(f"🙏|{source.name} молится за {target.name}!")
 
-            @event_manager.at(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
-            def hp_loss(message: PreDeathGameEvent):
-                if message.entity != source:
+            @At(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
+            def hp_loss(context: EventContext[PreDeathGameEvent]):
+                if context.event.entity != source:
                     return
                 if source.hp <= 0:
                     source.hp = 1
                     self.session.say(f'😇|Высшие силы спасли {source.name}!')
-                    message.canceled = True
+                    context.event.canceled = True
 
             return
 
@@ -89,12 +89,12 @@ class Pray(DecisiveStateAction):
 
         self.session.say(f'🙏|{source.name} молится. Над {target.name} собираются тучи!')
 
-        @event_manager.after(self.session.id, turns=0, repeats=2, event=PostDamagesGameEvent)
-        def post_actions(actions_message: PostDamagesGameEvent):
+        @After(self.session.id, turns=0, repeats=2, event=PostDamagesGameEvent)
+        def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
             self.session.say(f"☁️|Над {target.name} собираются тучи. ({self.get_timer()})")
 
-        @event_manager.after(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
-        def post_actions(actions_message: PostDamagesGameEvent):
+        @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
+        def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
             self.session.say(f"🌩|Гнев небес обрушивается на {target.name} в виде молнии!")
             self.session.say(f"🌀|{target.name} оглушен!")
 

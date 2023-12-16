@@ -1,4 +1,4 @@
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Decorators import RegisterEvent, RegisterState
 from core.Actions.ActionManager import AttachedAction, action_manager
 from core.Actions.ItemAction import ItemAction
@@ -24,12 +24,12 @@ class Thief(Skill):
 
 
 @RegisterState(Thief)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    source = session.get_entity(root_context.event.entity_id)
+    source = root_context.entity
 
     @RegisterEvent(session.id, event=PreActionsGameEvent)
-    def func(context: Context[PreActionsGameEvent]):
+    def func(context: EventContext[PreActionsGameEvent]):
         if source.weapon.ranged:
             source.outbound_accuracy_bonus += 1
 

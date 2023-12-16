@@ -1,4 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
+from core.Context import EventContext
+from core.Decorators import At
 from core.Events.EventManager import event_manager
 from core.Items.Item import Item
 from core.Actions.ItemAction import FreeItem
@@ -21,11 +23,11 @@ class JetAction(FreeItem):
         self.session.say(f"💉|{source.name} использует джет на {target.name}! Его энергия будет"
                          f" полностью восстановлена через 2 хода.")
 
-        @event_manager.at(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent, priority=3)
-        def jet_reload(message: PostDamagesGameEvent):
+        @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent, priority=3)
+        def jet_reload(context: EventContext[PostDamagesGameEvent]):
             self.session.say(f"💉|Энергия {target.name} восстановлена до максимальной! "
                              f"({target.max_energy})")
 
-        @event_manager.at(self.session.id, turn=self.session.turn + 3, event=PreMoveGameEvent, priority=3)
-        def jet_reload(message: PreMoveGameEvent):
+        @At(self.session.id, turn=self.session.turn + 3, event=PreMoveGameEvent, priority=3)
+        def jet_reload(context: EventContext[PreMoveGameEvent]):
             target.energy = target.max_energy

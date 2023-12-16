@@ -25,7 +25,7 @@ class ExtendedBot(TeleBot):
         return f"https://t.me/{self.user.username}?start={data}"
 
 
-bot = ExtendedBot(bot_token)
+bot = ExtendedBot(bot_token, skip_pending=True)
 rm = RatingManager()
 
 cm = ContentManager()

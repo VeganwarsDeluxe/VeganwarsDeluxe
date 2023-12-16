@@ -1,6 +1,6 @@
 from core.Actions.ActionManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Entities import Entity
 from core.Events.EventManager import event_manager
 from core.Decorators import RegisterState, RegisterEvent
@@ -27,12 +27,12 @@ class DodgeGameEvent(GameEvent):
 
 
 @RegisterState(Dodge)
-def register(root_context: Context[AttachStateEvent]):
+def register(root_context: StateContext[AttachStateEvent]):
     session: Session = root_context.session
-    state = root_context.event.state
+    state = root_context.state
 
     @RegisterEvent(session.id, event=PostTickGameEvent)
-    def func(context: Context[PostTickGameEvent]):
+    def func(context: EventContext[PostTickGameEvent]):
         state.dodge_cooldown = max(0, state.dodge_cooldown - 1)
 
 

@@ -1,13 +1,12 @@
 import typing
 from typing import Union
 
-from core import Singleton
 from core.Decorators import RegisterEvent
 from core.Actions.Action import Action
 from core.Actions.ItemAction import ItemAction
 from core.Actions.StateAction import StateAction
 from core.Actions.WeaponAction import WeaponAction
-from core.Context import Context
+from core.Context import StateContext, EventContext
 from core.Entities.Entity import Entity
 from core.Events.EventManager import event_manager
 from core.Events.Events import CallActionsGameEvent, AttachSessionEvent, PreMoveGameEvent, PostUpdateActionsGameEvent, \
@@ -23,7 +22,7 @@ ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
 from collections import defaultdict
 
 
-class ActionManager(Singleton):
+class ActionManager:
     def __init__(self):
         self.action_queue: list[Action] = []
         self.all_actions: dict[ActionOwnerType, list[type[Action]]] = defaultdict(list)
@@ -31,11 +30,11 @@ class ActionManager(Singleton):
         self.session_manager = SessionManager()
 
         @RegisterEvent(event=AttachSessionEvent)
-        def handle_attach_session(context: Context[AttachSessionEvent]):
+        def handle_attach_session(context: EventContext[AttachSessionEvent]):
             self.register(context.session.id)
 
         @RegisterEvent(event=PreMoveGameEvent)
-        def handle_pre_move_game_event(context: Context[PreMoveGameEvent]):
+        def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
             self.reset_removed_actions(context.session.id)
 
     def register_action(self, cls: ActionOwnerType):
@@ -163,7 +162,7 @@ class ActionManager(Singleton):
 
     def register(self, session_id):
         @RegisterEvent(session_id, event=CallActionsGameEvent)
-        def handle_call_actions_game_event(context: Context[CallActionsGameEvent]):
+        def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
             action_queue = [action for action in self.action_queue if action.session.id == session_id]
             action_queue.sort(key=lambda a: a.priority)
             for action in action_queue:
