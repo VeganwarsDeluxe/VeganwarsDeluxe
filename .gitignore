@@ -2,11 +2,10 @@ telegram
 venv
 .idea
 telegram/viro
-tests
+test
 WeaponsLegacy.py
 requirements.txt
 config.py
 __pycache__
 classes.png
 packages.png
-rpg
