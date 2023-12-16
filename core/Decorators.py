@@ -7,19 +7,6 @@ from core.States import State
 from core.Context import StateContext, EventContext
 
 
-def ExperimentalRegisterState():
-    def decorator_func(state: type[State]):
-        def callback_wrapper(message):
-            callback = state.register
-
-            context = StateContext[state](message, session_manager.get_session(message.session_id))
-            return callback(context)
-
-        event_manager.at_event(event=AttachStateEvent, unique_type=state, callback_wrapper=callback_wrapper)
-
-    return decorator_func
-
-
 def RegisterState(state: type[State]):
     def decorator_func(callback: Callable):
         def callback_wrapper(message):
