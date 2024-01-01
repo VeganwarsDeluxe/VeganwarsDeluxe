@@ -1,7 +1,6 @@
-from core.Context import StateContext, EventContext
 from core.ContentManager import RegisterState, Every
-
-from core.Events.Events import PreMoveGameEvent, AttachStateEvent
+from core.Context import StateContext, EventContext
+from core.Events.Events import PreMoveGameEvent
 from core.Skills.Skill import Skill
 from rebuild.Items.RageSerum import RageSerum
 

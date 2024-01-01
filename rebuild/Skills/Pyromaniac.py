@@ -1,9 +1,6 @@
-from core.Context import StateContext, EventContext
 from core.ContentManager import RegisterEvent
-from core.Events.DamageEvents import AttackGameEvent
-
+from core.Context import StateContext, EventContext
 from core.Events.Events import AttachStateEvent, HPLossGameEvent
-
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 

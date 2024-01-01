@@ -1,10 +1,9 @@
-from core.ContentManager import AttachedAction, content_manager
 from core.Actions.StateAction import DecisiveStateAction
+from core.ContentManager import AttachedAction
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Context import StateContext, EventContext
 from core.Entities import Entity
-from core.ContentManager import RegisterState, RegisterEvent
-from core.Events.Events import PostUpdatesGameEvent, AttachStateEvent, PostUpdateActionsGameEvent
-
+from core.Events.Events import AttachStateEvent, PostUpdateActionsGameEvent
 from core.Sessions import Session
 from core.States.State import State
 from core.TargetType import OwnOnly

@@ -1,10 +1,7 @@
-import random
-
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Context import StateContext, EventContext
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
-from core.ContentManager import RegisterState, RegisterEvent
-from core.Events.Events import AttachStateEvent
 from core.Sessions import Session
 from core.States.State import State
 from core.utils import percentage_chance

@@ -1,10 +1,9 @@
 import random
 
-from core.ContentManager import AttachedAction, content_manager
-from core.Actions.ItemAction import DecisiveItem, FreeItem
-from core.Context import EventContext
+from core.Actions.ItemAction import FreeItem
+from core.ContentManager import AttachedAction
 from core.ContentManager import Nearest
-
+from core.Context import EventContext
 from core.Events.Events import PostActionsGameEvent
 from core.Items.Item import Item
 from core.TargetType import Everyone

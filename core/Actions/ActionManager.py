@@ -5,9 +5,7 @@ from core.Actions.ItemAction import ItemAction
 from core.Actions.StateAction import StateAction
 from core.Actions.WeaponAction import WeaponAction
 from core.Entities.Entity import Entity
-
-from core.Events.Events import CallActionsGameEvent, AttachSessionEvent, PreMoveGameEvent, PostUpdateActionsGameEvent, \
-    PreUpdateActionsGameEvent
+from core.Events.Events import PostUpdateActionsGameEvent, PreUpdateActionsGameEvent
 from core.Items.Item import Item
 from core.SessionManager import SessionManager
 from core.Sessions import Session

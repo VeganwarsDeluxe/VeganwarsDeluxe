@@ -1,8 +1,7 @@
-from core.ContentManager import AttachedAction, content_manager
 from core.Actions.WeaponAction import MeleeAttack
-from core.Context import EventContext
+from core.ContentManager import AttachedAction
 from core.ContentManager import Nearest
-
+from core.Context import EventContext
 from core.Events.Events import PreDamagesGameEvent
 from core.Weapons.Weapon import MeleeWeapon
 

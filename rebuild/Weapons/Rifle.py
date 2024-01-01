@@ -1,9 +1,8 @@
-from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
-from core.Context import StateContext, EventContext
+from core.ContentManager import AttachedAction
 from core.ContentManager import RegisterEvent
+from core.Context import EventContext
 from core.Entities import Entity
-
 from core.Events.Events import PreMoveGameEvent
 from core.Sessions import Session
 from core.TargetType import Enemies

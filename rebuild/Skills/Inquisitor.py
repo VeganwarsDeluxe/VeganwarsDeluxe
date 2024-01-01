@@ -1,12 +1,11 @@
 import random
 
-from core.Context import StateContext, EventContext
-from core.ContentManager import RegisterEvent, RegisterState, After, At
-from core.ContentManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
+from core.ContentManager import AttachedAction
+from core.ContentManager import RegisterEvent, RegisterState, After, At
+from core.Context import StateContext, EventContext
 from core.Entities import Entity
-
-from core.Events.Events import AttachStateEvent, PreDeathGameEvent, PostDamagesGameEvent
+from core.Events.Events import PreDeathGameEvent, PostDamagesGameEvent
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Everyone

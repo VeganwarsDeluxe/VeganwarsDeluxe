@@ -1,5 +1,5 @@
+from core.Actions.WeaponAction import RangedAttack
 from core.ContentManager import AttachedAction
-from core.Actions.WeaponAction import RangedAttack, MeleeAttack
 from core.TargetType import Enemies
 from core.Weapons.Weapon import RangedWeapon
 

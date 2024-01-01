@@ -1,5 +1,5 @@
+from core.Actions.WeaponAction import MeleeAttack
 from core.ContentManager import AttachedAction
-from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.TargetType import Enemies, Distance

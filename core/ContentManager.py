@@ -2,7 +2,7 @@ import typing
 from collections import defaultdict
 from typing import Union
 
-from core import Entity, SessionManager
+from core import Entity
 from core.Actions.Action import Action
 from core.Actions.ActionManager import ActionManager
 from core.Context import StateContext, EventContext

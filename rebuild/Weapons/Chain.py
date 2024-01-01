@@ -1,7 +1,7 @@
 import random
 
-from core.ContentManager import AttachedAction, content_manager
-from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
+from core.Actions.WeaponAction import MeleeAttack
+from core.ContentManager import AttachedAction
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import MeleeWeapon
 from rebuild.Weapons.Fist import Fist

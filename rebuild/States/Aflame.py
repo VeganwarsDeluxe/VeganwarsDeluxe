@@ -1,9 +1,8 @@
 from core.Actions.EntityActions import SkipActionGameEvent
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Context import StateContext, EventContext
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
-
-from core.ContentManager import RegisterState, RegisterEvent
-from core.Events.Events import PostActionsGameEvent, PreDamagesGameEvent, AttachStateEvent,  PostUpdateActionsGameEvent
+from core.Events.Events import PostActionsGameEvent, PreDamagesGameEvent, PostUpdateActionsGameEvent
 from core.Sessions import Session
 from core.States.State import State
 

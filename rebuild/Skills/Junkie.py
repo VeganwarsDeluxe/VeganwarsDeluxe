@@ -1,9 +1,8 @@
 import random
 
-from core.Context import StateContext, EventContext
 from core.ContentManager import RegisterEvent, RegisterState, At
+from core.Context import StateContext, EventContext
 from core.Events.DamageEvents import AttackGameEvent
-
 from core.Events.Events import AttachStateEvent, PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent
 from core.Sessions import Session
 from core.Skills.Skill import Skill
@@ -35,7 +34,7 @@ def register(root_context: StateContext[AttachStateEvent]):
     def pre_actions(context: EventContext[PreActionsGameEvent]):
         accuracy_bonus = 0
         damage_bonus = 0
-        for action in action_manager.get_queued_session_actions(session):
+        for action in context.action_manager.get_queued_session_actions(session):
             if action.id in [Jet.id, Hitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
                 if action.target == source and not action.canceled:
                     accuracy_bonus += 2
