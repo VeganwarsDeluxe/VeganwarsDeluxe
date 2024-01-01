@@ -7,8 +7,8 @@ from telebot import types
 #import deluxe.bot.rating
 import rebuild
 from config import admin
-from core.Actions.ActionManager import action_manager
-from core.SessionManager import session_manager
+from core.Actions.ActionManager import content_manager
+
 from core.TargetType import Own
 from deluxe.bot.bot import bot, cm
 from deluxe.game.Entities.Cow import Cow

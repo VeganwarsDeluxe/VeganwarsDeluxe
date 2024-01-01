@@ -1,7 +1,7 @@
-from core.Actions.ActionManager import action_manager
 from core.Actions.WeaponAction import MeleeAttack
 import random
 
+from core.ContentManager import AttachedAction
 from core.Weapons.Weapon import MeleeWeapon
 
 
@@ -14,7 +14,7 @@ class BaseballBat(MeleeWeapon):
     cubes = 3
 
 
-@action_manager.register_action(BaseballBat)
+@AttachedAction(BaseballBat)
 class BaseballBatAttack(MeleeAttack):
     def func(self, source, target):
         damage = super().attack(source, target)

@@ -3,9 +3,8 @@ import random
 from core.Context import StateContext, EventContext
 from core.Entities import Entity
 from core.Events.DamageEvents import PostAttackGameEvent, PostDamageGameEvent
-from core.Decorators import RegisterState, RegisterEvent
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Events.Events import AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
 from core.utils import percentage_chance
@@ -44,7 +43,7 @@ class Armor(State):
 
 
 @RegisterState(Armor)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Armor]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state

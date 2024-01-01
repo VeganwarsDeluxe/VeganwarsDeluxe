@@ -1,7 +1,7 @@
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterState, RegisterEvent
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Events.Events import PreDamagesGameEvent, AttachStateEvent
-from core.SessionManager import session_manager
+
 from core.Sessions import Session
 from core.States.State import State
 

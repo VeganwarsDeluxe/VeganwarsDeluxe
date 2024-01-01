@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.ItemAction import FreeItem
 from core.TargetType import Allies
 from core.Items.Item import Item

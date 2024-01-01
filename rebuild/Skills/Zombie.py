@@ -1,8 +1,8 @@
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent, RegisterState
-from core.Events.EventManager import event_manager
+from core.ContentManager import RegisterEvent, RegisterState
+
 from core.Events.Events import AttachStateEvent, HPLossGameEvent, PreDeathGameEvent
-from core.SessionManager import session_manager
+
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from rebuild.States.Zombie import ZombieState

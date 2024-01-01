@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from core.Entities.Entity import Entity
-from core.Events.EventManager import event_manager
+from core.Events.EventManager import EventManager
 from core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
     DeathGameEvent, CallActionsGameEvent, AttachStateEvent, PreDeathGameEvent
@@ -12,7 +12,9 @@ class Session:
     HP_LOSS_MSG = "{hearts}|{name} теряет {hp_loss} ХП. Остается {hp} ХП."
     DEATH_MSG = '☠️|{name} теряет сознание.'
 
-    def __init__(self):
+    def __init__(self, event_manager: EventManager):
+        self.event_manager = event_manager
+
         self.id = uuid4()
         self.turn = 1
         self.active = True
@@ -29,7 +31,7 @@ class Session:
         """
         Print a given text with optional newline at the end.
         """
-        print(text, end=('\n' if n else ''))
+        # print(text, end=('\n' if n else ''))
 
     @property
     def alive_entities(self) -> list:
@@ -56,7 +58,7 @@ class Session:
     def start(self):
         for entity in self.entities:
             for state in entity.skills:
-                event_manager.publish(AttachStateEvent(self.id, entity.id, state))
+                self.event_manager.publish(AttachStateEvent(self.id, entity.id, state))
 
     def cancel_damages(self, source):
         for entity in self.entities:
@@ -69,7 +71,7 @@ class Session:
         hp_loss = (damage // 6) + 1
 
         message = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
-        event_manager.publish(message)
+        self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
         self.say(self.HP_LOSS_MSG.format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss, hp=entity.hp))
@@ -102,7 +104,7 @@ class Session:
                 continue
 
             message = PreDeathGameEvent(self.id, self.turn, entity)
-            event_manager.publish(message)
+            self.event_manager.publish(message)
 
             if entity.hp > 0 or message.canceled:
                 continue
@@ -112,7 +114,7 @@ class Session:
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
-            event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
+            self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
 
     def finish(self):
         if not len(self.alive_teams):  # If everyone is dead
@@ -127,18 +129,18 @@ class Session:
         self.stop()
 
     def move(self):  # 0. Pre-move stage
-        event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
-        event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
-        event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
+        self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
+        self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
+        self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
         self.say(f'\nЭффекты {self.turn}:')
-        event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
+        self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
         self.say(f'\nРезультаты хода {self.turn}:')
         self.calculate_damages()  # 4. Damages stage
-        event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
+        self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
+        self.event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
         self.death()  # 8. Death stage
-        event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
+        self.event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

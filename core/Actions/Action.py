@@ -11,6 +11,8 @@ class Action:
 
     def __init__(self, session: Session, source: Entity, *args):
         self.session: Session = session
+        self.event_manager = self.session.event_manager
+
         self.source: Entity = source
         self.target: Entity = source
 

@@ -1,7 +1,6 @@
-from core.Context import StateContext, EventContext
-from core.Decorators import RegisterState
+from core.Context import StateContext
+from core.ContentManager import RegisterState
 from core.Events.Events import AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from rebuild.States.Armor import Armor
@@ -22,5 +21,6 @@ def register(root_context: StateContext[AttachStateEvent]):
 
     armor = source.get_skill(Armor.id)
     armor.add(1, 50)
+    session.rack()
     threshold = source.get_skill(DamageThreshold.id)
     threshold.threshold += 1

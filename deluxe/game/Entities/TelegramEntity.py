@@ -1,8 +1,8 @@
 from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.EntityActions import SkipActionGameEvent
 from core.Entities.Entity import Entity
-from core.Events.EventManager import event_manager
+
 from core.TargetType import OwnOnly
 from rebuild import all_states
 

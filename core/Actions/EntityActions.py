@@ -1,7 +1,7 @@
 from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
+
 from core.Events.Events import GameEvent
 from core.TargetType import OwnOnly
 

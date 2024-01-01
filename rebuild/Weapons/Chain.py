@@ -1,6 +1,6 @@
 import random
 
-from core.Actions.ActionManager import AttachedAction, action_manager
+from core.ContentManager import AttachedAction, content_manager
 from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import MeleeWeapon

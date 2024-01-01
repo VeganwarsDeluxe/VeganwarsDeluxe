@@ -1,6 +1,6 @@
 import random
 
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import MeleeAttack
 from core.Weapons.Weapon import MeleeWeapon
 

@@ -1,8 +1,8 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import RangedAttack
 from core.Context import EventContext
-from core.Decorators import Nearest
-from core.Events.EventManager import event_manager
+from core.ContentManager import Nearest
+
 from core.Events.Events import PostTickGameEvent
 from core.Weapons.Weapon import RangedWeapon
 from rebuild.States.Injury import Injury

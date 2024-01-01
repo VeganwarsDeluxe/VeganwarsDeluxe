@@ -2,9 +2,9 @@ import random
 
 import rebuild
 from core.Actions.Action import Action, DecisiveAction
-from core.Actions.ActionManager import action_manager, AttachedAction
+from core.ContentManager import content_manager, AttachedAction
 from core.Actions.EntityActions import SkipActionGameEvent
-from core.Events.EventManager import event_manager
+
 from core.TargetType import Allies, Enemies, OwnOnly
 from core.Weapons import Weapon
 from core.utils import percentage_chance
@@ -55,7 +55,6 @@ class Rat(Dummy):
                 return
             else:
                 self.evade(session)
-
 
     def first_turn(self, session):
         base_action = Action(session, self)

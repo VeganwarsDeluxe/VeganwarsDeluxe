@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from core.Events.EventManager import event_manager
+from core.Events.EventManager import EventManager
 from core.Events.Events import AttachStateEvent
 from core.States import State
 from core.Weapons.Weapon import Weapon
@@ -13,6 +13,7 @@ class Entity:
                  session_id: str = '', name: str = '',
                  hp: int = 0, max_hp: int = 0,
                  energy: int = 0, max_energy: int = 0):
+
         self.session_id = session_id
         self.name: str = name
         self.id = str(uuid4())
@@ -56,11 +57,11 @@ class Entity:
             item.source = self
             return item
 
-    def attach_skill(self, state: State):
+    def attach_skill(self, state: State, event_manager: EventManager):
         self.skills.append(state)
-        event_manager.publish(AttachStateEvent)
+        event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
-    def get_skill(self, skill_id: str):
+    def get_skill(self, skill_id: str) -> State:
         result = list(filter(lambda s: s.id == skill_id, self.skills))
         if result:
             return result[0]

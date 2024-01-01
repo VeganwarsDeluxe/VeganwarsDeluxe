@@ -1,7 +1,6 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Entities import Entity
 from core.Events.DamageEvents import PostDamageGameEvent
-from core.Events.EventManager import event_manager
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
 import random
@@ -46,7 +45,7 @@ class GrenadeAction(DecisiveItem):
 
     def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
-        event_manager.publish(message)
+        self.event_manager.publish(message)
         return message.damage
 
     @property

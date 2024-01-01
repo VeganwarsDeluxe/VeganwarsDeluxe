@@ -1,10 +1,10 @@
-from core.Actions.ActionManager import AttachedAction, action_manager
+from core.ContentManager import AttachedAction, content_manager
 from core.Actions.StateAction import DecisiveStateAction
 from core.Context import StateContext, EventContext
 from core.Entities import Entity
-from core.Decorators import RegisterState, RegisterEvent
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Events.Events import PostUpdatesGameEvent, PostDamagesGameEvent, AttachStateEvent
-from core.SessionManager import session_manager
+
 from core.Sessions import Session
 from core.States.State import State
 
@@ -18,7 +18,7 @@ class Stun(State):
 
 
 @RegisterState(Stun)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Stun]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state

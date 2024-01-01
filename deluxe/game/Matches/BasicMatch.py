@@ -4,10 +4,10 @@ import telebot.util
 from telebot import types
 
 import rebuild
-from core.Actions.ActionManager import action_manager
-from core.Events.EventManager import event_manager
+from core.Actions.ActionManager import content_manager
+
 from core.Events.Events import PreMoveGameEvent
-from core.SessionManager import session_manager
+
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 from deluxe.game.Sessions.TelegramSession import TelegramSession
 from deluxe.bot.bot import bot

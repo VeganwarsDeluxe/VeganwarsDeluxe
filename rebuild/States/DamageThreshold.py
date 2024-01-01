@@ -1,7 +1,6 @@
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterState, RegisterEvent
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Events.Events import HPLossGameEvent, AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.States.State import State
 
@@ -15,7 +14,7 @@ class DamageThreshold(State):
 
 
 @RegisterState(DamageThreshold)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[DamageThreshold]):
     session: Session = root_context.session
     state = root_context.state
 

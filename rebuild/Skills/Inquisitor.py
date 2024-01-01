@@ -1,13 +1,12 @@
 import random
 
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent, RegisterState, After, At
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import RegisterEvent, RegisterState, After, At
+from core.ContentManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
+
 from core.Events.Events import AttachStateEvent, PreDeathGameEvent, PostDamagesGameEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Everyone
@@ -28,7 +27,7 @@ class Inquisitor(Skill):
 
 
 @RegisterState(Inquisitor)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Inquisitor]):
     session: Session = root_context.session
     source = root_context.entity
     state: Inquisitor = root_context.state

@@ -2,9 +2,8 @@ import random
 
 import rebuild
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterState
+from core.ContentManager import RegisterState
 from core.Events.Events import AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 

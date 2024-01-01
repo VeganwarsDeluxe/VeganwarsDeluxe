@@ -1,26 +1,23 @@
-from core.Events.EventManager import event_manager
+from core.Events.EventManager import EventManager
 from core.Events.Events import AttachSessionEvent
 from core.Sessions.Session import Session
 
 
 class SessionManager:
-    def __init__(self):
-        self.sessions: list[Session] = []
+    def __init__(self, event_manager: EventManager):
+        self.event_manager = event_manager
+
+        self.sessions: dict[str, Session] = dict()
 
     def get_session(self, session_id):
-        result = list(filter(lambda s: s.id == session_id, self.sessions))
-        if result:
-            return result[0]
+        return self.sessions.get(session_id)
 
     def attach_session(self, session: Session):
-        self.sessions.append(session)
-        event_manager.publish(AttachSessionEvent(session.id))
+        self.sessions.update({session.id: session})
+        self.event_manager.publish(AttachSessionEvent(session.id))
         return session
 
     def delete_session(self, session_id):
         session = self.get_session(session_id)
         if session and session in self.sessions:
-            self.sessions.remove(session)
-
-
-session_manager = SessionManager()
+            self.sessions.pop(session.id)

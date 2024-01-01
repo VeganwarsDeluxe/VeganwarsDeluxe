@@ -8,6 +8,9 @@ class EventManager:
     def __init__(self):
         self._handlers: list[EventHandler] = []
 
+    def clean_by_session_id(self, session_id: str):
+        self._handlers = list(filter(lambda eh: eh.session_id == session_id, self._handlers))
+
     def publish(self, event: Event):
         self._handlers.sort(key=lambda h: h.priority)
         for handler in self._handlers:
@@ -24,8 +27,8 @@ class EventManager:
               event: Type[Event] = Event,
               filters=None):
 
-        handler = ScheduledEventHandler(session_id, callback_wrapper, event, start=start, interval=turns, max_repeats=-1,
-                                        filters=filters)
+        handler = ScheduledEventHandler(session_id, callback_wrapper, event, start=start, interval=turns,
+                                        max_repeats=-1, filters=filters)
         self._handlers.append(handler)
 
     def at(self,
@@ -72,6 +75,3 @@ class EventManager:
         handler = EventHandler(session_id, callback_wrapper, event,
                                unique_type=unique_type, priority=priority, filters=filters)
         self._handlers.append(handler)
-
-
-event_manager = EventManager()

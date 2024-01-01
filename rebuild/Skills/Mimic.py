@@ -1,13 +1,12 @@
 import random
 
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent, RegisterState
-from core.Actions.ActionManager import action_manager, AttachedAction
+from core.ContentManager import RegisterEvent, RegisterState
+from core.ContentManager import AttachedAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
+
 from core.Events.Events import AttachStateEvent, PostUpdateActionsGameEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Everyone, Own
@@ -35,7 +34,7 @@ def register(root_context: StateContext[AttachStateEvent]):
         if update_context.event.entity_id != source.id:
             return
         if root_context.state.memorized_action:
-            action_manager.attach_action(session, source, root_context.state.memorized_action)
+            update_context.action_manager.attach_action(session, source, root_context.state.memorized_action)
 
 
 @AttachedAction(Mimic)

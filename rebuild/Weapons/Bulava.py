@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session

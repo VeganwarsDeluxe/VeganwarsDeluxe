@@ -1,11 +1,10 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent
+from core.ContentManager import RegisterEvent
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
+
 from core.Events.Events import PreMoveGameEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.TargetType import Enemies
 from core.Weapons.Weapon import RangedWeapon
@@ -26,11 +25,9 @@ class Rifle(RangedWeapon):
         super().__init__(session_id, entity_id)
         self.main_target = None, 0
 
-        session = session_manager.get_session(session_id)
-        entity = session.get_entity(entity_id)
-
         @RegisterEvent(session_id=session_id, event=PreMoveGameEvent)
         def pre_move(context: EventContext[PreMoveGameEvent]):
+            entity = context.session.get_entity(entity_id)
             main_target, level = self.main_target
             if main_target:
                 main_target: Entity

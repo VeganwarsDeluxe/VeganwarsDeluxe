@@ -2,12 +2,12 @@ import random
 
 import rebuild
 from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import action_manager, AttachedAction
+from core.ContentManager import content_manager, AttachedAction
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent
-from core.Events.EventManager import event_manager
+from core.ContentManager import RegisterEvent
+
 from core.Events.Events import PreDeathGameEvent
-from core.SessionManager import session_manager
+
 from core.Sessions import Session
 from core.TargetType import OwnOnly
 from .Dummy import Dummy

@@ -1,7 +1,6 @@
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterState
+from core.ContentManager import RegisterState
 from core.Events.Events import AttachStateEvent
-from core.SessionManager import session_manager
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 
@@ -13,7 +12,7 @@ class Dvuzhil(Skill):
 
 
 @RegisterState(Dvuzhil)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Dvuzhil]):
     session: Session = root_context.session
     source = root_context.entity
 

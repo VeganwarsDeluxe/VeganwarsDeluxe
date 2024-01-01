@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Entities import Entity
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem

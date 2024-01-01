@@ -25,12 +25,12 @@ class StartSessionEvent(Event):
         self.session_id = session_id
 
 
-class AttachStateEvent(Event):
+class AttachStateEvent[T: State](Event):
     def __init__(self, session_id, entity_id, state: State):
         super().__init__(type(state))
         self.session_id = session_id
         self.entity_id = entity_id
-        self.state: State = state
+        self.state: T = state
 
 
 class GameEvent(Event):

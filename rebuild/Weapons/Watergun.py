@@ -1,10 +1,10 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.Context import EventContext
-from core.Decorators import After
+from core.ContentManager import After
 from core.Entities import Entity
 from core.Events.DamageEvents import AttackGameEvent
-from core.Events.EventManager import event_manager
+
 from core.Events.Events import PreDamagesGameEvent
 from core.Sessions import Session
 from core.TargetType import Allies

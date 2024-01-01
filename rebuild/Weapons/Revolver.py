@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import RangedWeapon

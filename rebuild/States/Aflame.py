@@ -1,9 +1,8 @@
-from core.Actions.ActionManager import action_manager
 from core.Actions.EntityActions import SkipActionGameEvent
 from core.Context import StateContext, EventContext
 from core.Events.DamageEvents import PreDamageGameEvent, PostDamageGameEvent
-from core.Events.EventManager import event_manager
-from core.Decorators import RegisterState, RegisterEvent
+
+from core.ContentManager import RegisterState, RegisterEvent
 from core.Events.Events import PostActionsGameEvent, PreDamagesGameEvent, AttachStateEvent,  PostUpdateActionsGameEvent
 from core.Sessions import Session
 from core.States.State import State
@@ -32,7 +31,7 @@ class Aflame(State):
 
 
 @RegisterState(Aflame)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Aflame]):
     session: Session = root_context.session
     source = root_context.entity
     state: Aflame = root_context.state
@@ -42,7 +41,8 @@ def register(root_context: StateContext[AttachStateEvent]):
         """
         Handle events after actions have been taken.
         """
-        if 'skip' not in action_manager.get_queued_entity_actions(session, source) or not state.flame:
+        skipped = 'skip' not in context.action_manager.get_queued_entity_actions(session, source)
+        if skipped or not state.flame:
             return
         session.say(f'💨|{source.name} потушил себя.')
         state.timer = 0
@@ -57,7 +57,7 @@ def register(root_context: StateContext[AttachStateEvent]):
         if root_context.event.entity_id != source.id:
             return
         if state.flame:
-            action = action_manager.get_action(session, source, 'skip')
+            action = context.action_manager.get_action(session, source, 'skip')
             if not action:
                 return
             action.name = 'Потушиться'
@@ -117,13 +117,13 @@ def perform_fire_attack(session, source, state, message):
     Perform a fire attack and calculate the damage.
     """
     fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
-    event_manager.publish(fire_event)
+    session.event_manager.publish(fire_event)
     damage = fire_event.damage
 
     session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
-    event_manager.publish(post_fire_event)
+    session.event_manager.publish(post_fire_event)
     return post_fire_event.damage
 
 

@@ -1,8 +1,8 @@
 import random
 
 from core.Context import StateContext, EventContext
-from core.Decorators import RegisterEvent
-from core.Decorators import RegisterState
+from core.ContentManager import RegisterEvent
+from core.ContentManager import RegisterState
 from core.Events.DamageEvents import AttackGameEvent
 from core.Events.Events import AttachStateEvent
 from core.Sessions import Session

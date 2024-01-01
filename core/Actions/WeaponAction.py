@@ -3,7 +3,6 @@ import random
 
 from core.Actions.Action import Action
 from core.Entities import Entity
-from core.Events.EventManager import event_manager
 from core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
 from core.Sessions import Session
 from core.TargetType import Enemies, Distance
@@ -73,12 +72,12 @@ class Attack(DecisiveWeaponAction):
 
     def publish_attack_event(self, source, target, damage):
         message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)
-        event_manager.publish(message)  # 7.1 Pre-Attack stage
+        self.event_manager.publish(message)  # 7.1 Pre-Attack stage
         return message.damage
 
     def publish_post_attack_event(self, source, target, damage):
         message = PostAttackGameEvent(self.session.id, self.session.turn, source, target, damage)
-        event_manager.publish(message)  # 7.2 Post-Attack stage
+        self.event_manager.publish(message)  # 7.2 Post-Attack stage
         return message.damage
 
     def send_attack_message(self, source, target, damage):

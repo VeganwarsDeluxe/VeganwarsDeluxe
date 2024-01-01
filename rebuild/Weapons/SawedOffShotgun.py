@@ -1,4 +1,4 @@
-from core.Actions.ActionManager import AttachedAction
+from core.ContentManager import AttachedAction
 from core.Weapons.Weapon import RangedWeapon
 from .Shotgun import ShotgunAttack
 

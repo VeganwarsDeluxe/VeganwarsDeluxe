@@ -1,8 +1,8 @@
-from core.Actions.ActionManager import AttachedAction, action_manager
+from core.ContentManager import AttachedAction, content_manager
 from core.Actions.WeaponAction import MeleeAttack
 from core.Context import EventContext
-from core.Decorators import Nearest
-from core.Events.EventManager import event_manager
+from core.ContentManager import Nearest
+
 from core.Events.Events import PreDamagesGameEvent
 from core.Weapons.Weapon import MeleeWeapon
 
@@ -26,11 +26,15 @@ class KnucklesAttack(MeleeAttack):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        for action in action_manager.get_queued_entity_actions(self.session, target):
-            if action.id == 'reload':
-                @Nearest(self.session.id, event=PreDamagesGameEvent)
-                def pre_damages(context: EventContext[PreDamagesGameEvent]):
-                    self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
-                    target.energy = max(target.energy - 4, 0)
+
+        @Nearest(self.session.id, event=PreDamagesGameEvent)
+        def pre_damages(context: EventContext[PreDamagesGameEvent]):
+            reloading = False
+            for action in context.action_manager.get_queued_entity_actions(self.session, target):
+                if action.id == 'reload':
+                    reloading = True
+            if reloading:
+                self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
+                target.energy = max(target.energy - 4, 0)
 
         return damage

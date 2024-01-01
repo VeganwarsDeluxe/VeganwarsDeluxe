@@ -1,7 +1,7 @@
 import random
 
 from core.Actions.Action import DecisiveAction
-from core.Actions.ActionManager import action_manager, AttachedAction
+from core.ContentManager import content_manager, AttachedAction
 from core.Actions.ItemAction import FreeItem
 from core.Items.Item import Item
 from core.TargetType import OwnOnly
