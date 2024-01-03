@@ -1,7 +1,5 @@
-from core.ContentManager import AttachedAction
-from core.Actions.ItemAction import FreeItem
+from core import Item, FreeItem, AttachedAction
 from core.TargetType import Allies
-from core.Items.Item import Item
 
 
 class Adrenaline(Item):

@@ -1,1 +1,1 @@
-from .Weapon import Weapon
+from .Weapon import Weapon, MeleeWeapon, RangedWeapon
