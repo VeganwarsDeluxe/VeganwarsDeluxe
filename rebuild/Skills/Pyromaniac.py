@@ -12,7 +12,7 @@ class Pyromaniac(Skill):
 
 
 # @RegisterState(Pyromaniac)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Pyromaniac]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -26,7 +26,7 @@ def register(root_context: StateContext[AttachStateEvent]):
 def get_bonus(session: Session):
     bonus = 0
     for entity in session.entities:
-        aflame = entity.get_skill('aflame')
+        aflame = entity.get_state('aflame')
         if aflame.flame:
             bonus += 1
     return bonus

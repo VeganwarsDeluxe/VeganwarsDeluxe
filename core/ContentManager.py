@@ -5,8 +5,9 @@ from typing import Union
 from core import Entity
 from core.Actions.Action import Action
 from core.Actions.ActionManager import ActionManager
-from core.Context import StateContext, EventContext
-from core.Events.Events import Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent, CallActionsGameEvent
+from core.Context import StateContext, EventContext, ActionExecutionContext
+from core.Events.Events import Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent, CallActionsGameEvent, \
+    ExecuteActionEvent, DeliveryRequestEvent, DeliveryPackageEvent
 from core.Items.Item import Item
 from core.States import State
 from core.Weapons import Weapon
@@ -51,8 +52,19 @@ class ContentManager:
                                 if action.session.id == context.session.id]
                 action_queue.sort(key=lambda a: a.priority)
                 for action in action_queue:
-                    action()
+                    event = ExecuteActionEvent(context.session.id, context.session.turn, action)
+                    context.event_manager.publish(event)
+
                     action_manager.action_queue.remove(action)
+
+            @RegisterEvent(root_context.session.id, event=DeliveryRequestEvent)
+            def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
+                event = DeliveryPackageEvent(context.session.id, context.session.turn)
+                context.event_manager.publish(event)
+
+            @self.register_action_execution_event(root_context.session.id)
+            def execute_action_handler(context: ActionExecutionContext):
+                context.action()
 
         """
         Every PreMoveGameEvent, resets removed actions for the Session.
@@ -98,6 +110,31 @@ class ContentManager:
 
         return decorator_func
 
+    def register_action_execution_event(self, session_id: str = None, unique_type=None,
+                                        priority=0, filters=None):
+        """
+        Works same as self.register_state, but more complicated. Adds an Assignment to be completed
+        in Engine init.
+        """
+
+        def decorator_func(callback: typing.Callable):
+            def assignment(action_manager: ActionManager):
+                session_manager = action_manager.session_manager
+                event_manager = session_manager.event_manager
+
+                def callback_wrapper(message):
+                    context = ActionExecutionContext[
+                        ExecuteActionEvent
+                    ](message, session_manager.get_session(message.session_id), action_manager)
+                    return callback(context)
+
+                event_manager.at_event(event=ExecuteActionEvent, session_id=session_id, unique_type=unique_type,
+                                       priority=priority, filters=filters, callback_wrapper=callback_wrapper)
+
+            self.add_assignment(assignment)
+
+        return decorator_func
+
     def register_state(self, state: type[State]):
         def decorator_func(callback: typing.Callable):
             """
@@ -115,7 +152,8 @@ class ContentManager:
                 event_manager = session_manager.event_manager
 
                 def callback_wrapper(message):
-                    context = EventContext[event](message, session_manager.get_session(message.session_id))
+                    context = EventContext[event](message, session_manager.get_session(message.session_id),
+                                                  action_manager)
                     return callback(context)
 
                 event_manager.at(callback_wrapper, session_id, turn, event, priority=priority, filters=filters)
@@ -131,7 +169,8 @@ class ContentManager:
                 event_manager = session_manager.event_manager
 
                 def callback_wrapper(message):
-                    context = EventContext[event](message, session_manager.get_session(message.session_id))
+                    context = EventContext[event](message, session_manager.get_session(message.session_id),
+                                                  action_manager)
                     return callback(context)
 
                 event_manager.nearest(callback_wrapper, session_id, event=event, priority=priority, filters=filters)
@@ -147,7 +186,8 @@ class ContentManager:
                 event_manager = session_manager.event_manager
 
                 def callback_wrapper(message):
-                    context = EventContext[event](message, session_manager.get_session(message.session_id))
+                    context = EventContext[event](message, session_manager.get_session(message.session_id),
+                                                  action_manager)
                     return callback(context)
 
                 event_manager.every(callback_wrapper, session_id, turns, start, event, filters)
@@ -163,7 +203,8 @@ class ContentManager:
                 event_manager = session_manager.event_manager
 
                 def callback_wrapper(message):
-                    context = EventContext[event](message, session_manager.get_session(message.session_id))
+                    context = EventContext[event](message, session_manager.get_session(message.session_id),
+                                                  action_manager)
                     return callback(context)
 
                 event_manager.after(event=event, session_id=session_id, turns=turns, repeats=repeats,

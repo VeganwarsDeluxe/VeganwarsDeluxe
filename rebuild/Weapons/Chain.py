@@ -1,7 +1,9 @@
 import random
 
 from core.Actions.WeaponAction import MeleeAttack
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, Nearest
+from core.Context import EventContext
+from core.Events.Events import DeliveryPackageEvent, DeliveryRequestEvent
 from core.TargetType import Enemies, Distance
 from core.Weapons.Weapon import MeleeWeapon
 from rebuild.Weapons.Fist import Fist
@@ -40,14 +42,20 @@ class KnockWeapon(MeleeAttack):
         return self.session.turn < self.weapon.cooldown_turn
 
     def func(self, source, target):
-        self.weapon.cooldown_turn = self.session.turn + 3
-        self.attack(source, target)
-        source_reloading = 'reload' not in [a.id for a in
-                                            action_manager.get_queued_entity_actions(self.session, target)]
-        if source_reloading or random.randint(1, 100) <= 10:
-            self.session.say(f'⛓|{source.name} выбил оружие из рук {target.name}!')
-            state = target.get_skill('knocked-weapon')
-            state.weapon = target.weapon
-            target.weapon = Fist(self.session.id, target.id)
-        else:
-            self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
+        @Nearest(self.session.id, event=DeliveryPackageEvent)
+        def delivery(context: EventContext[DeliveryPackageEvent]):
+            action_manager = context.action_manager
+
+            self.weapon.cooldown_turn = self.session.turn + 3
+            self.attack(source, target)
+            source_reloading = 'reload' not in [a.id for a in
+                                                action_manager.get_queued_entity_actions(self.session, target)]
+            if source_reloading or random.randint(1, 100) <= 10:
+                self.session.say(f'⛓|{source.name} выбил оружие из рук {target.name}!')
+                state = target.get_state('knocked-weapon')
+                state.weapon = target.weapon
+                target.weapon = Fist(self.session.id, target.id)
+            else:
+                self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
+
+        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))

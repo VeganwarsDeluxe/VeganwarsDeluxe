@@ -49,6 +49,6 @@ class SkipTurnAction(DecisiveAction):
     priority = 2
 
     def func(self, source, target):
-        message = event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
+        message = self.event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
         if not message.no_text:
             self.session.say(f"⬇|{source.name} пропускает ход.")

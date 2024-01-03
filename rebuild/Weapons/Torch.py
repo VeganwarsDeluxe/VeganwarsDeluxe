@@ -23,6 +23,6 @@ class TorchAttack(MeleeAttack):
         if not damage:
             return damage
         if random.randint(0, 100) > 50:
-            aflame = target.get_skill('aflame')
+            aflame = target.get_state('aflame')
             aflame.add_flame(self.session, target, source, 1)
         return damage

@@ -20,11 +20,11 @@ class HitinAction(FreeItem):
     priority = -2
 
     def func(self, source, target):
-        target.get_skill('armor').add(2, 100)
+        target.get_state('armor').add(2, 100)
         self.session.say(f'💉|{source.name} использует хитин на {target.name}!')
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent)
         def hitin_knockout(context: EventContext[PostDamagesGameEvent]):
-            target.get_skill('armor').remove((2, 100))
-            target.get_skill('stun').stun += 1
+            target.get_state('armor').remove((2, 100))
+            target.get_state('stun').stun += 1
             self.session.say(f'🌀|{target.name} теряет эффект хитина. Игрок оглушен!')

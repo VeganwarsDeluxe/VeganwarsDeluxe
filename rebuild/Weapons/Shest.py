@@ -48,5 +48,5 @@ class KnockDown(MeleeAttack):
             self.session.say(f'🚷💨|{source.name} не удалось сбить {target.name} с ног!')
             return
         self.session.say(f'🚷|{source.name} сбивает {target.name} с ног! {target.name} теряет равновесие и падает!')
-        state = target.get_skill('knockdown')
+        state = target.get_state('knockdown')
         state.active = True

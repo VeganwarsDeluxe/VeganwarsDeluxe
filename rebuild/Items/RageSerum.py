@@ -27,7 +27,7 @@ class RageSerumAction(FreeItem):
         def serum_attack(context: EventContext[PostActionsGameEvent]):
             if target.dead:
                 return
-            attack = action_manager.get_action(self.session, target, 'attack')
+            attack = context.action_manager.get_action(self.session, target, 'attack')
             if not attack:
                 self.session.say(f'💉|{target.name} чихает.')
                 return

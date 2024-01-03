@@ -21,7 +21,7 @@ class Junkie(Skill):
 
 
 @RegisterState(Junkie)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Junkie]):
     session: Session = root_context.session
     source = root_context.entity
     source.items.append(random.choice([Jet, Hitin, Adrenaline])())

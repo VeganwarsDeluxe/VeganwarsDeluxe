@@ -8,8 +8,12 @@ class EventManager:
     def __init__(self):
         self._handlers: list[EventHandler] = []
 
+    @property
+    def size(self):
+        return len(self._handlers)
+
     def clean_by_session_id(self, session_id: str):
-        self._handlers = list(filter(lambda eh: eh.session_id == session_id, self._handlers))
+        self._handlers = list(filter(lambda eh: eh.session_id != session_id, self._handlers))
 
     def publish(self, event: Event):
         self._handlers.sort(key=lambda h: h.priority)

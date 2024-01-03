@@ -96,7 +96,7 @@ class Pray(DecisiveStateAction):
             self.session.say(f"🌩|Гнев небес обрушивается на {target.name} в виде молнии!")
             self.session.say(f"🌀|{target.name} оглушен!")
 
-            target.get_skill("stun").stun += 1
+            target.get_state("stun").stun += 1
 
     def get_timer(self):
         self._timer -= 1

@@ -1,11 +1,11 @@
 import random
 
 from core.Actions.StateAction import DecisiveStateAction
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, Nearest
 from core.ContentManager import RegisterEvent, RegisterState
 from core.Context import StateContext, EventContext
 from core.Entities import Entity
-from core.Events.Events import AttachStateEvent, PostUpdateActionsGameEvent
+from core.Events.Events import AttachStateEvent, PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Everyone, Own
@@ -24,7 +24,7 @@ class Mimic(Skill):
 
 
 @RegisterState(Mimic)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Mimic]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -52,21 +52,29 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
         return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
+        @Nearest(self.session.id, event=DeliveryPackageEvent)
+        def delivery(context: EventContext[DeliveryPackageEvent]):
+            action_manager = context.action_manager
+
+            action_pool = []
+            for action in action_manager.action_queue:
+                if action.type == 'item':
+                    continue
+                if action.source != target:
+                    continue
+                action_pool.append(action)
+
+            if not action_pool:
+                self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+                return
+
+            self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
+
+            action = random.choice(action_pool)
+            self.state.memorized_action = action.id
+
+        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+
         self.state.cooldown_turn = self.session.turn + 6
 
-        action_pool = []
-        for action in action_manager.action_queue:
-            if action.type == 'item':
-                continue
-            if action.source != target:
-                continue
-            action_pool.append(action)
 
-        if not action_pool:
-            self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
-            return
-
-        self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
-
-        action = random.choice(action_pool)
-        self.state.memorized_action = action.id

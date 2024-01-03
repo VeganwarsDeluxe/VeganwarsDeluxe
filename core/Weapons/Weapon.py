@@ -12,6 +12,8 @@ class Weapon:
     damage_bonus = 0
     accuracy_bonus = 0
 
+    type = 'weapon'
+
     @classmethod
     @property
     @functools.cache

@@ -22,7 +22,7 @@ class BaseballBatAttack(MeleeAttack):
             return damage
         if random.randint(0, 100) > 30:
             return
-        stun = target.get_skill('stun')
+        stun = target.get_state('stun')
         self.session.say(f'🌀|{target.name} оглушен!')
         stun.stun += 2
         return damage

@@ -24,6 +24,6 @@ class FlamethrowerAttack(RangedAttack):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        aflame = target.get_skill('aflame')
+        aflame = target.get_state('aflame')
         aflame.add_flame(self.session, target, source, 1)
         return damage

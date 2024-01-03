@@ -15,5 +15,5 @@ class SawedOffShotgun(RangedWeapon):
 
 
 @AttachedAction(SawedOffShotgun)
-class ObrezAttack(ShotgunAttack):
+class SawedOffShotgunAttack(ShotgunAttack):
     pass

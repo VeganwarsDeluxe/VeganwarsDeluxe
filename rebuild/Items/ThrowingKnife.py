@@ -29,7 +29,7 @@ class ThrowingKnifeAction(DecisiveItem):
         if random.randint(0, 100) > self.hit_chance:
             self.session.say(f"💨|{source.name} кидает метательный нож в {target.name}, но не попадает.")
             return
-        bleeding = target.get_skill('bleeding')
+        bleeding = target.get_state('bleeding')
         if bleeding.active:
             bleeding.bleeding -= 1
         bleeding.active = True

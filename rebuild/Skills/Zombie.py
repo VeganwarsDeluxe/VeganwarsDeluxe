@@ -15,7 +15,7 @@ class Zombie(Skill):
 
 
 @RegisterState(Zombie)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Zombie]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -25,7 +25,7 @@ def register(root_context: StateContext[AttachStateEvent]):
             return
         if context.event.canceled:
             return
-        zombie = source.get_skill(ZombieState.id)
+        zombie = source.get_state(ZombieState.id)
         if zombie.active:
             return
         if not zombie.active and zombie.deactivations > 0:

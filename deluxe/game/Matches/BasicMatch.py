@@ -155,7 +155,7 @@ class BasicMatch:
     def execute_actions(self):
         """Executes actions for all alive entities."""
         for player in self.session.alive_entities:
-            if player.get_skill('stun').stun:
+            if player.get_state('stun').stun:
                 action_manager.queue_action(self.session, player, 'lay_stun')
                 player.ready = True
                 if not self.session.unready_players:

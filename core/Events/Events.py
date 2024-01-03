@@ -51,6 +51,22 @@ class AddAction(GameEvent):
     pass
 
 
+class DeliveryRequestEvent(GameEvent):
+    def __init__(self, session_id, turn):
+        super().__init__(session_id, turn)
+
+
+class DeliveryPackageEvent(GameEvent):
+    def __init__(self, session_id, turn):
+        super().__init__(session_id, turn)
+
+
+class ExecuteActionEvent(GameEvent):
+    def __init__(self, session_id, turn, action):
+        super().__init__(session_id, turn)
+        self.action = action
+
+
 class PreDeathGameEvent(GameEvent):
     def __init__(self, session_id, turn, entity):
         super().__init__(session_id, turn)

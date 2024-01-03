@@ -1,28 +1,34 @@
 class DamageHolder:
     def __init__(self):
-        self.damages = []
+        self.damages: list[DamageLog] = []
 
-    def add(self, source, damage):
-        self.damages.append((source, damage))
+    def add(self, source, damage: int, turn: int):
+        if not damage:
+            damage = 0
+        self.damages.append(DamageLog(source, damage, turn))
 
     def sum(self):
         total = 0
-        for source, damage in self.damages:
-            if not damage:
-                damage = 0
-            total += damage
+        for log in self.damages:
+            total += log.damage
         return total
 
     def clear(self):
         self.damages = []
 
     def cancel(self, source):
-        self.damages = list(filter(lambda d: d[0] != source, self.damages))
+        self.damages = list(filter(lambda d: d.source != source, self.damages))
 
     def contributors(self):
         contributors = []
-        for source, damage in self.damages:
-            if source not in contributors:
-                contributors.append(source)
+        for log in self.damages:
+            if log.source not in contributors:
+                contributors.append(log.source)
         return contributors
 
+
+class DamageLog:
+    def __init__(self, source, damage: int, turn: int):
+        self.source = source
+        self.damage = damage
+        self.turn = turn

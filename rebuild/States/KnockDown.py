@@ -18,7 +18,7 @@ class Knockdown(State):
 
 
 @RegisterState(Knockdown)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Knockdown]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
@@ -27,8 +27,8 @@ def register(root_context: StateContext[AttachStateEvent]):
     def func(context: EventContext[PostUpdateActionsGameEvent]):
         if not state.active:
             return
-        action_manager.remove_action(session, source, 'attack')
-        action_manager.remove_action(session, source, 'dodge')
+        context.action_manager.remove_action(session, source, 'attack')
+        context.action_manager.remove_action(session, source, 'dodge')
 
 
 @AttachedAction(Knockdown)

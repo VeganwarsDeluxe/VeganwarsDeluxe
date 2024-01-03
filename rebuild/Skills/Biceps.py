@@ -16,7 +16,7 @@ class Biceps(Skill):
 
 
 @RegisterState(Biceps)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Biceps]):
     session: Session = root_context.session
 
     @RegisterEvent(session.id, event=AttackGameEvent)

@@ -75,8 +75,8 @@ def register(root_context: StateContext[Aflame]):
 
         damage = perform_fire_attack(session, source, state, context.event)
 
-        source.inbound_dmg.add(state.dealer, damage)
-        source.outbound_dmg.add(state.dealer, damage)
+        source.inbound_dmg.add(state.dealer, damage, session.turn)
+        source.outbound_dmg.add(state.dealer, damage, session.turn)
 
         if state.flame > 1:
             session.say(f'🔥|{source.name} горит. Теряет {state.flame - 1} энергии.')

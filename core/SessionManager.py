@@ -18,6 +18,4 @@ class SessionManager:
         return session
 
     def delete_session(self, session_id):
-        session = self.get_session(session_id)
-        if session and session in self.sessions:
-            self.sessions.pop(session.id)
+        self.sessions.pop(session_id, None)

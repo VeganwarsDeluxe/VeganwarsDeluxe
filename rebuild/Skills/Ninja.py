@@ -15,7 +15,7 @@ class Ninja(Skill):
 
 
 @RegisterState(Ninja)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Ninja]):
     session: Session = root_context.session
     source = root_context.entity
 

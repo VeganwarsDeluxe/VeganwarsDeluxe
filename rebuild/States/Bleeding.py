@@ -1,6 +1,6 @@
 from core.ContentManager import RegisterState, RegisterEvent
 from core.Context import StateContext, EventContext
-from core.Events.Events import PreDamagesGameEvent, AttachStateEvent
+from core.Events.Events import PreDamagesGameEvent
 from core.Sessions import Session
 from core.States.State import State
 
@@ -15,7 +15,7 @@ class Bleeding(State):
 
 
 @RegisterState(Bleeding)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Bleeding]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state

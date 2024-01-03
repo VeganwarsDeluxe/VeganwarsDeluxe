@@ -26,7 +26,7 @@ class DodgeGameEvent(GameEvent):
 
 
 @RegisterState(Dodge)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Dodge]):
     session: Session = root_context.session
     state = root_context.state
 
@@ -54,7 +54,7 @@ class DodgeAction(DecisiveStateAction):
         self.state.dodge_cooldown = 5
         bonus = -5
         message = DodgeGameEvent(self.session.id, self.session.turn, source, bonus)
-        event_manager.publish(message)
+        self.event_manager.publish(message)
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
         self.session.say(f"💨|{source.name} перекатывается.")

@@ -12,7 +12,7 @@ class Sadist(Skill):
 
 
 @RegisterState(Sadist)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Sadist]):
     session: Session = root_context.session
     source = root_context.entity
 

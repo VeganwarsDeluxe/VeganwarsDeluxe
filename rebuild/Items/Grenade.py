@@ -36,8 +36,8 @@ class GrenadeAction(DecisiveItem):
                 continue
             target = random.choice(target_pool)
             post_damage = self.publish_post_damage_event(source, target, damage)
-            target.inbound_dmg.add(source, post_damage)
-            source.outbound_dmg.add(source, post_damage)
+            target.inbound_dmg.add(source, post_damage, self.session.turn)
+            source.outbound_dmg.add(source, post_damage, self.session.turn)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
         self.session.say(f'💣|{source.name} кидает гранату! Нанесено {damage} урона следующим целям: '

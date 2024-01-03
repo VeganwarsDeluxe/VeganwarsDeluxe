@@ -341,7 +341,7 @@ def act_callback_handler(c):
     if player.chose_skills or player.skill_cycle == int(cycle):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
-    skill = cm.get_skill(skill_id)()
+    skill = cm.get_state(skill_id)()
     if skill_id == 'random':
         variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], rebuild.all_skills))
         if not variants:
@@ -368,7 +368,7 @@ def act_callback_handler(c):
 @bot.callback_query_handler(func=lambda c: c.data.startswith('ci'))
 def act_callback_handler(c):
     _, skill_id = c.data.split('_', 3)
-    bot.answer_callback_query(c.id, cm.get_skill(skill_id).description, show_alert=True)
+    bot.answer_callback_query(c.id, cm.get_state(skill_id).description, show_alert=True)
 
 
 @bot.callback_query_handler(func=lambda c: c.data.startswith('wi'))

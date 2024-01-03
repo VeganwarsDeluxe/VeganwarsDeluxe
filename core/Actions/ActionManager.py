@@ -40,6 +40,8 @@ class ActionManager:
         owner_type, action_type = self.get_action_from_all_actions(action_id)
         if isinstance(owner_type, Entity):
             action = action_type(session, entity)
+        elif owner_type.type == 'weapon':
+            action = action_type(session, entity, owner_type(session.id, entity.id))
         else:
             action = action_type(session, entity, owner_type())
         self.actions[(session, entity)].append(action)
@@ -92,7 +94,7 @@ class ActionManager:
     def get_actions(self, session: Session, entity: Entity):
         return self.actions[(session, entity)]
 
-    def get_available_actions(self, session: Session, entity: Entity):
+    def get_available_actions(self, session: Session, entity: Entity) -> list[Action]:
         actions = self.get_actions(session, entity)
         result = []
         for action in actions:

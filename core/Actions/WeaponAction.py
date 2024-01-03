@@ -9,10 +9,10 @@ from core.TargetType import Enemies, Distance
 from core.Weapons import Weapon
 
 
-class WeaponAction(Action):
-    def __init__(self, session: Session, source: Entity, weapon: Weapon):
+class WeaponAction[T: Weapon](Action):
+    def __init__(self, session: Session, source: Entity, weapon: T):
         super().__init__(session, source)
-        self.weapon = weapon
+        self.weapon: T = weapon
 
 
 class FreeWeaponAction(WeaponAction):
@@ -66,8 +66,8 @@ class Attack(DecisiveWeaponAction):
         self.send_attack_message(source, target, damage)
         damage = self.publish_post_attack_event(source, target, damage)
 
-        target.inbound_dmg.add(source, damage)
-        source.outbound_dmg.add(target, damage)
+        target.inbound_dmg.add(source, damage, self.session.turn)
+        source.outbound_dmg.add(target, damage, self.session.turn)
         return damage
 
     def publish_attack_event(self, source, target, damage):

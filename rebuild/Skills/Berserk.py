@@ -15,7 +15,7 @@ class Berserk(Skill):
 
 
 @RegisterState(Berserk)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Berserk]):
     session: Session = root_context.session
     source = root_context.entity
 

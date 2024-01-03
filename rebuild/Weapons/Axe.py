@@ -22,7 +22,7 @@ class AxeAttack(MeleeAttack):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        threshold = target.get_skill(DamageThreshold.id)
+        threshold = target.get_state(DamageThreshold.id)
         self.session.say(f'🤕|{target.name} покалечен!')
 
         threshold.threshold += 1

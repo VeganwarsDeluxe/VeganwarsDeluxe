@@ -20,6 +20,17 @@ class Session:
         self.active = True
         self.entities: list[Entity] = []
 
+        self.mute_status = False
+
+    def mute(self):
+        self.mute_status = True
+
+    def unmute(self):
+        self.mute_status = False
+
+    def attach_entity(self, entity: Entity):
+        self.entities.append(entity)
+
     def get_entity(self, entity_id: str) -> Entity:
         """
         Get an entity by its ID.
@@ -31,7 +42,9 @@ class Session:
         """
         Print a given text with optional newline at the end.
         """
-        # print(text, end=('\n' if n else ''))
+        if self.mute_status:
+            return
+        print(text, end=('\n' if n else ''))
 
     @property
     def alive_entities(self) -> list:

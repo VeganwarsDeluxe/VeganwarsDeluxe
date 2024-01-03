@@ -44,5 +44,5 @@ class FireArrow(RangedAttack):
             self.session.say(f'💨|{source.name} поджигает стрелу и запускает ее в {target.name}, но не попадает.')
             return
         self.session.say(f'☄️|{source.name} поджигает стрелу и запускает ее в {target.name}!')
-        aflame = target.get_skill('aflame')
+        aflame = target.get_state('aflame')
         aflame.add_flame(self.session, target, source, 2)

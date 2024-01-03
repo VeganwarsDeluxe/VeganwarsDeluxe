@@ -16,7 +16,7 @@ class ZombieState(State):
 
 
 @RegisterState(ZombieState)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[ZombieState]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state

@@ -9,6 +9,8 @@ from core.DamageHolder import DamageHolder
 
 
 class Entity:
+    type = 'entity'
+
     def __init__(self,
                  session_id: str = '', name: str = '',
                  hp: int = 0, max_hp: int = 0,
@@ -57,11 +59,11 @@ class Entity:
             item.source = self
             return item
 
-    def attach_skill(self, state: State, event_manager: EventManager):
+    def attach_state(self, state: State, event_manager: EventManager):
         self.skills.append(state)
         event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
-    def get_skill(self, skill_id: str) -> State:
+    def get_state(self, skill_id: str) -> State:
         result = list(filter(lambda s: s.id == skill_id, self.skills))
         if result:
             return result[0]

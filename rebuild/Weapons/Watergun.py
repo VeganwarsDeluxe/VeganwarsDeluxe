@@ -49,7 +49,7 @@ class CreateWaterShield(DecisiveWeaponAction):
     def func(self, source, target):
         @After(self.session.id, 0, event=PreDamagesGameEvent, repeats=3)
         def _(context: EventContext[PreDamagesGameEvent]):
-            aflame = self.source.get_skill('aflame')
+            aflame = self.source.get_state('aflame')
             aflame.extinguished = True
             aflame.flame = 0
 

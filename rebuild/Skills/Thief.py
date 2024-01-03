@@ -1,11 +1,11 @@
 from core.Context import StateContext, EventContext
-from core.ContentManager import RegisterEvent, RegisterState
+from core.ContentManager import RegisterEvent, RegisterState, Nearest
 from core.ContentManager import AttachedAction, content_manager
 from core.Actions.ItemAction import ItemAction
 from core.Actions.StateAction import DecisiveStateAction
 from core.Entities import Entity
 
-from core.Events.Events import AttachStateEvent, PreActionsGameEvent
+from core.Events.Events import AttachStateEvent, PreActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from core.TargetType import Enemies
@@ -23,7 +23,7 @@ class Thief(Skill):
 
 
 @RegisterState(Thief)
-def register(root_context: StateContext[AttachStateEvent]):
+def register(root_context: StateContext[Thief]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -49,22 +49,30 @@ class Steal(DecisiveStateAction):
         return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
-        self.state.cooldown_turn = self.session.turn + 3
-        success = False
-        for action in action_manager.action_queue:
-            if action.type != 'item':
-                continue
-            action: ItemAction
-            if action.source != target:
-                continue
-            item = action.item
-            if action.canceled:
-                continue
-            action.canceled = True
+        @Nearest(self.session.id, event=DeliveryPackageEvent)
+        def delivery(context: EventContext[DeliveryPackageEvent]):
+            action_manager = context.action_manager
 
-            self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
-            source.items.append(item)
+            self.state.cooldown_turn = self.session.turn + 3
+            success = False
+            for action in action_manager.action_queue:
+                if action.type != 'item':
+                    continue
+                action: ItemAction
+                if action.source != target:
+                    continue
+                item = action.item
+                if action.canceled:
+                    continue
+                action.canceled = True
 
-            success = True
-        if not success:
-            self.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
+                self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+                source.items.append(item)
+
+                success = True
+            if not success:
+                self.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
+
+        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+
+

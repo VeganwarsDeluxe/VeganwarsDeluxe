@@ -18,7 +18,7 @@ class KnifeAttack(MeleeAttack):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        bleeding = target.get_skill('bleeding')
+        bleeding = target.get_state('bleeding')
         if bleeding.active:
             bleeding.bleeding -= 1
             self.session.say(f"🩸|Кровотечение усиливается!")

@@ -32,7 +32,7 @@ class MolotovAction(DecisiveItem):
             if not target_pool:
                 continue
             target = random.choice(target_pool)
-            aflame = target.get_skill('aflame')
+            aflame = target.get_state('aflame')
             aflame.add_flame(self.session, target, source, 1)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
