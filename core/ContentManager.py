@@ -39,11 +39,27 @@ class ContentManager:
         self.states: dict[str, State] = dict()
         self.items: dict[str, Item] = dict()
 
+    def get_state(self, state_id: str) -> typing.Optional[State]:
+        """
+        Retrieve a state by its ID.
+        If no state is found, return an empty state.
+        """
+        return self.states.get(state_id, State)
+
+    def get_weapon(self, weapon_id: str) -> typing.Optional[Weapon]:
+        """
+        Retrieve a weapon by its ID.
+        If no weapon is found, return an empty weapon.
+        """
+        return self.weapons.get(weapon_id, Weapon)
+
     def register_weapon(self, weapon: Weapon):
         self.weapons.update({weapon.id: weapon})
+        return weapon
 
     def register_item(self, item: Item):
         self.items.update({item.id: item})
+        return item
 
     def initialize_action_manager(self, action_manager: ActionManager):
         """
