@@ -70,7 +70,7 @@ class Session:
 
     def start(self):
         for entity in self.entities:
-            for state in entity.skills:
+            for state in entity.states:
                 self.event_manager.publish(AttachStateEvent(self.id, entity.id, state))
 
     def cancel_damages(self, source):

@@ -21,6 +21,7 @@ class Action:
         self.canceled = False
         self.type = 'action'
         self.removed = False
+        self.queued = False
 
     def func(self, source, target):
         pass

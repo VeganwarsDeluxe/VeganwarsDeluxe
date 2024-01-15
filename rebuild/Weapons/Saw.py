@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import RangedAttack
 from core.Context import EventContext
 from core.ContentManager import Nearest
@@ -8,6 +8,7 @@ from core.Weapons.Weapon import RangedWeapon
 from rebuild.States.Injury import Injury
 
 
+@RegisterWeapon
 class Saw(RangedWeapon):
     id = 'saw'
     name = 'Пиломет'

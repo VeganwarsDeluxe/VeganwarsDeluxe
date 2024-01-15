@@ -1,10 +1,11 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Hatchet(MeleeWeapon):
     id = 'hatchet'
     name = "Тесак"

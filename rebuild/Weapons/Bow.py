@@ -1,9 +1,9 @@
 from core.Actions.WeaponAction import RangedAttack
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.TargetType import Enemies
 from core.Weapons.Weapon import RangedWeapon
 
-
+@RegisterWeapon
 class Bow(RangedWeapon):
     id = 'bow'
     name = 'Лук'

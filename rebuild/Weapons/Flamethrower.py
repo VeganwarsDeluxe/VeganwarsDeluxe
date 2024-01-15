@@ -1,8 +1,9 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import RangedAttack
 from core.Weapons.Weapon import RangedWeapon
 
 
+@RegisterWeapon
 class Flamethrower(RangedWeapon):
     id = 'flamethrower'
     name = 'Огнемет'

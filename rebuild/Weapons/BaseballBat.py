@@ -1,10 +1,11 @@
 from core.Actions.WeaponAction import MeleeAttack
 import random
 
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class BaseballBat(MeleeWeapon):
     id = 'baseball_bat'
     name = 'Бита'

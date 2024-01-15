@@ -35,6 +35,11 @@ class ContentManager:
 
         self.attached_action_managers: list[ActionManager] = list()
 
+        self.weapons: dict[str, Weapon] = dict()
+
+    def register_weapon(self, weapon: Weapon):
+        print(weapon)
+
     def initialize_action_manager(self, action_manager: ActionManager):
         """
         On AttachSessionEvent, attaches "action calling function" to the Session.
@@ -253,3 +258,5 @@ At = content_manager.at
 Nearest = content_manager.nearest
 Every = content_manager.every
 After = content_manager.after
+
+RegisterWeapon = content_manager.register_weapon

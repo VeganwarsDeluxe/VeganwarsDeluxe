@@ -1,7 +1,7 @@
 import random
 
 from core.Actions.WeaponAction import MeleeAttack
-from core.ContentManager import AttachedAction, Nearest
+from core.ContentManager import AttachedAction, Nearest, RegisterWeapon
 from core.Context import EventContext
 from core.Events.Events import DeliveryPackageEvent, DeliveryRequestEvent
 from core.TargetType import Enemies, Distance
@@ -9,6 +9,7 @@ from core.Weapons.Weapon import MeleeWeapon
 from rebuild.Weapons.Fist import Fist
 
 
+@RegisterWeapon
 class Chain(MeleeWeapon):
     id = 'chain'
     name = 'Цепь'

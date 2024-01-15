@@ -1,5 +1,5 @@
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.ContentManager import RegisterEvent
 from core.Context import EventContext
 from core.Entities import Entity
@@ -9,6 +9,7 @@ from core.TargetType import Enemies
 from core.Weapons.Weapon import RangedWeapon
 
 
+@RegisterWeapon
 class Rifle(RangedWeapon):
     id = 'sniperRifle'
     name = 'Снайперская винтовка'

@@ -28,7 +28,7 @@ class Entity:
         self.max_energy: int = max_energy
 
         self.weapon: Weapon = Weapon(session_id, self.id)
-        self.skills: list[State] = []
+        self.states: list[State] = []
         self.items: list[Item] = []
 
         self.nearby_entities: list[Entity] = []
@@ -46,11 +46,15 @@ class Entity:
 
     @property
     def hearts(self):
-        return '♥️' * self.hp if self.hp < 8 else f"♥️x{self.hp}"
+        return '♥️' * self.hp if 0 < self.hp < 8 else f"♥️x{self.hp}"
 
     @property
     def energies(self):
-        return '⚡️' * self.energy if self.energy < 8 else f"⚡️x{self.energy}"
+        return '⚡️' * self.energy if 0 < self.energy < 8 else f"⚡️x{self.energy}"
+
+    @property
+    def skills(self):
+        return list(filter(lambda s: s.type == 'skill', self.states))
 
     def get_item(self, item_id: str):
         items = list(filter(lambda i: i.id == item_id, self.items))
@@ -60,11 +64,11 @@ class Entity:
             return item
 
     def attach_state(self, state: State, event_manager: EventManager):
-        self.skills.append(state)
+        self.states.append(state)
         event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
     def get_state(self, skill_id: str) -> State:
-        result = list(filter(lambda s: s.id == skill_id, self.skills))
+        result = list(filter(lambda s: s.id == skill_id, self.states))
         if result:
             return result[0]
 

@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import DecisiveWeaponAction, RangedAttack
 from core.Context import EventContext
 from core.ContentManager import After
@@ -11,6 +11,7 @@ from core.TargetType import Allies
 from core.Weapons.Weapon import RangedWeapon
 
 
+@RegisterWeapon
 class WaterGun(RangedWeapon):
     id = 'watergun'
     name = 'Водомет'

@@ -67,7 +67,7 @@ class ActionManager:
                 action: type[WeaponAction]
                 entity_actions.append(action(session, entity, entity.weapon))
 
-        for state in entity.skills:
+        for state in entity.states:
             state_type = type(state)
             if state_type in self.action_map:
                 for action in self.action_map[state_type]:
@@ -92,7 +92,7 @@ class ActionManager:
         return next(actions, None)
 
     def get_actions(self, session: Session, entity: Entity):
-        return self.actions[(session, entity)]
+        return self.actions.get((session, entity), [])
 
     def get_available_actions(self, session: Session, entity: Entity) -> list[Action]:
         actions = self.get_actions(session, entity)
@@ -131,10 +131,12 @@ class ActionManager:
 
     def queue_action(self, session: Session, entity: Entity, action_id: str) -> bool:
         action: Action = self.get_action(session, entity, action_id)
+        action.queued = True
         return self.queue_action_instance(action)
 
     def queue_action_instance(self, action: Action) -> bool:
         self.action_queue.append(action)
+        action.queued = True
         return not action.cost
 
     def get_action_from_all_actions(self, action_id: str) -> Optional[tuple[type[ActionOwnerType], type[Action]]]:

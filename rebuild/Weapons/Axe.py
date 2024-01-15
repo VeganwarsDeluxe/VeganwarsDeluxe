@@ -1,9 +1,10 @@
 from core.Actions.WeaponAction import MeleeAttack
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Weapons.Weapon import MeleeWeapon
 from rebuild.States.DamageThreshold import DamageThreshold
 
 
+@RegisterWeapon
 class Axe(MeleeWeapon):
     id = 'axe'
     name = 'Топор'

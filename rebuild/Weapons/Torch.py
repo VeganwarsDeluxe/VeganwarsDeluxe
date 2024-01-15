@@ -1,10 +1,11 @@
 import random
 
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import MeleeAttack
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Torch(MeleeWeapon):
     id = 'torch'
     name = 'Факел'

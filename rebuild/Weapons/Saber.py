@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import DecisiveWeaponAction, MeleeAttack
 from core.Context import EventContext
 from core.ContentManager import At
@@ -10,6 +10,7 @@ from core.TargetType import Enemies
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Saber(MeleeWeapon):
     id = 'saber'
     name = 'Сабля'

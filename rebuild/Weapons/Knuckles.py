@@ -1,11 +1,12 @@
 from core.Actions.WeaponAction import MeleeAttack
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.ContentManager import Nearest
 from core.Context import EventContext
 from core.Events.Events import PreDamagesGameEvent
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Knuckles(MeleeWeapon):
     id = 'knuckles'
     name = 'Кастет'

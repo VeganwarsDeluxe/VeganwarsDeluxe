@@ -7,9 +7,9 @@ from core.States import State
 
 class Engine:
     def __init__(self):
-        self.event_manager = EventManager()
-        self.session_manager = SessionManager(self.event_manager)
-        self.action_manager = ActionManager(self.session_manager, action_map=content_manager.action_map)
+        self.event_manager: EventManager = EventManager()
+        self.session_manager: SessionManager = SessionManager(self.event_manager)
+        self.action_manager: ActionManager = ActionManager(self.session_manager, action_map=content_manager.action_map)
 
         content_manager.initialize_action_manager(self.action_manager)
         content_manager.attach_action_manager(self.action_manager)

@@ -1,8 +1,9 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Weapons.Weapon import RangedWeapon
 from .Shotgun import ShotgunAttack
 
 
+@RegisterWeapon
 class SawedOffShotgun(RangedWeapon):
     id = 'sawed-off-shotgun'
     name = 'Обрез'

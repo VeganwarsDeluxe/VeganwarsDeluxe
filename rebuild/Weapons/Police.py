@@ -1,8 +1,9 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import MeleeAttack
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Police(MeleeWeapon):
     id = 'policebat'
     name = 'Полицейская дубинка'

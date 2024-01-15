@@ -1,9 +1,10 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import FreeWeaponAction, MeleeAttack
 from core.TargetType import OwnOnly
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Claws(MeleeWeapon):
     id = 'claws'
     name = 'Стальные когти'

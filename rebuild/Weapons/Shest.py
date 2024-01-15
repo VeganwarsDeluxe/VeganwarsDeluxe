@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterWeapon
 from core.Actions.WeaponAction import MeleeAttack
 from core.Entities import Entity
 from core.Sessions import Session
@@ -6,6 +6,7 @@ from core.TargetType import Enemies
 from core.Weapons.Weapon import MeleeWeapon
 
 
+@RegisterWeapon
 class Shest(MeleeWeapon):
     id = 'shest'
     name = 'Шест'
