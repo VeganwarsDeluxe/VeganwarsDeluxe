@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Context import EventContext
 from core.ContentManager import At
 from core.Items.Item import Item
@@ -7,6 +7,7 @@ from core.Events.Events import PostDamagesGameEvent
 from core.TargetType import Everyone
 
 
+@RegisterItem
 class Hitin(Item):
     id = 'hitin'
     name = 'Хитин'

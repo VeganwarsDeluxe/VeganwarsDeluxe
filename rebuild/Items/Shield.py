@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Actions.ItemAction import DecisiveItem
 from core.Context import EventContext
 from core.ContentManager import At
@@ -8,6 +8,7 @@ from core.Items.Item import Item
 from core.TargetType import Allies
 
 
+@RegisterItem
 class Shield(Item):
     id = 'shield'
     name = 'Щит'

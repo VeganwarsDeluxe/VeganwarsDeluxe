@@ -1,7 +1,9 @@
 from core import Item, FreeItem, AttachedAction
+from core.ContentManager import RegisterItem
 from core.TargetType import Allies
 
 
+@RegisterItem
 class Adrenaline(Item):
     id = 'adrenaline'
     name = 'Адреналин'

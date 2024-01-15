@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Context import EventContext
 from core.ContentManager import At
 
@@ -8,6 +8,7 @@ from core.Events.Events import PostDamagesGameEvent, PreMoveGameEvent
 from core.TargetType import Allies
 
 
+@RegisterItem
 class Jet(Item):
     id = 'jet'
     name = 'Джет'

@@ -1,19 +1,20 @@
 import random
 
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
 from core.TargetType import Enemies
 
 
+@RegisterItem
 class ThrowingKnife(Item):
-    id = 'throwingknife'
+    id = 'throwing_knife'
     name = 'Метательный нож'
 
 
 @AttachedAction(ThrowingKnife)
 class ThrowingKnifeAction(DecisiveItem):
-    id = 'throwingknife'
+    id = 'throwing_knife'
     target_type = Enemies()
 
     @property

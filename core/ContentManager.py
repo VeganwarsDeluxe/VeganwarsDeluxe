@@ -36,9 +36,14 @@ class ContentManager:
         self.attached_action_managers: list[ActionManager] = list()
 
         self.weapons: dict[str, Weapon] = dict()
+        self.states: dict[str, State] = dict()
+        self.items: dict[str, Item] = dict()
 
     def register_weapon(self, weapon: Weapon):
-        print(weapon)
+        self.weapons.update({weapon.id: weapon})
+
+    def register_item(self, item: Item):
+        self.items.update({item.id: item})
 
     def initialize_action_manager(self, action_manager: ActionManager):
         """
@@ -141,6 +146,8 @@ class ContentManager:
         return decorator_func
 
     def register_state(self, state: type[State]):
+        self.states.update({state.id: state})
+
         def decorator_func(callback: typing.Callable):
             """
             We actually do nothing here, we only save Callback along with the State to be
@@ -260,3 +267,4 @@ Every = content_manager.every
 After = content_manager.after
 
 RegisterWeapon = content_manager.register_weapon
+RegisterItem = content_manager.register_item

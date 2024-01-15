@@ -1,7 +1,7 @@
 import random
 
 from core.Actions.ItemAction import FreeItem
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.ContentManager import Nearest
 from core.Context import EventContext
 from core.Events.Events import PostActionsGameEvent
@@ -9,6 +9,7 @@ from core.Items.Item import Item
 from core.TargetType import Everyone
 
 
+@RegisterItem
 class RageSerum(Item):
     id = 'rage-serum'
     name = 'Сыворотка бешенства'

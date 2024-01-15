@@ -1,4 +1,4 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Entities import Entity
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
@@ -8,6 +8,7 @@ from core.Sessions import Session
 from core.TargetType import Enemies
 
 
+@RegisterItem
 class Molotov(Item):
     id = 'molotov'
     name = 'Коктейль Молотова'

@@ -1,9 +1,10 @@
-from core.ContentManager import AttachedAction
+from core.ContentManager import AttachedAction, RegisterItem
 from core.Items.Item import Item
 from core.Actions.ItemAction import DecisiveItem
 from core.TargetType import Allies
 
 
+@RegisterItem
 class Stimulator(Item):
     id = 'stimulator'
     name = 'Стимулятор'
