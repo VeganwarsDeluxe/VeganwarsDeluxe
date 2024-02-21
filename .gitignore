@@ -4,7 +4,6 @@ venv
 telegram/viro
 test
 WeaponsLegacy.py
-requirements.txt
 config.py
 __pycache__
 multiverse
