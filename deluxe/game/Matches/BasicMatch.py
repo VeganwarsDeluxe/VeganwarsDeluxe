@@ -4,13 +4,12 @@ import telebot.util
 from telebot import types
 
 import rebuild
-from core.Actions.ActionManager import content_manager
 
 from core.Events.Events import PreMoveGameEvent
 
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 from deluxe.game.Sessions.TelegramSession import TelegramSession
-from deluxe.bot.bot import bot
+from deluxe.startup import bot, engine
 
 
 class BasicMatch:
@@ -44,7 +43,7 @@ class BasicMatch:
 
     def create_session(self, id: str):
         session = TelegramSession(id)
-        session_manager.attach_session(session)
+        engine.session_manager.attach_session(session)
         return session
 
     def notify_players(self, message):
@@ -66,7 +65,7 @@ class BasicMatch:
             tts = 'Игра окончена! Все погибли!'
         self.notify_players(tts)
         bot.send_message(self.session.chat_id, tts)
-        session_manager.delete_session(self.session.id)
+        engine.session_manager.delete_session(self.session.id)
 
     def choose_target(self, player, targets, index=0):
         kb = types.InlineKeyboardMarkup()
@@ -82,8 +81,8 @@ class BasicMatch:
     def choose_act(self, user_id, target_id, act_id):
         player = self.session.get_player(user_id)
         target = self.session.get_entity(target_id)
-        action = action_manager.get_action(self.session, player, act_id)
-        queue = action_manager.queue_action(self.session, player, act_id)
+        action = engine.action_manager.get_action(self.session, player, act_id)
+        queue = engine.action_manager.queue_action(self.session, player, act_id)
         action.target = target
 
         if action.type == 'item':
@@ -145,18 +144,18 @@ class BasicMatch:
 
     def update_game_actions(self):
         """Updates actions for a game."""
-        action_manager.update_actions(self.session)
+        engine.action_manager.update_actions(self.session)
         self.action_indexes = []
 
     def handle_pre_move_events(self):
         """Handles events before a move."""
-        self.session.pre_move(), event_manager.publish(PreMoveGameEvent(self.session.id, self.session.turn))
+        self.session.pre_move(), engine.event_manager.publish(PreMoveGameEvent(self.session.id, self.session.turn))
 
     def execute_actions(self):
         """Executes actions for all alive entities."""
         for player in self.session.alive_entities:
             if player.get_state('stun').stun:
-                action_manager.queue_action(self.session, player, 'lay_stun')
+                engine.action_manager.queue_action(self.session, player, 'lay_stun')
                 player.ready = True
                 if not self.session.unready_players:
                     self.cycle()
@@ -166,7 +165,7 @@ class BasicMatch:
                 self.send_act_buttons(player)
 
     def map_buttons(self, player):
-        action_manager.update_entity_actions(self.session, player)
+        engine.action_manager.update_entity_actions(self.session, player)
 
         buttons = {
             'first_row': [],
@@ -175,7 +174,7 @@ class BasicMatch:
             'approach_row': [],
             'skip_row': []
         }
-        for action in action_manager.get_available_actions(self.session, player):
+        for action in engine.action_manager.get_available_actions(self.session, player):
             name = action.name
             button = types.InlineKeyboardButton(text=name, callback_data=f"act_{self.session.chat_id}_{action.id}")
             if action.id in ['attack', 'reload']:
@@ -209,11 +208,11 @@ class BasicMatch:
         return kb
 
     def get_additional_buttons(self, player):
-        action_manager.update_entity_actions(self.session, player)
+        engine.action_manager.update_entity_actions(self.session, player)
 
         all_buttons = []
         items = []
-        for action in action_manager.get_available_actions(self.session, player):
+        for action in engine.action_manager.get_available_actions(self.session, player):
             name = action.name
             if action.type == 'item':
                 items.append(action)
@@ -334,7 +333,7 @@ class BasicMatch:
         skills = []
         for _ in range(self.skill_number):
             variants = list(filter(lambda s: s.id not in [s.id for s in skills], rebuild.all_skills))
-            variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], variants))
+            variants = list(filter(lambda s: s.id not in [s.id for s in player.states], variants))
             if not variants:
                 break
             choice = random.choice(variants)

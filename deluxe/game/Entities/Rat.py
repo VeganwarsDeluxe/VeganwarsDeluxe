@@ -9,6 +9,7 @@ from core.TargetType import Allies, Enemies, OwnOnly
 from core.Weapons import Weapon
 from core.utils import percentage_chance
 from deluxe.game.Entities.Dummy import Dummy
+from rebuild import ThrowingKnife, Molotov, Grenade
 
 
 class Rat(Dummy):
@@ -23,7 +24,7 @@ class Rat(Dummy):
         self.items = []
 
         for _ in range(2):
-            self.skills.append(random.choice(rebuild.all_skills)())
+            self.states.append(random.choice(rebuild.all_skills)())
 
         self.weapon: Weapon = random.choice(rebuild.all_weapons)(session_id, self.id)
 
@@ -63,7 +64,7 @@ class Rat(Dummy):
         target = random.choice(enemies)
 
         if self.weapon.melee and target.weapon.melee:
-            if percentage_chance(40) and 'thief' in [s.id for s in self.skills]:
+            if percentage_chance(40) and 'thief' in [s.id for s in self.states]:
                 self.use_thief(session, target)
             else:
                 if percentage_chance(50):
@@ -72,7 +73,7 @@ class Rat(Dummy):
                     self.throw_something(session, target)
 
         elif self.weapon.ranged and target.weapon.melee:
-            if percentage_chance(80) or 'thief' not in [s.id for s in self.skills]:
+            if percentage_chance(80) or 'thief' not in [s.id for s in self.states]:
                 if percentage_chance(50) and 'adrenaline' in [i.id for i in self.items]:
                     action = action_manager.get_action(session, self, "adrenaline")
                     action.target = self
@@ -114,7 +115,7 @@ class Rat(Dummy):
 
     def throw_something(self, session, target):
         for item in self.items:
-            if item.id in ['grenade', 'molotov', 'throwingknife']:
+            if item.id in [Grenade.id, Molotov.id, ThrowingKnife.id]:
                 action = action_manager.get_action(session, self, item.id)
                 action.target = target
                 action_manager.queue_action_instance(action)

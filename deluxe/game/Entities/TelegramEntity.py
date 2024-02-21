@@ -1,18 +1,18 @@
+import rebuild
 from core.Actions.Action import DecisiveAction
 from core.ContentManager import AttachedAction
 from core.Actions.EntityActions import SkipActionGameEvent
 from core.Entities.Entity import Entity
 
 from core.TargetType import OwnOnly
-from rebuild import all_states
+from deluxe.startup import engine
 
 
 class TelegramEntity(Entity):
     def __init__(self, session_id: str, user_name, user_id):
         super().__init__(session_id)
-        self.init_states()
-
         self.id = str(user_id)
+
         self.name = user_name
         self.npc = False  # to differentiate humans and bots
 
@@ -22,6 +22,8 @@ class TelegramEntity(Entity):
         self.chose_items = False
         self.ready = False
 
+        self.init_states()
+
     @property
     def user_id(self):
         return int(self.id)
@@ -30,8 +32,7 @@ class TelegramEntity(Entity):
         pass
 
     def init_states(self):
-        for state in all_states:
-            self.skills.append(state())
+        engine.attach_states(self, rebuild.all_states)
 
     def pre_move(self):
         super().pre_move()

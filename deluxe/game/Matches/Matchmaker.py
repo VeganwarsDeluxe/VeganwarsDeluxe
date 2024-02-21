@@ -2,6 +2,7 @@ from typing import Optional
 
 from telebot import types
 
+from core import Engine
 from deluxe.game.Matches.BasicMatch import BasicMatch
 
 
@@ -11,9 +12,15 @@ from deluxe.game.Matches.BasicMatch import BasicMatch
 class Matchmaker:
     """Matchmaker Class: Handles matches.."""
 
-    def __init__(self, bot):
+    def __init__(self, bot, engine):
         """Initialization function."""
         self.bot = bot
+        self.engine = engine
+
+        self.action_manager = self.engine.action_manager
+        self.session_manager = self.engine.session_manager
+        self.event_manager = self.engine.event_manager
+
         self.matches: dict[str, BasicMatch] = {}
 
     def attach_match(self, match: BasicMatch):

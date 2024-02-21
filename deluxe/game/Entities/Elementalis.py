@@ -11,6 +11,7 @@ from core.Events.Events import PreDeathGameEvent
 from core.Sessions import Session
 from core.TargetType import OwnOnly
 from .Dummy import Dummy
+from ...startup import engine
 
 
 class Elemental(Dummy):
@@ -23,7 +24,7 @@ class Elemental(Dummy):
         self.max_energy = 7
 
         self.items = [item() for item in rebuild.all_items]
-        self.skills.extend([skill() for skill in rebuild.all_skills])
+        self.states.extend([skill() for skill in rebuild.all_skills])
 
         self.team = 'elemental'
 
@@ -47,20 +48,20 @@ class Elemental(Dummy):
     def choose_act(self, session):
         super().choose_act(session)
         self.weapon = random.choice(rebuild.all_weapons)(session.id, self.id)
-        action_manager.update_entity_actions(session, self)
+        engine.engine.action_manager.update_entity_actions(session, self)
 
         cost = False
         while not cost:
             if self.energy <= 0:
-                action = action_manager.get_action(session, self, "reload")
+                action = engine.action_manager.get_action(session, self, "reload")
             else:
-                action = random.choice(action_manager.get_available_actions(session, self))
+                action = random.choice(engine.action_manager.get_available_actions(session, self))
             if not action:
-                action = random.choice(action_manager.get_available_actions(session, self))
+                action = random.choice(engine.action_manager.get_available_actions(session, self))
             if not action.targets:
                 continue
             action.target = random.choice(action.targets)
-            action_manager.queue_action(session, self, action.id)
+            engine.action_manager.queue_action(session, self, action.id)
             if self.anger:
                 cost = random.choice([True, False, False, False])
             else:

@@ -1,12 +1,13 @@
 from core.Sessions.Session import Session
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
+from deluxe.startup import engine
 
 
 class TelegramSession(Session):
     name = 'Basic'
 
     def __init__(self, chat_id):
-        super().__init__()
+        super().__init__(engine.event_manager)
         self.entities: list[TelegramEntity] = []
         self.texts = ['', '']
 

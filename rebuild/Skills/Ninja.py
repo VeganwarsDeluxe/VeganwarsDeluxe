@@ -2,7 +2,6 @@ import math
 
 from core.ContentManager import RegisterState, RegisterEvent
 from core.Context import StateContext, EventContext
-from core.Events.Events import AttachStateEvent
 from core.Sessions import Session
 from core.Skills.Skill import Skill
 from rebuild.States.Dodge import DodgeGameEvent

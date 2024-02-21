@@ -1,10 +1,11 @@
 import random
 
 from core.Actions.Action import DecisiveAction
-from core.ContentManager import content_manager, AttachedAction
+from core.ContentManager import AttachedAction
 from core.Actions.ItemAction import FreeItem
 from core.Items.Item import Item
 from core.TargetType import OwnOnly
+from deluxe.startup import engine
 from .Dummy import Dummy
 
 
@@ -22,14 +23,14 @@ class Cow(Dummy):
         super().choose_act(session)
 
         while True:
-            action = action_manager.get_action(session, self, random.choice(["cow_approach", "cow_silence", "cow_dodge",
+            action = engine.action_manager.get_action(session, self, random.choice(["cow_approach", "cow_silence", "cow_dodge",
                                                                              "cow_walk_away", "reload"]))
             if not action:
                 continue
             if not action.targets:
                 continue
             action.target = random.choice(action.targets)
-            action_manager.queue_action(session, self, action.id)
+            engine.action_manager.queue_action(session, self, action.id)
             break
 
 

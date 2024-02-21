@@ -7,10 +7,9 @@ from telebot import types
 #import deluxe.bot.rating
 import rebuild
 from config import admin
-from core.Actions.ActionManager import content_manager
 
 from core.TargetType import Own
-from deluxe.bot.bot import bot, cm
+from deluxe.startup import bot, cm, engine
 from deluxe.game.Entities.Cow import Cow
 from deluxe.game.Matches.RatFight import RatDungeon
 
@@ -20,7 +19,7 @@ from deluxe.game.Matches.ElementalDungeon import ElementalDungeon
 from deluxe.game.Matches.Matchmaker import Matchmaker
 from deluxe.game.Matches.TestGameMatch import TestGameMatch
 
-mm = Matchmaker(bot)
+mm = Matchmaker(bot, engine)
 
 
 @bot.message_handler(commands=['do'])
@@ -170,7 +169,7 @@ def vd_prepare_handler(m):
         bot.reply_to(m, 'Игра и так не запущена!')
         return
     del mm.matches[match.id]
-    session_manager.delete_session(match.session.id)
+    engine.session_manager.delete_session(match.session.id)
     bot.reply_to(m, 'Игра удалена.')
 
 
@@ -341,13 +340,13 @@ def act_callback_handler(c):
     if player.chose_skills or player.skill_cycle == int(cycle):
         bot.edit_message_text(f'Хватит так поступать.', c.message.chat.id, c.message.message_id)
         return
-    skill = cm.get_state(skill_id)()
+    skill = cm.get_state(skill_id)
     if skill_id == 'random':
-        variants = list(filter(lambda s: s.id not in [s.id for s in player.skills], rebuild.all_skills))
+        variants = list(filter(lambda s: s.id not in [s.id for s in player.states], rebuild.all_skills))
         if not variants:
             variants = rebuild.all_skills
-        skill = random.choice(variants)()
-    player.skills.append(skill)
+        skill = random.choice(variants)
+    engine.attach_states(player, [skill])
     player.skill_cycle = int(cycle)
 
     if int(cycle) >= match.skill_cycles:
@@ -388,7 +387,7 @@ def act_callback_handler(c):
     if not player:
         bot.edit_message_text('Игрок стух!', c.message.chat.id, c.message.message_id)
         return
-    action = action_manager.get_action(match.session, player, act_id)
+    action = engine.action_manager.get_action(match.session, player, act_id)
     if not action:
         bot.edit_message_text('Кнопка стухла!', c.message.chat.id, c.message.message_id)
         return
