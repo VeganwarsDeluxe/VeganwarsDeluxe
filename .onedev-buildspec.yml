@@ -1,0 +1,30 @@
+version: 27
+imports:
+- projectPath: public/ci-templates
+  revision: master
+jobs:
+- name: build-docker-image
+  steps:
+  - !CheckoutStep
+    name: checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    cloneDepth: 1
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !UseTemplateStep
+    name: build-version
+    templateName: Get build version
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !UseTemplateStep
+    name: build-docker-image
+    templateName: Build docker Image
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: master
+    paths: -.onedev-buildspec.yml -.gitignore
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
