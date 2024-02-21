@@ -1,4 +1,4 @@
-from deluxe.bot.bot import bot
+from deluxe.startup import bot
 from config import admin
 from deluxe.db.Rating import RatingManager
 
