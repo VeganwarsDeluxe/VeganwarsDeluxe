@@ -20,6 +20,10 @@ jobs:
     name: build-docker-image
     templateName: Build docker Image
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Publish artifacts
+    artifacts: buildVersion.txt
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
   - !BranchUpdateTrigger
     branches: master
