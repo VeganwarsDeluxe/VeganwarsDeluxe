@@ -38,7 +38,7 @@ jobs:
   - !BranchUpdateTrigger
     branches: master
   jobDependencies:
-  - jobName: Build docker image
+  - jobName: build-docker-image
     requireSuccessful: true
     artifacts: buildVersion.txt
   retryCondition: never
