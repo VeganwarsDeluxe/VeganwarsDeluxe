@@ -10,3 +10,4 @@ from .Context import Context, StateContext, EventContext, ActionExecutionContext
 from .SessionManager import SessionManager
 from .ContentManager import ContentManager, AttachedAction, RegisterState, RegisterEvent, At, Nearest, Every, After
 from .Engine import *
+__version__ = "1.0.0"
