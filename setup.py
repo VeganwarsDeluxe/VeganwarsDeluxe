@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import core
 
 setup(
-    name='manybots',
+    name='VegansDeluxe',
     version=core.__version__,
     author='vezono',
     author_email='vezono@gts.org.ua',
