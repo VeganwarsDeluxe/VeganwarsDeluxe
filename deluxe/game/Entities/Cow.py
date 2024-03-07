@@ -1,10 +1,10 @@
 import random
 
-from core.Actions.Action import DecisiveAction
-from core.ContentManager import AttachedAction
-from core.Actions.ItemAction import FreeItem
-from core.Items.Item import Item
-from core.TargetType import OwnOnly
+from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import FreeItem
+from VegansDeluxe.core import Item
+from VegansDeluxe.core import OwnOnly
 from deluxe.startup import engine
 from .Dummy import Dummy
 

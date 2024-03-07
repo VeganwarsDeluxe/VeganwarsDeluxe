@@ -1,15 +1,15 @@
 import random
 
-import rebuild
-from core.Actions.Action import DecisiveAction
-from core.ContentManager import content_manager, AttachedAction
-from core.Context import StateContext, EventContext
-from core.ContentManager import RegisterEvent
+from VegansDeluxe import rebuild
+from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import EventContext
+from VegansDeluxe.core import RegisterEvent
 
-from core.Events.Events import PreDeathGameEvent
+from VegansDeluxe.core import PreDeathGameEvent
 
-from core.Sessions import Session
-from core.TargetType import OwnOnly
+from VegansDeluxe.core import Session
+from VegansDeluxe.core import OwnOnly
 from .Dummy import Dummy
 from ...startup import engine
 

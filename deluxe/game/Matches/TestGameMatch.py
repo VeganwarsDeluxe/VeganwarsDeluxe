@@ -1,6 +1,4 @@
-import random
-
-import rebuild
+from VegansDeluxe import rebuild
 from deluxe.game.Entities.Cow import Cow
 from deluxe.game.Matches.BasicMatch import BasicMatch
 

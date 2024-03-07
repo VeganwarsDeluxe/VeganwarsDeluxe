@@ -1,4 +1,4 @@
-from core.Sessions.Session import Session
+from VegansDeluxe.core.Sessions.Session import Session
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 from deluxe.startup import engine
 

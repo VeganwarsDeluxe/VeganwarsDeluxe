@@ -1,10 +1,10 @@
-import rebuild
-from core.Actions.Action import DecisiveAction
-from core.ContentManager import AttachedAction
-from core.Actions.EntityActions import SkipActionGameEvent
-from core.Entities.Entity import Entity
+from VegansDeluxe import rebuild
+from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import SkipActionGameEvent
+from VegansDeluxe.core.Entities.Entity import Entity
 
-from core.TargetType import OwnOnly
+from VegansDeluxe.core import OwnOnly
 from deluxe.startup import engine
 
 

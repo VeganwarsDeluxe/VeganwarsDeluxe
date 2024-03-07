@@ -1,7 +1,7 @@
 from mongoengine import connect
 
 from config import bot_token, mongourl
-from core import ContentManager, Engine
+from VegansDeluxe.core import ContentManager, Engine
 from deluxe.bot.bot import ExtendedBot
 from deluxe.db import RatingManager
 

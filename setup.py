@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-import core
+from VegansDeluxe import core
 
 setup(
     name='VegansDeluxe',
@@ -8,7 +8,6 @@ setup(
     author_email='vezono@gts.org.ua',
     url='https://onedev.gts.org.ua/vezono/vegans-deluxe',
     packages=find_packages(),
-    package_dir={'': 'VegansDeluxe'},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

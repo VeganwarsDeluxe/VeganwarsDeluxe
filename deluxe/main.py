@@ -5,10 +5,10 @@ from telebot import types
 
 #       Handler imports
 import deluxe.bot.rating
-import rebuild
+from VegansDeluxe import rebuild
 from config import admin
 
-from core.TargetType import Own
+from VegansDeluxe.core import Own
 from deluxe.startup import bot, cm, engine
 from deluxe.game.Entities.Cow import Cow
 from deluxe.game.Matches.RatFight import RatDungeon

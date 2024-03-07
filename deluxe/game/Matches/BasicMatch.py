@@ -3,9 +3,9 @@ import random
 import telebot.util
 from telebot import types
 
-import rebuild
+from VegansDeluxe import rebuild
 
-from core.Events.Events import PreMoveGameEvent
+from VegansDeluxe.core import PreMoveGameEvent
 
 from deluxe.game.Entities.TelegramEntity import TelegramEntity
 from deluxe.game.Sessions.TelegramSession import TelegramSession

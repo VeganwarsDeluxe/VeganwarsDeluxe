@@ -1,15 +1,15 @@
 import random
 
-import rebuild
-from core.Actions.Action import Action, DecisiveAction
-from core.ContentManager import content_manager, AttachedAction
-from core.Actions.EntityActions import SkipActionGameEvent
+from VegansDeluxe import rebuild
+from VegansDeluxe.core.Actions.Action import Action, DecisiveAction
+from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import SkipActionGameEvent
 
-from core.TargetType import Allies, Enemies, OwnOnly
-from core.Weapons import Weapon
-from core.utils import percentage_chance
+from VegansDeluxe.core import Enemies, OwnOnly
+from VegansDeluxe.core import Weapon
+from VegansDeluxe.core import percentage_chance
 from deluxe.game.Entities.Dummy import Dummy
-from rebuild import ThrowingKnife, Molotov, Grenade
+from VegansDeluxe.rebuild import ThrowingKnife, Molotov, Grenade
 
 
 class Rat(Dummy):

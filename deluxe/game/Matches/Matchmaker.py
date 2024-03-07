@@ -2,7 +2,6 @@ from typing import Optional
 
 from telebot import types
 
-from core import Engine
 from deluxe.game.Matches.BasicMatch import BasicMatch
 
 
