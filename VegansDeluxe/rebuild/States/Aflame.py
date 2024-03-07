@@ -1,4 +1,4 @@
-from VegansDeluxe.core import SkipActionGameEvent
+from VegansDeluxe.core.Actions.EntityActions import SkipActionGameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import PreDamageGameEvent, PostDamageGameEvent

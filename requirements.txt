@@ -1,5 +1,0 @@
-dnspython
-mongoengine
-pyTelegramBotAPI
-requests
-urllib3
