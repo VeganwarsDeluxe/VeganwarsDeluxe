@@ -69,9 +69,7 @@ class Session:
             entity.pre_move()
 
     def start(self):
-        for entity in self.entities:
-            for state in entity.states:
-                self.event_manager.publish(AttachStateEvent(self.id, entity.id, state))
+        pass
 
     def cancel_damages(self, source):
         for entity in self.entities:
