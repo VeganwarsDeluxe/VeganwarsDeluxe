@@ -36,7 +36,6 @@ class Session:
         Get an entity by its ID.
         """
         result = [entity for entity in self.entities if entity.id == entity_id]
-        print(entity_id, result, [entity.id for entity in self.entities])
         return result[0] if result else None
 
     def say(self, text: str, n: bool = True) -> None:

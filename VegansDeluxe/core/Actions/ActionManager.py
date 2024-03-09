@@ -38,7 +38,7 @@ class ActionManager:
 
     def attach_action(self, session: Session, entity: Entity, action_id: str):
         owner_type, action_type = self.get_action_from_all_actions(action_id)
-        if isinstance(owner_type, Entity):
+        if owner_type.type == 'entity':
             action = action_type(session, entity)
         elif owner_type.type == 'weapon':
             action = action_type(session, entity, owner_type(session.id, entity.id))

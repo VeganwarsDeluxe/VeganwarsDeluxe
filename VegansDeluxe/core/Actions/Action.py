@@ -1,3 +1,5 @@
+import logging
+
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Sessions import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
@@ -23,6 +25,8 @@ class Action:
         self.removed = False
         self.queued = False
 
+        logging.debug(f"__init__() in Action[{self.id}] | session: {self.session.id}")
+
     def func(self, source, target):
         pass
 
@@ -40,6 +44,8 @@ class Action:
         return self.get_targets(self.source, self.target_type)
 
     def get_targets(self, source, target_type: TargetType):
+        logging.debug(f"get_targets() in Action[{self.id}] | session: {self.session.id}")
+
         target_pool = self.session.entities
         targets = []
 
