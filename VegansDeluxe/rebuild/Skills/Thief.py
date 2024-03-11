@@ -29,7 +29,7 @@ def register(root_context: StateContext[Thief]):
 
     @RegisterEvent(session.id, event=PreActionsGameEvent)
     def func(context: EventContext[PreActionsGameEvent]):
-        if source.weapon.ranged:
+        if source.weapon and source.weapon.ranged:
             source.outbound_accuracy_bonus += 1
 
 

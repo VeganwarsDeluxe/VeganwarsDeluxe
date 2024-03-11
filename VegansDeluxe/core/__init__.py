@@ -14,4 +14,4 @@ from .ContentManager import ContentManager, AttachedAction, RegisterState, Regis
 from .TargetType import *
 from .Engine import *
 from .utils import *
-__version__ = "1.1.0"
+__version__ = "1.1.1"
