@@ -36,7 +36,7 @@ class KnockWeapon(MeleeAttack):
     id = 'knock_weapon'
     name = 'Выбить оружие'
     priority = -1
-    target_type = Enemies(distance=Distance.ANY)
+    target_type = Enemies(distance=Distance.NEARBY_ONLY)
 
     @property
     def hidden(self) -> bool:
@@ -48,7 +48,11 @@ class KnockWeapon(MeleeAttack):
             action_manager = context.action_manager
 
             self.weapon.cooldown_turn = self.session.turn + 3
-            self.attack(source, target)
+            damage = self.attack(source, target)
+            if not damage:
+                self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
+                return
+
             source_reloading = 'reload' not in [a.id for a in
                                                 action_manager.get_queued_entity_actions(self.session, target)]
             if source_reloading or random.randint(1, 100) <= 10:
