@@ -39,7 +39,7 @@ class Attack(DecisiveWeaponAction):
     SELF_TARGET_NAME = "себя"
 
     def func(self, source, target):
-        self.attack(source, target)
+        return self.attack(source, target)
 
     def calculate_damage(self, source: Entity, target: Entity) -> int:
         """
