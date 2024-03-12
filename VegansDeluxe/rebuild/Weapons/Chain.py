@@ -47,7 +47,7 @@ class KnockWeapon(MeleeAttack):
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
-            self.weapon.cooldown_turn = self.session.turn + 3
+            self.weapon.cooldown_turn = self.session.turn + 6
             damage = self.attack(source, target)
             if not damage:
                 self.session.say(f'⛓💨|{source.name} не получилось выбить оружие из рук {target.name}!')
