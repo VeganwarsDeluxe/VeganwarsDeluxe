@@ -9,7 +9,7 @@ class Flamethrower(RangedWeapon):
     name = 'Огнемет'
     description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
 
-    energy_cost = 4
+    energy_cost = 3
     cubes = 2
     accuracy_bonus = 2
 
