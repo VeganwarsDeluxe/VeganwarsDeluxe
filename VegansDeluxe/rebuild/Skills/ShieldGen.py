@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, StateContext, RegisterState
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import At
@@ -18,6 +18,12 @@ class ShieldGen(Skill):
     def __init__(self):
         super().__init__()
         self.cooldown_turn = 0
+
+
+@RegisterState(ShieldGen)
+def register(root_context: StateContext[ShieldGen]):
+    session: Session = root_context.session
+    source = root_context.entity
 
 
 @AttachedAction(ShieldGen)
