@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, OwnOnly
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
@@ -17,6 +17,7 @@ class KnockedWeapon(State):
 class PickUp(DecisiveStateAction):
     id = 'pick_up'
     name = 'Подобрать оружие'
+    target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: KnockedWeapon):
         super().__init__(session, source, skill)
