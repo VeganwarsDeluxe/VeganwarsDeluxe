@@ -19,7 +19,6 @@ from VegansDeluxe.rebuild.Skills.Junkie import Junkie
 from VegansDeluxe.rebuild.Skills.Medic import Medic
 from VegansDeluxe.rebuild.Skills.Mimic import Mimic
 from VegansDeluxe.rebuild.Skills.Ninja import Ninja
-from VegansDeluxe.rebuild.Skills.Pyrotechnic import Pyrotechnic
 from VegansDeluxe.rebuild.Skills.Sadist import Sadist
 from VegansDeluxe.rebuild.Skills.Scope import Scope
 from VegansDeluxe.rebuild.Skills.ShieldGen import ShieldGen
@@ -63,7 +62,7 @@ from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
-              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie, Pyrotechnic]
+              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
                Police, Saber, Bow]
