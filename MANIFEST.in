@@ -1,0 +1,2 @@
+include core/localizations/*
+include rebuild/localizations/*
