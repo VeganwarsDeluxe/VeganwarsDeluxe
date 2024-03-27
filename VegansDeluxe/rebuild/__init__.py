@@ -1,7 +1,10 @@
+import pathlib
+
+from VegansDeluxe.core.Translator.Translator import translator
 from VegansDeluxe.rebuild.Items.Adrenaline import Adrenaline
 from VegansDeluxe.rebuild.Items.FlashGrenade import FlashGrenade
 from VegansDeluxe.rebuild.Items.Grenade import Grenade
-from VegansDeluxe.rebuild.Items.Hitin import Hitin
+from VegansDeluxe.rebuild.Items.Chitin import Chitin
 from VegansDeluxe.rebuild.Items.Jet import Jet
 from VegansDeluxe.rebuild.Items.Molotov import Molotov
 from VegansDeluxe.rebuild.Items.RageSerum import RageSerum
@@ -12,8 +15,8 @@ from VegansDeluxe.rebuild.Items.ThrowingKnife import ThrowingKnife
 from VegansDeluxe.rebuild.Skills.Alchemist import Alchemist
 from VegansDeluxe.rebuild.Skills.Berserk import Berserk
 from VegansDeluxe.rebuild.Skills.Biceps import Biceps
-from VegansDeluxe.rebuild.Skills.Cherep import Cherep
-from VegansDeluxe.rebuild.Skills.Dvuzhil import Dvuzhil
+from VegansDeluxe.rebuild.Skills.ToughSkull import ToughSkull
+from VegansDeluxe.rebuild.Skills.DoubleVein import DoubleVein
 from VegansDeluxe.rebuild.Skills.Inquisitor import Inquisitor
 from VegansDeluxe.rebuild.Skills.Junkie import Junkie
 from VegansDeluxe.rebuild.Skills.Medic import Medic
@@ -40,7 +43,7 @@ from VegansDeluxe.rebuild.States.Zombie import ZombieState
 from VegansDeluxe.rebuild.Weapons.Axe import Axe
 from VegansDeluxe.rebuild.Weapons.BaseballBat import BaseballBat
 from VegansDeluxe.rebuild.Weapons.Bow import Bow
-from VegansDeluxe.rebuild.Weapons.Bulava import Bulava
+from VegansDeluxe.rebuild.Weapons.Mace import Mace
 from VegansDeluxe.rebuild.Weapons.Chain import Chain
 from VegansDeluxe.rebuild.Weapons.Claws import Claws
 from VegansDeluxe.rebuild.Weapons.Fist import Fist
@@ -55,17 +58,20 @@ from VegansDeluxe.rebuild.Weapons.Revolver import Revolver
 from VegansDeluxe.rebuild.Weapons.Rifle import Rifle
 from VegansDeluxe.rebuild.Weapons.Saber import Saber
 from VegansDeluxe.rebuild.Weapons.Saw import Saw
-from VegansDeluxe.rebuild.Weapons.Shest import Shest
+from VegansDeluxe.rebuild.Weapons.Shaft import Shaft
 from VegansDeluxe.rebuild.Weapons.Shotgun import Shotgun
 from VegansDeluxe.rebuild.Weapons.Hatchet import Hatchet
 from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
-all_skills = [Dvuzhil, Biceps, Cherep, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
+all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
               Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
-               Revolver, Pistol, Flamethrower, Axe, Knife, Shest, Saw, Bulava, Molot,
+               Revolver, Pistol, Flamethrower, Axe, Knife, Shaft, Saw, Mace, Molot,
                Police, Saber, Bow]
-all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Hitin, Jet, Shield, RageSerum]
+all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Chitin, Jet, Shield, RageSerum]
 
-game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Hitin]
+game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Chitin]
+
+localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
+translator.load_folder(localizations)

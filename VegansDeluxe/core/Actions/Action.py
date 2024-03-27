@@ -3,11 +3,12 @@ import logging
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Sessions import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Action:
     id = 'action'
-    name = 'Action'
+    name = ls("base_action_name")
     priority = 0
     target_type = TargetType(0, 0, 0, 0)
 

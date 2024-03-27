@@ -3,6 +3,7 @@ from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class KnockedWeapon(State):
@@ -16,7 +17,7 @@ class KnockedWeapon(State):
 @AttachedAction(KnockedWeapon)
 class PickUp(DecisiveStateAction):
     id = 'pick_up'
-    name = 'Подобрать оружие'
+    name = ls("state_knocked_weapon_name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: KnockedWeapon):
@@ -29,5 +30,5 @@ class PickUp(DecisiveStateAction):
 
     def func(self, source, target):
         source.weapon = self.state.weapon
-        self.session.say(f'🤚{source.name} подбирает потерянное оружие.')
+        self.session.say(ls("state_knocked_weapon_text").format(source.name))
         self.state.weapon = None

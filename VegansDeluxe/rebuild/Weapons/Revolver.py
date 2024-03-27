@@ -1,14 +1,15 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
 from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
 
 @RegisterWeapon
 class Revolver(RangedWeapon):
     id = 'revolver'
-    name = 'Револьвер'
-    description = 'Дальний бой, урон 3-3, точность средняя.'
+    name = ls("weapon_revolver_name")
+    description = ls("weapon_revolver_description")
 
     cubes = 3
     damage_bonus = 0
@@ -26,10 +27,10 @@ class RevolverAttack(RangedAttack):
 @AttachedAction(Revolver)
 class ShootYourself(DecisiveWeaponAction):
     id = 'shoot_yourself'
-    name = 'Застрелится'
+    name = ls("weapon_revolver_action_name")
     priority = 3
     target_type = OwnOnly()
 
     def func(self, source, target):
-        self.session.say(f"🎇|{source.name} застрелился!")
+        self.session.say(ls("weapon_revolver_action_text").format(source.name))
         source.hp = 0

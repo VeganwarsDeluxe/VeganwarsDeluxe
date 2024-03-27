@@ -5,13 +5,13 @@ from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import PreMoveGameEvent, HPLossGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Berserk(Skill):
     id = 'berserk'
-    name = 'Берсерк'
-    description = 'Вы начинаете матч с 3 энергии. За каждое потерянное хп вы получаете +1 к текущей и максимальной ' \
-                  'энергии. Если у вас остался 1 хп, то ваш урон увеличивается на 2.'
+    name = ls("skill_berserk_name")
+    description = ls("skill_berserk_description")
 
 
 @RegisterState(Berserk)

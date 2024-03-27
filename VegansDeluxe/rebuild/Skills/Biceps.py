@@ -6,12 +6,13 @@ from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Biceps(Skill):
     id = 'biceps'
-    name = 'Бицепс'
-    description = 'Даёт шанс нанести удвоенный урон.'
+    name = ls("skill_biceps_name")
+    description = ls("skill_biceps_description")
 
 
 @RegisterState(Biceps)

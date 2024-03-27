@@ -9,13 +9,13 @@ from VegansDeluxe.core import PreActionsGameEvent, DeliveryRequestEvent, Deliver
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Thief(Skill):
     id = 'thief'
-    name = 'Вор'
-    description = 'Если применить эту способность на цель, которая применяет какой-либо предмет, вы ' \
-                  'получите этот предмет. Дает +1 точности на дальнобойние оружия.'
+    name = ls("skill_thief_name")
+    description = ls("skill_thief_description")
 
     def __init__(self):
         super().__init__()
@@ -36,7 +36,7 @@ def register(root_context: StateContext[Thief]):
 @AttachedAction(Thief)
 class Steal(DecisiveStateAction):
     id = 'steal'
-    name = 'Украсть предмет'
+    name = ls("skill_action_name")
     priority = -3
     target_type = Enemies()
 
@@ -66,12 +66,12 @@ class Steal(DecisiveStateAction):
                     continue
                 action.canceled = True
 
-                self.session.say(f'😏|{target.name} хотел использовать {item.name}, но вор {source.name} его украл!')
+                self.session.say(ls("skill_thief_action_text").format(target.name, item.name, source.name))
                 source.items.append(item)
 
                 success = True
             if not success:
-                self.session.say(f'😒|Вору {source.name} не удается ничего украсть у {target.name}!')
+                self.session.say(ls("skill_thief_action_miss").format(source.name, target.name))
 
         self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 

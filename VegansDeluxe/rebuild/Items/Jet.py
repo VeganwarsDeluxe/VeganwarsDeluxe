@@ -6,28 +6,31 @@ from VegansDeluxe.core import Item
 from VegansDeluxe.core import FreeItem
 from VegansDeluxe.core import PostDamagesGameEvent, PreMoveGameEvent
 from VegansDeluxe.core import Allies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class Jet(Item):
     id = 'jet'
-    name = 'Джет'
+    name = ls("item_jet_name")
 
 
 @AttachedAction(Jet)
 class JetAction(FreeItem):
     id = 'jet'
-    name = 'Джет'
+    name = ls("item_jet_name")
     target_type = Allies()
 
     def func(self, source, target):
-        self.session.say(f"💉|{source.name} использует джет на {target.name}! Его энергия будет"
-                         f" полностью восстановлена через 2 хода.")
+        self.session.say(
+            ls("item_jet_text").format(source.name, target.name)
+        )
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent, priority=3)
         def jet_reload(context: EventContext[PostDamagesGameEvent]):
-            self.session.say(f"💉|Энергия {target.name} восстановлена до максимальной! "
-                             f"({target.max_energy})")
+            self.session.say(
+                ls("item_jet_effect").format(target.name, target.max_energy)
+            )
 
         @At(self.session.id, turn=self.session.turn + 3, event=PreMoveGameEvent, priority=3)
         def jet_reload(context: EventContext[PreMoveGameEvent]):

@@ -1,13 +1,14 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Police(MeleeWeapon):
-    id = 'policebat'
-    name = 'Полицейская дубинка'
-    description = 'Ближний бой, урон 1-3, точность высокая. Каждая атака отнимает у цели 1 энергии.'
+    id = 'police_bat'
+    name = ls("weapon_police_bat_name")
+    description = ls("weapon_police_bat_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -24,5 +25,5 @@ class PoliceAttack(MeleeAttack):
         if not damage:
             return damage
         target.energy = max(target.energy - 1, 0)
-        self.session.say(f'⚡️|{target.name} теряет 1 енергию!')
+        self.session.say(ls("weapon_police_bat_effect").format(target.name))
         return damage

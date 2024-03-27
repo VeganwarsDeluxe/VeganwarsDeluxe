@@ -5,13 +5,14 @@ from VegansDeluxe.core import PreDeathGameEvent
 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Zombie import ZombieState
 
 
 class Zombie(Skill):
     id = 'zombie'
-    name = 'Зомби'
-    description = 'Перед тем, как умереть, вы проживете 2 дополнительных хода.'
+    name = ls("skill_zombie_name")
+    description = ls("skill_zombie_description")
 
 
 @RegisterState(Zombie)
@@ -32,5 +33,5 @@ def register(root_context: StateContext[Zombie]):
             return
         zombie.active = True
         zombie.timer = 1
-        session.say(f"😬|{source.name} продолжает сражаться, истекая кровью!")
+        session.say(ls("skill_zombie_effect").format(source.name))
         context.event.canceled = True

@@ -4,12 +4,13 @@ from VegansDeluxe.core import AttachedAction, RegisterItem
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class ThrowingKnife(Item):
     id = 'throwing_knife'
-    name = 'Метательный нож'
+    name = ls("item_throwing_knife_name")
 
 
 @AttachedAction(ThrowingKnife)
@@ -19,7 +20,7 @@ class ThrowingKnifeAction(DecisiveItem):
 
     @property
     def name(self):
-        return f'Метательный нож ({self.hit_chance}%)'
+        return ls("item_throwing_knife_name_percentage").format(self.hit_chance)
 
     @property
     def hit_chance(self):
@@ -28,11 +29,12 @@ class ThrowingKnifeAction(DecisiveItem):
     def func(self, source, target):
         source.energy -= 1
         if random.randint(0, 100) > self.hit_chance:
-            self.session.say(f"💨|{source.name} кидает метательный нож в {target.name}, но не попадает.")
+            self.session.say(ls("item_throwing_knife_name_miss").format(source.name, target.name))
             return
         bleeding = target.get_state('bleeding')
         if bleeding.active:
             bleeding.bleeding -= 1
         bleeding.active = True
-        self.session.say(f'🔪|{source.name} кидает метательный нож в {target.name}.\n'
-                         f'❣️|{target.name} истекает кровью!')
+        self.session.say(
+            ls("item_throwing_knife_text").format(source.name, target.name)
+        )

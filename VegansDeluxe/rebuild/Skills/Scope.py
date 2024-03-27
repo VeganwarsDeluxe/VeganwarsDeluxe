@@ -3,12 +3,13 @@ from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Scope(Skill):
     id = 'scope'
-    name = 'Прицел'
-    description = 'Повышает точность для дальнобойного оружия на 2.'
+    name = ls("skill_scope_name")
+    description = ls("skill_scope_description")
 
 
 @RegisterState(Scope)

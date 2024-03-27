@@ -4,6 +4,7 @@ from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import Nearest
 
 from VegansDeluxe.core import PostTickGameEvent
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 from VegansDeluxe.rebuild.States.Injury import Injury
 
@@ -11,9 +12,8 @@ from VegansDeluxe.rebuild.States.Injury import Injury
 @RegisterWeapon
 class Saw(RangedWeapon):
     id = 'saw'
-    name = 'Пиломет'
-    description = 'Дальний бой, урон 1-1, точность высокая. имеет шанс наложить на цель эффект "ранен", ' \
-                  'увеличивающий урон от атак по цели на 1.'
+    name = ls("weapon_saw_name")
+    description = ls("weapon_saw_description")
 
     cubes = 2
     accuracy_bonus = 3
@@ -27,7 +27,8 @@ class SawAttack(RangedAttack):
         damage = super().attack(source, target)
         if not damage:
             return damage
-        self.session.say(f'{target.name} ранен! ({target.get_state(Injury.id).injury})')
+        self.session.say(ls("weapon_saw_effect")
+                         .format(target.name, target.get_state(Injury.id).injury))
 
         @Nearest(self.session.id, PostTickGameEvent)
         def func(context: EventContext[PostTickGameEvent]):

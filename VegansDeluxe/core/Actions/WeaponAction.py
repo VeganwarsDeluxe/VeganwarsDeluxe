@@ -6,6 +6,7 @@ from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
 from VegansDeluxe.core.Sessions import Session
 from VegansDeluxe.core.TargetType import Enemies, Distance
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons import Weapon
 
 
@@ -29,14 +30,13 @@ class DecisiveWeaponAction(WeaponAction):
 
 class Attack(DecisiveWeaponAction):
     id = 'attack'
-    name = 'Атака'
+    name = ls("base_attack_name")
     target_type = Enemies()
     priority = 0
 
-    ATTACK_MESSAGE = "{attack_emoji}|{source_name} {attack_text} {target_name} используя {weapon_name}! " \
-                     "Нанесено {damage} урона."
-    MISS_MESSAGE = "💨|{source_name} {attack_text} {target_name} используя {weapon_name}, но не попадает."
-    SELF_TARGET_NAME = "себя"
+    ATTACK_MESSAGE = ls("base_attack_message")
+    MISS_MESSAGE = ls("base_miss_message")
+    SELF_TARGET_NAME = ls("base_self_target_name")
 
     def func(self, source, target):
         return self.attack(source, target)
@@ -81,8 +81,8 @@ class Attack(DecisiveWeaponAction):
         return message.damage
 
     def send_attack_message(self, source, target, damage):
-        attack_text = 'стреляет в' if self.weapon.ranged else 'бьет'
-        attack_emoji = '💥' if self.weapon.ranged else '👊'
+        attack_text = ls("base_attack_text_ranged") if self.weapon.ranged else ls("base_attack_text_melee")
+        attack_emoji = ls("base_attack_emoji_ranged") if self.weapon.ranged else ls("base_attack_emoji_melee")
         target_name = self.SELF_TARGET_NAME if source == target else target.name
         if damage:
             message = self.ATTACK_MESSAGE.format(attack_emoji=attack_emoji, source_name=source.name,

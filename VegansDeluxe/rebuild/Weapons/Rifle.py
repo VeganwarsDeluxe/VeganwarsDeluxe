@@ -6,15 +6,15 @@ from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
 
 @RegisterWeapon
 class Rifle(RangedWeapon):
     id = 'sniperRifle'
-    name = 'Снайперская винтовка'
-    description = 'Дальний бой, урон 8-8, точность очень низкая. Можно прицелиться вместо атаки,' \
-                  ' чтобы повысить точность против выбранного персонажа'
+    name = ls("weapon_sniperRifle_name")
+    description = ls("weapon_sniperRifle_description")
 
     cubes = 1
     accuracy_bonus = -4
@@ -38,7 +38,7 @@ class Rifle(RangedWeapon):
                 elif level == 2:
                     chance += 90
 
-                entity.notifications += f'🎯|Вероятность попасть по {main_target.name} - {chance}%'
+                entity.notifications += ls("").format(main_target.name, chance)
 
 
 @AttachedAction(Rifle)
@@ -64,7 +64,7 @@ class RifleAttack(RangedAttack):
 @AttachedAction(Rifle)
 class AimRifle(DecisiveWeaponAction):
     id = 'aim_rifle'
-    name = 'Выцелить'
+    name = ls("weapon_sniperRifle_action_name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Rifle):
@@ -74,4 +74,4 @@ class AimRifle(DecisiveWeaponAction):
     def func(self, source, target):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
-        self.session.say(f'🎯|{source.name} целится.')
+        self.session.say(ls("weapon_sniperRifle_action_text").format(source.name))

@@ -3,14 +3,15 @@ from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import Nearest
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import PreDamagesGameEvent
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Knuckles(MeleeWeapon):
     id = 'knuckles'
-    name = 'Кастет'
-    description = 'Ближний бой, урон 1-3, точность высокая. Атакуя перезаряжающегося врага, вы снимаете ему 4 энергии.'
+    name = ls("weapon_knuckles_name")
+    description = ls("weapon_knuckles_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -31,10 +32,10 @@ class KnucklesAttack(MeleeAttack):
         def pre_damages(context: EventContext[PreDamagesGameEvent]):
             reloading = False
             for action in context.action_manager.get_queued_entity_actions(self.session, target):
-                if action.id == 'reload':
+                if action.id == 'reload':  # TODO: Action types!
                     reloading = True
             if reloading:
-                self.session.say(f'⚡️|{target.name} теряет 4 енергии!')
+                self.session.say(ls("weapon_knuckles_effect").format(target.name))
                 target.energy = max(target.energy - 4, 0)
 
         return damage

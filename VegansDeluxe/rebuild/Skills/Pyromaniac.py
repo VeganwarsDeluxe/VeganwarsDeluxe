@@ -12,6 +12,7 @@ class Pyromaniac(Skill):
 
 
 # @RegisterState(Pyromaniac)
+# TODO: Fix Pyromaniac!!!
 def register(root_context: StateContext[Pyromaniac]):
     session: Session = root_context.session
     source = root_context.entity

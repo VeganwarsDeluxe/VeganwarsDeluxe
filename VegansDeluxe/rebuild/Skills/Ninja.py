@@ -4,13 +4,14 @@ from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Dodge import DodgeGameEvent
 
 
 class Ninja(Skill):
     id = 'ninja'
-    name = 'Ниндзя'
-    description = 'По вашему перекату невозможно попасть атакой.'
+    name = ls("skill_ninja_name")
+    description = ls("skill_ninja_description")
 
 
 @RegisterState(Ninja)

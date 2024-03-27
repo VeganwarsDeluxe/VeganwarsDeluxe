@@ -1,5 +1,8 @@
+from VegansDeluxe.core.Translator.LocalizedString import ls
+
+
 class Item:
     id = 'item'
-    name = 'Item'
+    name = ls("base_item_name")
 
     type = 'item'

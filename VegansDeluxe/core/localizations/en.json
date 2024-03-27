@@ -1,0 +1,35 @@
+{
+  "base_attack_message": "{attack_emoji}|{source_name} {attack_text} {target_name} using {weapon_name}! Dealt {damage} damage.",
+  "base_miss_message": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} using {weapon_name}, but misses.",
+  "base_self_target_name": "themselves",
+  "base_action_name": "Action",
+
+  "base_attack_text_ranged": "shoots",
+  "base_attack_text_melee": "punches",
+  "base_attack_emoji_ranged": "\uD83D\uDCA5",
+  "base_attack_emoji_melee": "\uD83D\uDC4A",
+
+  "approach_entity_action_name": "Approach",
+  "approach_entity_action_text": "\uD83D\uDC63|{0} approaches the enemy.",
+  "reload_entity_action_name": "Reload",
+  "skip_entity_action_name": "Skip",
+  "skip_entity_action_text": "⬇|{0} skips turn.",
+
+  "base_item_name": "Item",
+
+  "base_attack_name": "Attack",
+
+  "session_alive_entities_msg": "\uD83D\uDCA8|{0} loses excess energy.",
+  "session_hp_loss_msg": "{hearts}|{name} loses {hp_loss} HP. {hp} HP left.",
+  "session_death_msg": "☠\uFE0F|{name} passes out.",
+  "session_effects_line": "\nEffects {0}:",
+  "session_results_line": "\nResults of turn {0}:",
+
+  "base_state_name": "State",
+  "base_state_description": "No information written yet.",
+
+  "base_weapon_name": "Empty weapon",
+  "base_weapon_description": "No description written yet.",
+  "base_weapon_reload_text_ranged": "🕓|{0} is reloading. Energy restored to maximum! ({1})",
+  "base_weapon_reload_text_melee": "😤|{0}️ catches his breath. Energy restored to maximum! ({1})"
+}

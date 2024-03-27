@@ -6,6 +6,7 @@ from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PostUpdatesGameEvent, PostDamagesGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Stun(State):
@@ -26,7 +27,7 @@ def register(root_context: StateContext[Stun]):
     def func(context: EventContext[PostUpdatesGameEvent]):
         if not state.stun:
             return
-        for action in action_manager.get_actions(session, source):
+        for action in context.action_manager.get_actions(session, source):
             if action.id != 'lay_stun':
                 action.removed = True
 
@@ -35,14 +36,14 @@ def register(root_context: StateContext[Stun]):
         if not state.stun:
             return
         if state.stun == 1:
-            session.say(f'🌀|{source.name} приходит в себя.')
+            session.say(ls("state_stun_wake_up").format(source.name))
         state.stun -= 1
 
 
 @AttachedAction(Stun)
 class LayStun(DecisiveStateAction):
     id = 'lay_stun'
-    name = 'Лежать в стане'
+    name = ls("state_stun_action_name")
 
     def __init__(self, session: Session, source: Entity, skill: Stun):
         super().__init__(session, source, skill)

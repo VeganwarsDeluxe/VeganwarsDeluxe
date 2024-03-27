@@ -9,14 +9,14 @@ from VegansDeluxe.core import PreDeathGameEvent, PostDamagesGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Everyone
+from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.rebuild.States.Stun import Stun
 
 
 class Inquisitor(Skill):
     id = 'inquisitor'
-    name = 'Инквизитор'
-    description = 'Вы можете направить гнев небес на соперника. Если в этот ход соперник делает действие, ' \
-                  'наносящее вред, то через 2 хода он будет оглушен. Если применить на союзника, то в этот ход он ' \
-                  'не может умереть.'
+    name = ls("skill_inquisitor_name")
+    description = ls("skill_inquisitor_description")
 
     def __init__(self):
         super().__init__()
@@ -43,7 +43,7 @@ def register(root_context: StateContext[Inquisitor]):
             return
         if source.hp <= 0:
             source.hp = 1
-            session.say(f'😇|Высшие силы решили спасти {source.name}!')
+            session.say(ls("skill_inquisitor_effect").format(source.name))
             state.random_activated = True
             context.event.canceled = True
 
@@ -51,7 +51,7 @@ def register(root_context: StateContext[Inquisitor]):
 @AttachedAction(Inquisitor)
 class Pray(DecisiveStateAction):
     id = 'pray'
-    name = 'Направить взор небес'
+    name = ls("skill_inquisitor_pray_action_name")
     priority = 2
     target_type = Everyone()
 
@@ -68,7 +68,7 @@ class Pray(DecisiveStateAction):
     def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
         if source.is_ally(target):
-            self.session.say(f"🙏|{source.name} молится за {target.name}!")
+            self.session.say(ls("skill_inquisitor_pray_action_targeted").format(source.name, target.name))
 
             @At(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
             def hp_loss(context: EventContext[PreDeathGameEvent]):
@@ -76,27 +76,27 @@ class Pray(DecisiveStateAction):
                     return
                 if source.hp <= 0:
                     source.hp = 1
-                    self.session.say(f'😇|Высшие силы спасли {source.name}!')
+                    self.session.say(ls("skill_inquisitor_pray_action_saved").format(source.name))
                     context.event.canceled = True
 
             return
 
         if not target.outbound_dmg.contributors():
-            self.session.say(f"💨|{source.name} молится, но с {target.name} ничего не происходит.")
+            self.session.say(ls("skill_inquisitor_pray_action_missed").format(source.name, target.name))
             return
 
-        self.session.say(f'🙏|{source.name} молится. Над {target.name} собираются тучи!')
+        self.session.say(ls("skill_inquisitor_pray_action_angered").format(source.name, target.name))
 
         @After(self.session.id, turns=0, repeats=2, event=PostDamagesGameEvent)
         def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
-            self.session.say(f"☁️|Над {target.name} собираются тучи. ({self.get_timer()})")
+            self.session.say(ls("skill_inquisitor_clouds_timer").format(target.name, self.get_timer()))
 
         @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
         def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
-            self.session.say(f"🌩|Гнев небес обрушивается на {target.name} в виде молнии!")
-            self.session.say(f"🌀|{target.name} оглушен!")
+            self.session.say(ls("skill_inquisitor_clouds_effect").format(target.name))
+            self.session.say(ls("skill_inquisitor_stun").format(target.name))
 
-            target.get_state("stun").stun += 1
+            target.get_state(Stun.id).stun += 1
 
     def get_timer(self):
         self._timer -= 1

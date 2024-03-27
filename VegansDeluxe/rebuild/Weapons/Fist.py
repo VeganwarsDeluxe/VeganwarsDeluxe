@@ -1,13 +1,14 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Fist(MeleeWeapon):
     id = 'fist'
-    name = 'Кулаки'
-    description = 'Ближний бой. Оружие для настоящих боев!'
+    name = ls("weapon_fist_name")
+    description = ls("weapon_fist_description")
 
     accuracy_bonus = 2
 

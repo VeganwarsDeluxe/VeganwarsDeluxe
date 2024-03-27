@@ -1,5 +1,6 @@
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 
@@ -7,9 +8,8 @@ from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 @RegisterWeapon
 class Axe(MeleeWeapon):
     id = 'axe'
-    name = 'Топор'
-    description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс покалечить цель, ' \
-                  'после чего ей становится легче снять больше, чем одну жизнь.'
+    name = ls("weapon_axe_name")
+    description = ls("weapon_axe_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -24,7 +24,7 @@ class AxeAttack(MeleeAttack):
         if not damage:
             return damage
         threshold = target.get_state(DamageThreshold.id)
-        self.session.say(f'🤕|{target.name} покалечен!')
+        self.session.say(ls("weapon_axe_effect").format(target.name))
 
         threshold.threshold += 1
         return damage

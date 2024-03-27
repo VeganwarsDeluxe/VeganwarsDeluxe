@@ -3,6 +3,7 @@ from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import PreDamagesGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Bleeding(State):
@@ -23,11 +24,10 @@ def register(root_context: StateContext[Bleeding]):
     @RegisterEvent(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
     def func(context: EventContext[PreDamagesGameEvent]):
         if state.bleeding <= 0:
-            session.say(f'🩸|{source.name} теряет ХП от '
-                        f'кровотечения! Осталось {source.hp - 1} ХП.')
+            session.say(ls("state_bleeding_hp_loss").format(source.name, source.hp - 1))
             source.hp -= 1
             state.active = False
             state.bleeding = 3
             return
-        session.say(f'🩸|{source.name} истекает кровью! ({max(state.bleeding, 0)})')
+        session.say(ls("state_bleeding_timer").format(source.name, max(state.bleeding, 0)))
         state.bleeding -= 1

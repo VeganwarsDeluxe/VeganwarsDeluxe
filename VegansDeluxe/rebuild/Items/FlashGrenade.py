@@ -2,21 +2,22 @@ from VegansDeluxe.core import AttachedAction, RegisterItem
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class FlashGrenade(Item):
     id = 'flash_grenade'
-    name = 'Световая граната'
+    name = ls("item_flash_grenade_text")
 
 
 @AttachedAction(FlashGrenade)
 class FlashGrenadeAction(DecisiveItem):
     id = 'flash_grenade'
-    name = 'Световая граната'
+    name = ls("item_flash_grenade_text")
     target_type = Enemies()
     priority = -1
 
     def func(self, source, target):
         target.energy = max(0, target.energy - 8)
-        self.session.say(f'😵|{self.source.name} кидает световую гранату в {target.name}. (-8 Энергии)')
+        self.session.say(ls("item_flash_grenade_text").format(self.source.name, target.name))

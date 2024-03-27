@@ -7,15 +7,15 @@ from VegansDeluxe.core import PostAttackGameEvent
 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Saber(MeleeWeapon):
     id = 'saber'
-    name = 'Сабля'
-    description = 'Ближний бой, урон 1-3, точность высокая. Способность: можно выбрать любого врага. ' \
-                  'Если тот атаковал, урон от его атаки полностью блокируется, а энергия цели снижается до 0.'
+    name = ls("weapon_saber_name")
+    description = ls("weapon_saber_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,7 +34,7 @@ class FistAttack(MeleeAttack):
 
 @AttachedAction(Saber)
 class Parry(DecisiveWeaponAction):
-    name = 'Парировать'
+    name = ls("weapon_saber_action_name")
     id = 'parry'
     priority = -4
     target_type = Enemies()
@@ -49,7 +49,7 @@ class Parry(DecisiveWeaponAction):
 
     def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 5
-        self.session.say(f'🗡|{source.name} готовится парировать.')
+        self.session.say(ls("weapon_saber_action_text").format(source.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
         def parry(context: EventContext[PostAttackGameEvent]):
@@ -60,7 +60,6 @@ class Parry(DecisiveWeaponAction):
             if not context.event.damage:
                 return
 
-            self.session.say(f'🗡|{source.name} парирует атаку {target.name}! Урон заблокирован,'
-                             f' {target.name} теряет всю энергию!')
+            self.session.say(ls("weapon_saber_action_effect").format(source.name, target.name))
             target.energy = 0
             context.event.damage = 0

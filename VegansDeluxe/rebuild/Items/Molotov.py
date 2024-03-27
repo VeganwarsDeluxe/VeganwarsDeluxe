@@ -6,18 +6,19 @@ import random
 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class Molotov(Item):
     id = 'molotov'
-    name = 'Коктейль Молотова'
+    name = ls("item_molotov_name")
 
 
 @AttachedAction(Molotov)
 class MolotovAction(DecisiveItem):
     id = 'molotov'
-    name = 'Коктейль Молотова'
+    name = ls("item_molotov_name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, item: Item):
@@ -37,8 +38,9 @@ class MolotovAction(DecisiveItem):
             aflame.add_flame(self.session, target, source, 1)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
-        self.session.say(f'🍸|{source.name} кидает коктейль молотова! '
-                         f'{",".join([t.name for t in targets])} в огне!')
+        self.session.say(
+            ls("item_molotov_text").format(source.name, ",".join([t.name for t in targets]))
+        )
 
     @property
     def blocked(self):

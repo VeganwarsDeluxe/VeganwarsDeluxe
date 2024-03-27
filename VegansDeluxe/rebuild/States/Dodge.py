@@ -8,6 +8,7 @@ from VegansDeluxe.core import PostTickGameEvent, GameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Dodge(State):
@@ -38,7 +39,7 @@ def register(root_context: StateContext[Dodge]):
 @AttachedAction(Dodge)
 class DodgeAction(DecisiveStateAction):
     id = 'dodge'
-    name = 'Перекат'
+    name = ls("state_dodge_name")
     target_type = OwnOnly()
     priority = -2
 
@@ -57,4 +58,4 @@ class DodgeAction(DecisiveStateAction):
         self.event_manager.publish(message)
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
-        self.session.say(f"💨|{source.name} перекатывается.")
+        self.session.say(ls("state_dodge_text").format(source.name))

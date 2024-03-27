@@ -1,15 +1,15 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import FreeWeaponAction, MeleeAttack
 from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Claws(MeleeWeapon):
     id = 'claws'
-    name = 'Стальные когти'
-    description = 'Ближний бой, урон 1-3, точность высокая. Можно выдвинуть когти, повысив урон до 2-5, ' \
-                  'но затрачивая 4 энергии за атаку.'
+    name = ls("weapon_claws_name")
+    description = ls("weapon_claws_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,7 +34,7 @@ class SwitchClaws(FreeWeaponAction):
 
     @property
     def name(self):
-        return 'Выдвинуть когти' if not self.weapon.claws else 'Задвинуть когти'
+        return ls("weapon_claws_enable_name") if not self.weapon.claws else ls("weapon_claws_disable_name")
 
     def func(self, source, target):
         if not self.weapon.claws:
@@ -48,4 +48,7 @@ class SwitchClaws(FreeWeaponAction):
             self.weapon.energy_cost = 2
             self.weapon.accuracy_bonus = 2
         self.weapon.claws = not self.weapon.claws
-        self.session.say(f"⚙️|{source.name} {'выдвигает' if not self.weapon.claws else 'задвигает'} когти!")
+        self.session.say(ls("weapon_claws_switch_text").format(source.name,
+                                       ls("weapon_claws_enable_text") if not self.weapon.claws else
+                                       ls("weapon_claws_disable_text"))
+                         )

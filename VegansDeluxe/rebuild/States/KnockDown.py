@@ -7,6 +7,7 @@ from VegansDeluxe.core import PostUpdateActionsGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Knockdown(State):
@@ -34,7 +35,7 @@ def register(root_context: StateContext[Knockdown]):
 @AttachedAction(Knockdown)
 class StandUp(DecisiveStateAction):
     id = 'stand_up'
-    name = 'Поднятся с земли'
+    name = ls("state_knockdown_name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Knockdown):
@@ -47,4 +48,4 @@ class StandUp(DecisiveStateAction):
 
     def func(self, source, target):
         self.state.active = False
-        self.session.say(f'⬆️|{source.name} поднимается с земли.')
+        self.session.say(ls("state_knockdown_text").format(source.name))

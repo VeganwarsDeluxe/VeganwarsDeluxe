@@ -1,13 +1,14 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import RangedAttack
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
 
 @RegisterWeapon
 class Flamethrower(RangedWeapon):
     id = 'flamethrower'
-    name = 'Огнемет'
-    description = 'Дальний бой, урон 1-1, точность низкая. Поджигает цель при попадании.'
+    name = ls("weapon_flamethrower_name")
+    description = ls("weapon_flamethrower_description")
 
     energy_cost = 3
     cubes = 2

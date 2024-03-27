@@ -5,6 +5,7 @@ from VegansDeluxe.core import PostAttackGameEvent, PostDamageGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import percentage_chance
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Armor(State):
@@ -20,7 +21,7 @@ class Armor(State):
         armor = min(message.damage, self.roll_armor())
         if not armor:
             return
-        session.say(f'🛡|Броня {source.name} снимает {armor} урона.')
+        session.say(ls("state_armor_effect").format(source.name, armor))
         message.damage -= armor
 
     def add(self, value: int, chance=100):

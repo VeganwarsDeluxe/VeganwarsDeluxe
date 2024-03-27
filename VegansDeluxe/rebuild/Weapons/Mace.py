@@ -2,15 +2,15 @@ from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
-class Bulava(MeleeWeapon):
-    id = 'bulava'
-    name = 'Булава'
-    description = 'Ближний бой, урон 1-3, точность высокая. За каждую атаку подряд по одной и той же цели ' \
-                  'вы получаете +1 урона.'
+class Mace(MeleeWeapon):
+    id = 'mace'
+    name = ls("weapon_mace_name")
+    description = ls("weapon_mace_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -23,11 +23,11 @@ class Bulava(MeleeWeapon):
         self.last_attack_turn = 0
 
 
-@AttachedAction(Bulava)
-class BulavaAttack(MeleeAttack):
-    def __init__(self, session: Session, source: Entity, weapon: Bulava):
+@AttachedAction(Mace)
+class MaceAttack(MeleeAttack):
+    def __init__(self, session: Session, source: Entity, weapon: Mace):
         super().__init__(session, source, weapon)
-        self.weapon: Bulava = weapon
+        self.weapon: Mace = weapon
 
     def calculate_damage(self, source: Entity, target: Entity) -> int:
         """

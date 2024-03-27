@@ -5,12 +5,13 @@ from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Stockpile(Skill):
     id = 'stockpile'
-    name = 'Запасливый'
-    description = 'В начале матча вы получаете два дополнительных предмета.'
+    name = ls("skill_stockpile_name")
+    description = ls("skill_stockpile_description")
 
 
 @RegisterState(Stockpile)

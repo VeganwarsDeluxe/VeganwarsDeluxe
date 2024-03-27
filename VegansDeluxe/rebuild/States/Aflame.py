@@ -5,6 +5,7 @@ from VegansDeluxe.core import PreDamageGameEvent, PostDamageGameEvent
 from VegansDeluxe.core import PostActionsGameEvent, PreDamagesGameEvent, PostUpdateActionsGameEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Aflame(State):
@@ -22,9 +23,9 @@ class Aflame(State):
         self.timer = 2
         self.extinguished = False
         if self.flame == 0:
-            session.say(f'🔥|{entity.name} загорелся!')
+            session.say(ls("state_aflame_activate").format(entity.name))
         else:
-            session.say(f'🔥|Огонь {entity.name} усиливается!')
+            session.say(ls("state_aflame_increase").format(entity.name))
         self.flame += flame
         self.dealer = dealer
 
@@ -43,7 +44,7 @@ def register(root_context: StateContext[Aflame]):
         skipped = 'skip' not in context.action_manager.get_queued_entity_actions(session, source)
         if skipped or not state.flame:
             return
-        session.say(f'💨|{source.name} потушил себя.')
+        session.say(ls("state_aflame_remove").format(source.name))
         state.timer = 0
         state.flame = 0
         state.extinguished = False
@@ -59,7 +60,7 @@ def register(root_context: StateContext[Aflame]):
             action = context.action_manager.get_action(session, source, 'skip')
             if not action:
                 return
-            action.name = 'Потушиться'
+            action.name = ls("state_aflame_extinguish")
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
     def handle_pre_damages_event(context: EventContext[PreDamagesGameEvent]):
@@ -70,7 +71,7 @@ def register(root_context: StateContext[Aflame]):
             return
 
         if state.extinguished:
-            reset_state(state, session, f'🔥|Огонь на {source.name} потух!')
+            reset_state(state, session, ls("state_aflame_disappear").format(source.name))
             return
 
         damage = perform_fire_attack(session, source, state, context.event)
@@ -79,7 +80,7 @@ def register(root_context: StateContext[Aflame]):
         source.outbound_dmg.add(state.dealer, damage, session.turn)
 
         if state.flame > 1:
-            session.say(f'🔥|{source.name} горит. Теряет {state.flame - 1} энергии.')
+            session.say(ls("state_aflame_disappear").format(source.name, state.flame-1))
             source.energy -= state.flame - 1
         if state.timer <= 1:
             state.extinguished = True
@@ -97,7 +98,7 @@ def register(root_context: StateContext[Aflame]):
             return
         state.flame = 0
         state.extinguished = False
-        session.say(f'💨|{source.name} тушит себя.')
+        session.say(ls("state_aflame_removing").format(source.name))
         context.event.no_text = True
 
 
@@ -119,7 +120,7 @@ def perform_fire_attack(session, source, state, message):
     session.event_manager.publish(fire_event)
     damage = fire_event.damage
 
-    session.say(f'🔥|{source.name} горит. Получает {damage} урона.')
+    session.say(ls("state_aflame_damage").format(source.name, damage))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
     session.event_manager.publish(post_fire_event)

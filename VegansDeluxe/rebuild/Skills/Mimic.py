@@ -9,13 +9,13 @@ from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Everyone, Own
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Mimic(Skill):
     id = 'mimic'
-    name = 'Мимик'
-    description = 'Если применить эту способность на цель, которая что то делает, вы ' \
-                  'получите возможность его повторить!'
+    name = ls("skill_mimic_name")
+    description = ls("skill_mimic_description")
 
     def __init__(self):
         super().__init__()
@@ -39,7 +39,7 @@ def register(root_context: StateContext[Mimic]):
 @AttachedAction(Mimic)
 class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
-    name = 'Запомнить действие'
+    name = ls("skill_mimic_action_name")
     priority = -2
     target_type = Everyone(own=Own.SELF_EXCLUDED)
 
@@ -65,10 +65,10 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
                 action_pool.append(action)
 
             if not action_pool:
-                self.session.say(f'🎭|Мимику {source.name} не удается ничего скопировать у {target.name}!')
+                self.session.say(ls("skill_mimic_action_miss").format(source.name, target.name))
                 return
 
-            self.session.say(f'🎭|Мимик {source.name} запоминает действие {target.name}!')
+            self.session.say(ls("skill_mimic_action_text").format(source.name, target.name))
 
             action = random.choice(action_pool)
             self.state.memorized_action = action.id

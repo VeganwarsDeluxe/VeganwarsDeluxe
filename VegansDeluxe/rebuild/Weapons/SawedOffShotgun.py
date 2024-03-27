@@ -1,14 +1,14 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 from .Shotgun import ShotgunAttack
+from ...core.Translator.LocalizedString import ls
 
 
 @RegisterWeapon
 class SawedOffShotgun(RangedWeapon):
     id = 'sawed-off-shotgun'
-    name = 'Обрез'
-    description = 'Дальний бой, урон 1-4, точность средняя. Атакуя цель, находящуюся с вами в ближнем ' \
-                  'бою, вы получаете +1 к урону.'
+    name = ls("weapon_sawed-off-shotgun_name")
+    description = ls("weapon_sawed-off-shotgun_description")
 
     energy_cost = 3
     accuracy_bonus = 0

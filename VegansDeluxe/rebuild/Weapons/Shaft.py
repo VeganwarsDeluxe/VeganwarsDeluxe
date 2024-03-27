@@ -3,15 +3,15 @@ from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
-class Shest(MeleeWeapon):
-    id = 'shest'
-    name = 'Шест'
-    description = 'Ближний бой, урон 1-3. Способность: вы пытаетесь сбить соперника с ног, получая ' \
-                  'возможность атаковать даже тех, кто не находится с вами в ближнем бою.'
+class Shaft(MeleeWeapon):
+    id = 'shaft'
+    name = ls("weapon_shaft_name")
+    description = ls("weapon_shaft_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -23,20 +23,20 @@ class Shest(MeleeWeapon):
         self.cooldown_turn = 0
 
 
-@AttachedAction(Shest)
-class ShestAttack(MeleeAttack):
+@AttachedAction(Shaft)
+class ShaftAttack(MeleeAttack):
     pass
 
 
-@AttachedAction(Shest)
+@AttachedAction(Shaft)
 class KnockDown(MeleeAttack):
     id = 'knock_down'
-    name = 'Сбить с ног'
+    name = ls("weapon_shaft_action_name")
     target_type = Enemies()
 
-    def __init__(self, session: Session, source: Entity, weapon: Shest):
+    def __init__(self, session: Session, source: Entity, weapon: Shaft):
         super().__init__(session, source, weapon)
-        self.weapon: Shest = weapon
+        self.weapon: Shaft = weapon
 
     @property
     def hidden(self) -> bool:
@@ -46,8 +46,8 @@ class KnockDown(MeleeAttack):
         self.weapon.cooldown_turn = self.session.turn + 6
         damage = self.attack(source, target)
         if not damage:
-            self.session.say(f'🚷💨|{source.name} не удалось сбить {target.name} с ног!')
+            self.session.say(ls("weapon_shaft_action_miss").format(source.name, target.name))
             return
-        self.session.say(f'🚷|{source.name} сбивает {target.name} с ног! {target.name} теряет равновесие и падает!')
+        self.session.say(ls("weapon_shaft_action_text").format(source.name, target.name))
         state = target.get_state('knockdown')
         state.active = True

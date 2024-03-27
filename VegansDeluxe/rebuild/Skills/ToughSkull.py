@@ -2,19 +2,19 @@ from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Armor import Armor
 from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 
 
-class Cherep(Skill):
-    id = 'cherep'
-    name = 'Крепкий череп'
-    description = 'Ваш порог урона увеличивается (вам сложнее отнять больше, чем одну единицу здоровья), ' \
-                  'даёт шанс заблокировать 1 урона.'
+class ToughSkull(Skill):
+    id = 'tough-skull'
+    name = ls("skill_tough_skull_name")
+    description = ls("skill_tough_skull_description")
 
 
-@RegisterState(Cherep)
-def register(root_context: StateContext[Cherep]):
+@RegisterState(ToughSkull)
+def register(root_context: StateContext[ToughSkull]):
     session: Session = root_context.session
     source = root_context.entity
 

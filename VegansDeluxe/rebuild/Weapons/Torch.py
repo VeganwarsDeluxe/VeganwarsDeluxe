@@ -2,14 +2,15 @@ import random
 
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Torch(MeleeWeapon):
     id = 'torch'
-    name = 'Факел'
-    description = 'Ближний бой, урон 1-3, точность высокая. Имеет шанс поджечь цель.'
+    name = ls("weapon_torch_name")
+    description = ls("weapon_torch_description")
 
     def __init__(self, session_id: str, entity_id: str):
         super().__init__(session_id, entity_id)

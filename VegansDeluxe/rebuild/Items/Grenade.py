@@ -7,18 +7,19 @@ import random
 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class Grenade(Item):
     id = 'grenade'
-    name = 'Граната'
+    name = ls("item_grenade_name")
 
 
 @AttachedAction(Grenade)
 class GrenadeAction(DecisiveItem):
     id = 'grenade'
-    name = 'Граната'
+    name = ls("item_grenade_name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, item: Item):
@@ -41,8 +42,10 @@ class GrenadeAction(DecisiveItem):
             source.outbound_dmg.add(source, post_damage, self.session.turn)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
-        self.session.say(f'💣|{source.name} кидает гранату! Нанесено {damage} урона следующим целям: '
-                         f'{",".join([t.name for t in targets])}.')
+        self.session.say(
+            ls("item_grenade_text")
+            .format(source.name, damage, ",".join([t.name for t in targets]))
+        )
 
     def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)

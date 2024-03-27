@@ -21,13 +21,14 @@ class Pyrotechnic(Skill):
         self.damage = 1
 
 
-@RegisterState(Pyrotechnic)
+# @RegisterState(Pyrotechnic)
+# TODO: FIX PYROTECHNIC
 def register(root_context: StateContext[Pyrotechnic]):
     session: Session = root_context.session
     source = root_context.entity
 
 
-@AttachedAction(Pyrotechnic)
+# @AttachedAction(Pyrotechnic)
 class ImproveBomb(RangedAttack):
     id = 'launch-bomb'
     name = 'Кинуть бомбу'
@@ -54,7 +55,7 @@ class ImproveBomb(RangedAttack):
         self.session.say(f"⚒|Пиротехник {source.name} улучшает самодельную бомбу.")
 
 
-@AttachedAction(Pyrotechnic)
+# @AttachedAction(Pyrotechnic)
 class ImproveBomb(DecisiveStateAction):
     id = 'improve-bomb'
     name = 'Улучшить бомбу'

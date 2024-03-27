@@ -3,15 +3,15 @@ from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies, Distance
+from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
 class Molot(MeleeWeapon):
     id = 'molot'
-    name = 'Молот'
-    description = 'Ближний бой, урон 1-3. Способность: за каждые две недостающие единицы энергии ' \
-                  'получает +1 к урону.'
+    name = ls("weapon_molot_name")
+    description = ls("weapon_molot_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -46,7 +46,7 @@ class MolotAttack(MeleeAttack):
 @AttachedAction(Molot)
 class TrueStrike(MeleeAttack):
     id = 'true_strike'
-    name = 'Точный удар'
+    name = ls("weapon_molot_action_name")
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
     priority = -3
 

@@ -1,3 +1,4 @@
+from typing import Union
 from uuid import uuid4
 
 from VegansDeluxe.core.Entities.Entity import Entity
@@ -5,12 +6,13 @@ from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
     DeathGameEvent, CallActionsGameEvent, AttachStateEvent, PreDeathGameEvent
+from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Session:
-    ALIVE_ENTITIES_MSG = '💨|{name} теряет излишек энергии.'
-    HP_LOSS_MSG = "{hearts}|{name} теряет {hp_loss} ХП. Остается {hp} ХП."
-    DEATH_MSG = '☠️|{name} теряет сознание.'
+    ALIVE_ENTITIES_MSG = ls("session_alive_entities_msg")  # TODO: Huh? Misnamed locale string
+    HP_LOSS_MSG = ls("session_hp_loss_msg")
+    DEATH_MSG = ls("session_death_msg")
 
     def __init__(self, event_manager: EventManager):
         self.event_manager = event_manager
@@ -38,7 +40,7 @@ class Session:
         result = [entity for entity in self.entities if entity.id == entity_id]
         return result[0] if result else None
 
-    def say(self, text: str, n: bool = True) -> None:
+    def say(self, text: Union[str, ls], n: bool = True) -> None:
         """
         Print a given text with optional newline at the end.
         """
@@ -90,7 +92,7 @@ class Session:
     def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
-                self.say(f'💨|{entity.name} теряет излишек энергии.')
+                self.say(self.ALIVE_ENTITIES_MSG.format(entity.name))
                 entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
@@ -143,9 +145,9 @@ class Session:
         self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
         self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
         self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
-        self.say(f'\nЭффекты {self.turn}:')
+        self.say(ls("session_effects_line").format(self.turn))
         self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
-        self.say(f'\nРезультаты хода {self.turn}:')
+        self.say(ls("session_results_line").format(self.turn))
         self.calculate_damages()  # 4. Damages stage
         self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
