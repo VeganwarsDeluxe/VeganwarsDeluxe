@@ -7,9 +7,7 @@ setup(
     author='vezono',
     author_email='vezono@gts.org.ua',
     url='https://onedev.gts.org.ua/vezono/vegans-deluxe',
-    packages=[
-        "VegansDeluxe",
-    ],
+    packages=find_packages(),
     package_dir={"VegansDeluxe": "VegansDeluxe"},
     include_package_data=True,
     package_data={"VegansDeluxe": [".json", "localizations"]},
