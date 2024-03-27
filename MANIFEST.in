@@ -1,1 +1,1 @@
-include VegansDeluxe/*/localizations/*.json
+include VegansDeluxe/core/localizations/*.json
