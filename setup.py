@@ -7,7 +7,8 @@ setup(
     author='vezono',
     author_email='vezono@gts.org.ua',
     url='https://onedev.gts.org.ua/vezono/vegans-deluxe',
-    packages=find_packages(),
+    packages=find_packages(include="VegansDeluxe"),
+    package_data={'': ['localizations']},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
