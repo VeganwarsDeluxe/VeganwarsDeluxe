@@ -7,9 +7,12 @@ setup(
     author='vezono',
     author_email='vezono@gts.org.ua',
     url='https://onedev.gts.org.ua/vezono/vegans-deluxe',
-    packages=find_packages(include="VegansDeluxe"),
-    package_data={'': ['localizations']},
+    packages=[
+        "VegansDeluxe",
+    ],
+    package_dir={"VegansDeluxe": "VegansDeluxe"},
     include_package_data=True,
+    package_data={"VegansDeluxe": [".json", "localizations"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
