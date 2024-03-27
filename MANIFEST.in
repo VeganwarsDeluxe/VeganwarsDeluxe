@@ -1,2 +1,1 @@
-include core/localizations/*
-include rebuild/localizations/*
+include VegansDeluxe/*
