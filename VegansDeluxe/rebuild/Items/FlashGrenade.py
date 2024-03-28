@@ -8,7 +8,7 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class FlashGrenade(Item):
     id = 'flash_grenade'
-    name = ls("item_flash_grenade_text")
+    name = ls("item_flash_grenade_name")
 
 
 @AttachedAction(FlashGrenade)
