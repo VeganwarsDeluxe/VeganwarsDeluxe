@@ -16,6 +16,9 @@ class LocalizedString:
         return self.localize()
 
     def localize(self, code: str = ""):
+        if code and code not in translator.locales:
+            print(f"Warning: no [{code}] locale in translator. Defaulting to [{translator.default_locale}].")
+            code = translator.default_locale
         string = translator.get_string(self.key, code)
         for format_func in self.__format_queue:
             string = format_func(string)
