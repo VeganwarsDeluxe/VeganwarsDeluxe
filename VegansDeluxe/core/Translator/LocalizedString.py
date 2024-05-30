@@ -20,8 +20,6 @@ class LocalizedString:
             print(f"Warning: no [{code}] locale in translator. Defaulting to [{translator.default_locale}].")
             code = translator.default_locale
         string = translator.get_string(self.key, code)
-        for format_func in self.__format_queue:
-            string = format_func(string)
         if string is None and code != translator.default_locale:
             print(f"Warning: string [{self.key}] not found in [{code}]. Defaulting to [{translator.default_locale}].")
             string = self.localize(translator.default_locale)
@@ -29,6 +27,8 @@ class LocalizedString:
             print(f"Warning: string [{self.key}] not found in default locale [{translator.default_locale}]. "
                   f"Defaulting to raw key.")
             string = self.key
+        for format_func in self.__format_queue:
+            string = format_func(string)
 
         return string
 
