@@ -42,7 +42,6 @@ class Translator:
         try:
             data = json.load(file)
         except:
-            traceback.print_exc()
             raise Exception(f"Fatal error while loading {filepath}.")
 
         self.update_locale(code, data)
