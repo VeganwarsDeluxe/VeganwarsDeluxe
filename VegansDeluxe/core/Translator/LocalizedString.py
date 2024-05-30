@@ -22,6 +22,9 @@ class LocalizedString:
         string = translator.get_string(self.key, code)
         for format_func in self.__format_queue:
             string = format_func(string)
+        if string is None:
+            raise Exception(f"Error: string [{self.key}] not found in [{code}].")
+
         return string
 
     def format(self, *args, **kwargs) -> Self:
