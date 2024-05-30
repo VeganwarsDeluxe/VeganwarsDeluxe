@@ -23,7 +23,8 @@ class LocalizedString:
         for format_func in self.__format_queue:
             string = format_func(string)
         if string is None:
-            raise Exception(f"Error: string [{self.key}] not found in [{code}].")
+            print(f"Warning: string [{self.key}] not found in [{code}]. Defaulting to [{translator.default_locale}].")
+            return self.localize(translator.default_locale)
 
         return string
 
