@@ -34,10 +34,6 @@ class Attack(DecisiveWeaponAction):
     target_type = Enemies()
     priority = 0
 
-    ATTACK_MESSAGE = ls("base_attack_message")
-    MISS_MESSAGE = ls("base_miss_message")
-    SELF_TARGET_NAME = ls("base_self_target_name")
-
     def func(self, source, target):
         return self.attack(source, target)
 
@@ -83,13 +79,13 @@ class Attack(DecisiveWeaponAction):
     def send_attack_message(self, source, target, damage):
         attack_text = ls("base_attack_text_ranged") if self.weapon.ranged else ls("base_attack_text_melee")
         attack_emoji = ls("base_attack_emoji_ranged") if self.weapon.ranged else ls("base_attack_emoji_melee")
-        target_name = self.SELF_TARGET_NAME if source == target else target.name
+        target_name = ls("base_self_target_name") if source == target else target.name
         if damage:
-            message = self.ATTACK_MESSAGE.format(attack_emoji=attack_emoji, source_name=source.name,
+            message = ls("base_attack_message").format(attack_emoji=attack_emoji, source_name=source.name,
                                                  attack_text=attack_text,
                                                  target_name=target_name, weapon_name=self.weapon.name, damage=damage)
         else:
-            message = self.MISS_MESSAGE.format(source_name=source.name, attack_text=attack_text,
+            message = ls("base_miss_message").format(source_name=source.name, attack_text=attack_text,
                                                target_name=target_name,
                                                weapon_name=self.weapon.name)
         self.session.say(message)
