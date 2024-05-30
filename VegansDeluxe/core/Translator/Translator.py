@@ -1,5 +1,6 @@
 import json
 import os
+import traceback
 
 from VegansDeluxe.core.Translator.Locale import Locale
 
@@ -38,7 +39,11 @@ class Translator:
 
     def load_json(self, code: str, filepath: str):
         file = open(filepath, "r")
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except:
+            traceback.print_exc()
+            raise Exception(f"Fatal error while loading {filepath}.")
 
         self.update_locale(code, data)
 
