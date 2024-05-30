@@ -36,7 +36,7 @@ def register(root_context: StateContext[Thief]):
 @AttachedAction(Thief)
 class Steal(DecisiveStateAction):
     id = 'steal'
-    name = ls("skill_action_name")
+    name = ls("skill_thief_action_name")
     priority = -3
     target_type = Enemies()
 
