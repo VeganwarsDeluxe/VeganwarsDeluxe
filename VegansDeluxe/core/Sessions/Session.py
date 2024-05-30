@@ -10,10 +10,6 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Session:
-    ALIVE_ENTITIES_MSG = ls("session_alive_entities_msg")  # TODO: Huh? Misnamed locale string
-    HP_LOSS_MSG = ls("session_hp_loss_msg")
-    DEATH_MSG = ls("session_death_msg")
-
     def __init__(self, event_manager: EventManager):
         self.event_manager = event_manager
 
@@ -87,12 +83,12 @@ class Session:
         self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
-        self.say(self.HP_LOSS_MSG.format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss, hp=entity.hp))
+        self.say(ls("session_hp_loss_msg"))
 
     def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
-                self.say(self.ALIVE_ENTITIES_MSG.format(entity.name))
+                self.say(ls("session_alive_entities_msg").format(entity.name))
                 entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
@@ -122,7 +118,7 @@ class Session:
             if entity.hp > 0 or message.canceled:
                 continue
 
-            self.say(self.DEATH_MSG.format(name=entity.name))
+            self.say(ls("session_death_msg").format(name=entity.name))
             entity.dead = True
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
