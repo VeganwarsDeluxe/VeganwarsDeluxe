@@ -83,7 +83,8 @@ class Session:
         self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
-        self.say(ls("session_hp_loss_msg"))
+        self.say(ls("session_hp_loss_msg").format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
+                                                  hp=entity.hp))
 
     def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
