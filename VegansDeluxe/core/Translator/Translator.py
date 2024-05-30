@@ -38,7 +38,7 @@ class Translator:
             self.load_json(code, f"{folder_path}/{file}")
 
     def load_json(self, code: str, filepath: str):
-        file = open(filepath, "r")
+        file = open(filepath, "r", encoding="utf-8")
         try:
             data = json.load(file)
         except:
