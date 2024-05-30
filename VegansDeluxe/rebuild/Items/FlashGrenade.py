@@ -14,7 +14,7 @@ class FlashGrenade(Item):
 @AttachedAction(FlashGrenade)
 class FlashGrenadeAction(DecisiveItem):
     id = 'flash_grenade'
-    name = ls("item_flash_grenade_text")
+    name = ls("item_flash_grenade_name")
     target_type = Enemies()
     priority = -1
 
