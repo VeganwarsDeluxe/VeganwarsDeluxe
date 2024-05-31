@@ -1,7 +1,7 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import RangedAttack
 from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import Nearest
+from VegansDeluxe.core import Next
 
 from VegansDeluxe.core import PostTickGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -30,7 +30,7 @@ class SawAttack(RangedAttack):
         self.session.say(ls("weapon_saw_effect")
                          .format(target.name, target.get_state(Injury.id).injury))
 
-        @Nearest(self.session.id, PostTickGameEvent)
+        @Next(self.session.id, PostTickGameEvent)
         def func(context: EventContext[PostTickGameEvent]):
             injury = target.get_state(Injury.id)
             injury.injury += 1

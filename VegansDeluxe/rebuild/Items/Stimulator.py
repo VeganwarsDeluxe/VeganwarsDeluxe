@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Allies
@@ -17,6 +17,11 @@ class StimulatorAction(DecisiveItem):
     name = ls("item_stimulator_name")
     target_type = Allies()
     priority = -2
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.MEDICINE]
 
     def func(self, source, target):
         target.hp = min(target.hp + 2, target.max_hp)

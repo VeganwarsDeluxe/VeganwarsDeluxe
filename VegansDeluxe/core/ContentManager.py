@@ -190,7 +190,7 @@ class ContentManager:
 
         return decorator_func
 
-    def nearest(self, session_id: str, event: type[Event] = Event, priority=0, filters=None):
+    def next(self, session_id: str, event: type[Event] = Event, priority=0, filters=None):
         def decorator_func(callback: typing.Callable):
             def assignment(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
@@ -278,7 +278,7 @@ AttachedAction = content_manager.register_action
 RegisterState = content_manager.register_state
 RegisterEvent = content_manager.register_event
 At = content_manager.at
-Nearest = content_manager.nearest
+Next = content_manager.next
 Every = content_manager.every
 After = content_manager.after
 

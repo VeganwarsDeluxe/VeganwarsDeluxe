@@ -1,5 +1,5 @@
 from VegansDeluxe.core.Actions.EntityActions import SkipActionGameEvent
-from VegansDeluxe.core import RegisterState, RegisterEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent, ActionTag
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import PreDamageGameEvent, PostDamageGameEvent
 from VegansDeluxe.core import PostActionsGameEvent, PreDamagesGameEvent, PostUpdateActionsGameEvent
@@ -41,7 +41,11 @@ def register(root_context: StateContext[Aflame]):
         """
         Handle events after actions have been taken.
         """
-        skipped = 'skip' not in context.action_manager.get_queued_entity_actions(session, source)
+        skipped = False
+        for action in context.action_manager.get_queued_entity_actions(session, source):
+            if ActionTag.SKIP in action.tags:
+                skipped = True
+                break
         if skipped or not state.flame:
             return
         session.say(ls("state_aflame_remove").format(source.name))

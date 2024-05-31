@@ -1,3 +1,4 @@
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Items.Item import Item
@@ -12,6 +13,7 @@ class ItemAction(Action):
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source)
         self.item = item
+        self.tags += [ActionTag.ITEM]
         self.type = 'item'
 
 

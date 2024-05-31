@@ -1,5 +1,5 @@
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import RegisterEvent, RegisterState, Nearest
+from VegansDeluxe.core import RegisterEvent, RegisterState, Next
 from VegansDeluxe.core import AttachedAction
 from VegansDeluxe.core import ItemAction
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
@@ -49,7 +49,7 @@ class Steal(DecisiveStateAction):
         return self.session.turn < self.state.cooldown_turn
 
     def func(self, source, target):
-        @Nearest(self.session.id, event=DeliveryPackageEvent)
+        @Next(self.session.id, event=DeliveryPackageEvent)
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 

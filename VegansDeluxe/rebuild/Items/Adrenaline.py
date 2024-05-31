@@ -1,4 +1,4 @@
-from VegansDeluxe.core import Item, FreeItem, AttachedAction
+from VegansDeluxe.core import Item, FreeItem, AttachedAction, ActionTag
 from VegansDeluxe.core import RegisterItem
 from VegansDeluxe.core import Allies
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -16,6 +16,11 @@ class AdrenalineAction(FreeItem):
     name = ls("item_adrenaline_name")
     target_type = Allies()
     priority = -2
+    
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.MEDICINE]
 
     def func(self, source, target):
         target.energy += 3

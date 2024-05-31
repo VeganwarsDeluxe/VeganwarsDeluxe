@@ -18,7 +18,7 @@ def register(root_context: StateContext[ToughSkull]):
     session: Session = root_context.session
     source = root_context.entity
 
-    armor = source.get_state(Armor.id)
+    armor: Armor = source.get_state(Armor.id)
     armor.add(1, 50)
     threshold = source.get_state(DamageThreshold.id)
     threshold.threshold += 1

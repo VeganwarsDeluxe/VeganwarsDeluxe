@@ -12,12 +12,12 @@ from .Translator.Translator import translator
 from .Weapons import *
 from .Context import Context, StateContext, EventContext, ActionExecutionContext
 from .SessionManager import SessionManager
-from .ContentManager import ContentManager, AttachedAction, RegisterState, RegisterEvent, At, Nearest, Every, After, \
+from .ContentManager import ContentManager, AttachedAction, RegisterState, RegisterEvent, At, Next, Every, After, \
     RegisterItem, RegisterWeapon
 from .TargetType import *
 from .Engine import *
 from .utils import *
-__version__ = "1.2.8"
+__version__ = "1.3.0"
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 

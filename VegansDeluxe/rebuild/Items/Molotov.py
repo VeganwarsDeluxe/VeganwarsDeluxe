@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
@@ -23,6 +23,8 @@ class MolotovAction(DecisiveItem):
 
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source, item)
+        self.tags += [ActionTag.HARMFUL]
+
         self.range = 2
 
     def func(self, source, target):

@@ -1,7 +1,7 @@
 import random
 
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, Next, DeliveryPackageEvent, DeliveryRequestEvent, ActionTag
 from VegansDeluxe.core import RegisterEvent, RegisterState, After, At
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
@@ -81,25 +81,34 @@ class Pray(DecisiveStateAction):
 
             return
 
-        if not target.outbound_dmg.contributors():
-            self.session.say(ls("skill_inquisitor_pray_action_missed").format(source.name, target.name))
-            return
+        @Next(self.session.id, event=DeliveryPackageEvent)
+        def delivery(context: EventContext[DeliveryPackageEvent]):
+            action_manager = context.action_manager
+            harmful_actions = []
+            # TODO: Very good, but please ensure that it works.
+            for action in action_manager.get_queued_entity_actions(self.session, target):
+                if ActionTag.HARMFUL in action.tags:
+                    harmful_actions.append(action)
 
-        self.session.say(ls("skill_inquisitor_pray_action_angered").format(source.name, target.name))
+            if not harmful_actions:
+                self.session.say(ls("skill_inquisitor_pray_action_missed").format(source.name, target.name))
+                return
 
-        @After(self.session.id, turns=0, repeats=2, event=PostDamagesGameEvent)
-        def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
-            self.session.say(ls("skill_inquisitor_clouds_timer").format(target.name, self.get_timer()))
+            self.session.say(ls("skill_inquisitor_pray_action_angered").format(source.name, target.name))
 
-        @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
-        def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
-            self.session.say(ls("skill_inquisitor_clouds_effect").format(target.name))
-            self.session.say(ls("skill_inquisitor_stun").format(target.name))
+            @After(self.session.id, turns=0, repeats=2, event=PostDamagesGameEvent)
+            def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
+                self.session.say(ls("skill_inquisitor_clouds_timer").format(target.name, self.get_timer()))
 
-            target.get_state(Stun.id).stun += 1
+            @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
+            def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
+                self.session.say(ls("skill_inquisitor_clouds_effect").format(target.name))
+                self.session.say(ls("skill_inquisitor_stun").format(target.name))
+
+                target.get_state(Stun.id).stun += 1
+
+        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
     def get_timer(self):
         self._timer -= 1
         return self._timer
-
-
