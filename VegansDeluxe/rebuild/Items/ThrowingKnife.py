@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
@@ -17,6 +17,11 @@ class ThrowingKnife(Item):
 class ThrowingKnifeAction(DecisiveItem):
     id = 'throwing_knife'
     target_type = Enemies()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.HARMFUL]
 
     @property
     def name(self):

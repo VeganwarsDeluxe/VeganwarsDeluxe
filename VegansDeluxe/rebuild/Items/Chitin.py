@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import At
 from VegansDeluxe.core import Item
@@ -20,6 +20,11 @@ class ChitinAction(FreeItem):
     name = ls("item_chitin_name")
     target_type = Everyone()
     priority = -2
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.MEDICINE]
 
     def func(self, source, target):
         target.get_state('armor').add(2, 100)

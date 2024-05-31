@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import RegisterEvent, RegisterState, At
+from VegansDeluxe.core import RegisterEvent, RegisterState, At, ActionTag
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent
@@ -19,12 +19,14 @@ class Junkie(Skill):
     name = ls("skill_junkie_name")
     description = ls("skill_junkie_description")
 
+    item_pool = [Jet, Chitin, Adrenaline]
+
 
 @RegisterState(Junkie)
 def register(root_context: StateContext[Junkie]):
     session: Session = root_context.session
     source = root_context.entity
-    source.items.append(random.choice([Jet, Chitin, Adrenaline])())
+    source.items.append(random.choice(Junkie.item_pool)())
 
     @RegisterEvent(session.id, event=PreMoveGameEvent)
     def func(context: EventContext[PreMoveGameEvent]):
@@ -35,7 +37,7 @@ def register(root_context: StateContext[Junkie]):
         accuracy_bonus = 0
         damage_bonus = 0
         for action in context.action_manager.get_queued_session_actions(session):
-            if action.id in [Jet.id, Chitin.id, Adrenaline.id, Stimulator.id, RageSerum.id]:
+            if ActionTag.MEDICINE in action.tags:
                 if action.target == source and not action.canceled:
                     accuracy_bonus += 2
                     damage_bonus += 1

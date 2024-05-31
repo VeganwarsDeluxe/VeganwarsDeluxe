@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PostDamageGameEvent
 from VegansDeluxe.core import Item
@@ -24,6 +24,8 @@ class GrenadeAction(DecisiveItem):
 
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source, item)
+        self.tags += [ActionTag.HARMFUL]
+
         self.damage = 3
         self.range = 2
 

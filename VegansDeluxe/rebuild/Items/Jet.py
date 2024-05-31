@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import At
 
@@ -20,6 +20,11 @@ class JetAction(FreeItem):
     id = 'jet'
     name = ls("item_jet_name")
     target_type = Allies()
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.MEDICINE]
 
     def func(self, source, target):
         self.session.say(

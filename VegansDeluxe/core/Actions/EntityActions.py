@@ -1,3 +1,4 @@
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import DecisiveAction
 from VegansDeluxe.core.ContentManager import AttachedAction
 from VegansDeluxe.core.Entities import Entity
@@ -30,6 +31,11 @@ class ReloadAction(DecisiveAction):
     name = ls("reload_entity_action_name")
     target_type = OwnOnly()
 
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.RELOAD]
+
     def func(self, source, target):
         source.energy = source.max_energy
         self.session.say(source.weapon.reload_text(source))
@@ -48,6 +54,11 @@ class SkipTurnAction(DecisiveAction):
     name = ls("skip_entity_action_name")
     target_type = OwnOnly()
     priority = 2
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.SKIP]
 
     def func(self, source, target):
         message = self.event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))

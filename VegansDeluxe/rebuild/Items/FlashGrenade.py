@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
@@ -17,6 +17,11 @@ class FlashGrenadeAction(DecisiveItem):
     name = ls("item_flash_grenade_name")
     target_type = Enemies()
     priority = -1
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.HARMFUL]
 
     def func(self, source, target):
         target.energy = max(0, target.energy - 8)

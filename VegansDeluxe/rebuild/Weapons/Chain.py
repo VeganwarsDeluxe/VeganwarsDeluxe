@@ -1,7 +1,7 @@
 import random
 
 from VegansDeluxe.core import MeleeAttack
-from VegansDeluxe.core import AttachedAction, Nearest, RegisterWeapon
+from VegansDeluxe.core import AttachedAction, Next, RegisterWeapon
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core import Enemies, Distance
@@ -43,7 +43,7 @@ class KnockWeapon(MeleeAttack):
         return self.session.turn < self.weapon.cooldown_turn
 
     def func(self, source, target):
-        @Nearest(self.session.id, event=DeliveryPackageEvent)
+        @Next(self.session.id, event=DeliveryPackageEvent)
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 

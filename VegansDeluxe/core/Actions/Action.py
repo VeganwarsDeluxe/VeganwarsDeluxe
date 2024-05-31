@@ -15,6 +15,8 @@ class Action:
     type = 'action'
 
     def __init__(self, session: Session, source: Entity, *args):
+        self.tags = []
+
         self.session: Session = session
         self.event_manager = self.session.event_manager
 

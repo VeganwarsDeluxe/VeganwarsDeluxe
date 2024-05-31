@@ -1,6 +1,7 @@
 import math
 import random
 
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
@@ -33,6 +34,11 @@ class Attack(DecisiveWeaponAction):
     name = ls("base_attack_name")
     target_type = Enemies()
     priority = 0
+    
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.tags += [ActionTag.ATTACK, ActionTag.HARMFUL]
 
     def func(self, source, target):
         return self.attack(source, target)

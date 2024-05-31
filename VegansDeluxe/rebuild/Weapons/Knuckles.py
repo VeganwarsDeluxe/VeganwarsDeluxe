@@ -1,6 +1,6 @@
-from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core import MeleeAttack, ActionTag
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import Nearest
+from VegansDeluxe.core import Next
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import PreDamagesGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -28,11 +28,11 @@ class KnucklesAttack(MeleeAttack):
         if not damage:
             return damage
 
-        @Nearest(self.session.id, event=PreDamagesGameEvent)
+        @Next(self.session.id, event=PreDamagesGameEvent)
         def pre_damages(context: EventContext[PreDamagesGameEvent]):
             reloading = False
             for action in context.action_manager.get_queued_entity_actions(self.session, target):
-                if action.id == 'reload':  # TODO: Action types!
+                if ActionTag.RELOAD in action.tags:
                     reloading = True
             if reloading:
                 self.session.say(ls("weapon_knuckles_effect").format(target.name))
