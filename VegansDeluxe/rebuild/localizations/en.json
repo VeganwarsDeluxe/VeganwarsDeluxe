@@ -56,7 +56,7 @@
   "skill_inquisitor_pray_action_name": "Direct the heavens' gaze",
   "skill_inquisitor_pray_action_targeted": "\uD83D\uDE4F|{0} prays for {1}!",
   "skill_inquisitor_pray_action_saved": "\uD83D\uDE07|Higher powers have saved {0}!",
-  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} prays, but nothing happens to {target.name}.",
+  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} prays, but nothing happens to {1}.",
   "skill_inquisitor_pray_action_angered": "\uD83D\uDE4F|{0} prays. Clouds gather over {1}!",
   "skill_inquisitor_clouds_timer": "☁️|Clouds gather over {0}. ({1})",
   "skill_inquisitor_clouds_effect": "\uD83C\uDF29|The wrath of the heavens strikes {0} with lightning!",

@@ -57,7 +57,7 @@
   "skill_inquisitor_pray_action_name": "Направить взор небес",
   "skill_inquisitor_pray_action_targeted": "\uD83D\uDE4F|{0} молится за {1}!",
   "skill_inquisitor_pray_action_saved": "\uD83D\uDE07|Высшие силы спасли {0}!",
-  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} молится, но с {target.name} ничего не происходит.",
+  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} молится, но с {1} ничего не происходит.",
   "skill_inquisitor_pray_action_angered": "\uD83D\uDE4F|{0} молится. Над {1} собираются тучи!",
   "skill_inquisitor_clouds_timer": "☁️|Над {0} собираются тучи. ({1})",
   "skill_inquisitor_clouds_effect": "\uD83C\uDF29|Гнев небес обрушивается на {0} в виде молнии!",

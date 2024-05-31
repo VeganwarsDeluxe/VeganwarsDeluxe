@@ -57,7 +57,7 @@
   "skill_inquisitor_pray_action_name": "Спрямувати погляд небес",
   "skill_inquisitor_pray_action_targeted": "\uD83D\uDE4F|{0} молиться за {1}!",
   "skill_inquisitor_pray_action_saved": "\uD83D\uDE07|Вищі сили врятували {0}!",
-  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} молиться, але з {target.name} нічого не виходить.",
+  "skill_inquisitor_pray_action_missed": "\uD83D\uDCA8|{0} молиться, але з {1} нічого не відбувається.",
   "skill_inquisitor_pray_action_angered": "\uD83D\uDE4F|{0} молиться. Над {1} збираються хмари!",
   "skill_inquisitor_clouds_timer": "☁️|Над {0} збираються хмари. ({1})",
   "skill_inquisitor_clouds_effect": "\uD83C\uDF29|Гнів небес обрушується на {0} блискавкою!",
