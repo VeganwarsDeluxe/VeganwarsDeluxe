@@ -13,8 +13,6 @@ class Stockpile(Skill):
     name = ls("skill_stockpile_name")
     description = ls("skill_stockpile_description")
 
-    item_pool = rebuild.game_items_pool
-
 
 @RegisterState(Stockpile)
 def register(root_context: StateContext[Stockpile]):
