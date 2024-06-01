@@ -38,7 +38,7 @@ class Rifle(RangedWeapon):
                 elif level == 2:
                     chance += 90
 
-                entity.notifications += ls("").format(main_target.name, chance)
+                entity.notifications += str(ls("weapon_sniperRifle_notification").format(main_target.name, chance))
 
 
 @AttachedAction(Rifle)
