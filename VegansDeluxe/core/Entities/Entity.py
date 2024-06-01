@@ -88,7 +88,7 @@ class Entity:
         self.outbound_accuracy_bonus = 0
         self.inbound_accuracy_bonus = 0
 
-        self.notifications = ""
+        self.notifications = []
 
     def tick_turn(self):
         pass
