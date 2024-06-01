@@ -37,14 +37,14 @@ class Session:
         self.texts.append(text + ("\n" if n else ''))
 
     @property
-    def alive_entities(self) -> list:
+    def alive_entities(self) -> list[Entity]:
         """
         Get the list of entities which are not dead.
         """
         return [entity for entity in self.entities if not entity.dead]
 
     @property
-    def alive_teams(self) -> set:
+    def alive_teams(self) -> set[str]:
         """
         Get the set of teams which have alive entities.
         """
