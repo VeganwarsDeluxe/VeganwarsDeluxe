@@ -1,8 +1,10 @@
+from typing import Union
 from uuid import uuid4
 
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachStateEvent
 from VegansDeluxe.core.States import State
+from VegansDeluxe.core.Translator.LocalizedString import LocalizedString
 from VegansDeluxe.core.Weapons.Weapon import Weapon
 from VegansDeluxe.core.Items.Item import Item
 from VegansDeluxe.core.DamageHolder import DamageHolder
@@ -42,7 +44,7 @@ class Entity:
         self.outbound_accuracy_bonus = 0
         self.inbound_accuracy_bonus = 0
 
-        self.notifications = ""
+        self.notifications: list[str | LocalizedString] = []
 
     @property
     def hearts(self):
