@@ -9,21 +9,21 @@ from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
-class Session:
+class Session[T: Entity]:
     def __init__(self, event_manager: EventManager):
         self.event_manager = event_manager
 
         self.id = uuid4()
         self.turn = 1
         self.active = True
-        self.entities: list[Entity] = []
+        self.entities: list[T] = []
 
         self.texts = []
 
-    def attach_entity(self, entity: Entity):
+    def attach_entity(self, entity: T):
         self.entities.append(entity)
 
-    def get_entity(self, entity_id: str) -> Entity:
+    def get_entity(self, entity_id: str) -> T:
         """
         Get an entity by its ID.
         """
@@ -37,7 +37,7 @@ class Session:
         self.texts.append(text + ("\n" if n else ''))
 
     @property
-    def alive_entities(self) -> list[Entity]:
+    def alive_entities(self) -> list[T]:
         """
         Get the list of entities which are not dead.
         """
@@ -66,7 +66,7 @@ class Session:
         for entity in self.entities:
             entity.inbound_dmg.cancel(source)
 
-    def lose_hp(self, entity: Entity, damage: int) -> None:
+    def lose_hp(self, entity: T, damage: int) -> None:
         """
         Deduct HP from the entity and print a message.
         """
