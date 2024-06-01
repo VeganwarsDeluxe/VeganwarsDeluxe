@@ -18,13 +18,7 @@ class Session:
         self.active = True
         self.entities: list[Entity] = []
 
-        self.mute_status = False
-
-    def mute(self):
-        self.mute_status = True
-
-    def unmute(self):
-        self.mute_status = False
+        self.texts = []
 
     def attach_entity(self, entity: Entity):
         self.entities.append(entity)
@@ -38,11 +32,9 @@ class Session:
 
     def say(self, text: Union[str, ls], n: bool = True) -> None:
         """
-        Print a given text with optional newline at the end.
+        Adds given text to log queue.
         """
-        if self.mute_status:
-            return
-        print(text, end=('\n' if n else ''))
+        self.texts.append(text + ("\n" if n else ''))
 
     @property
     def alive_entities(self) -> list:
@@ -65,6 +57,7 @@ class Session:
     def pre_move(self):
         for entity in self.entities:
             entity.pre_move()
+        self.texts = []
 
     def start(self):
         pass
