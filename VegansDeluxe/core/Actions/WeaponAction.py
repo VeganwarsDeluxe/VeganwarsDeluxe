@@ -38,6 +38,12 @@ class Attack(DecisiveWeaponAction):
     def __init__(self, *args):
         super().__init__(*args)
 
+        self.ATTACK_TEXT = ls("base_attack_text_ranged") if self.weapon.ranged else ls("base_attack_text_melee")
+        self.ATTACK_EMOJI = ls("base_attack_emoji_ranged") if self.weapon.ranged else ls("base_attack_emoji_melee")
+        self.ATTACK_MESSAGE = ls("base_attack_message")
+        self.MISS_MESSAGE = ls("base_miss_message")
+        self.SELF_TARGET_NAME = ls("base_self_target_name")
+
         self.tags += [ActionTag.ATTACK, ActionTag.HARMFUL]
 
     def func(self, source, target):
@@ -83,15 +89,13 @@ class Attack(DecisiveWeaponAction):
         return message.damage
 
     def send_attack_message(self, source, target, damage):
-        attack_text = ls("base_attack_text_ranged") if self.weapon.ranged else ls("base_attack_text_melee")
-        attack_emoji = ls("base_attack_emoji_ranged") if self.weapon.ranged else ls("base_attack_emoji_melee")
-        target_name = ls("base_self_target_name") if source == target else target.name
+        target_name = self.SELF_TARGET_NAME if source == target else target.name
         if damage:
-            message = ls("base_attack_message").format(attack_emoji=attack_emoji, source_name=source.name,
-                                                 attack_text=attack_text,
+            message = self.ATTACK_MESSAGE.format(attack_emoji=self.ATTACK_EMOJI, source_name=source.name,
+                                                 attack_text=self.ATTACK_TEXT,
                                                  target_name=target_name, weapon_name=self.weapon.name, damage=damage)
         else:
-            message = ls("base_miss_message").format(source_name=source.name, attack_text=attack_text,
+            message = self.MISS_MESSAGE.format(source_name=source.name, attack_text=self.ATTACK_TEXT,
                                                target_name=target_name,
                                                weapon_name=self.weapon.name)
         self.session.say(message)
