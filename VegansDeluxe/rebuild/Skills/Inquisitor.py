@@ -85,7 +85,7 @@ class Pray(DecisiveStateAction):
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
             harmful_actions = []
-            # TODO: Very good, but please ensure that it works.
+            # TODO: Doesn't work. Needs to be fixed.
             for action in action_manager.get_queued_entity_actions(self.session, target):
                 if ActionTag.HARMFUL in action.tags:
                     harmful_actions.append(action)
