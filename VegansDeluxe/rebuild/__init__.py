@@ -27,6 +27,7 @@ from VegansDeluxe.rebuild.Skills.Scope import Scope
 from VegansDeluxe.rebuild.Skills.ShieldGen import ShieldGen
 from VegansDeluxe.rebuild.Skills.Stockpile import Stockpile
 from VegansDeluxe.rebuild.Skills.Thief import Thief
+from VegansDeluxe.rebuild.Skills.Visor import Visor
 from VegansDeluxe.rebuild.Skills.Zombie import Zombie
 
 from VegansDeluxe.rebuild.States.Aflame import Aflame
@@ -65,7 +66,7 @@ from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
-              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Zombie]
+              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Visor, Zombie]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shaft, Saw, Mace, Molot,
                Police, Saber, Bow]

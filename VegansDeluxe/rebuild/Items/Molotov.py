@@ -40,6 +40,8 @@ class MolotovAction(DecisiveItem):
             aflame.add_flame(self.session, target, source, 1)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
+        for t in targets:
+            pass
         self.session.say(
             ls("item_molotov_text").format(source.name, ",".join([t.name for t in targets]))
         )

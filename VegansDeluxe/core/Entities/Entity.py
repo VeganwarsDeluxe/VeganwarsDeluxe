@@ -1,6 +1,7 @@
 from typing import Union
 from uuid import uuid4
 
+from VegansDeluxe.core import Skill
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachStateEvent
 from VegansDeluxe.core.States import State
@@ -47,18 +48,33 @@ class Entity:
         self.notifications: list[str | LocalizedString] = []
 
     @property
-    def hearts(self):
+    def hit_chance(self) -> int:
+        if self.weapon:
+            return self.weapon.hit_chance(self)
+        else:
+            return 0
+
+    def map_items_quantity(self) -> dict[str, int]:
+        item_map = {}
+        for item in self.items:
+            if item.id not in item_map:
+                item_map[item.id] = 0
+            item_map[item.id] += 1
+        return item_map
+
+    @property
+    def hearts(self) -> str:
         return '♥️' * self.hp if 0 < self.hp < 8 else f"♥️x{self.hp}"
 
     @property
-    def energies(self):
+    def energies(self) -> str:
         return '⚡️' * self.energy if 0 < self.energy < 8 else f"⚡️x{self.energy}"
 
     @property
-    def skills(self):
+    def skills(self) -> list[Skill]:
         return list(filter(lambda s: s.type == 'skill', self.states))
 
-    def get_item(self, item_id: str):
+    def get_item(self, item_id: str) -> Item:
         items = list(filter(lambda i: i.id == item_id, self.items))
         if items:
             item = items[0]
@@ -74,7 +90,7 @@ class Entity:
         if result:
             return result[0]
 
-    def is_ally(self, target):
+    def is_ally(self, target) -> bool:
         if target == self:
             return True
         if target.team is None or self.team is None:

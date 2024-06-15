@@ -59,7 +59,10 @@ class LocalizedString:
 
     def insert(self, line):
         def format_func(string: str, code=''):
-            return line.format(string)
+            l_line = line
+            if isinstance(line, LocalizedString):
+                l_line = line.localize(code)
+            return l_line.format(string)
         self_copy = self.copy()
         self_copy.__format_queue.append(format_func)
         return self_copy

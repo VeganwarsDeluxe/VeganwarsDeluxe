@@ -103,6 +103,14 @@
   "skill_tough_skull_name": "Tough Skull",
   "skill_tough_skull_description": "Your damage threshold is increased (it's harder for you to lose more than one HP), and you have a chance to block 1 damage.",
 
+  "skill_visor_name": "Visor",
+  "skill_visor_description": "Allows to see information about an opponent. Gives +1 accuracy for ranged weapons.",
+  "skill_visor_action_name": "Visor",
+  "skill_visor_notification_name": "{name}",
+  "skill_visor_notification_hp": "{hearts}|{hp} HP. Max: {max_hp}",
+  "skill_visor_notification_energy": "{energies}|{energy} energy. Max: {max_energy}",
+  "skill_visor_hit_chance": "\uD83C\uDFAF|Hit probability is {0}%",
+
   "skill_zombie_name": "Zombie",
   "skill_zombie_description": "Before dying, you will live for 2 additional turns.",
   "skill_zombie_effect": "😬|{0} continues to fight, bleeding out!",
