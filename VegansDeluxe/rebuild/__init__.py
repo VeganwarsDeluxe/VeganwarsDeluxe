@@ -15,6 +15,7 @@ from VegansDeluxe.rebuild.Items.ThrowingKnife import ThrowingKnife
 from VegansDeluxe.rebuild.Skills.Alchemist import Alchemist
 from VegansDeluxe.rebuild.Skills.Berserk import Berserk
 from VegansDeluxe.rebuild.Skills.Biceps import Biceps
+from VegansDeluxe.rebuild.Skills.Necromancer import Necromancer
 from VegansDeluxe.rebuild.Skills.ToughSkull import ToughSkull
 from VegansDeluxe.rebuild.Skills.DoubleVein import DoubleVein
 from VegansDeluxe.rebuild.Skills.Inquisitor import Inquisitor
@@ -66,7 +67,7 @@ from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
-              Berserk, Junkie, Ninja, Sadist, Scope, Inquisitor, Visor, Zombie]
+              Berserk, Junkie, Ninja, Necromancer, Sadist, Scope, Inquisitor, Visor, Zombie]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shaft, Saw, Mace, Molot,
                Police, Saber, Bow]
