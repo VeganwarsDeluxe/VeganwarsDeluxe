@@ -1,7 +1,7 @@
 from typing import Union
 from uuid import uuid4
 
-from VegansDeluxe.core import Skill
+from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachStateEvent
 from VegansDeluxe.core.States import State
