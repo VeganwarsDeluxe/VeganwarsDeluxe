@@ -34,7 +34,7 @@ class LocalizedString:
 
         return string
 
-    def localize_args(self, args: tuple, kwargs: dict, code: str) -> tuple[tuple[str], dict[str, str]]:
+    def localize_args(self, args: tuple, kwargs: dict, code: str) -> tuple[list[str], dict[str, str]]:
         localized_args: list[str] = []
         localized_kwargs: dict[str, str] = {}
 
@@ -46,7 +46,7 @@ class LocalizedString:
             v = ensure_str(v, code)
             localized_kwargs.update({k: v})
 
-        return tuple(*localized_args), localized_kwargs
+        return localized_args, localized_kwargs
 
     def format(self, *args, **kwargs) -> Self:
         def format_func(string: str, code=''):
