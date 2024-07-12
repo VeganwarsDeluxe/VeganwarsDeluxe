@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core import MeleeAttack, ActionTag
 from VegansDeluxe.core import AttachedAction, Next, RegisterWeapon
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import DeliveryPackageEvent, DeliveryRequestEvent
@@ -53,8 +53,11 @@ class KnockWeapon(MeleeAttack):
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
                 return
 
-            source_reloading = 'reload' not in [a.id for a in
-                                                action_manager.get_queued_entity_actions(self.session, target)]
+            source_reloading = False
+            for action in action_manager.get_queued_entity_actions(self.session, target):
+                if ActionTag.RELOAD in action.tags:
+                    source_reloading = True
+
             if source_reloading or random.randint(1, 100) <= 10:
                 self.session.say(ls("weapon_chain_action_text").format(source.name, target.name))
                 state = target.get_state('knocked-weapon')
