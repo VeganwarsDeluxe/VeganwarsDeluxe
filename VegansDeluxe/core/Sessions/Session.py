@@ -5,7 +5,7 @@ from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsGameEvent, AttachStateEvent, PreDeathGameEvent
+    DeathGameEvent, CallActionsGameEvent, AttachStateEvent, PreDeathGameEvent, StartSessionEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -60,7 +60,7 @@ class Session[T: Entity]:
         self.texts = []
 
     def start(self):
-        pass
+        self.event_manager.publish(StartSessionEvent(self.id))
 
     def cancel_damages(self, source):
         for entity in self.entities:

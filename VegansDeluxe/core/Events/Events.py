@@ -14,12 +14,21 @@ class Event:
 
 
 class AttachSessionEvent(Event):
+    """
+    Published by SessionManager after attaching a Session.
+    Used by ContentManager to initialize it.
+    """
+
     def __init__(self, session_id):
         super().__init__()
         self.session_id = session_id
 
 
 class StartSessionEvent(Event):
+    """
+    Published by Session when it is started.
+    """
+
     def __init__(self, session_id):
         super().__init__()
         self.session_id = session_id

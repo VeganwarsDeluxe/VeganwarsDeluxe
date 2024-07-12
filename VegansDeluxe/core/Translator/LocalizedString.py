@@ -1,6 +1,7 @@
 import copy
-from typing import Self
+from typing import Self, Tuple, Dict
 
+from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.Translator import translator
 
 
@@ -33,26 +34,25 @@ class LocalizedString:
 
         return string
 
-    def localize_args(self, args: tuple, kwargs: dict, code: str):
-        localized_args = []
-        localized_kwargs = {}
+    def localize_args(self, args: tuple, kwargs: dict, code: str) -> tuple[tuple[str], dict[str, str]]:
+        localized_args: list[str] = []
+        localized_kwargs: dict[str, str] = {}
 
         for arg in args:
-            if isinstance(arg, LocalizedString):
-                arg = arg.localize(code)
+            arg = ensure_str(arg, code)
             localized_args.append(arg)
 
         for k, v in kwargs.items():
-            if isinstance(v, LocalizedString):
-                v = v.localize(code)
+            v = ensure_str(v, code)
             localized_kwargs.update({k: v})
 
-        return tuple(localized_args), localized_kwargs
+        return tuple(*localized_args), localized_kwargs
 
     def format(self, *args, **kwargs) -> Self:
         def format_func(string: str, code=''):
             l_args, l_kwargs = self.localize_args(args, kwargs, code)
             return string.format(*l_args, **l_kwargs)
+
         self_copy = self.copy()
         self_copy.__format_queue.append(format_func)
         return self_copy
@@ -72,6 +72,15 @@ class LocalizedString:
 
     def copy(self) -> Self:
         return LocalizedString(self.key, self.__format_queue)
+
+
+def ensure_str(data: str | LocalizedList | LocalizedString, code: str) -> str:
+    if isinstance(data, LocalizedString):
+        return data.localize(code)
+    elif isinstance(data, LocalizedList):
+        return data.separator.join([ensure_str(element, code) for element in data.elements])
+    else:
+        return data
 
 
 ls = LocalizedString

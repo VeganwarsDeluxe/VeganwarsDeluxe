@@ -7,6 +7,7 @@ import random
 
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -46,7 +47,7 @@ class GrenadeAction(DecisiveItem):
         source.energy = max(source.energy - 2, 0)
         self.session.say(
             ls("item_grenade_text")
-            .format(source.name, damage, ",".join([t.name for t in targets]))
+            .format(source.name, damage, LocalizedList([t.name for t in targets]))
         )
 
     def publish_post_damage_event(self, source, target, damage):
