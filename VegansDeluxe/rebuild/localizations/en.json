@@ -75,6 +75,11 @@
   "skill_mimic_action_miss": "\uD83C\uDFAD|Mimic {0} fails to copy anything from {1}!",
   "skill_mimic_action_text": "\uD83C\uDFAD|Mimic {0} remembers the action {1}!",
 
+  "skill_necromancer_name": "Necromancer",
+  "skill_necromancer_description": "You can revive a dead entity.",
+  "skill_necromancer_action_name": "Revive",
+  "skill_necromancer_action_text": "\uD83D\uDDA4Necromancer {0} revives {1}!",
+
   "skill_ninja_name": "Ninja",
   "skill_ninja_description": "You cannot be hit by attacks when you dodge.",
 

@@ -76,6 +76,11 @@
   "skill_mimic_action_miss": "\uD83C\uDFAD|Міміку {0} не вдається скопіювати нічого від {1}!",
   "skill_mimic_action_text": "\uD83C\uDFAD|Мімік {0} запам'ятовує дію {1}!",
 
+  "skill_necromancer_name": "Некромант",
+  "skill_necromancer_description": "Ви можете піднімати мертвих!",
+  "skill_necromancer_action_name": "Підняти з мертвих",
+  "skill_necromancer_action_text": "\uD83D\uDDA4Некромант {0} піднімає з мертвих {1}!",
+
   "skill_ninja_name": "Ніндзя",
   "skill_ninja_description": "По вашому перекату неможливо потрапити атакою.",
 
