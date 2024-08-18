@@ -1,0 +1,21 @@
+version: 27
+imports:
+- projectPath: public/ci-templates
+  revision: master
+jobs:
+- name: push-to-github
+  steps:
+  - !PushRepository
+    name: push-to-github
+    remoteUrl: https://github.com/Vezono/VeganwarsDeluxe
+    userName: Vezono
+    passwordSecret: github-vegans
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: master
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
