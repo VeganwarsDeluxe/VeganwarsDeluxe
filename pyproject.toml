@@ -19,8 +19,8 @@ authors = [
   {name = "Vezono", email = "vezono@gts.org.ua"}
 ]
 
-[tool.setuptools.packages.find]
-where = ["VegansDeluxe"]
+[tool.setuptools.packages]
+where = ["src"]
 
 [project.urls]
 Homepage = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
