@@ -1,1 +1,2 @@
-include MANIFEST.in VegansDeluxe/core/localizations/*.json VegansDeluxe/rebuild/localizations/*.json
+include VegansDeluxe/core/localizations/*.json
+include VegansDeluxe/rebuild/localizations/*.json

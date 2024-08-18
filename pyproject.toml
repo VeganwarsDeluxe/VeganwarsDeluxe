@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "VegansDeluxe"
+description = "Open engine for VeganWars game."
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.12"
+keywords = ["veganwars", "game", "engine"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+
+    "Topic :: Games/Entertainment :: Turn Based Strategy"
+]
+authors = [
+  {name = "Vezono", email = "vezono@gts.org.ua"}
+]
+
+[tool.setuptools.packages.find]
+where = ["VegansDeluxe"]
+
+[project.urls]
+Homepage = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
+Repository = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
+Issues = "https://onedev.gts.org.ua/vezono/vegans-deluxe/~issues"
