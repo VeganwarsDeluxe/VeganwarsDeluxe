@@ -1,10 +1,6 @@
-telegram
-venv
+.venv
 .idea
-telegram/viro
 test
-WeaponsLegacy.py
 __pycache__
-multiverse
-classes.png
-packages.png
+
+WeaponsLegacy.py
