@@ -28,4 +28,5 @@ version = {attr = "VegansDeluxe.__version__"}
 [project.urls]
 Homepage = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
 Repository = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
+Documentation = "https://veganwarsdeluxe.readthedocs.io"
 Issues = "https://onedev.gts.org.ua/vezono/vegans-deluxe/~issues"
