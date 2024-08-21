@@ -58,7 +58,7 @@ class RifleAttack(RangedAttack):
         return super().calculate_damage(source, target)
 
     def func(self, source, target):
-        damage = super().attack(source, target)
+        damage = super().attack(source, target).dealt
         self.weapon.main_target = None, 0
         return damage
 

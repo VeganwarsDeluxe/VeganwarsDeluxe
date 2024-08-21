@@ -24,7 +24,7 @@ class Saw(RangedWeapon):
 @AttachedAction(Saw)
 class SawAttack(RangedAttack):
     def func(self, source, target):
-        damage = super().attack(source, target)
+        damage = super().attack(source, target).dealt
         if not damage:
             return damage
         self.session.say(ls("weapon_saw_effect")

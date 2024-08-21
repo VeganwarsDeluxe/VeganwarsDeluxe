@@ -17,7 +17,7 @@ class Knife(MeleeWeapon):
 @AttachedAction(Knife)
 class KnifeAttack(MeleeAttack):
     def func(self, source, target):
-        damage = super().attack(source, target)
+        damage = super().attack(source, target).dealt
         if not damage:
             return damage
         bleeding = target.get_state('bleeding')
