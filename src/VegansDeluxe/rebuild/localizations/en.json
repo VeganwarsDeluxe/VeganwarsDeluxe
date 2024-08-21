@@ -129,6 +129,7 @@
   "state_aflame_extinguish": "Extinguish",
   "state_aflame_disappear": "\uD83D\uDD25|The fire on {0} has been extinguished!",
   "state_aflame_damage": "\uD83D\uDD25|{0} is burning. Takes {1} damage.",
+  "state_aflame_damage_energy": "\uD83D\uDD25|{0} is burning. Takes {1} damage and loses {2} energy.",
 
   "state_armor_effect": "🛡|{0}'s armor absorbs {1} damage.",
 

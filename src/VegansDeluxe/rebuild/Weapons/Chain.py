@@ -48,7 +48,7 @@ class KnockWeapon(MeleeAttack):
             action_manager = context.action_manager
 
             self.weapon.cooldown_turn = self.session.turn + 6
-            damage = self.attack(source, target)
+            damage = self.attack(source, target).dealt
             if not damage:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
                 return

@@ -11,6 +11,16 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons import Weapon
 
 
+class DamageData:
+    def __init__(self, calculated, displayed, dealt):
+        self.calculated = calculated
+        self.displayed = displayed
+        self.dealt = dealt
+
+    def __int__(self):
+        return self.dealt
+
+
 class WeaponAction[T: Weapon](Action):
     def __init__(self, session: Session, source: Entity, weapon: T):
         super().__init__(session, source)
@@ -62,21 +72,21 @@ class Attack(DecisiveWeaponAction):
             damage = int(math.floor(damage * total_accuracy / 10))
         return damage + self.weapon.damage_bonus if damage else 0
 
-    def attack(self, source, target, pay_energy=True):
+    def attack(self, source, target, pay_energy=True) -> DamageData:
         """
         Actually performs attack on target, dealing damage.
         """
-        damage = self.calculate_damage(source, target)
+        calculated_damage = self.calculate_damage(source, target)
         if pay_energy:
             source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
-        damage = self.publish_attack_event(source, target, damage)
-        self.send_attack_message(source, target, damage)
-        damage = self.publish_post_attack_event(source, target, damage)
+        displayed_damage = self.publish_attack_event(source, target, calculated_damage)
+        self.send_attack_message(source, target, displayed_damage)
+        dealt_damage = self.publish_post_attack_event(source, target, displayed_damage)
 
-        target.inbound_dmg.add(source, damage, self.session.turn)
-        source.outbound_dmg.add(target, damage, self.session.turn)
-        return damage
+        target.inbound_dmg.add(source, dealt_damage, self.session.turn)
+        source.outbound_dmg.add(target, dealt_damage, self.session.turn)
+        return DamageData(calculated_damage, displayed_damage, dealt_damage)
 
     def publish_attack_event(self, source, target, damage):
         message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)
@@ -107,3 +117,6 @@ class MeleeAttack(Attack):
 
 class RangedAttack(MeleeAttack):
     target_type = Enemies(distance=Distance.ANY)
+
+
+

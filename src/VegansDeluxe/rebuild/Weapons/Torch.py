@@ -21,7 +21,7 @@ class Torch(MeleeWeapon):
 @AttachedAction(Torch)
 class TorchAttack(MeleeAttack):
     def func(self, source, target):
-        damage = super().attack(source, target)
+        damage = super().attack(source, target).dealt
         if not damage:
             return damage
         if random.randint(0, 100) > 50:

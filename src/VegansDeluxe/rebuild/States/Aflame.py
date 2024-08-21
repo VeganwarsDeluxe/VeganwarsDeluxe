@@ -46,7 +46,7 @@ def register(root_context: StateContext[Aflame]):
             if ActionTag.SKIP in action.tags:
                 skipped = True
                 break
-        if skipped or not state.flame:
+        if not skipped or not state.flame:
             return
         session.say(ls("state_aflame_remove").format(source.name))
         state.timer = 0
@@ -84,7 +84,6 @@ def register(root_context: StateContext[Aflame]):
         source.outbound_dmg.add(state.dealer, damage, session.turn)
 
         if state.flame > 1:
-            session.say(ls("state_aflame_disappear").format(source.name, state.flame-1))
             source.energy -= state.flame - 1
         if state.timer <= 1:
             state.extinguished = True
@@ -124,7 +123,10 @@ def perform_fire_attack(session, source, state, message):
     session.event_manager.publish(fire_event)
     damage = fire_event.damage
 
-    session.say(ls("state_aflame_damage").format(source.name, damage))
+    if state.flame == 1:
+        session.say(ls("state_aflame_damage").format(source.name, damage))
+    elif state.flame > 1:
+        session.say(ls("state_aflame_damage_energy").format(source.name, damage, state.flame-1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
     session.event_manager.publish(post_fire_event)
