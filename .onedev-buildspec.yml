@@ -7,7 +7,7 @@ jobs:
   steps:
   - !PushRepository
     name: push-to-github
-    remoteUrl: https://github.com/Vezono/VeganwarsDeluxe
+    remoteUrl: https://github.com/VeganwarsDeluxe/VeganwarsDeluxe
     userName: Vezono
     passwordSecret: github-vegans
     force: false
