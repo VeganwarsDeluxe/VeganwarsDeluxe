@@ -13,6 +13,15 @@ Session is the center of the game. It contains all Entities, has logical start, 
 
 Action
 ----------------
-Action is the basic building block
+Action is the basic building block of the game.
+
+.. autoclass:: VegansDeluxe.core.Actions.Action.Action
+    :members:
+    :show-inheritance:
+    :member-order: bysource
+    :special-members: __init__
+    :undoc-members: True
+    :noindex:
+
 
 
