@@ -26,5 +26,5 @@ class AxeAttack(MeleeAttack):
         threshold = target.get_state(DamageThreshold.id)
         self.session.say(ls("weapon_axe_effect").format(target.name))
 
-        threshold.threshold += 1
+        threshold.threshold -= 1
         return damage

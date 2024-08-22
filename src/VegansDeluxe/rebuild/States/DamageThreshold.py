@@ -22,4 +22,4 @@ def register(root_context: StateContext[DamageThreshold]):
     def func(context: EventContext[HPLossGameEvent]):
         if not context.event.damage:
             return
-        context.event.hp_loss = (context.event.damage // state.threshold) + 1
+        context.event.hp_loss = (context.event.damage // max(state.threshold, 1)) + 1
