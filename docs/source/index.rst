@@ -19,3 +19,5 @@ Contents
 
    usage
    api
+   stages
+   npc
