@@ -19,7 +19,6 @@ class Bow(RangedWeapon):
     def __init__(self, session_id: str, entity_id: str):
         super().__init__(session_id, entity_id)
         self.cooldown_turn = 0
-        self.strike = False
 
 
 @AttachedAction(Bow)
