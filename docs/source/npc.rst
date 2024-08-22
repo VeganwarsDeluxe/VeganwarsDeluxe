@@ -185,7 +185,7 @@ Full NPC example
             else:
                 attack = engine.action_manager.get_action(session, self, SlimeAttack.id)
                 attack.target = er.qrandom.choice(attack.targets)
-                engine.action_managueue_action_instance(attack)
+                engine.action_manager.queue_action_instance(attack)
                 return
 
             # Skipping turn if nothing above is triggered
