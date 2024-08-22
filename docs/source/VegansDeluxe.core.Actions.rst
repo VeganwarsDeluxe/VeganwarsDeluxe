@@ -8,9 +8,9 @@ VegansDeluxe.core.Actions.Action module
 ---------------------------------------
 
 .. automodule:: VegansDeluxe.core.Actions.Action
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 VegansDeluxe.core.Actions.ActionManager module
 ----------------------------------------------

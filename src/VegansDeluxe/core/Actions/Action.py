@@ -63,8 +63,6 @@ class Action:
         return self.get_targets(self.source, self.target_type)
 
     def get_targets(self, source, target_type: TargetType):
-        logging.debug(f"get_targets() in Action[{self.id}] | session: {self.session.id}")
-
         target_pool = self.session.entities
         targets = []
 
