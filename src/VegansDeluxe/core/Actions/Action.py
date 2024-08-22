@@ -1,3 +1,10 @@
+"""
+Action - building block of the game.
+
+All attacks, usage of items, and other actions that Entities do stem from it.
+"""
+
+
 import logging
 
 from VegansDeluxe.core.Entities import Entity
@@ -15,6 +22,12 @@ class Action:
     type = 'action'
 
     def __init__(self, session: Session, source: Entity, *args):
+        """
+        Action class
+
+        :param session: Session instance
+        :param source: Entity instance of action owner
+        """
         self.tags = []
 
         self.session: Session = session
@@ -31,9 +44,12 @@ class Action:
         logging.debug(f"__init__() in Action[{self.id}] | session: {self.session.id}")
 
     def func(self, source, target):
+        """
+        Function to override with actual mechanics of the action.
+        """
         pass
 
-    def __call__(self):  # Abstract "Run" method for overriding
+    def __call__(self):
         if self.canceled:
             return
         return self.func(self.source, self.target)
