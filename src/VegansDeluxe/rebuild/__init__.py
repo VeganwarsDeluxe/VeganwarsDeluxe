@@ -1,3 +1,7 @@
+"""
+Module for Rebuild game content.
+"""
+
 import pathlib
 
 from VegansDeluxe.core.Translator.Translator import translator

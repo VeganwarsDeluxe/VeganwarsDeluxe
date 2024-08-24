@@ -1,3 +1,7 @@
+"""
+Core module of the library. Contains all core mechanics of the engine.
+"""
+
 import pathlib
 
 from .Actions import *
