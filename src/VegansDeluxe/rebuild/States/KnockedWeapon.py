@@ -4,6 +4,7 @@ from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.rebuild import Fist
 
 
 class KnockedWeapon(State):
@@ -12,6 +13,11 @@ class KnockedWeapon(State):
     def __init__(self):
         super().__init__()
         self.weapon = None
+        self.default_weapon_type = Fist
+
+    def drop_weapon(self, source: Entity):
+        self.weapon = source.weapon
+        source.weapon = self.default_weapon_type(source.session_id, source.id)
 
 
 @AttachedAction(KnockedWeapon)

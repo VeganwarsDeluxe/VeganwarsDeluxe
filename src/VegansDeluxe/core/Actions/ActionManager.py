@@ -1,5 +1,6 @@
 from typing import Union, Optional
 
+from VegansDeluxe.core import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Actions.ItemAction import ItemAction
 from VegansDeluxe.core.Actions.StateAction import StateAction
@@ -160,6 +161,14 @@ class ActionManager:
         """
         queue = [action for action in self.action_queue if action.session.id == session.id]
         return queue
+
+    def remove_actions_by_tag(self, session: Session, entity: Entity, action_tag: ActionTag):
+        """
+        Marks an action with specific tag as removed for an entity in the given session.
+        """
+        for action in self.get_available_actions(session, entity):
+            if action_tag in action.tags:
+                action.removed = True
 
     def remove_action(self, session: Session, entity: Entity, action_id: str):
         """

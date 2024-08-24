@@ -7,7 +7,7 @@ from VegansDeluxe.core import DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core import Enemies, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
-from VegansDeluxe.rebuild.Weapons.Fist import Fist
+from VegansDeluxe.rebuild import KnockedWeapon
 
 
 @RegisterWeapon
@@ -60,9 +60,8 @@ class KnockWeapon(MeleeAttack):
 
             if source_reloading or random.randint(1, 100) <= 10:
                 self.session.say(ls("weapon_chain_action_text").format(source.name, target.name))
-                state = target.get_state('knocked-weapon')
-                state.weapon = target.weapon
-                target.weapon = Fist(self.session.id, target.id)
+                state = target.get_state(KnockedWeapon.id)
+                state.drop_weapon(source)
             else:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
 

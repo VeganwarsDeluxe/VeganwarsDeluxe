@@ -1,5 +1,5 @@
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, ActionTag
 from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
@@ -28,8 +28,8 @@ def register(root_context: StateContext[Knockdown]):
     def func(context: EventContext[PostUpdateActionsGameEvent]):
         if not state.active:
             return
-        # TODO: Remove by tags btw.
-        context.action_manager.remove_action(session, source, 'attack')
+
+        context.action_manager.remove_actions_by_tag(session, source, ActionTag.ATTACK)
         context.action_manager.remove_action(session, source, 'dodge')
 
 

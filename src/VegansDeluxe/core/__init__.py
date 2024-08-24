@@ -21,7 +21,7 @@ from .ContentManager import ContentManager, AttachedAction, RegisterState, Regis
 from .TargetType import *
 from .Engine import *
 from .utils import *
-__version__ = "1.4.5"
+__version__ = "1.4.6"
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 

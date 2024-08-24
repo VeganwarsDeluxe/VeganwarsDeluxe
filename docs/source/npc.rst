@@ -86,7 +86,7 @@ For now, best way to set up cooldowns is using variables in NPCs __init__.
             self.evade_cooldown_turn = 0
             ...
 
-         def choose_act(self, session: Session[TelegramEntity]):
+        def choose_act(self, session: Session[TelegramEntity]):
             ...
             if session.turn >= self.evade_cooldown_turn:
                 if some_other_checks:
@@ -95,9 +95,18 @@ For now, best way to set up cooldowns is using variables in NPCs __init__.
                     return
             ...
 
-Using items
+Performing
 ------------
+.. code-block:: python3
 
+        def choose_act(self, session: Session[TelegramEntity]):
+            ...
+            adrenaline_action = engine.action_manager.get_attached_actions(Adrenaline)[0]
+
+            engine.action_manager.queue_action_instance(adrenaline_action())
+            # or
+            engine.action_manager.queue_action(session, self, adrenaline_action.id)
+            ...
 
 Creating custom NPC weapons
 ------------
