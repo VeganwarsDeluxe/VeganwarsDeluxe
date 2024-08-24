@@ -61,7 +61,7 @@ class KnockWeapon(MeleeAttack):
             if source_reloading or random.randint(1, 100) <= 10:
                 self.session.say(ls("weapon_chain_action_text").format(source.name, target.name))
                 state = target.get_state(KnockedWeapon.id)
-                state.drop_weapon(source)
+                state.drop_weapon(target)
             else:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
 
