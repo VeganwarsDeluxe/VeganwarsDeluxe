@@ -63,6 +63,11 @@ class ActionManager:
         self.actions[(session, entity)].append(action)
 
     def update_entity_actions(self, session: Session, entity: Entity):
+        """
+        Compiles actions available to the entity from itself, all its items, states, skills and the weapon.
+
+        Can be influenced by subscribing to PreUpdateActionsGameEvent and PostUpdateActionsGameEvent events.
+        """
         self.event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
         entity_actions = self.actions.get((session, entity))
@@ -107,10 +112,24 @@ class ActionManager:
         actions = filter(lambda a: action_id == a.id, self.get_actions(session, entity))
         return next(actions, None)
 
-    def get_actions(self, session: Session, entity: Entity):
+    def get_actions(self, session: Session, entity: Entity) -> list[Action]:
+        """
+        Returns list of actions, available to the entity in given session.
+
+        Usually combination of entity actions, it's weapon actions and all state and items actions.
+        """
         return self.actions.get((session, entity), [])
 
+    def get_attached_actions(self, action_owner: ActionOwnerType) -> list[type[Action]]:
+        """
+        Returns list of actions, attached to the game element by the ContentManager.
+        """
+        return self.action_map.get(action_owner, [])
+
     def get_available_actions(self, session: Session, entity: Entity) -> list[Action]:
+        """
+        Returns list of actions, visible and available for entity to select on the current turn.
+        """
         actions = self.get_actions(session, entity)
         result = []
         for action in actions:
@@ -136,10 +155,16 @@ class ActionManager:
         return result
 
     def get_queued_session_actions(self, session: Session) -> list[Action]:
+        """
+        Returns current action queue of the session.
+        """
         queue = [action for action in self.action_queue if action.session.id == session.id]
         return queue
 
     def remove_action(self, session: Session, entity: Entity, action_id: str):
+        """
+        Marks an action as removed for an entity in the given session.
+        """
         action = self.get_action(session, entity, action_id)
         if action:
             action.removed = True

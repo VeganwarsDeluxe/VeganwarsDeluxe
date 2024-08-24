@@ -95,6 +95,10 @@ For now, best way to set up cooldowns is using variables in NPCs __init__.
                     return
             ...
 
+Using items
+------------
+
+
 Creating custom NPC weapons
 ------------
 If you want custom attacks for your NPC, you create NPC weapons. It is done the same way as creating
