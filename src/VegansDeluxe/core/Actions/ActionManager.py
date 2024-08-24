@@ -1,6 +1,6 @@
 from typing import Union, Optional
 
-from VegansDeluxe.core import ActionTag
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Actions.ItemAction import ItemAction
 from VegansDeluxe.core.Actions.StateAction import StateAction

@@ -4,7 +4,7 @@ from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import Fist
+from VegansDeluxe.rebuild.Weapons.Fist import Fist
 
 
 class KnockedWeapon(State):
