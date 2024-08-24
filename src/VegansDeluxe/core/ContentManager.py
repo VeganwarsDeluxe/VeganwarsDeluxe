@@ -22,18 +22,16 @@ class ContentManager:
     """
 
     def __init__(self):
-        """
-        self.action_map: Map of Content classes to Action classes.
-        self.state_init_map: Map of State classes to their "game inits".
-        self.assignments: List of event assignments to be completed on Engine initialization.
-        self.attached_session_manager: List of attached SessionManagers.
-        """
         self.action_map: dict[ActionOwnerType, list[type[Action]]] = defaultdict(list)
+        """Map of Content classes to Action classes."""
 
         self.state_init_map: dict[type[State], typing.Callable] = dict()
+        """Map of State classes to their "game inits"."""
         self.assignments: list[typing.Callable] = list()
+        """List of event assignments to be completed on Engine initialization."""
 
         self.attached_action_managers: list[ActionManager] = list()
+        """List of attached SessionManagers."""
 
         self.weapons: dict[str, Weapon] = dict()
         self.states: dict[str, State] = dict()
@@ -85,19 +83,24 @@ class ContentManager:
 
             @RegisterEvent(root_context.session.id, event=DeliveryRequestEvent)
             def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
+                """
+                Broadcasts EventContext[DeliveryPackageEvent] immediately on receiving DeliveryRequestEvent.
+
+                Useful to get the ActionManager contained in the EventContext, circumventing circular dependencies.
+                """
                 event = DeliveryPackageEvent(context.session.id, context.session.turn)
                 context.event_manager.publish(event)
 
             @self.register_action_execution_event(root_context.session.id)
             def execute_action_handler(context: ActionExecutionContext):
+                """Execute the action on receiving ExecuteActionEvent."""
                 context.action()
-
-        """
-        Every PreMoveGameEvent, resets removed actions for the Session.
-        """
 
         @RegisterEvent(event=PreMoveGameEvent)
         def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
+            """
+            Every PreMoveGameEvent, resets removed actions for the Session.
+            """
             action_manager.reset_removed_actions(context.session.id)
 
     def attach_action_manager(self, action_manager: ActionManager):
@@ -149,9 +152,9 @@ class ContentManager:
                 event_manager = session_manager.event_manager
 
                 def callback_wrapper(message):
-                    context = ActionExecutionContext[
-                        ExecuteActionEvent
-                    ](message, session_manager.get_session(message.session_id), action_manager)
+                    context = ActionExecutionContext[ExecuteActionEvent](
+                        message, session_manager.get_session(message.session_id), action_manager
+                    )
                     return callback(context)
 
                 event_manager.at_event(event=ExecuteActionEvent, session_id=session_id, unique_type=unique_type,

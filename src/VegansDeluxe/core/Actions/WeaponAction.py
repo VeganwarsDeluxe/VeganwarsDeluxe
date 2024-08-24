@@ -2,7 +2,7 @@ import math
 import random
 
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
-from VegansDeluxe.core.Actions.Action import Action
+from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
 from VegansDeluxe.core.Sessions import Session
@@ -27,16 +27,12 @@ class WeaponAction[T: Weapon](Action):
         self.weapon: T = weapon
 
 
-class FreeWeaponAction(WeaponAction):
-    @property
-    def cost(self):
-        return False
+class FreeWeaponAction(WeaponAction, FreeAction):
+    pass
 
 
-class DecisiveWeaponAction(WeaponAction):
-    @property
-    def cost(self):
-        return True
+class DecisiveWeaponAction(WeaponAction, DecisiveAction):
+    pass
 
 
 class Attack(DecisiveWeaponAction):

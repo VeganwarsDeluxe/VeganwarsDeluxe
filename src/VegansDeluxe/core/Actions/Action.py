@@ -7,45 +7,55 @@ All attacks, usage of items, and other actions that Entities do stem from it.
 
 import logging
 
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
+from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Sessions import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
-from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.core.Translator.LocalizedString import ls, LocalizedString
 
 
 class Action:
-    id = 'action'
-    name = ls("base_action_name")
-    priority = 0
-    target_type = TargetType(0, 0, 0, 0)
+    id: str = 'action'
+    """ID of the action."""
 
-    type = 'action'
+    name: str | LocalizedString = ls("base_action_name")
+    """Name of the action, that is displayed to the player."""
+
+    priority: int = 0
+    """Priority of the action. Defines the order to be executed during CallActions stage."""
+
+    target_type: TargetType = TargetType(0, 0, 0, 0)
+    """Filter for targets, to which this action can be applied."""
+
+    type: str = 'action'
+    """String type definition for the class. Used internally."""
 
     def __init__(self, session: Session, source: Entity, *args):
         """
-        Action class
-
         :param session: Session instance
         :param source: Entity instance of action owner
         """
-        self.tags = []
+        self.tags: list[ActionTag] = []
+        """List of tags to categorize the action."""
 
         self.session: Session = session
-        self.event_manager = self.session.event_manager
+        self.event_manager: EventManager = self.session.event_manager
 
         self.source: Entity = source
         self.target: Entity = source
 
         self.canceled = False
+        """If set to True, the action will not be executed."""
         self.type = 'action'
         self.removed = False
         self.queued = False
 
-        logging.debug(f"__init__() in Action[{self.id}] | session: {self.session.id}")
-
-    def func(self, source, target):
+    def func(self, source: Entity, target: Entity):
         """
         Function to override with actual mechanics of the action.
+
+        All Actions have Source Entity and Target Entity. Source and Target may be the same.
         """
         pass
 
@@ -55,14 +65,41 @@ class Action:
         return self.func(self.source, self.target)
 
     @property
+    def cost(self):
+        """
+        True if player's turn should be finalized after selecting this action, otherwise False.
+        """
+        return None
+
+    @property
     def hidden(self) -> bool:
+        """
+        True if action should not appear for selection.
+
+        Overwrite this function to define behaviour.
+        """
+        return False
+
+    @property
+    def blocked(self) -> bool:
+        """
+        Returns True if action should appear, but be unavailable to select.
+
+        Overwrite this function to define behaviour.
+        """
         return False
 
     @property
     def targets(self):
+        """
+        Targets applicable by this Action.
+        """
         return self.get_targets(self.source, self.target_type)
 
-    def get_targets(self, source, target_type: TargetType):
+    def get_targets(self, source: Entity, target_type: TargetType):
+        """
+        Function that filters targets by TargetType filter relative to source.
+        """
         target_pool = self.session.entities
         targets = []
 
@@ -86,22 +123,20 @@ class Action:
 
         return targets
 
-    @property
-    def blocked(self):
-        return False
-
-    @property
-    def cost(self):
-        return None
-
 
 class DecisiveAction(Action):
+    """
+    Action that finalizes player's turn.
+    """
     @property
     def cost(self):
         return True
 
 
 class FreeAction(Action):
+    """
+    Action that after selection allows to select more for the current turn.
+    """
     @property
     def cost(self):
         return False

@@ -21,3 +21,4 @@ Contents
    api
    stages
    npc
+   VegansDeluxe

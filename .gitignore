@@ -2,5 +2,6 @@
 .idea
 test
 __pycache__
+docs/build
 
 WeaponsLegacy.py

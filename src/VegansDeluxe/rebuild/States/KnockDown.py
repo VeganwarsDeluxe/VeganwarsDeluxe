@@ -28,6 +28,7 @@ def register(root_context: StateContext[Knockdown]):
     def func(context: EventContext[PostUpdateActionsGameEvent]):
         if not state.active:
             return
+        # TODO: Remove by tags btw.
         context.action_manager.remove_action(session, source, 'attack')
         context.action_manager.remove_action(session, source, 'dodge')
 

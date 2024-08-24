@@ -16,20 +16,31 @@ ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
 
 
 class ActionManager:
+    """
+    Manages action queues for all active sessions,
+    """
     def __init__(self, session_manager: SessionManager, action_map: dict[ActionOwnerType, list[type[Action]]]):
         self.session_manager = session_manager
         self.event_manager = session_manager.event_manager
 
-        """
-        self.action_queue: Queue of Actions from all active Sessions.
-        self.actions: Map of Session & Entity pairs to Actions.
-        """
         self.action_queue: list[Action] = []
-        self.actions: dict[tuple[Session, Entity], list[Action]] = {}
+        """Queue of Actions from all active Sessions."""
 
-        self.action_map = action_map
+        self.actions: dict[tuple[Session, Entity], list[Action]] = {}
+        """
+        Map of Session & Entity pairs to their available Actions.
+        Updated by ActionManager.update_entity_actions().
+        """
+
+        self.action_map: dict[ActionOwnerType, list[type[Action]]] = action_map
+        """Map of all game elements (Entity, Weapon, State, Item) to their Actions."""
 
     def reset_removed_actions(self, session_id):
+        """
+        Sets removed attribute to False in all actions of all entities in the session.
+
+        :param session_id: ID of the Session.
+        """
         session = self.session_manager.get_session(session_id)
         for entity in session.entities:
             entity_actions = self.actions[(session, entity)]
@@ -37,6 +48,11 @@ class ActionManager:
                 action.removed = False
 
     def attach_action(self, session: Session, entity: Entity, action_id: str):
+        """
+        Attaches a foreign Action by action_id to the Entity in the Session.
+
+        :todo: Deprecate this. Used by Mimic only.
+        """
         owner_type, action_type = self.get_action_from_all_actions(action_id)
         if owner_type.type == 'entity':
             action = action_type(session, entity)

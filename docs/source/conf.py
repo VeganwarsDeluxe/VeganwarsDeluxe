@@ -2,6 +2,10 @@
 
 # -- Project information
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(".."))
+
 project = 'VeganwarsDeluxe'
 copyright = '2024, VeganwarsDeluxe'
 author = 'Vezono'
@@ -12,6 +16,8 @@ version = '1.4.5'
 # -- General configuration
 
 extensions = [
+    'sphinx.ext.viewcode',
+    'sphinx.ext.todo',
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
