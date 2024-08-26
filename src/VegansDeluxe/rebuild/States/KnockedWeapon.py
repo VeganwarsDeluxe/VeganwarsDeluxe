@@ -19,6 +19,9 @@ class KnockedWeapon(State):
         self.weapon = source.weapon
         source.weapon = self.default_weapon_type(source.session_id, source.id)
 
+    def pick_up_weapon(self, source: Entity):
+        source.weapon = self.weapon
+
 
 @AttachedAction(KnockedWeapon)
 class PickUp(DecisiveStateAction):
