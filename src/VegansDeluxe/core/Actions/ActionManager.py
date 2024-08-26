@@ -110,6 +110,9 @@ class ActionManager:
             self.update_entity_actions(session, entity)
 
     def get_action(self, session: Session, entity: Entity, action_id: str) -> Action:
+        """
+        Finds an action of an entity that is available to it in the given session.
+        """
         actions = filter(lambda a: action_id == a.id, self.get_actions(session, entity))
         return next(actions, None)
 
@@ -148,6 +151,9 @@ class ActionManager:
         return False
 
     def get_queued_entity_actions(self, session: Session, entity: Entity) -> list[Action]:
+        """
+        Returns current action queue of an entity.
+        """
         result = []
         for action in self.get_queued_session_actions(session):
             if action.source != entity:
@@ -180,11 +186,17 @@ class ActionManager:
         return action
 
     def queue_action(self, session: Session, entity: Entity, action_id: str) -> bool:
+        """
+        Adds an action to the action queue by its ID.
+        """
         action: Action = self.get_action(session, entity, action_id)
         action.queued = True
         return self.queue_action_instance(action)
 
     def queue_action_instance(self, action: Action) -> bool:
+        """
+        Adds an action instance to the action queue.
+        """
         self.action_queue.append(action)
         action.queued = True
         return not action.cost

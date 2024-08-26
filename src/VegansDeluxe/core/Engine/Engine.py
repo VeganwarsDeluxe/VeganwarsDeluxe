@@ -7,6 +7,10 @@ from VegansDeluxe.core.States import State
 
 class Engine:
     def __init__(self):
+        """
+        Engine class, that puts all content and managers together, ready for work.
+        """
+
         self.event_manager: EventManager = EventManager()
         self.session_manager: SessionManager = SessionManager(self.event_manager)
         self.action_manager: ActionManager = ActionManager(self.session_manager, action_map=content_manager.action_map)

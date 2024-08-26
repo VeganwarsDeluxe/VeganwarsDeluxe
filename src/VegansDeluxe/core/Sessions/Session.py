@@ -1,4 +1,3 @@
-from typing import Union
 from uuid import uuid4
 
 from VegansDeluxe.core.Entities.Entity import Entity
@@ -30,7 +29,7 @@ class Session[T: Entity]:
         result = [entity for entity in self.entities if entity.id == entity_id]
         return result[0] if result else None
 
-    def say(self, text: Union[str, ls], n: bool = True) -> None:
+    def say(self, text: str | ls, n: bool = True) -> None:
         """
         Adds given text to log queue.
         """
@@ -96,11 +95,12 @@ class Session[T: Entity]:
             self.lose_hp(entity, entity.inbound_dmg.sum())
 
     def stop(self):
+        # TODO: Maybe publish some stop event?
         self.active = False
 
     def death(self) -> None:
         """
-        Handle the death of entities.
+        Handle the death of entities. Publishes PreDeathGameEvent and DeathGameEvent.
         """
         for entity in self.alive_entities:
             if entity.hp > 0:
@@ -120,6 +120,8 @@ class Session[T: Entity]:
             self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
 
     def finish(self):
+        # TODO: Broadcast a pair of events, like in Session.death().
+        #  Maybe someone will want to make a dungeon or something.
         if not len(self.alive_teams):  # If everyone is dead
             self.stop()
             return
@@ -131,12 +133,14 @@ class Session[T: Entity]:
                 return
         self.stop()
 
-    def move(self):  # 0. Pre-move stage
+    def move(self):
         self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
         self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
         self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
+
         self.say(ls("session_effects_line").format(self.turn))
         self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
+
         self.say(ls("session_results_line").format(self.turn))
         self.calculate_damages()  # 4. Damages stage
         self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage

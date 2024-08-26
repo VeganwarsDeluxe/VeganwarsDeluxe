@@ -1,18 +1,18 @@
 import typing
 from collections import defaultdict
-from typing import Union
 
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.Context import StateContext, EventContext, ActionExecutionContext
-from VegansDeluxe.core.Events.Events import Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent, CallActionsGameEvent, \
-    ExecuteActionEvent, DeliveryRequestEvent, DeliveryPackageEvent
+from VegansDeluxe.core.Events.Events import (Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent,
+                                             CallActionsGameEvent, ExecuteActionEvent, DeliveryRequestEvent,
+                                             DeliveryPackageEvent)
 from VegansDeluxe.core.Items.Item import Item
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
 
-ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
+ActionOwnerType = type[Entity] | type[Weapon] | type[State] | type[Item]
 
 
 class ContentManager:
