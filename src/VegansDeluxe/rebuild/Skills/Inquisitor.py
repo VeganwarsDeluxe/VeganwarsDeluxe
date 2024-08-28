@@ -60,6 +60,8 @@ class Pray(DecisiveStateAction):
         super().__init__(session, source, skill)
         self.state = skill
 
+        self.tags += [ActionTag.HARMFUL]
+
         self._timer = 3
 
     @property
