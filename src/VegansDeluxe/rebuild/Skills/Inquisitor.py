@@ -2,7 +2,7 @@ import random
 
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction, Next, DeliveryPackageEvent, DeliveryRequestEvent, ActionTag, \
-    PreDamagesGameEvent
+    PreDamagesGameEvent, PostDamagesGameEvent
 from VegansDeluxe.core import RegisterEvent, RegisterState, After, At
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
@@ -106,6 +106,8 @@ class Pray(DecisiveStateAction):
                 self.session.say(ls("skill_inquisitor_clouds_effect").format(target.name))
                 self.session.say(ls("skill_inquisitor_stun").format(target.name))
 
+            @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
+            def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
                 target.get_state(Stun.id).stun += 1
 
         self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
