@@ -1,6 +1,6 @@
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachSessionEvent
-from VegansDeluxe.core.Sessions.Session import Session
+from VegansDeluxe.core.Session import Session
 
 
 class SessionManager:

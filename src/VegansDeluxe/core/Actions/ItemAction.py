@@ -2,7 +2,7 @@ from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Items.Item import Item
-from VegansDeluxe.core.Sessions import Session
+from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 

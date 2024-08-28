@@ -9,7 +9,7 @@ from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.Events import PostUpdateActionsGameEvent, PreUpdateActionsGameEvent
 from VegansDeluxe.core.Items.Item import Item
 from VegansDeluxe.core.SessionManager import SessionManager
-from VegansDeluxe.core.Sessions import Session
+from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
 

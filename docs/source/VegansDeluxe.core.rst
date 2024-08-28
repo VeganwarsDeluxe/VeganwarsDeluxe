@@ -12,7 +12,7 @@ Subpackages
    VegansDeluxe.core.Entities
    VegansDeluxe.core.Events
    VegansDeluxe.core.Items
-   VegansDeluxe.core.Sessions
+   VegansDeluxe.core.Session
    VegansDeluxe.core.Skills
    VegansDeluxe.core.States
    VegansDeluxe.core.Translator
