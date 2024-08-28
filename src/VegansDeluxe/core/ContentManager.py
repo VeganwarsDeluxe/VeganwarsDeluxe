@@ -7,7 +7,7 @@ from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.Context import StateContext, EventContext, ActionExecutionContext
 from VegansDeluxe.core.Events.Events import (Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent,
                                              CallActionsGameEvent, ExecuteActionEvent, DeliveryRequestEvent,
-                                             DeliveryPackageEvent)
+                                             DeliveryPackageEvent, PostActionsGameEvent)
 from VegansDeluxe.core.Items.Item import Item
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
@@ -66,6 +66,17 @@ class ContentManager:
 
         @RegisterEvent(event=AttachSessionEvent)
         def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
+            @RegisterEvent(root_context.session.id, event=PostActionsGameEvent, priority=99)
+            def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
+                """
+                Clears out all action from the queue after they are executed.
+                :todo: Make sure if this is the right time to clear. Though before we cleared them after the execution,
+                    so I think we are fine for now.
+                """
+
+                action_manager.action_queue = \
+                    [action for action in action_manager.action_queue if action.session.id != root_context.session.id]
+
             @RegisterEvent(root_context.session.id, event=CallActionsGameEvent)
             def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
                 """
@@ -78,8 +89,6 @@ class ContentManager:
                 for action in action_queue:
                     event = ExecuteActionEvent(context.session.id, context.session.turn, action)
                     context.event_manager.publish(event)
-
-                    action_manager.action_queue.remove(action)
 
             @RegisterEvent(root_context.session.id, event=DeliveryRequestEvent)
             def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
