@@ -1,13 +1,13 @@
-VegansDeluxe.core.Sessions package
+VegansDeluxe.core.Session package
 ==================================
 
 Submodules
 ----------
 
-VegansDeluxe.core.Sessions.Session module
+VegansDeluxe.core.Session.Session module
 -----------------------------------------
 
-.. automodule:: VegansDeluxe.core.Sessions.Session
+.. automodule:: VegansDeluxe.core.Session.Session
    :members:
    :undoc-members:
    :show-inheritance:
@@ -15,7 +15,7 @@ VegansDeluxe.core.Sessions.Session module
 Module contents
 ---------------
 
-.. automodule:: VegansDeluxe.core.Sessions
+.. automodule:: VegansDeluxe.core.Session
    :members:
    :undoc-members:
    :show-inheritance:

@@ -10,7 +10,7 @@ import logging
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Entities import Entity
-from VegansDeluxe.core.Sessions import Session
+from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls, LocalizedString
 

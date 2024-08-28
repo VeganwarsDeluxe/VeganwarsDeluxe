@@ -9,7 +9,7 @@ from .Actions.WeaponAction import *
 from .Entities import *
 from .Events import *
 from .Items import *
-from .Sessions import *
+from .Session import *
 from .Skills import *
 from .States import *
 from .Translator.Translator import translator

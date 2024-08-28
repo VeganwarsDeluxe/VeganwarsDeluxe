@@ -1,7 +1,7 @@
 from VegansDeluxe.core.Actions.Action import Action
 from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.Events.Events import Event, AttachStateEvent, ExecuteActionEvent
-from VegansDeluxe.core.Sessions import Session
+from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.States import State
 
 
