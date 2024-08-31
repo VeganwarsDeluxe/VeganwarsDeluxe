@@ -117,6 +117,12 @@
   "skill_visor_notification_energy": "{energies}|{energy} енергии. Максимум: {max_energy}",
   "skill_visor_hit_chance": "\uD83C\uDFAF|Вероятность попасть - {0}%",
 
+  "skill_weaponsmith_name": "Оружейник",
+  "skill_weaponsmith_description": "Имеет два оружия, с возможностью переключения.",
+  "skill_weaponsmith_choice_text": "Второе оружие",
+  "skill_weaponsmith_action_name": "Сменить оружие",
+  "skill_weaponsmith_action_text": "\uD83D\uDE0F|{0} достаёт {1}!",
+
   "skill_zombie_name": "Зомби",
   "skill_zombie_description": "Перед тем, как умереть, вы проживете 2 дополнительных хода.",
   "skill_zombie_effect": "😬|{0} продолжает сражаться, истекая кровью!",

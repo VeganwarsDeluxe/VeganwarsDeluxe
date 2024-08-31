@@ -117,6 +117,12 @@
   "skill_visor_notification_energy": "{energies}|{energy} енергії. Максимум: {max_energy}",
   "skill_visor_hit_chance": "\uD83C\uDFAF|Імовірність влучити - {0}%",
 
+  "skill_weaponsmith_name": "Зброяр",
+  "skill_weaponsmith_description": "Має дві зброї з можливістю перемикання.",
+  "skill_weaponsmith_choice_text": "Інша зброя",
+  "skill_weaponsmith_action_name": "Змінити зброю",
+  "skill_weaponsmith_action_text": "\uD83D\uDE0F|{0} дістає {1}!",
+
   "skill_zombie_name": "Зомбі",
   "skill_zombie_description": "Перед тим, як померти, ви проживете 2 додаткові ходи.",
   "skill_zombie_effect": "😬|{0} продовжує боротьбу, стікаючи кров'ю!",
