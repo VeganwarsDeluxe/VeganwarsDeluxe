@@ -25,7 +25,7 @@ class Weaponsmith(Skill):
 
 
 @RegisterState(Weaponsmith)
-def register(root_context: StateContext[Weaponsmith]):
+async def register(root_context: StateContext[Weaponsmith]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -37,10 +37,10 @@ def register(root_context: StateContext[Weaponsmith]):
         choice = Choice(choice_id=str(i), text=weapon.name)
         weapon_choice.choices.append(choice)
 
-    session.event_manager.publish(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
+    await session.event_manager.publish_and_get_responses(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
 
     @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question.id == weapon_choice.id])
-    def answer(context: EventContext[AnswerGameEvent]):
+    async def answer(context: EventContext[AnswerGameEvent]):
         chosen_weapon_index = int(context.event.choice_id)
         chosen_weapon = pool[chosen_weapon_index]
 
@@ -58,7 +58,7 @@ class SwitchWeapon(FreeStateAction):
         super().__init__(session, source, skill)
         self.state = skill
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         other_weapon = self.state.other_weapon
 
         self.state.other_weapon = source.weapon
@@ -68,6 +68,6 @@ class SwitchWeapon(FreeStateAction):
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
             action_manager.update_entity_actions(self.session, source)
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.session.say(ls("skill_weaponsmith_action_text").format(source.name, other_weapon.name))

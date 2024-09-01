@@ -31,13 +31,13 @@ class Aflame(State):
 
 
 @RegisterState(Aflame)
-def register(root_context: StateContext[Aflame]):
+async def register(root_context: StateContext[Aflame]):
     session: Session = root_context.session
     source = root_context.entity
     state: Aflame = root_context.state
 
     @RegisterEvent(session.id, event=PostActionsGameEvent)
-    def handle_post_actions_event(context: EventContext[PostActionsGameEvent]):
+    async def handle_post_actions_event(context: EventContext[PostActionsGameEvent]):
         """
         Handle events after actions have been taken.
         """
@@ -54,7 +54,7 @@ def register(root_context: StateContext[Aflame]):
         state.extinguished = False
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def handle_post_updates_event(context: EventContext[PostUpdateActionsGameEvent]):
+    async def handle_post_updates_event(context: EventContext[PostUpdateActionsGameEvent]):
         """
         Handle events after updates have been performed.
         """
@@ -67,7 +67,7 @@ def register(root_context: StateContext[Aflame]):
             action.name = ls("state_aflame_extinguish")
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
-    def handle_pre_damages_event(context: EventContext[PreDamagesGameEvent]):
+    async def handle_pre_damages_event(context: EventContext[PreDamagesGameEvent]):
         """
         Handle events prior to damage calculation.
         """
@@ -91,7 +91,7 @@ def register(root_context: StateContext[Aflame]):
             state.timer -= 1
 
     @RegisterEvent(session.id, event=SkipActionGameEvent)
-    def handle_pre_damages_event(context: EventContext[SkipActionGameEvent]):
+    async def handle_pre_damages_event(context: EventContext[SkipActionGameEvent]):
         """
         Handle skip turn event,
         """
@@ -120,7 +120,7 @@ def perform_fire_attack(session, source, state, message):
     Perform a fire attack and calculate the damage.
     """
     fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
-    session.event_manager.publish(fire_event)
+    session.event_manager.publish_and_get_responses(fire_event)
     damage = fire_event.damage
 
     if state.flame == 1:
@@ -129,7 +129,7 @@ def perform_fire_attack(session, source, state, message):
         session.say(ls("state_aflame_damage_energy").format(source.name, damage, state.flame-1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
-    session.event_manager.publish(post_fire_event)
+    session.event_manager.publish_and_get_responses(post_fire_event)
     return post_fire_event.damage
 
 

@@ -22,6 +22,6 @@ class AdrenalineAction(FreeItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         target.energy += 3
         self.session.say(ls("item_adrenaline_text").format(self.source.name, target.name))

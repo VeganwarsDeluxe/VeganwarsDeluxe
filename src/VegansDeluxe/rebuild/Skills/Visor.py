@@ -16,7 +16,7 @@ class Visor(Skill):
 
 
 @RegisterState(Visor)
-def register(root_context: StateContext[Visor]):
+async def register(root_context: StateContext[Visor]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -36,7 +36,7 @@ class VisorAction(FreeStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
         source.notifications.append(ls("skill_visor_notification_name")
                                     .format(name=target.name))

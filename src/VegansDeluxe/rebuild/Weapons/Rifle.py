@@ -57,7 +57,7 @@ class RifleAttack(RangedAttack):
             self.weapon.accuracy_bonus = -4
         return super().calculate_damage(source, target)
 
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         self.weapon.main_target = None, 0
         return damage
@@ -73,7 +73,7 @@ class AimRifle(DecisiveWeaponAction):
         super().__init__(session, source, weapon)
         self.weapon: Rifle = weapon
 
-    def func(self, source, target):
+    async def func(self, source, target):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
         self.session.say(ls("weapon_sniperRifle_action_text").format(source.name))

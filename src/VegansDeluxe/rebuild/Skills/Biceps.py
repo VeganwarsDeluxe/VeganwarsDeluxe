@@ -16,11 +16,11 @@ class Biceps(Skill):
 
 
 @RegisterState(Biceps)
-def register(root_context: StateContext[Biceps]):
+async def register(root_context: StateContext[Biceps]):
     session: Session = root_context.session
 
     @RegisterEvent(session.id, event=AttackGameEvent)
-    def func(context: EventContext[AttackGameEvent]):
+    async def func(context: EventContext[AttackGameEvent]):
         if context.event.source.id != root_context.event.entity_id:
             return
         if context.event.source.weapon.ranged:

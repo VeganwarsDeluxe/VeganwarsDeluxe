@@ -63,13 +63,13 @@ class ActionManager:
             action = action_type(session, entity, owner_type())
         self.actions[(session, entity)].append(action)
 
-    def update_entity_actions(self, session: Session, entity: Entity):
+    async def update_entity_actions(self, session: Session, entity: Entity):
         """
         Compiles actions available to the entity from itself, all its items, states, skills and the weapon.
 
         Can be influenced by subscribing to PreUpdateActionsGameEvent and PostUpdateActionsGameEvent events.
         """
-        self.event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish_and_get_responses(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
         entity_actions = self.actions.get((session, entity))
         if not entity_actions:
@@ -103,11 +103,11 @@ class ActionManager:
                     action: type[ItemAction]
                     entity_actions.append(action(session, entity, item))
 
-        self.event_manager.publish(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish_and_get_responses(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
-    def update_actions(self, session: Session):
+    async def update_actions(self, session: Session):
         for entity in session.entities:
-            self.update_entity_actions(session, entity)
+            await self.update_entity_actions(session, entity)
 
     def get_action(self, session: Session, entity: Entity, action_id: str) -> Action:
         """

@@ -24,12 +24,12 @@ class Mimic(Skill):
 
 
 @RegisterState(Mimic)
-def register(root_context: StateContext[Mimic]):
+async def register(root_context: StateContext[Mimic]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def post_update_actions(update_context: EventContext[PostUpdateActionsGameEvent]):
+    async def post_update_actions(update_context: EventContext[PostUpdateActionsGameEvent]):
         if update_context.event.entity_id != source.id:
             return
         if root_context.state.memorized_action:
@@ -51,9 +51,9 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
             action_pool = []
@@ -73,7 +73,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
             action = random.choice(action_pool)
             self.state.memorized_action = action.id
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.state.cooldown_turn = self.session.turn + 6
 

@@ -24,7 +24,7 @@ class Necromancer(Skill):
 
 
 @RegisterState(Necromancer)
-def register(root_context: StateContext[Necromancer]):
+async def register(root_context: StateContext[Necromancer]):
     session: Session = root_context.session
     source = root_context.entity
     state: Necromancer = root_context.state
@@ -45,7 +45,7 @@ class RaiseUndead(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
 
         target.dead = False

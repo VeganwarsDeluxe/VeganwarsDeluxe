@@ -27,12 +27,12 @@ class DodgeGameEvent(GameEvent):
 
 
 @RegisterState(Dodge)
-def register(root_context: StateContext[Dodge]):
+async def register(root_context: StateContext[Dodge]):
     session: Session = root_context.session
     state = root_context.state
 
     @RegisterEvent(session.id, event=PostTickGameEvent)
-    def func(context: EventContext[PostTickGameEvent]):
+    async def func(context: EventContext[PostTickGameEvent]):
         state.dodge_cooldown = max(0, state.dodge_cooldown - 1)
 
 
@@ -51,11 +51,11 @@ class DodgeAction(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.state.dodge_cooldown != 0
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.state.dodge_cooldown = 5
         bonus = -5
         message = DodgeGameEvent(self.session.id, self.session.turn, source, bonus)
-        self.event_manager.publish(message)
+        await self.event_manager.publish_and_get_responses(message)
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
         self.session.say(ls("state_dodge_text").format(source.name))

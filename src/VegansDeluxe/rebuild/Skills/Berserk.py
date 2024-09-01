@@ -15,18 +15,18 @@ class Berserk(Skill):
 
 
 @RegisterState(Berserk)
-def register(root_context: StateContext[Berserk]):
+async def register(root_context: StateContext[Berserk]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, PreMoveGameEvent, priority=1)
-    def pre_actions(context: EventContext[PreMoveGameEvent]):
+    async def pre_actions(context: EventContext[PreMoveGameEvent]):
         source.max_energy = max(7 - source.hp, 2)
         if context.event.turn == 1:
             source.energy = source.max_energy
 
     @RegisterEvent(session.id, event=HPLossGameEvent, priority=2)
-    def hp_loss(context: EventContext[HPLossGameEvent]):
+    async def hp_loss(context: EventContext[HPLossGameEvent]):
         if context.event.source != source:
             return
         source.energy = min(source.energy+context.event.hp_loss, source.max_energy)
@@ -35,7 +35,7 @@ def register(root_context: StateContext[Berserk]):
             session.say(f"😡|Берсерк {source.name} входит в боевой транс!")
 
     @RegisterEvent(session.id, event=AttackGameEvent)
-    def attack_handler(attack_context: EventContext[AttackGameEvent]):
+    async def attack_handler(attack_context: EventContext[AttackGameEvent]):
         if attack_context.event.source != source:
             return
         if source.hp != 1:

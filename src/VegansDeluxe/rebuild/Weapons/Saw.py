@@ -23,7 +23,7 @@ class Saw(RangedWeapon):
 
 @AttachedAction(Saw)
 class SawAttack(RangedAttack):
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if not damage:
             return damage

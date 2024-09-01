@@ -18,16 +18,16 @@ class Engine:
         content_manager.initialize_action_manager(self.action_manager)
         content_manager.attach_action_manager(self.action_manager)
 
-    def attach_session(self, session: Session):
-        self.session_manager.attach_session(session)
+    async def attach_session(self, session: Session):
+        await self.session_manager.attach_session(session)
 
     def detach_session(self, session: Session):
         self.session_manager.delete_session(session.id)
         self.event_manager.clean_by_session_id(session.id)
 
-    def attach_states(self, entity: Entity, state_pool: list[type[State]]):
+    async def attach_states(self, entity: Entity, state_pool: list[type[State]]):
         for state in state_pool:
-            entity.attach_state(state(), self.event_manager)
+            await entity.attach_state(state(), self.event_manager)
 
     def stats(self):
         result = (f"Event Handlers: {self.event_manager.size}\n"

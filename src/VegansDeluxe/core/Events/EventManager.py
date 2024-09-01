@@ -1,7 +1,10 @@
+import threading
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from VegansDeluxe.core.Events.Events import GameEvent, Event
 from VegansDeluxe.core.Events.EventHandlers import EventHandler, ScheduledEventHandler, SingleTurnHandler
 
-from typing import Callable, Type
+from typing import Callable, Type, Awaitable, Any
 
 
 class EventManager:
@@ -15,16 +18,19 @@ class EventManager:
     def clean_by_session_id(self, session_id: str):
         self._handlers = list(filter(lambda eh: eh.session_id != session_id, self._handlers))
 
-    def publish(self, event: Event):
+    async def publish_and_get_responses(self, event: Event):
+        responses = []
+
         self._handlers.sort(key=lambda h: h.priority)
         for handler in self._handlers:
             if isinstance(event, GameEvent) and event.session_id != handler.session_id:
                 continue
-            handler(event)
-        return event
+            response = await handler(event)
+            responses.append(response)
+        return responses
 
     def every(self,
-              callback_wrapper: Callable,
+              callback_wrapper:  Callable[[Any, Any], Awaitable[Any]],
               session_id: str,
               turns: int,
               start: int = 1,
@@ -36,7 +42,7 @@ class EventManager:
         self._handlers.append(handler)
 
     def at(self,
-           callback_wrapper: Callable,
+           callback_wrapper:  Callable[[Any, Any], Awaitable[Any]],
            session_id: str,
            turn: int,
            event: Type[Event] = Event,
@@ -47,7 +53,7 @@ class EventManager:
         self._handlers.append(handler)
 
     def nearest(self,
-                callback_wrapper: Callable,
+                callback_wrapper:  Callable[[Any, Any], Awaitable[Any]],
                 session_id: str,
                 event: Type[Event] = Event,
                 priority=0,
@@ -57,7 +63,7 @@ class EventManager:
         self._handlers.append(handler)
 
     def after(self,
-              callback_wrapper: Callable,
+              callback_wrapper:  Callable[[Any, Any], Awaitable[Any]],
               session_id: str,
               turns: int,
               event: Type[Event] = Event,
@@ -69,7 +75,7 @@ class EventManager:
         self._handlers.append(handler)
 
     def at_event(self,
-                 callback_wrapper: Callable,
+                 callback_wrapper:  Callable[[Any, Any], Awaitable[Any]],
                  session_id: str = None,
                  event: Type[Event] = Event,
                  unique_type=None,

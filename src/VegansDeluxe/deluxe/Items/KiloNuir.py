@@ -22,6 +22,6 @@ class KiloNuirAction(FreeItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         target.hp -= 1000
         self.session.say(f"💉{target.name} {self.name}!")

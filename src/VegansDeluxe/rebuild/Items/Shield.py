@@ -22,14 +22,14 @@ class ShieldAction(DecisiveItem):
     target_type = Allies()
     priority = -2
 
-    def func(self, source, target):
+    async def func(self, source, target):
         if target == source:
             self.session.say(ls("item_shield_text").format(source.name))
         else:
             self.session.say(ls("item_shield_text_targeted").format(source.name, target.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
-        def shield_block(context: EventContext[PostDamageGameEvent]):
+        async def shield_block(context: EventContext[PostDamageGameEvent]):
             if context.event.target != target:
                 return
             if not context.event.damage:

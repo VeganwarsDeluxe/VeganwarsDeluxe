@@ -19,7 +19,7 @@ class Axe(MeleeWeapon):
 
 @AttachedAction(Axe)
 class AxeAttack(MeleeAttack):
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if not damage:
             return damage

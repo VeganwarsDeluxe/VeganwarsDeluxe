@@ -52,8 +52,8 @@ class Attack(DecisiveWeaponAction):
 
         self.tags += [ActionTag.ATTACK, ActionTag.HARMFUL]
 
-    def func(self, source, target):
-        return self.attack(source, target)
+    async def func(self, source, target):
+        return await self.attack(source, target)
 
     def calculate_damage(self, source: Entity, target: Entity) -> int:
         """
@@ -68,7 +68,7 @@ class Attack(DecisiveWeaponAction):
             damage = int(math.floor(damage * total_accuracy / 10))
         return damage + self.weapon.damage_bonus if damage else 0
 
-    def attack(self, source, target, pay_energy=True) -> DamageData:
+    async def attack(self, source, target, pay_energy=True) -> DamageData:
         """
         Actually performs attack on target, dealing damage.
         """
@@ -76,22 +76,22 @@ class Attack(DecisiveWeaponAction):
         if pay_energy:
             source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
-        displayed_damage = self.publish_attack_event(source, target, calculated_damage)
+        displayed_damage = await self.publish_attack_event(source, target, calculated_damage)
         self.send_attack_message(source, target, displayed_damage)
-        dealt_damage = self.publish_post_attack_event(source, target, displayed_damage)
+        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage)
 
         target.inbound_dmg.add(source, dealt_damage, self.session.turn)
         source.outbound_dmg.add(target, dealt_damage, self.session.turn)
         return DamageData(calculated_damage, displayed_damage, dealt_damage)
 
-    def publish_attack_event(self, source, target, damage):
+    async def publish_attack_event(self, source, target, damage):
         message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)
-        self.event_manager.publish(message)  # 7.1 Pre-Attack stage
+        await self.event_manager.publish_and_get_responses(message)  # 7.1 Pre-Attack stage
         return message.damage
 
-    def publish_post_attack_event(self, source, target, damage):
+    async def publish_post_attack_event(self, source, target, damage):
         message = PostAttackGameEvent(self.session.id, self.session.turn, source, target, damage)
-        self.event_manager.publish(message)  # 7.2 Post-Attack stage
+        await self.event_manager.publish_and_get_responses(message)  # 7.2 Post-Attack stage
         return message.damage
 
     def send_attack_message(self, source, target, damage):

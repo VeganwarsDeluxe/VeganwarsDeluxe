@@ -23,6 +23,6 @@ class FlashGrenadeAction(DecisiveItem):
 
         self.tags += [ActionTag.HARMFUL]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         target.energy = max(0, target.energy - 8)
         self.session.say(ls("item_flash_grenade_text").format(self.source.name, target.name))

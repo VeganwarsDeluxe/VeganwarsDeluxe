@@ -19,13 +19,13 @@ class Knockdown(State):
 
 
 @RegisterState(Knockdown)
-def register(root_context: StateContext[Knockdown]):
+async def register(root_context: StateContext[Knockdown]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def func(context: EventContext[PostUpdateActionsGameEvent]):
+    async def func(context: EventContext[PostUpdateActionsGameEvent]):
         if not state.active:
             return
 
@@ -47,6 +47,6 @@ class StandUp(DecisiveStateAction):
     def hidden(self) -> bool:
         return not self.state.active
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.state.active = False
         self.session.say(ls("state_knockdown_text").format(source.name))

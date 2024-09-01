@@ -41,12 +41,12 @@ class Armor(State):
 
 
 @RegisterState(Armor)
-def register(root_context: StateContext[Armor]):
+async def register(root_context: StateContext[Armor]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PostDamageGameEvent)
-    def func(context: EventContext[PostDamageGameEvent]):
+    async def func(context: EventContext[PostDamageGameEvent]):
         if context.event.target == source:
             state.negate_damage(session, source, context.event)

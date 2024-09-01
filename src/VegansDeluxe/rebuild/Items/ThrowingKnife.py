@@ -31,7 +31,7 @@ class ThrowingKnifeAction(DecisiveItem):
     def hit_chance(self):
         return 40 + self.source.energy * 10
 
-    def func(self, source, target):
+    async def func(self, source, target):
         source.energy -= 1
         if random.randint(0, 100) > self.hit_chance:
             self.session.say(ls("item_throwing_knife_name_miss").format(source.name, target.name))

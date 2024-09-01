@@ -15,12 +15,12 @@ class Ninja(Skill):
 
 
 @RegisterState(Ninja)
-def register(root_context: StateContext[Ninja]):
+async def register(root_context: StateContext[Ninja]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, DodgeGameEvent)
-    def pre_actions(context: EventContext[DodgeGameEvent]):
+    async def pre_actions(context: EventContext[DodgeGameEvent]):
         if context.event.entity.id != source.id:
             return
         context.event.bonus = -math.inf

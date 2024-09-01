@@ -34,7 +34,7 @@ class HatchetAttack(MeleeAttack):
             return
         return damage + self.weapon.hatchet_bonus
 
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if damage:
             self.weapon.hatchet_bonus = max(self.weapon.hatchet_bonus - 1, 0)

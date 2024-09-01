@@ -27,13 +27,13 @@ class RageSerumAction(FreeItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.session.say(
             ls("item_rage_serum_text").format(source.name, target.name)
         )
 
         @Next(self.session.id, event=PostActionsGameEvent)
-        def serum_attack(context: EventContext[PostActionsGameEvent]):
+        async def serum_attack(context: EventContext[PostActionsGameEvent]):
             if target.dead:
                 return
 
@@ -48,4 +48,4 @@ class RageSerumAction(FreeItem):
                 self.session.say(ls("item_rage_serum_sneeze").format(target.name))
                 return
             attack.target = random.choice(attack.targets) if attack.targets else target
-            attack()
+            await attack()

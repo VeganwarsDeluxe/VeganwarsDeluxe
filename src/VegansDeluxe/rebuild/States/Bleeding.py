@@ -16,13 +16,13 @@ class Bleeding(State):
 
 
 @RegisterState(Bleeding)
-def register(root_context: StateContext[Bleeding]):
+async def register(root_context: StateContext[Bleeding]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
-    def func(context: EventContext[PreDamagesGameEvent]):
+    async def func(context: EventContext[PreDamagesGameEvent]):
         if state.bleeding <= 0:
             session.say(ls("state_bleeding_hp_loss").format(source.name, source.hp - 1))
             source.hp -= 1

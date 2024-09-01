@@ -42,7 +42,7 @@ class KnockDown(MeleeAttack):
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
         damage = self.attack(source, target).dealt
         if not damage:

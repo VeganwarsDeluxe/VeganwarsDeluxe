@@ -13,8 +13,8 @@ class Alchemist(Skill):
 
 
 @RegisterState(Alchemist)
-def register(root_context: StateContext[Alchemist]):
+async def register(root_context: StateContext[Alchemist]):
 
     @Every(root_context.session.id, turns=9, event=PreMoveGameEvent)
-    def func(context: EventContext[PreMoveGameEvent]):
+    async def func(context: EventContext[PreMoveGameEvent]):
         root_context.entity.items.append(RageSerum())

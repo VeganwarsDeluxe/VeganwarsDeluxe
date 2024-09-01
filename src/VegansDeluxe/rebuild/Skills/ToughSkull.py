@@ -14,7 +14,7 @@ class ToughSkull(Skill):
 
 
 @RegisterState(ToughSkull)
-def register(root_context: StateContext[ToughSkull]):
+async def register(root_context: StateContext[ToughSkull]):
     session: Session = root_context.session
     source = root_context.entity
 

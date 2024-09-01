@@ -20,7 +20,7 @@ class Torch(MeleeWeapon):
 
 @AttachedAction(Torch)
 class TorchAttack(MeleeAttack):
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if not damage:
             return damage

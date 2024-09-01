@@ -12,7 +12,7 @@ class DoubleVein(Skill):
 
 
 @RegisterState(DoubleVein)
-def register(root_context: StateContext[DoubleVein]):
+async def register(root_context: StateContext[DoubleVein]):
     session: Session = root_context.session
     source = root_context.entity
 

@@ -23,17 +23,17 @@ class Junkie(Skill):
 
 
 @RegisterState(Junkie)
-def register(root_context: StateContext[Junkie]):
+async def register(root_context: StateContext[Junkie]):
     session: Session = root_context.session
     source = root_context.entity
     source.items.append(random.choice(Junkie.item_pool)())
 
     @RegisterEvent(session.id, event=PreMoveGameEvent)
-    def func(context: EventContext[PreMoveGameEvent]):
+    async def func(context: EventContext[PreMoveGameEvent]):
         source.outbound_accuracy_bonus -= 1
 
     @RegisterEvent(session.id, PreActionsGameEvent)
-    def pre_actions(context: EventContext[PreActionsGameEvent]):
+    async def pre_actions(context: EventContext[PreActionsGameEvent]):
         accuracy_bonus = 0
         damage_bonus = 0
         for action in context.action_manager.get_queued_session_actions(session):
@@ -44,13 +44,13 @@ def register(root_context: StateContext[Junkie]):
 
         if accuracy_bonus:
             @At(session.id, turn=session.turn, event=PreDamagesGameEvent)
-            def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
+            async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
                 session.say(ls("skill_junkie_effect").format(source.name))
 
             source.outbound_accuracy_bonus += accuracy_bonus
 
             @At(session.id, turn=session.turn, event=AttackGameEvent)
-            def attack_handler(actions_context: EventContext[AttackGameEvent]):
+            async def attack_handler(actions_context: EventContext[AttackGameEvent]):
                 if actions_context.event.source != source:
                     return
                 if actions_context.event.damage:

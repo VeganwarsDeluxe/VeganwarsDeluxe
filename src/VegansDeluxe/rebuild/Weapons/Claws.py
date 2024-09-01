@@ -36,7 +36,7 @@ class SwitchClaws(FreeWeaponAction):
     def name(self):
         return ls("weapon_claws_enable_name") if not self.weapon.claws else ls("weapon_claws_disable_name")
 
-    def func(self, source, target):
+    async def func(self, source, target):
         if not self.weapon.claws:
             self.weapon.cubes = 4
             self.weapon.damage_bonus = 1

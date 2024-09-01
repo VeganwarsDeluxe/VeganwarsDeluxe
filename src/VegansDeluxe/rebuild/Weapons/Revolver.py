@@ -31,6 +31,6 @@ class ShootYourself(DecisiveWeaponAction):
     priority = 3
     target_type = OwnOnly()
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.session.say(ls("weapon_revolver_action_text").format(source.name))
         source.hp = 0

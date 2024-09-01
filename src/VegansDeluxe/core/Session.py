@@ -58,27 +58,27 @@ class Session[T: Entity]:
             entity.pre_move()
         self.texts = []
 
-    def start(self):
-        self.event_manager.publish(StartSessionEvent(self.id))
+    async def start(self):
+        await self.event_manager.publish_and_get_responses(StartSessionEvent(self.id))
 
     def cancel_damages(self, source):
         for entity in self.entities:
             entity.inbound_dmg.cancel(source)
 
-    def lose_hp(self, entity: T, damage: int) -> None:
+    async def lose_hp(self, entity: T, damage: int) -> None:
         """
         Deduct HP from the entity and print a message.
         """
         hp_loss = (damage // 6) + 1
 
         message = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
-        self.event_manager.publish(message)
+        await self.event_manager.publish_and_get_responses(message)
 
         entity.hp -= message.hp_loss
         self.say(ls("session_hp_loss_msg").format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
                                                   hp=entity.hp))
 
-    def calculate_damages(self):
+    async def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
                 self.say(ls("session_alive_entities_msg").format(entity.name))
@@ -92,13 +92,13 @@ class Session[T: Entity]:
                 continue
             entity.inbound_dmg.cancel(entity)
 
-            self.lose_hp(entity, entity.inbound_dmg.sum())
+            await self.lose_hp(entity, entity.inbound_dmg.sum())
 
     def stop(self):
         # TODO: Maybe publish some stop event?
         self.active = False
 
-    def death(self) -> None:
+    async def death(self) -> None:
         """
         Handle the death of entities. Publishes PreDeathGameEvent and DeathGameEvent.
         """
@@ -107,7 +107,7 @@ class Session[T: Entity]:
                 continue
 
             message = PreDeathGameEvent(self.id, self.turn, entity)
-            self.event_manager.publish(message)
+            await self.event_manager.publish_and_get_responses(message)
 
             if entity.hp > 0 or message.canceled:
                 continue
@@ -117,7 +117,7 @@ class Session[T: Entity]:
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
 
-            self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
+            await self.event_manager.publish_and_get_responses(DeathGameEvent(self.id, self.turn, entity))
 
     def finish(self):
         # TODO: Broadcast a pair of events, like in Session.death().
@@ -133,21 +133,27 @@ class Session[T: Entity]:
                 return
         self.stop()
 
-    def move(self):
-        self.event_manager.publish(PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
-        self.event_manager.publish(CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
-        self.event_manager.publish(PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
+    async def move(self):
+        await self.event_manager.publish_and_get_responses(
+            PreActionsGameEvent(self.id, self.turn))  # 1. Pre-action stage
+        await self.event_manager.publish_and_get_responses(
+            CallActionsGameEvent(self.id, self.turn))  # 2. Action stage
+        await self.event_manager.publish_and_get_responses(
+            PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
 
         self.say(ls("session_effects_line").format(self.turn))
-        self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
+        await self.event_manager.publish_and_get_responses(PreDamagesGameEvent(self.id, self.turn))
 
         self.say(ls("session_results_line").format(self.turn))
-        self.calculate_damages()  # 4. Damages stage
-        self.event_manager.publish(PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
+        await self.calculate_damages()  # 4. Damages stage
+        await self.event_manager.publish_and_get_responses(
+            PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage
         self.tick()  # 6. Tick stage
-        self.event_manager.publish(PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
-        self.death()  # 8. Death stage
-        self.event_manager.publish(PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
+        await self.event_manager.publish_and_get_responses(
+            PostTickGameEvent(self.id, self.turn))  # 7. Post-tick stage
+        await self.death()  # 8. Death stage
+        await self.event_manager.publish_and_get_responses(
+            PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
         self.finish()  # 10. Finish stage
 
         self.turn += 1

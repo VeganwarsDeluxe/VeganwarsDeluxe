@@ -18,13 +18,13 @@ class Stun(State):
 
 
 @RegisterState(Stun)
-def register(root_context: StateContext[Stun]):
+async def register(root_context: StateContext[Stun]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PostUpdatesGameEvent)
-    def func(context: EventContext[PostUpdatesGameEvent]):
+    async def func(context: EventContext[PostUpdatesGameEvent]):
         if not state.stun:
             return
         for action in context.action_manager.get_actions(session, source):
@@ -32,7 +32,7 @@ def register(root_context: StateContext[Stun]):
                 action.removed = True
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
-    def func(context: EventContext[PostDamagesGameEvent]):
+    async def func(context: EventContext[PostDamagesGameEvent]):
         if not state.stun:
             return
         if state.stun == 1:
@@ -53,5 +53,5 @@ class LayStun(DecisiveStateAction):
     def hidden(self) -> bool:
         return not self.state.stun
 
-    def func(self, source, target):
+    async def func(self, source, target):
         pass

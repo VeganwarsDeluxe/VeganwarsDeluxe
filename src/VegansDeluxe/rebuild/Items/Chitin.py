@@ -26,13 +26,13 @@ class ChitinAction(FreeItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         target.get_state('armor').add(2, 100)
         self.session.say(ls("item_chitin_text")
                          .format(source.name, target.name))
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent)
-        def chitin_knockout(context: EventContext[PostDamagesGameEvent]):
+        async def chitin_knockout(context: EventContext[PostDamagesGameEvent]):
             target.get_state('armor').remove((2, 100))
             target.get_state('stun').stun += 1
             self.session.say(ls("item_chitin_wear_off").format(target.name))

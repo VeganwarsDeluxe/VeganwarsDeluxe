@@ -1,4 +1,4 @@
-from typing import Type, Callable, Any
+from typing import Type, Callable, Any, Awaitable
 
 from VegansDeluxe.core.Events.Events import GameEvent, Event
 
@@ -6,7 +6,7 @@ from VegansDeluxe.core.Events.Events import GameEvent, Event
 class EventHandler:
     def __init__(self,
                  session_id: str,
-                 callback: Callable,
+                 callback:  Callable[[Any, Any], Awaitable[Any]],
                  events: Type[Event],
                  max_repeats: int = -1,
                  min_wait_turns: int = 0,
@@ -18,7 +18,7 @@ class EventHandler:
             filters = []
         self.session_id = session_id
 
-        self.callback: Callable = callback
+        self.callback:  Callable[[Any, Any], Awaitable[Any]] = callback
         self.event_type: Type[Event] = events
         self.max_repeats = max_repeats
         self.times_executed = set()
@@ -49,28 +49,29 @@ class EventHandler:
     def is_valid_filter(self, message: Event) -> bool:
         return all(map(lambda f: f(message), self.filters))
 
-    def __call__(self, event: Event):
+    async def __call__(self, event: Event):
         if not self.is_valid_turn(event):
-            return
+            return False
         if not self.is_valid_event(event):
-            return
+            return False
         if not self.is_valid_filter(event):
-            return
-        self.callback(event)
+            return False
 
         if isinstance(event, GameEvent):
             self.times_executed.add(event.turn)
 
+        return await self.callback(event)
+
 
 class ConstantEventHandler(EventHandler):
-    def __init__(self, session_id: str, callback: Callable):
+    def __init__(self, session_id: str, callback:  Callable[[Any, Any], Awaitable[Any]]):
         super().__init__(session_id, callback, events=Event)
 
 
 class ScheduledEventHandler(EventHandler):
     def __init__(self,
                  session_id: str,
-                 callback: Callable,
+                 callback:  Callable[[Any, Any], Awaitable[Any]],
                  events: Type[Event],
                  start: int,
                  interval: int,
@@ -98,7 +99,7 @@ class ScheduledEventHandler(EventHandler):
 
 
 class SingleTurnHandler(ScheduledEventHandler):
-    def __init__(self, session_id: str, callback: Callable, events: Type[Event], turn: int, priority: int = 0,
+    def __init__(self, session_id: str, callback:  Callable[[Any, Any], Awaitable[Any]], events: Type[Event], turn: int, priority: int = 0,
                  filters=None):
         super().__init__(session_id, callback, events, start=turn, interval=0, max_repeats=1, priority=priority,
                          filters=filters)

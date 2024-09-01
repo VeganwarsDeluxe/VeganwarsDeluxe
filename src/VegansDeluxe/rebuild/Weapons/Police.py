@@ -20,7 +20,7 @@ class Police(MeleeWeapon):
 class PoliceAttack(MeleeAttack):
     priority = -1
 
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if not damage:
             return damage

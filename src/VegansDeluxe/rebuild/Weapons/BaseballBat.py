@@ -18,7 +18,7 @@ class BaseballBat(MeleeWeapon):
 
 @AttachedAction(BaseballBat)
 class BaseballBatAttack(MeleeAttack):
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = super().attack(source, target).dealt
         if not damage:
             return damage

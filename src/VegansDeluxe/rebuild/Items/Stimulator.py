@@ -23,7 +23,7 @@ class StimulatorAction(DecisiveItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         target.hp = min(target.hp + 2, target.max_hp)
         self.session.say(ls("item_stimulator_text").format(source.name, target.name))
         self.session.say(ls("item_stimulator_effect").format(target.hearts, target.name, target.hp))

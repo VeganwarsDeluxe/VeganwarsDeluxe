@@ -26,7 +26,7 @@ class JetAction(FreeItem):
 
         self.tags += [ActionTag.MEDICINE]
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.session.say(
             ls("item_jet_text").format(source.name, target.name)
         )

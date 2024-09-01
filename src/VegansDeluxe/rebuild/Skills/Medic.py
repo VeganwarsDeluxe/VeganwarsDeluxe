@@ -13,7 +13,7 @@ class Medic(Skill):
 
 
 @RegisterState(Medic)
-def register(root_context: StateContext[Medic]):
+async def register(root_context: StateContext[Medic]):
     session: Session = root_context.session
     source = root_context.entity
 

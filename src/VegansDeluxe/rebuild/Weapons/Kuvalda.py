@@ -42,7 +42,7 @@ class KuvaldaCrush(MeleeAttack):
             return 0
         return 1 + target.max_energy - target.energy
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
         source.energy -= 4
         self.attack(source, target, pay_energy=False)

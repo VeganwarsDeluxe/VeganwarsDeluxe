@@ -42,7 +42,7 @@ class KnockWeapon(MeleeAttack):
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
@@ -65,4 +65,4 @@ class KnockWeapon(MeleeAttack):
             else:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))

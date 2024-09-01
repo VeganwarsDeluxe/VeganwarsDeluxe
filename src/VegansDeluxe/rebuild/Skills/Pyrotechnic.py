@@ -23,7 +23,7 @@ class Pyrotechnic(Skill):
 
 # @RegisterState(Pyrotechnic)
 # TODO: FIX PYROTECHNIC
-def register(root_context: StateContext[Pyrotechnic]):
+async def register(root_context: StateContext[Pyrotechnic]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -49,8 +49,8 @@ class ImproveBomb(RangedAttack):
     def calculate_damage(self, source: Entity, target: Entity) -> int:
         return self.state.damage
 
-    def func(self, source, target):
-        super().func(source, target)
+    async def func(self, source, target):
+        await super().func(source, target)
         self.state.damage += 2
         self.session.say(f"⚒|Пиротехник {source.name} улучшает самодельную бомбу.")
 
@@ -69,6 +69,6 @@ class ImproveBomb(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.state.damage == 0
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.state.damage += 2
         self.session.say(f"⚒|Пиротехник {source.name} улучшает самодельную бомбу.")

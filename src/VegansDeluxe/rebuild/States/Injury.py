@@ -15,13 +15,13 @@ class Injury(State):
 
 
 @RegisterState(Injury)
-def register(root_context: StateContext[Injury]):
+async def register(root_context: StateContext[Injury]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=AttackGameEvent)
-    def func(context: EventContext[AttackGameEvent]):
+    async def func(context: EventContext[AttackGameEvent]):
         if not state.injury:
             return
         if context.event.target != source:

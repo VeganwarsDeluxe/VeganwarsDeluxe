@@ -27,13 +27,13 @@ class Inquisitor(Skill):
 
 
 @RegisterState(Inquisitor)
-def register(root_context: StateContext[Inquisitor]):
+async def register(root_context: StateContext[Inquisitor]):
     session: Session = root_context.session
     source = root_context.entity
     state: Inquisitor = root_context.state
 
     @RegisterEvent(session.id, event=PreDeathGameEvent, priority=2)
-    def hp_loss(context: EventContext[PreDeathGameEvent]):
+    async def hp_loss(context: EventContext[PreDeathGameEvent]):
         if context.event.canceled:
             return
         if context.event.entity != source:
@@ -66,13 +66,13 @@ class Pray(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
         if source.is_ally(target):
             self.session.say(ls("skill_inquisitor_pray_action_targeted").format(source.name, target.name))
 
             @At(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
-            def hp_loss(context: EventContext[PreDeathGameEvent]):
+            async def hp_loss(context: EventContext[PreDeathGameEvent]):
                 if context.event.entity != source:
                     return
                 if source.hp <= 0:
@@ -83,7 +83,7 @@ class Pray(DecisiveStateAction):
             return
 
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
             harmful_actions = []
 
@@ -98,19 +98,19 @@ class Pray(DecisiveStateAction):
             self.session.say(ls("skill_inquisitor_pray_action_angered").format(source.name, target.name))
 
             @After(self.session.id, turns=0, repeats=2, event=PreDamagesGameEvent)
-            def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
+            async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
                 self.session.say(ls("skill_inquisitor_clouds_timer").format(target.name, self.get_timer()))
 
             @After(self.session.id, turns=3, repeats=1, event=PreDamagesGameEvent)
-            def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
+            async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
                 self.session.say(ls("skill_inquisitor_clouds_effect").format(target.name))
                 self.session.say(ls("skill_inquisitor_stun").format(target.name))
 
             @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
-            def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
+            async def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
                 target.get_state(Stun.id).stun += 1
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
 
     def get_timer(self):
         self._timer -= 1

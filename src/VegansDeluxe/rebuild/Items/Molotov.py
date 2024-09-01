@@ -28,7 +28,7 @@ class MolotovAction(DecisiveItem):
 
         self.range = 2
 
-    def func(self, source, target):
+    async def func(self, source, target):
         targets = []
         for _ in range(self.range):
             target_pool = list(filter(lambda t: t not in targets,

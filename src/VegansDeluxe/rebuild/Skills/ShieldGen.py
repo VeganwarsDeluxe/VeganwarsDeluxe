@@ -22,7 +22,7 @@ class ShieldGen(Skill):
 
 
 @RegisterState(ShieldGen)
-def register(root_context: StateContext[ShieldGen]):
+async def register(root_context: StateContext[ShieldGen]):
     session: Session = root_context.session
     source = root_context.entity
 
@@ -42,7 +42,7 @@ class ShieldGenAction(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.state.cooldown_turn = self.session.turn + 5
         if target == source:
             self.session.say(ls("skill_shield_gen_action_text").format(source.name))
@@ -50,7 +50,7 @@ class ShieldGenAction(DecisiveStateAction):
             self.session.say(ls("skill_shield_gen_action_targeted").format(source.name, target.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
-        def shield_block(context: EventContext[PostDamageGameEvent]):
+        async def shield_block(context: EventContext[PostDamageGameEvent]):
             if context.event.target != target:
                 return
             if not context.event.damage:

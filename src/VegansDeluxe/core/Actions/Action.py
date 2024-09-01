@@ -51,7 +51,7 @@ class Action:
         self.removed = False
         self.queued = False
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         """
         Function to override with actual mechanics of the action.
 

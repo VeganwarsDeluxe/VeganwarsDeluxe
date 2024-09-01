@@ -47,7 +47,7 @@ class CreateWaterShield(DecisiveWeaponAction):
     def hidden(self) -> bool:
         return self.session.turn < self.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @After(self.session.id, 0, event=PreDamagesGameEvent, repeats=3)
         def _(context: EventContext[PreDamagesGameEvent]):
             aflame = self.source.get_state('aflame')

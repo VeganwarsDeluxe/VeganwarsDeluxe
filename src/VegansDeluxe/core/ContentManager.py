@@ -65,9 +65,9 @@ class ContentManager:
         """
 
         @RegisterEvent(event=AttachSessionEvent)
-        def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
+        async def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
             @RegisterEvent(root_context.session.id, event=PostActionsGameEvent, priority=99)
-            def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
+            async def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
                 """
                 Clears out all action from the queue after they are executed.
                 :todo: Make sure if this is the right time to clear. Though before we cleared them after the execution,
@@ -78,7 +78,7 @@ class ContentManager:
                     [action for action in action_manager.action_queue if action.session.id != root_context.session.id]
 
             @RegisterEvent(root_context.session.id, event=CallActionsGameEvent)
-            def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
+            async def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
                 """
                 Calls all the actions in the Action Queue that attached to certain Session.
                 """
@@ -88,25 +88,25 @@ class ContentManager:
                 action_queue.sort(key=lambda a: a.priority)
                 for action in action_queue:
                     event = ExecuteActionEvent(context.session.id, context.session.turn, action)
-                    context.event_manager.publish(event)
+                    await context.event_manager.publish_and_get_responses(event)
 
             @RegisterEvent(root_context.session.id, event=DeliveryRequestEvent)
-            def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
+            async def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
                 """
                 Broadcasts EventContext[DeliveryPackageEvent] immediately on receiving DeliveryRequestEvent.
 
                 Useful to get the ActionManager contained in the EventContext, circumventing circular dependencies.
                 """
                 event = DeliveryPackageEvent(context.session.id, context.session.turn)
-                context.event_manager.publish(event)
+                await context.event_manager.publish_and_get_responses(event)
 
             @self.register_action_execution_event(root_context.session.id)
-            def execute_action_handler(context: ActionExecutionContext):
+            async def execute_action_handler(context: ActionExecutionContext):
                 """Execute the action on receiving ExecuteActionEvent."""
-                context.action()
+                await context.action()
 
         @RegisterEvent(event=PreMoveGameEvent)
-        def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
+        async def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
             """
             Every PreMoveGameEvent, resets removed actions for the Session.
             """
@@ -136,10 +136,10 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at_event(event=event, session_id=session_id, unique_type=unique_type,
                                        priority=priority, filters=filters, callback_wrapper=callback_wrapper)
@@ -160,11 +160,11 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = ActionExecutionContext[ExecuteActionEvent](
                         message, session_manager.get_session(message.session_id), action_manager
                     )
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at_event(event=ExecuteActionEvent, session_id=session_id, unique_type=unique_type,
                                        priority=priority, filters=filters, callback_wrapper=callback_wrapper)
@@ -191,10 +191,10 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at(callback_wrapper, session_id, turn, event, priority=priority, filters=filters)
 
@@ -208,10 +208,10 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.nearest(callback_wrapper, session_id, event=event, priority=priority, filters=filters)
 
@@ -225,10 +225,10 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.every(callback_wrapper, session_id, turns, start, event, filters)
 
@@ -242,10 +242,10 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.after(event=event, session_id=session_id, turns=turns, repeats=repeats,
                                     filters=filters, callback_wrapper=callback_wrapper)
@@ -262,10 +262,10 @@ class ContentManager:
         session_manager = action_manager.session_manager
         event_manager = session_manager.event_manager
 
-        def callback_wrapper(event):
+        async def callback_wrapper(event):
             session = session_manager.get_session(event.session_id)
             context = StateContext[state](event, session, action_manager)
-            return callback(context)
+            return await callback(context)
 
         event_manager.at_event(event=AttachStateEvent, unique_type=state, callback_wrapper=callback_wrapper)
 

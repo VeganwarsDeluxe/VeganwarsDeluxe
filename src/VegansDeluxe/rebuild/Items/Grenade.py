@@ -30,7 +30,7 @@ class GrenadeAction(DecisiveItem):
         self.damage = 3
         self.range = 2
 
-    def func(self, source, target):
+    async def func(self, source, target):
         damage = self.damage
         targets = []
         for _ in range(self.range):
@@ -50,9 +50,9 @@ class GrenadeAction(DecisiveItem):
             .format(source.name, damage, LocalizedList([t.name for t in targets]))
         )
 
-    def publish_post_damage_event(self, source, target, damage):
+    async def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
-        self.event_manager.publish(message)
+        await self.event_manager.publish_and_get_responses(message)
         return message.damage
 
     @property

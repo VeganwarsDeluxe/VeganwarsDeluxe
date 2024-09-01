@@ -41,7 +41,7 @@ class MaceAttack(MeleeAttack):
             damage += bonus
         return damage
 
-    def func(self, source: Entity, target: Entity) -> int:
+    async def func(self, source: Entity, target: Entity) -> int:
         """
         Attacks the target and keeps track of consecutive attacks on the same target for damage bonus.
         """

@@ -13,11 +13,11 @@ class Scope(Skill):
 
 
 @RegisterState(Scope)
-def register(root_context: StateContext[Scope]):
+async def register(root_context: StateContext[Scope]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, event=PreMoveGameEvent)
-    def func(context: EventContext[PreMoveGameEvent]):
+    async def func(context: EventContext[PreMoveGameEvent]):
         if source.weapon.ranged:
             source.outbound_accuracy_bonus += 2

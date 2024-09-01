@@ -37,7 +37,7 @@ class PickUp(DecisiveStateAction):
     def hidden(self) -> bool:
         return not self.state.weapon
 
-    def func(self, source, target):
+    async def func(self, source, target):
         source.weapon = self.state.weapon
         self.session.say(ls("state_knocked_weapon_text").format(source.name))
         self.state.weapon = None

@@ -23,12 +23,12 @@ class Thief(Skill):
 
 
 @RegisterState(Thief)
-def register(root_context: StateContext[Thief]):
+async def register(root_context: StateContext[Thief]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, event=PreActionsGameEvent)
-    def func(context: EventContext[PreActionsGameEvent]):
+    async def func(context: EventContext[PreActionsGameEvent]):
         if source.weapon and source.weapon.ranged:
             source.outbound_accuracy_bonus += 1
 
@@ -48,9 +48,9 @@ class Steal(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
             self.state.cooldown_turn = self.session.turn + 3
@@ -73,6 +73,6 @@ class Steal(DecisiveStateAction):
             if not success:
                 self.session.say(ls("skill_thief_action_miss").format(source.name, target.name))
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
 
 

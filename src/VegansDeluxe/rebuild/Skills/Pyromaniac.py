@@ -13,12 +13,12 @@ class Pyromaniac(Skill):
 
 # @RegisterState(Pyromaniac)
 # TODO: Fix Pyromaniac!!!
-def register(root_context: StateContext[Pyromaniac]):
+async def register(root_context: StateContext[Pyromaniac]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, event=HPLossGameEvent)
-    def func(context: EventContext[HPLossGameEvent]):
+    async def func(context: EventContext[HPLossGameEvent]):
         if source in context.event.source.inbound_dmg.contributors():
             source.energy += context.event.hp_loss
             session.say(f'😃|Садист {source.name} получает {context.event.hp_loss} энергии.')
