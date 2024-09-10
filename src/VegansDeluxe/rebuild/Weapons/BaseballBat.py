@@ -19,7 +19,7 @@ class BaseballBat(MeleeWeapon):
 @AttachedAction(BaseballBat)
 class BaseballBatAttack(MeleeAttack):
     async def func(self, source, target):
-        damage = super().attack(source, target).dealt
+        damage = (await super().attack(source, target)).dealt
         if not damage:
             return damage
         if random.randint(0, 100) > 30:

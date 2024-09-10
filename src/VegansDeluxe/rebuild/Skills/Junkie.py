@@ -1,17 +1,15 @@
 import random
 
-from VegansDeluxe.core import RegisterEvent, RegisterState, At, ActionTag
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent
+from VegansDeluxe.core import RegisterEvent, RegisterState, At, ActionTag
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.Items.Adrenaline import Adrenaline
 from VegansDeluxe.rebuild.Items.Chitin import Chitin
 from VegansDeluxe.rebuild.Items.Jet import Jet
-from VegansDeluxe.rebuild.Items.RageSerum import RageSerum
-from VegansDeluxe.rebuild.Items.Stimulator import Stimulator
 
 
 class Junkie(Skill):

@@ -55,7 +55,7 @@ class DodgeAction(DecisiveStateAction):
         self.state.dodge_cooldown = 5
         bonus = -5
         message = DodgeGameEvent(self.session.id, self.session.turn, source, bonus)
-        await self.event_manager.publish_and_get_responses(message)
+        await self.event_manager.publish(message)
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
         self.session.say(ls("state_dodge_text").format(source.name))

@@ -1,13 +1,15 @@
-from typing import Type, Callable, Any, Awaitable
+from typing import Type, Callable, Any, Coroutine
 
 from VegansDeluxe.core.Events.Events import GameEvent, Event
 
+HandlerType = Callable[..., Coroutine]
 
-class EventHandler:
+
+class EventSubscription:
     def __init__(self,
                  session_id: str,
-                 callback:  Callable[[Any, Any], Awaitable[Any]],
-                 events: Type[Event],
+                 handler:  HandlerType,
+                 event: Type[Event],
                  max_repeats: int = -1,
                  min_wait_turns: int = 0,
                  unique_type: Any = None,
@@ -18,8 +20,8 @@ class EventHandler:
             filters = []
         self.session_id = session_id
 
-        self.callback:  Callable[[Any, Any], Awaitable[Any]] = callback
-        self.event_type: Type[Event] = events
+        self.handler:  HandlerType = handler
+        self.event_type: Type[Event] = event
         self.max_repeats = max_repeats
         self.times_executed = set()
         self.unique_type = unique_type
@@ -30,26 +32,26 @@ class EventHandler:
 
         self.filters: list[Callable] = filters
 
-    def is_valid_turn(self, message: Event) -> bool:
-        if not isinstance(message, GameEvent):
-            return self.is_valid_event(message)
+    def is_valid_turn(self, event: Event) -> bool:
+        if not isinstance(event, GameEvent):
+            return self.is_valid_event(event)
         if self.min_wait_turns > len(self.turns_waited):
-            self.turns_waited.add(message.turn)
+            self.turns_waited.add(event.turn)
             return False
         if self.max_repeats != -1 and len(self.times_executed) >= self.max_repeats:
-            if message.turn not in self.times_executed:
+            if event.turn not in self.times_executed:
                 return False
         return True
 
-    def is_valid_event(self, message: Event) -> bool:
-        if isinstance(message, GameEvent) and message.session_id != self.session_id:
+    def is_valid_event(self, event: Event) -> bool:
+        if isinstance(event, GameEvent) and event.session_id != self.session_id:
             return False
-        return isinstance(message, self.event_type) and message.unique_type == self.unique_type
+        return isinstance(event, self.event_type) and event.unique_type == self.unique_type
 
     def is_valid_filter(self, message: Event) -> bool:
         return all(map(lambda f: f(message), self.filters))
 
-    async def __call__(self, event: Event):
+    async def handle(self, event: Event):
         if not self.is_valid_turn(event):
             return False
         if not self.is_valid_event(event):
@@ -60,19 +62,19 @@ class EventHandler:
         if isinstance(event, GameEvent):
             self.times_executed.add(event.turn)
 
-        return await self.callback(event)
+        return await self.handler(event)
 
 
-class ConstantEventHandler(EventHandler):
-    def __init__(self, session_id: str, callback:  Callable[[Any, Any], Awaitable[Any]]):
-        super().__init__(session_id, callback, events=Event)
+class ConstantEventSubscription(EventSubscription):
+    def __init__(self, session_id: str, handler:  HandlerType):
+        super().__init__(session_id, handler, event=Event)
 
 
-class ScheduledEventHandler(EventHandler):
+class ScheduledEventSubscription(EventSubscription):
     def __init__(self,
                  session_id: str,
-                 callback:  Callable[[Any, Any], Awaitable[Any]],
-                 events: Type[Event],
+                 handler:  HandlerType,
+                 event: Type[Event],
                  start: int,
                  interval: int,
                  max_repeats: int = -1,
@@ -80,7 +82,7 @@ class ScheduledEventHandler(EventHandler):
                  priority: int = 0,
                  filters=None
                  ):
-        super().__init__(session_id, callback, events, max_repeats=max_repeats, min_wait_turns=min_wait_turns,
+        super().__init__(session_id, handler, event, max_repeats=max_repeats, min_wait_turns=min_wait_turns,
                          priority=priority, filters=filters)
         self.start = start
         self.interval = interval
@@ -93,13 +95,13 @@ class ScheduledEventHandler(EventHandler):
         else:
             return message.turn == self.start
 
-    def __call__(self, message: Event):
+    def handle(self, message: Event):
         if not isinstance(message, GameEvent) or self.is_valid_schedule(message):
-            super().__call__(message)
+            super().handle(message)
 
 
-class SingleTurnHandler(ScheduledEventHandler):
-    def __init__(self, session_id: str, callback:  Callable[[Any, Any], Awaitable[Any]], events: Type[Event], turn: int, priority: int = 0,
+class SingleTurnHandler(ScheduledEventSubscription):
+    def __init__(self, session_id: str, handler:  HandlerType, event: Type[Event], turn: int, priority: int = 0,
                  filters=None):
-        super().__init__(session_id, callback, events, start=turn, interval=0, max_repeats=1, priority=priority,
+        super().__init__(session_id, handler, event, start=turn, interval=0, max_repeats=1, priority=priority,
                          filters=filters)

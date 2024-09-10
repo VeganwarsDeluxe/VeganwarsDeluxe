@@ -1,13 +1,8 @@
-from VegansDeluxe.core import AttachedAction, StateContext, RegisterState, OwnOnly, Enemies, RangedAttack
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
-from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import At
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostDamageGameEvent
-
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, OwnOnly, Enemies, RangedAttack
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Skills.Skill import Skill
-from VegansDeluxe.core import Allies
 
 
 class Pyrotechnic(Skill):
@@ -29,7 +24,7 @@ async def register(root_context: StateContext[Pyrotechnic]):
 
 
 # @AttachedAction(Pyrotechnic)
-class ImproveBomb(RangedAttack):
+class LaunchBomb(RangedAttack):
     id = 'launch-bomb'
     name = 'Кинуть бомбу'
     target_type = Enemies().distance.ANY

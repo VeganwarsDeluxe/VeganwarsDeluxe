@@ -110,7 +110,7 @@ class Pray(DecisiveStateAction):
             async def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
                 target.get_state(Stun.id).stun += 1
 
-        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
     def get_timer(self):
         self._timer -= 1

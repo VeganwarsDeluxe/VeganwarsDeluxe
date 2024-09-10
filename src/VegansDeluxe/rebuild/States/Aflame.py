@@ -120,7 +120,7 @@ def perform_fire_attack(session, source, state, message):
     Perform a fire attack and calculate the damage.
     """
     fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
-    session.event_manager.publish_and_get_responses(fire_event)
+    session.event_manager.publish(fire_event)
     damage = fire_event.damage
 
     if state.flame == 1:
@@ -129,7 +129,7 @@ def perform_fire_attack(session, source, state, message):
         session.say(ls("state_aflame_damage_energy").format(source.name, damage, state.flame-1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
-    session.event_manager.publish_and_get_responses(post_fire_event)
+    session.event_manager.publish(post_fire_event)
     return post_fire_event.damage
 
 

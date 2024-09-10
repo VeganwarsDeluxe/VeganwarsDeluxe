@@ -1,9 +1,9 @@
-from VegansDeluxe.core import RegisterState, RegisterEvent
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostAttackGameEvent, PostDamageGameEvent
+from VegansDeluxe.core import PostDamageGameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import percentage_chance
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -15,7 +15,7 @@ class Armor(State):
         super().__init__()
         self.armor = []
 
-    def negate_damage(self, session: Session, source: Entity, message: PostAttackGameEvent):
+    def negate_damage(self, session: Session, source: Entity, message: PostDamageGameEvent):
         if not message.damage:
             return
         armor = min(message.damage, self.roll_armor())

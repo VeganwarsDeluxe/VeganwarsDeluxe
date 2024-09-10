@@ -1,5 +1,3 @@
-import functools
-
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -15,12 +13,6 @@ class Weapon:
     accuracy_bonus = 0
 
     type = 'weapon'
-
-    @classmethod
-    @property
-    @functools.cache
-    def melee(cls):
-        return not cls.ranged
 
     def __init__(self, session_id: str, entity_id: str):
         self.session_id = session_id

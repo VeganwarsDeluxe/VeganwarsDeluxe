@@ -14,7 +14,7 @@ class SessionManager:
 
     async def attach_session(self, session: Session):
         self.sessions.update({session.id: session})
-        await self.event_manager.publish_and_get_responses(AttachSessionEvent(session.id))
+        await self.event_manager.publish(AttachSessionEvent(session.id))
         return session
 
     def delete_session(self, session_id):

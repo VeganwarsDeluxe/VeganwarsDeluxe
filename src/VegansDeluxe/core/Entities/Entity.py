@@ -112,7 +112,7 @@ class Entity:
 
     async def attach_state(self, state: State, event_manager: EventManager):
         self.states.append(state)
-        await event_manager.publish_and_get_responses(AttachStateEvent(self.session_id, self.id, state))
+        await event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
     def get_state(self, skill_id: str) -> State:
         result = list(filter(lambda s: s.id == skill_id, self.states))

@@ -1,7 +1,5 @@
 from VegansDeluxe.core import Item, FreeItem, AttachedAction, ActionTag, Entity, Everyone
 from VegansDeluxe.core import RegisterItem
-from VegansDeluxe.core import Allies
-from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem

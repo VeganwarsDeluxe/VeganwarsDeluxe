@@ -73,7 +73,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
             action = random.choice(action_pool)
             self.state.memorized_action = action.id
 
-        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.state.cooldown_turn = self.session.turn + 6
 

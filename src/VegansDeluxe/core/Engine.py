@@ -32,5 +32,6 @@ class Engine:
     def stats(self):
         result = (f"Event Handlers: {self.event_manager.size}\n"
                   f"Sessions: {len(self.session_manager.sessions)}\n"
-                  f"Action Queue: {len(self.action_manager.action_queue)}\n")
+                  f"Action Queue: {len(self.action_manager.action_queue)}\n"
+                  f"CM Assignments: {len(content_manager.assignments)}")
         return result

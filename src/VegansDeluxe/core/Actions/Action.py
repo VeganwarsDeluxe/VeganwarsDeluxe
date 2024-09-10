@@ -4,12 +4,9 @@ Action - building block of the game.
 All attacks, usage of items, and other actions that Entities do stem from it.
 """
 
-
-import logging
-
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
-from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Entities import Entity
+from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls, LocalizedString
@@ -59,10 +56,10 @@ class Action:
         """
         pass
 
-    def __call__(self):
+    async def execute(self):
         if self.canceled:
             return
-        return self.func(self.source, self.target)
+        return await self.func(self.source, self.target)
 
     @property
     def cost(self):

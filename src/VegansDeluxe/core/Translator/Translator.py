@@ -1,6 +1,5 @@
 import json
 import os
-import traceback
 
 from VegansDeluxe.core.Translator.Locale import Locale
 

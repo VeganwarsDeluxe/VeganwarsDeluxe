@@ -1,9 +1,9 @@
 import random
 
-from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, DecisiveStateAction, FreeStateAction, \
-    OwnOnly, Entity, DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, FreeStateAction, \
+    OwnOnly, Entity, DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core.Question.Choice import Choice
 from VegansDeluxe.core.Question.Question import Question
 from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent, AnswerGameEvent
@@ -37,7 +37,7 @@ async def register(root_context: StateContext[Weaponsmith]):
         choice = Choice(choice_id=str(i), text=weapon.name)
         weapon_choice.choices.append(choice)
 
-    await session.event_manager.publish_and_get_responses(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
+    await session.event_manager.publish(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
 
     @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question.id == weapon_choice.id])
     async def answer(context: EventContext[AnswerGameEvent]):
@@ -68,6 +68,6 @@ class SwitchWeapon(FreeStateAction):
         def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
             action_manager.update_entity_actions(self.session, source)
-        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.session.say(ls("skill_weaponsmith_action_text").format(source.name, other_weapon.name))

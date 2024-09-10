@@ -69,7 +69,7 @@ class ActionManager:
 
         Can be influenced by subscribing to PreUpdateActionsGameEvent and PostUpdateActionsGameEvent events.
         """
-        await self.event_manager.publish_and_get_responses(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
         entity_actions = self.actions.get((session, entity))
         if not entity_actions:
@@ -103,7 +103,7 @@ class ActionManager:
                     action: type[ItemAction]
                     entity_actions.append(action(session, entity, item))
 
-        await self.event_manager.publish_and_get_responses(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
     async def update_actions(self, session: Session):
         for entity in session.entities:

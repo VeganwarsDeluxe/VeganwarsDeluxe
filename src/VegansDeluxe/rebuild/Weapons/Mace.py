@@ -51,5 +51,5 @@ class MaceAttack(MeleeAttack):
         else:
             self.weapon.consecutive_target = target, 1
         self.weapon.last_attack_turn = self.session.turn
-        damage = super().attack(source, target).dealt
+        damage = (await super().attack(source, target)).dealt
         return damage

@@ -73,6 +73,6 @@ class Steal(DecisiveStateAction):
             if not success:
                 self.session.say(ls("skill_thief_action_miss").format(source.name, target.name))
 
-        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
 

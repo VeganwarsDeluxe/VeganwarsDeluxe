@@ -52,7 +52,7 @@ class GrenadeAction(DecisiveItem):
 
     async def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
-        await self.event_manager.publish_and_get_responses(message)
+        await self.event_manager.publish(message)
         return message.damage
 
     @property

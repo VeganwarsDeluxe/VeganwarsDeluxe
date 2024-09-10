@@ -23,7 +23,7 @@ class FlamethrowerAttack(RangedAttack):
             return 1
 
     async def func(self, source, target):
-        damage = super().attack(source, target)
+        damage = await super().attack(source, target)
         if damage.calculated:
             aflame = target.get_state('aflame')
             aflame.add_flame(self.session, target, source, 1)

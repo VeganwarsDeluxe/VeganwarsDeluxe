@@ -21,7 +21,7 @@ class PoliceAttack(MeleeAttack):
     priority = -1
 
     async def func(self, source, target):
-        damage = super().attack(source, target).dealt
+        damage = (await super().attack(source, target)).dealt
         if not damage:
             return damage
         target.energy = max(target.energy - 1, 0)

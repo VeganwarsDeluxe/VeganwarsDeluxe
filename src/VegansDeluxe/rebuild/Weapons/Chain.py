@@ -44,11 +44,11 @@ class KnockWeapon(MeleeAttack):
 
     async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
             self.weapon.cooldown_turn = self.session.turn + 6
-            damage = self.attack(source, target).dealt
+            damage = (await self.attack(source, target)).dealt
             if not damage:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
                 return
@@ -65,4 +65,4 @@ class KnockWeapon(MeleeAttack):
             else:
                 self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
 
-        await self.event_manager.publish_and_get_responses(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))

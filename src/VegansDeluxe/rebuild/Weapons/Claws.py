@@ -48,7 +48,8 @@ class SwitchClaws(FreeWeaponAction):
             self.weapon.energy_cost = 2
             self.weapon.accuracy_bonus = 2
         self.weapon.claws = not self.weapon.claws
-        self.session.say(ls("weapon_claws_switch_text").format(source.name,
-                                       ls("weapon_claws_enable_text") if not self.weapon.claws else
-                                       ls("weapon_claws_disable_text"))
-                         )
+        self.session.say(
+            ls("weapon_claws_switch_text").format(source.name,
+                                                  ls("weapon_claws_enable_text") if not self.weapon.claws else
+                                                  ls("weapon_claws_disable_text"))
+        )

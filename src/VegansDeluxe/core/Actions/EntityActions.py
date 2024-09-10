@@ -61,6 +61,6 @@ class SkipTurnAction(DecisiveAction):
         self.tags += [ActionTag.SKIP]
 
     async def func(self, source, target):
-        message = await self.event_manager.publish_and_get_responses(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
+        message = await self.event_manager.publish(SkipActionGameEvent(self.session.id, self.session.turn, source.id))
         if not message.no_text:
             self.session.say(ls("skip_entity_action_text").format(source.name))
