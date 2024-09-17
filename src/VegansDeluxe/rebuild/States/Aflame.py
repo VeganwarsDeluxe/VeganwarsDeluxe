@@ -78,7 +78,7 @@ async def register(root_context: StateContext[Aflame]):
             reset_state(state, session, ls("state_aflame_disappear").format(source.name))
             return
 
-        damage = perform_fire_attack(session, source, state, context.event)
+        damage = await perform_fire_attack(session, source, state, context.event)
 
         source.inbound_dmg.add(state.dealer, damage, session.turn)
         source.outbound_dmg.add(state.dealer, damage, session.turn)
@@ -115,12 +115,12 @@ def reset_state(state, session, message):
     session.say(message)
 
 
-def perform_fire_attack(session, source, state, message):
+async def perform_fire_attack(session: Session, source, state, message):
     """
     Perform a fire attack and calculate the damage.
     """
     fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
-    session.event_manager.publish(fire_event)
+    await session.event_manager.publish(fire_event)
     damage = fire_event.damage
 
     if state.flame == 1:
@@ -129,7 +129,7 @@ def perform_fire_attack(session, source, state, message):
         session.say(ls("state_aflame_damage_energy").format(source.name, damage, state.flame-1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
-    session.event_manager.publish(post_fire_event)
+    await session.event_manager.publish(post_fire_event)
     return post_fire_event.damage
 
 

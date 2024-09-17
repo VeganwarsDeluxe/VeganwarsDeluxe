@@ -31,7 +31,7 @@ class SawAttack(RangedAttack):
                          .format(target.name, target.get_state(Injury.id).injury))
 
         @Next(self.session.id, PostTickGameEvent)
-        def func(context: EventContext[PostTickGameEvent]):
+        async def func(context: EventContext[PostTickGameEvent]):
             injury = target.get_state(Injury.id)
             injury.injury += 1
 

@@ -100,7 +100,7 @@ class ScheduledEventSubscription(EventSubscription):
             super().handle(message)
 
 
-class SingleTurnHandler(ScheduledEventSubscription):
+class SingleTurnSubscription(ScheduledEventSubscription):
     def __init__(self, session_id: str, handler:  HandlerType, event: Type[Event], turn: int, priority: int = 0,
                  filters=None):
         super().__init__(session_id, handler, event, start=turn, interval=0, max_repeats=1, priority=priority,

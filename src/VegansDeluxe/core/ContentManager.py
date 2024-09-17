@@ -296,7 +296,7 @@ class ContentManager:
         action: Any Action.
         """
 
-        def decorator_func(action: type[Action]):
+        async def decorator_func(action: type[Action]):
             if cls not in self.action_map:
                 self.action_map.update({cls: []})
             self.action_map[cls].append(action)
