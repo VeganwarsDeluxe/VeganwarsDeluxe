@@ -40,7 +40,7 @@ class GrenadeAction(DecisiveItem):
             if not target_pool:
                 continue
             target = random.choice(target_pool)
-            post_damage = self.publish_post_damage_event(source, target, damage)
+            post_damage = await self.publish_post_damage_event(source, target, damage)
             target.inbound_dmg.add(source, post_damage, self.session.turn)
             source.outbound_dmg.add(source, post_damage, self.session.turn)
             targets.append(target)
