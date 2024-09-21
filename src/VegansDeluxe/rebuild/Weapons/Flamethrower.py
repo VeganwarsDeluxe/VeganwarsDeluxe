@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class Flamethrower(RangedWeapon):
     id = 'flamethrower'
-    name = ls("weapon_flamethrower_name")
-    description = ls("weapon_flamethrower_description")
+    name = ls("rebuild.weapon.flamethrower.name")
+    description = ls("rebuild.weapon.flamethrower.description")
 
     energy_cost = 3
     cubes = 2

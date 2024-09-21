@@ -11,8 +11,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Necromancer(Skill):
     id = 'necromancer'
-    name = ls("skill_necromancer_name")
-    description = ls("skill_necromancer_description")
+    name = ls("rebuild.skill.necromancer.name")
+    description = ls("rebuild.skill.necromancer.description")
 
     def __init__(self):
         super().__init__()
@@ -29,7 +29,7 @@ async def register(root_context: StateContext[Necromancer]):
 @AttachedAction(Necromancer)
 class RaiseUndead(DecisiveStateAction):
     id = 'raise_undead'
-    name = ls("skill_necromancer_action_name")
+    name = ls("rebuild.skill.necromancer.action.name")
     priority = 2
     target_type = Everyone(aliveness=Aliveness.DEAD_ONLY)
 
@@ -46,4 +46,4 @@ class RaiseUndead(DecisiveStateAction):
 
         target.dead = False
         target.hp = 1
-        self.session.say(ls("skill_necromancer_action_text").format(source.name, target.name))
+        self.session.say(ls("rebuild.skill.necromancer.action.text").format(source.name, target.name))

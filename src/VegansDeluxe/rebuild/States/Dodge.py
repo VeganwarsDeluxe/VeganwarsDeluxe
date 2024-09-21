@@ -1,13 +1,12 @@
 from VegansDeluxe.core import AttachedAction
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
-
-from VegansDeluxe.core import RegisterState, RegisterEvent
+from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import PostTickGameEvent, GameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -39,7 +38,7 @@ async def register(root_context: StateContext[Dodge]):
 @AttachedAction(Dodge)
 class DodgeAction(DecisiveStateAction):
     id = 'dodge'
-    name = ls("state_dodge_name")
+    name = ls("rebuild.state.dodge.name")
     target_type = OwnOnly()
     priority = -2
 
@@ -58,4 +57,4 @@ class DodgeAction(DecisiveStateAction):
         await self.event_manager.publish(message)
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
-        self.session.say(ls("state_dodge_text").format(source.name))
+        self.session.say(ls("rebuild.state.dodge.text").format(source.name))

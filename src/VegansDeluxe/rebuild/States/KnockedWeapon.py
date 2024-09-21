@@ -1,8 +1,8 @@
 from VegansDeluxe.core import AttachedAction, OwnOnly
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.Weapons.Fist import Fist
 
@@ -26,7 +26,7 @@ class KnockedWeapon(State):
 @AttachedAction(KnockedWeapon)
 class PickUp(DecisiveStateAction):
     id = 'pick_up'
-    name = ls("state_knocked_weapon_name")
+    name = ls("rebuild.state.knocked_weapon.name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: KnockedWeapon):
@@ -39,5 +39,5 @@ class PickUp(DecisiveStateAction):
 
     async def func(self, source, target):
         source.weapon = self.state.weapon
-        self.session.say(ls("state_knocked_weapon_text").format(source.name))
+        self.session.say(ls("rebuild.state.knocked_weapon.text").format(source.name))
         self.state.weapon = None

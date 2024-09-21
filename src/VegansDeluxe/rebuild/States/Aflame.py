@@ -1,10 +1,10 @@
-from VegansDeluxe.core.Actions.EntityActions import SkipActionGameEvent
-from VegansDeluxe.core import RegisterState, RegisterEvent, ActionTag
-from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import PreDamageGameEvent, PostDamageGameEvent
 from VegansDeluxe.core import PostActionsGameEvent, PreDamagesGameEvent, PostUpdateActionsGameEvent
+from VegansDeluxe.core import PreDamageGameEvent, PostDamageGameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent, ActionTag
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.EntityActions import SkipActionGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -23,9 +23,9 @@ class Aflame(State):
         self.timer = 2
         self.extinguished = False
         if self.flame == 0:
-            session.say(ls("state_aflame_activate").format(entity.name))
+            session.say(ls("rebuild.state.aflame.activate").format(entity.name))
         else:
-            session.say(ls("state_aflame_increase").format(entity.name))
+            session.say(ls("rebuild.state.aflame.increase").format(entity.name))
         self.flame += flame
         self.dealer = dealer
 
@@ -48,7 +48,7 @@ async def register(root_context: StateContext[Aflame]):
                 break
         if not skipped or not state.flame:
             return
-        session.say(ls("state_aflame_remove").format(source.name))
+        session.say(ls("rebuild.state.aflame.remove").format(source.name))
         state.timer = 0
         state.flame = 0
         state.extinguished = False
@@ -64,7 +64,7 @@ async def register(root_context: StateContext[Aflame]):
             action = context.action_manager.get_action(session, source, 'skip')
             if not action:
                 return
-            action.name = ls("state_aflame_extinguish")
+            action.name = ls("rebuild.state.aflame.extinguish")
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
     async def handle_pre_damages_event(context: EventContext[PreDamagesGameEvent]):
@@ -75,7 +75,7 @@ async def register(root_context: StateContext[Aflame]):
             return
 
         if state.extinguished:
-            reset_state(state, session, ls("state_aflame_disappear").format(source.name))
+            reset_state(state, session, ls("rebuild.state.aflame.disappear").format(source.name))
             return
 
         damage = await perform_fire_attack(session, source, state, context.event)
@@ -101,7 +101,7 @@ async def register(root_context: StateContext[Aflame]):
             return
         state.flame = 0
         state.extinguished = False
-        session.say(ls("state_aflame_removing").format(source.name))
+        session.say(ls("rebuild.state.aflame.removing").format(source.name))
         context.event.no_text = True
 
 
@@ -124,9 +124,9 @@ async def perform_fire_attack(session: Session, source, state, message):
     damage = fire_event.damage
 
     if state.flame == 1:
-        session.say(ls("state_aflame_damage").format(source.name, damage))
+        session.say(ls("rebuild.state.aflame.damage").format(source.name, damage))
     elif state.flame > 1:
-        session.say(ls("state_aflame_damage_energy").format(source.name, damage, state.flame-1))
+        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, damage, state.flame - 1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
     await session.event_manager.publish(post_fire_event)

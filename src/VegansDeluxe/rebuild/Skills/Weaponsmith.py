@@ -14,8 +14,8 @@ from VegansDeluxe.rebuild import all_weapons
 
 class Weaponsmith(Skill):
     id = 'weaponsmith'
-    name = ls("skill_weaponsmith_name")
-    description = ls("skill_weaponsmith_description")
+    name = ls("rebuild.skill.weaponsmith.name")
+    description = ls("rebuild.skill.weaponsmith.description")
 
     weapon_pool = all_weapons
 
@@ -30,7 +30,7 @@ async def register(root_context: StateContext[Weaponsmith]):
     source = root_context.entity
 
     pool = []
-    weapon_choice = Question(text=ls("skill_weaponsmith_choice_text"))
+    weapon_choice = Question(text=ls("rebuild.skill.weaponsmith_choice.text"))
     for i in range(3):
         weapon = random.choice(root_context.state.weapon_pool)
         pool.append(weapon_choice)
@@ -50,7 +50,7 @@ async def register(root_context: StateContext[Weaponsmith]):
 @AttachedAction(Weaponsmith)
 class SwitchWeapon(FreeStateAction):
     id = 'switch_weapon'
-    name = ls("skill_weaponsmith_action_name")
+    name = ls("rebuild.skill.weaponsmith_action.name")
     priority = -3
     target_type = OwnOnly()
 
@@ -70,4 +70,4 @@ class SwitchWeapon(FreeStateAction):
             action_manager.update_entity_actions(self.session, source)
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
-        self.session.say(ls("skill_weaponsmith_action_text").format(source.name, other_weapon.name))
+        self.session.say(ls("rebuild.skill.weaponsmith_action.text").format(source.name, other_weapon.name))

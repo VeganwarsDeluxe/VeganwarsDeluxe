@@ -1,21 +1,21 @@
 import random
 
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction, Next
-from VegansDeluxe.core import RegisterEvent, RegisterState
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
-from VegansDeluxe.core import Session
-from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Everyone, Own
+from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
+from VegansDeluxe.core import RegisterEvent, RegisterState
+from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
+from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Mimic(Skill):
     id = 'mimic'
-    name = ls("skill_mimic_name")
-    description = ls("skill_mimic_description")
+    name = ls("rebuild.skill.mimic.name")
+    description = ls("rebuild.skill.mimic.description")
 
     def __init__(self):
         super().__init__()
@@ -39,7 +39,7 @@ async def register(root_context: StateContext[Mimic]):
 @AttachedAction(Mimic)
 class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
-    name = ls("skill_mimic_action_name")
+    name = ls("rebuild.skill.mimic.action.name")
     priority = -2
     target_type = Everyone(own=Own.SELF_EXCLUDED)
 
@@ -65,10 +65,10 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
                 action_pool.append(action)
 
             if not action_pool:
-                self.session.say(ls("skill_mimic_action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.mimic.action_miss").format(source.name, target.name))
                 return
 
-            self.session.say(ls("skill_mimic_action_text").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.mimic.action.text").format(source.name, target.name))
 
             action = random.choice(action_pool)
             self.state.memorized_action = action.id

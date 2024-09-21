@@ -1,20 +1,20 @@
 from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
-from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Item
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 @RegisterItem
 class FlashGrenade(Item):
     id = 'flash_grenade'
-    name = ls("item_flash_grenade_name")
+    name = ls("rebuild.item.flash_grenade.name")
 
 
 @AttachedAction(FlashGrenade)
 class FlashGrenadeAction(DecisiveItem):
     id = 'flash_grenade'
-    name = ls("item_flash_grenade_name")
+    name = ls("rebuild.item.flash_grenade.name")
     target_type = Enemies()
     priority = -1
 
@@ -25,4 +25,4 @@ class FlashGrenadeAction(DecisiveItem):
 
     async def func(self, source, target):
         target.energy = max(0, target.energy - 8)
-        self.session.say(ls("item_flash_grenade_text").format(self.source.name, target.name))
+        self.session.say(ls("rebuild.item.flash_grenade.text").format(self.source.name, target.name))

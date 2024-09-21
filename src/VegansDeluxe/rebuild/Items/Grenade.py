@@ -1,12 +1,12 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostDamageGameEvent
-from VegansDeluxe.core import Item
-from VegansDeluxe.core import DecisiveItem
 import random
 
-from VegansDeluxe.core import Session
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
+from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import Item
+from VegansDeluxe.core import PostDamageGameEvent
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -14,13 +14,13 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class Grenade(Item):
     id = 'grenade'
-    name = ls("item_grenade_name")
+    name = ls("rebuild.item.grenade.name")
 
 
 @AttachedAction(Grenade)
 class GrenadeAction(DecisiveItem):
     id = 'grenade'
-    name = ls("item_grenade_name")
+    name = ls("rebuild.item.grenade.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, item: Item):
@@ -46,7 +46,7 @@ class GrenadeAction(DecisiveItem):
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
         self.session.say(
-            ls("item_grenade_text")
+            ls("rebuild.item.grenade.text")
             .format(source.name, damage, LocalizedList([t.name for t in targets]))
         )
 

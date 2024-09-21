@@ -9,8 +9,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Torch(MeleeWeapon):
     id = 'torch'
-    name = ls("weapon_torch_name")
-    description = ls("weapon_torch_description")
+    name = ls("rebuild.weapon.torch.name")
+    description = ls("rebuild.weapon.torch.description")
 
     def __init__(self, session_id: str, entity_id: str):
         super().__init__(session_id, entity_id)

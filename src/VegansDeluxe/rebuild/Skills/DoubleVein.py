@@ -1,14 +1,14 @@
-from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class DoubleVein(Skill):
     id = 'double-vein'
-    name = ls("skill_double_vein_name")
-    description = ls("skill_double_vein_description")
+    name = ls("rebuild.skill.double_vein.name")
+    description = ls("rebuild.skill.double_vein.description")
 
 
 @RegisterState(DoubleVein)

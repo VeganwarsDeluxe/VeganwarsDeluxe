@@ -1,6 +1,6 @@
 from VegansDeluxe.core import RegisterState
-from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.Items.Stimulator import Stimulator
@@ -8,8 +8,8 @@ from VegansDeluxe.rebuild.Items.Stimulator import Stimulator
 
 class Medic(Skill):
     id = 'medic'
-    name = ls("skill_medic_name")
-    description = ls("skill_medic_description")
+    name = ls("rebuild.skill.medic.name")
+    description = ls("rebuild.skill.medic.description")
 
 
 @RegisterState(Medic)

@@ -1,21 +1,20 @@
-from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import RegisterEvent, RegisterState, Next
 from VegansDeluxe.core import AttachedAction
-from VegansDeluxe.core import ItemAction
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
-from VegansDeluxe.core import Entity
-
-from VegansDeluxe.core import PreActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
-from VegansDeluxe.core import Session
-from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import ItemAction
+from VegansDeluxe.core import PreActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
+from VegansDeluxe.core import RegisterEvent, RegisterState, Next
+from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
+from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Thief(Skill):
     id = 'thief'
-    name = ls("skill_thief_name")
-    description = ls("skill_thief_description")
+    name = ls("rebuild.skill.thief.name")
+    description = ls("rebuild.skill.thief.description")
 
     def __init__(self):
         super().__init__()
@@ -36,7 +35,7 @@ async def register(root_context: StateContext[Thief]):
 @AttachedAction(Thief)
 class Steal(DecisiveStateAction):
     id = 'steal'
-    name = ls("skill_thief_action_name")
+    name = ls("rebuild.skill.thief.action.name")
     priority = -3
     target_type = Enemies()
 
@@ -66,12 +65,12 @@ class Steal(DecisiveStateAction):
                     continue
                 action.canceled = True
 
-                self.session.say(ls("skill_thief_action_text").format(target.name, item.name, source.name))
+                self.session.say(ls("rebuild.skill.thief.action.text").format(target.name, item.name, source.name))
                 source.items.append(item)
 
                 success = True
             if not success:
-                self.session.say(ls("skill_thief_action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.thief.action_miss").format(source.name, target.name))
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 

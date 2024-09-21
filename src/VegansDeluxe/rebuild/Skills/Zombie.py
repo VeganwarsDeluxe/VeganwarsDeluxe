@@ -1,9 +1,7 @@
-from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import RegisterEvent, RegisterState
-
 from VegansDeluxe.core import PreDeathGameEvent
-
+from VegansDeluxe.core import RegisterEvent, RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Zombie import ZombieState
@@ -11,8 +9,8 @@ from VegansDeluxe.rebuild.States.Zombie import ZombieState
 
 class Zombie(Skill):
     id = 'zombie'
-    name = ls("skill_zombie_name")
-    description = ls("skill_zombie_description")
+    name = ls("rebuild.skill.zombie.name")
+    description = ls("rebuild.skill.zombie.description")
 
 
 @RegisterState(Zombie)
@@ -33,5 +31,5 @@ async def register(root_context: StateContext[Zombie]):
             return
         zombie.active = True
         zombie.timer = 1
-        session.say(ls("skill_zombie_effect").format(source.name))
+        session.say(ls("rebuild.skill.zombie.effect").format(source.name))
         context.event.canceled = True

@@ -1,12 +1,11 @@
+from VegansDeluxe.core import At
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import DecisiveWeaponAction, MeleeAttack
-from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import At
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostAttackGameEvent
-
-from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import EventContext
+from VegansDeluxe.core import PostAttackGameEvent
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
@@ -14,8 +13,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Saber(MeleeWeapon):
     id = 'saber'
-    name = ls("weapon_saber_name")
-    description = ls("weapon_saber_description")
+    name = ls("rebuild.weapon.saber.name")
+    description = ls("rebuild.weapon.saber.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,7 +33,7 @@ class FistAttack(MeleeAttack):
 
 @AttachedAction(Saber)
 class Parry(DecisiveWeaponAction):
-    name = ls("weapon_saber_action_name")
+    name = ls("rebuild.weapon.saber.action.name")
     id = 'parry'
     priority = -4
     target_type = Enemies()
@@ -49,7 +48,7 @@ class Parry(DecisiveWeaponAction):
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 5
-        self.session.say(ls("weapon_saber_action_text").format(source.name))
+        self.session.say(ls("rebuild.weapon.saber.action.text").format(source.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
         def parry(context: EventContext[PostAttackGameEvent]):
@@ -60,6 +59,6 @@ class Parry(DecisiveWeaponAction):
             if not context.event.damage:
                 return
 
-            self.session.say(ls("weapon_saber_action_effect").format(source.name, target.name))
+            self.session.say(ls("rebuild.weapon.saber.action.effect").format(source.name, target.name))
             target.energy = 0
             context.event.damage = 0

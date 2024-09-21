@@ -1,11 +1,11 @@
-from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import Item
-from VegansDeluxe.core import DecisiveItem
 import random
 
-from VegansDeluxe.core import Session
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
+from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import Item
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -13,13 +13,13 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class Molotov(Item):
     id = 'molotov'
-    name = ls("item_molotov_name")
+    name = ls("rebuild.item.molotov.name")
 
 
 @AttachedAction(Molotov)
 class MolotovAction(DecisiveItem):
     id = 'molotov'
-    name = ls("item_molotov_name")
+    name = ls("rebuild.item.molotov.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, item: Item):
@@ -42,7 +42,7 @@ class MolotovAction(DecisiveItem):
             targets.append(target)
         source.energy = max(source.energy - 2, 0)
         self.session.say(
-            ls("item_molotov_text").format(source.name, LocalizedList([t.name for t in targets]))
+            ls("rebuild.item.molotov.text").format(source.name, LocalizedList([t.name for t in targets]))
         )
 
     @property

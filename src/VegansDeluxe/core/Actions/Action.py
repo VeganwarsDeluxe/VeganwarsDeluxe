@@ -16,7 +16,7 @@ class Action:
     id: str = 'action'
     """ID of the action."""
 
-    name: str | LocalizedString = ls("base_action_name")
+    name: str | LocalizedString = ls("core.base_action.name")
     """Name of the action, that is displayed to the player."""
 
     priority: int = 0

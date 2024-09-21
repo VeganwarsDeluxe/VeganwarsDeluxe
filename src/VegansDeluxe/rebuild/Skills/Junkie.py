@@ -14,8 +14,8 @@ from VegansDeluxe.rebuild.Items.Jet import Jet
 
 class Junkie(Skill):
     id = 'junkie'
-    name = ls("skill_junkie_name")
-    description = ls("skill_junkie_description")
+    name = ls("rebuild.skill.junkie.name")
+    description = ls("rebuild.skill.junkie.description")
 
     item_pool = [Jet, Chitin, Adrenaline]
 
@@ -43,7 +43,7 @@ async def register(root_context: StateContext[Junkie]):
         if accuracy_bonus:
             @At(session.id, turn=session.turn, event=PreDamagesGameEvent)
             async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
-                session.say(ls("skill_junkie_effect").format(source.name))
+                session.say(ls("rebuild.skill.junkie.effect").format(source.name))
 
             source.outbound_accuracy_bonus += accuracy_bonus
 

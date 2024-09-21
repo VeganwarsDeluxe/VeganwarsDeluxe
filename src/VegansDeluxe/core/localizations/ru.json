@@ -1,35 +1,28 @@
 {
-  "base_attack_message": "{attack_emoji}|{source_name} {attack_text} {target_name} используя {weapon_name}! Нанесено {damage} урона.",
-  "base_miss_message": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} используя {weapon_name}, но не попадает.",
-  "base_self_target_name": "себя",
-  "base_action_name": "Действие",
-
-  "base_attack_text_ranged": "стреляет в",
-  "base_attack_text_melee": "бьет",
-  "base_attack_emoji_ranged": "\uD83D\uDCA5",
-  "base_attack_emoji_melee": "\uD83D\uDC4A",
-
-  "approach_entity_action_name": "Подойти",
-  "approach_entity_action_text": "\uD83D\uDC63|{0} подходит к противнику вплотную.",
-  "reload_entity_action_name": "Перезарядка",
-  "skip_entity_action_name": "Пропустить",
-  "skip_entity_action_text": "⬇|{0} пропускает ход.",
-
-  "base_item_name": "Предмет",
-
-  "base_attack_name": "Атака",
-
-  "session_alive_entities_msg": "\uD83D\uDCA8|{0} теряет излишек энергии.",
-  "session_hp_loss_msg": "{hearts}|{name} теряет {hp_loss} ХП. Остается {hp} ХП.",
-  "session_death_msg": "☠\uFE0F|{name} теряет сознание.",
-  "session_effects_line": "\nЭффекты {0}:",
-  "session_results_line": "\nРезультаты хода {0}:",
-
-  "base_state_name": "Стейт",
-  "base_state_description": "Информация еще не написана.",
-
-  "base_weapon_name": "Пустое оружие",
-  "base_weapon_description": "Описание еще не написано.",
-  "base_weapon_reload_text_ranged": "🕓|{0} перезаряжается. Энергия восстановлена до максимальной! ({1})",
-  "base_weapon_reload_text_melee": "😤|{0}️ переводит дух. Энергия восстановлена до максимальной! ({1})"
+  "core.base_attack.hit": "{attack_emoji}|{source_name} {attack_text} {target_name} используя {weapon_name}! Нанесено {damage} урона.",
+  "core.base_attack.miss": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} используя {weapon_name}, но не попадает.",
+  "core.self_target_name": "себя",
+  "core.base_action.name": "Действие",
+  "core.base_attack.text_ranged": "стреляет в",
+  "core.base_attack.text_melee": "бьет",
+  "core.base_attack.emoji_ranged": "\uD83D\uDCA5",
+  "core.base_attack.emoji_melee": "\uD83D\uDC4A",
+  "core.action.approach.name": "Подойти",
+  "core.action.approach.text": "\uD83D\uDC63|{0} подходит к противнику вплотную.",
+  "core.action.reload.name": "Перезарядка",
+  "core.action.skip.name": "Пропустить",
+  "core.action.skip.text": "⬇|{0} пропускает ход.",
+  "core.base_item.name": "Предмет",
+  "core.base_attack.name": "Атака",
+  "core.session.message.alive_entities": "\uD83D\uDCA8|{0} теряет излишек энергии.",
+  "core.session.message.hp_loss": "{hearts}|{name} теряет {hp_loss} ХП. Остается {hp} ХП.",
+  "core.session.message.death": "☠\uFE0F|{name} теряет сознание.",
+  "core.session.message.effects": "\nЭффекты {0}:",
+  "core.session.message.results": "\nРезультаты хода {0}:",
+  "core.base_state.name": "Стейт",
+  "core.base_state.description": "Информация еще не написана.",
+  "core.base_weapon.name": "Пустое оружие",
+  "core.base_weapon.description": "Описание еще не написано.",
+  "core.base_weapon_reload_text_ranged": "🕓|{0} перезаряжается. Энергия восстановлена до максимальной! ({1})",
+  "core.base_weapon_reload_text_melee": "😤|{0}️ переводит дух. Энергия восстановлена до максимальной! ({1})"
 }

@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -9,8 +9,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Mace(MeleeWeapon):
     id = 'mace'
-    name = ls("weapon_mace_name")
-    description = ls("weapon_mace_description")
+    name = ls("rebuild.weapon.mace.name")
+    description = ls("rebuild.weapon.mace.description")
 
     cubes = 3
     accuracy_bonus = 2

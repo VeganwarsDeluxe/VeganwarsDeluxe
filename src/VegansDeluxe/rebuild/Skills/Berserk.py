@@ -1,17 +1,17 @@
-from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import RegisterEvent
 from VegansDeluxe.core import AttackGameEvent
-from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import PreMoveGameEvent, HPLossGameEvent
+from VegansDeluxe.core import RegisterEvent
+from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Berserk(Skill):
     id = 'berserk'
-    name = ls("skill_berserk_name")
-    description = ls("skill_berserk_description")
+    name = ls("rebuild.skill.berserk.name")
+    description = ls("rebuild.skill.berserk.description")
 
 
 @RegisterState(Berserk)

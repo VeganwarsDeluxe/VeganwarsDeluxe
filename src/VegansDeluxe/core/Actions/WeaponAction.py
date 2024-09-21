@@ -1,8 +1,8 @@
 import math
 import random
 
-from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
 from VegansDeluxe.core.Session import Session
@@ -37,18 +37,20 @@ class DecisiveWeaponAction(WeaponAction, DecisiveAction):
 
 class Attack(DecisiveWeaponAction):
     id = 'attack'
-    name = ls("base_attack_name")
+    name = ls("core.base_attack.name")
     target_type = Enemies()
     priority = 0
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ATTACK_TEXT = ls("base_attack_text_ranged") if self.weapon.ranged else ls("base_attack_text_melee")
-        self.ATTACK_EMOJI = ls("base_attack_emoji_ranged") if self.weapon.ranged else ls("base_attack_emoji_melee")
-        self.ATTACK_MESSAGE = ls("base_attack_message")
-        self.MISS_MESSAGE = ls("base_miss_message")
-        self.SELF_TARGET_NAME = ls("base_self_target_name")
+        self.ATTACK_TEXT = ls("core.base_attack.text_ranged") if self.weapon.ranged else ls(
+            "core.base_attack.text_melee")
+        self.ATTACK_EMOJI = ls("core.base_attack.emoji_ranged") if self.weapon.ranged else ls(
+            "core.base_attack.emoji_melee")
+        self.ATTACK_MESSAGE = ls("core.base_attack.hit")
+        self.MISS_MESSAGE = ls("core.base_attack.miss")
+        self.SELF_TARGET_NAME = ls("core.self_target_name")
 
         self.tags += [ActionTag.ATTACK, ActionTag.HARMFUL]
 

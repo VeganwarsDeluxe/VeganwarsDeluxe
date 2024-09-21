@@ -75,13 +75,14 @@ class Session[T: Entity]:
         await self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
-        self.say(ls("session_hp_loss_msg").format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
+        self.say(
+            ls("core.session.message.hp_loss").format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
                                                   hp=entity.hp))
 
     async def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
-                self.say(ls("session_alive_entities_msg").format(entity.name))
+                self.say(ls("core.session.message.alive_entities").format(entity.name))
                 entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
@@ -114,7 +115,7 @@ class Session[T: Entity]:
             if entity.hp > 0 or message.canceled:
                 continue
 
-            self.say(ls("session_death_msg").format(name=entity.name))
+            self.say(ls("core.session.message.death").format(name=entity.name))
             entity.dead = True
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None
@@ -143,10 +144,10 @@ class Session[T: Entity]:
         await self.event_manager.publish(
             PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
 
-        self.say(ls("session_effects_line").format(self.turn))
+        self.say(ls("core.session.message.effects").format(self.turn))
         await self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
 
-        self.say(ls("session_results_line").format(self.turn))
+        self.say(ls("core.session.message.results").format(self.turn))
         await self.calculate_damages()  # 4. Damages stage
         await self.event_manager.publish(
             PostDamagesGameEvent(self.id, self.turn))  # 5. Post-damages stage

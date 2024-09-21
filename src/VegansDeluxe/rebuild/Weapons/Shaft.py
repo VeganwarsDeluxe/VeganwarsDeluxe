@@ -1,8 +1,8 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import MeleeAttack
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
@@ -10,8 +10,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Shaft(MeleeWeapon):
     id = 'shaft'
-    name = ls("weapon_shaft_name")
-    description = ls("weapon_shaft_description")
+    name = ls("rebuild.weapon.shaft.name")
+    description = ls("rebuild.weapon.shaft.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -31,7 +31,7 @@ class ShaftAttack(MeleeAttack):
 @AttachedAction(Shaft)
 class KnockDown(MeleeAttack):
     id = 'knock_down'
-    name = ls("weapon_shaft_action_name")
+    name = ls("rebuild.weapon.shaft.action.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Shaft):
@@ -46,8 +46,8 @@ class KnockDown(MeleeAttack):
         self.weapon.cooldown_turn = self.session.turn + 6
         damage = (await self.attack(source, target)).dealt
         if not damage:
-            self.session.say(ls("weapon_shaft_action_miss").format(source.name, target.name))
+            self.session.say(ls("rebuild.weapon.shaft.action_miss").format(source.name, target.name))
             return
-        self.session.say(ls("weapon_shaft_action_text").format(source.name, target.name))
+        self.session.say(ls("rebuild.weapon.shaft.action.text").format(source.name, target.name))
         state = target.get_state('knockdown')
         state.active = True

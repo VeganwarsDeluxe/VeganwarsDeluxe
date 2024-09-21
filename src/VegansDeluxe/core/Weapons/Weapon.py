@@ -3,8 +3,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Weapon:
     id = 'None'
-    name = ls("base_weapon_name")
-    description = ls("base_weapon_description")
+    name = ls("core.base_weapon.name")
+    description = ls("core.base_weapon.description")
     ranged = False
 
     energy_cost = 2
@@ -20,9 +20,9 @@ class Weapon:
 
     def reload_text(self, source):
         if self.ranged:
-            tts = ls("base_weapon_reload_text_ranged").format(source.name, source.max_energy)
+            tts = ls("core.base_weapon_reload_text_ranged").format(source.name, source.max_energy)
         else:
-            tts = ls("base_weapon_reload_text_melee").format(source.name, source.max_energy)
+            tts = ls("core.base_weapon_reload_text_melee").format(source.name, source.max_energy)
         return tts
 
     def hit_chance(self, source) -> int:

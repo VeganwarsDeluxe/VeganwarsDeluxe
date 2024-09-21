@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class Shotgun(RangedWeapon):
     id = 'shotgun'
-    name = ls("weapon_shotgun_name")
-    description = ls("weapon_shotgun_description")
+    name = ls("rebuild.weapon.shotgun.name")
+    description = ls("rebuild.weapon.shotgun.description")
 
     energy_cost = 4
     damage_bonus = 1

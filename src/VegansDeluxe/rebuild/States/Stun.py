@@ -1,11 +1,11 @@
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction
-from VegansDeluxe.core import RegisterState, RegisterEvent
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PostUpdatesGameEvent, PostDamagesGameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -36,14 +36,14 @@ async def register(root_context: StateContext[Stun]):
         if not state.stun:
             return
         if state.stun == 1:
-            session.say(ls("state_stun_wake_up").format(source.name))
+            session.say(ls("rebuild.state.stun.wake_up").format(source.name))
         state.stun -= 1
 
 
 @AttachedAction(Stun)
 class LayStun(DecisiveStateAction):
     id = 'lay_stun'
-    name = ls("state_stun_action_name")
+    name = ls("rebuild.state.stun.action.name")
 
     def __init__(self, session: Session, source: Entity, skill: Stun):
         super().__init__(session, source, skill)

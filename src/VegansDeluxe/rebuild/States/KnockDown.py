@@ -1,12 +1,12 @@
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction, ActionTag
-from VegansDeluxe.core import RegisterState, RegisterEvent
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
+from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import PostUpdateActionsGameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -36,7 +36,7 @@ async def register(root_context: StateContext[Knockdown]):
 @AttachedAction(Knockdown)
 class StandUp(DecisiveStateAction):
     id = 'stand_up'
-    name = ls("state_knockdown_name")
+    name = ls("rebuild.state.knockdown.name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Knockdown):
@@ -49,4 +49,4 @@ class StandUp(DecisiveStateAction):
 
     async def func(self, source, target):
         self.state.active = False
-        self.session.say(ls("state_knockdown_text").format(source.name))
+        self.session.say(ls("rebuild.state.knockdown.text").format(source.name))

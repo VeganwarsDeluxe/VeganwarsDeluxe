@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Knife(MeleeWeapon):
     id = 'knife'
-    name = ls("weapon_knife_name")
-    description = ls("weapon_knife_description")
+    name = ls("rebuild.weapon.knife.name")
+    description = ls("rebuild.weapon.knife.description")
 
     accuracy_bonus = 2
     cubes = 3
@@ -23,8 +23,8 @@ class KnifeAttack(MeleeAttack):
         bleeding = target.get_state('bleeding')
         if bleeding.active:
             bleeding.bleeding -= 1
-            self.session.say(ls("weapon_knife_increase"))
+            self.session.say(ls("rebuild.weapon.knife.increase"))
         else:
-            self.session.say(ls("weapon_knife_effect").format(target.name))
+            self.session.say(ls("rebuild.weapon.knife.effect").format(target.name))
         bleeding.active = True
         return damage

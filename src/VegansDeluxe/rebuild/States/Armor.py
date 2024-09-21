@@ -21,7 +21,7 @@ class Armor(State):
         armor = min(message.damage, self.roll_armor())
         if not armor:
             return
-        session.say(ls("state_armor_effect").format(source.name, armor))
+        session.say(ls("rebuild.state.armor.effect").format(source.name, armor))
         message.damage -= armor
 
     def add(self, value: int, chance=100):

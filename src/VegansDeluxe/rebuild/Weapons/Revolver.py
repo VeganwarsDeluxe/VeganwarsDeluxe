@@ -8,8 +8,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class Revolver(RangedWeapon):
     id = 'revolver'
-    name = ls("weapon_revolver_name")
-    description = ls("weapon_revolver_description")
+    name = ls("rebuild.weapon.revolver.name")
+    description = ls("rebuild.weapon.revolver.description")
 
     cubes = 3
     damage_bonus = 0
@@ -27,10 +27,10 @@ class RevolverAttack(RangedAttack):
 @AttachedAction(Revolver)
 class ShootYourself(DecisiveWeaponAction):
     id = 'shoot_yourself'
-    name = ls("weapon_revolver_action_name")
+    name = ls("rebuild.weapon.revolver_action.name")
     priority = 3
     target_type = OwnOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("weapon_revolver_action_text").format(source.name))
+        self.session.say(ls("rebuild.weapon.revolver_action.text").format(source.name))
         source.hp = 0

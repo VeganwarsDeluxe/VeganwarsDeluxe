@@ -1,6 +1,6 @@
-from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Armor import Armor
@@ -9,8 +9,8 @@ from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 
 class ToughSkull(Skill):
     id = 'tough-skull'
-    name = ls("skill_tough_skull_name")
-    description = ls("skill_tough_skull_description")
+    name = ls("rebuild.skill.tough_skull.name")
+    description = ls("rebuild.skill.tough_skull.description")
 
 
 @RegisterState(ToughSkull)
