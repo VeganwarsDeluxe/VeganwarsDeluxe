@@ -1,13 +1,17 @@
 {
   "rebuild.item.adrenaline.name": "Adrenaline",
   "rebuild.item.adrenaline.text": "💉|{0} uses adrenaline on {1}! His energy increased by 3.",
+
   "rebuild.item.flash_grenade.name": "Flash grenade",
   "rebuild.item.flash_grenade.text": "\uD83D\uDE35|{0} throws a flash grenade at {1}. (-8 energy)",
+
   "rebuild.item.grenade.name": "Grenade",
   "rebuild.item.grenade.text": "\uD83D\uDCA3|{0} throws a grenade! Dealt {1} damage to the following targets: {2}.",
+
   "rebuild.item.chitin.name": "Chitin",
   "rebuild.item.chitin.text": "\uD83D\uDC89|{0} uses chitin on {1}!",
   "rebuild.item.chitin_wear_off": "\uD83C\uDF00|{0} loses chitin effect. The player is stunned!",
+
   "rebuild.item.jet.name": "Jet",
   "rebuild.item.jet.text": "\uD83D\uDC89|{0} uses jet on {1}! His energy will be fully restored in 2 turns.",
   "rebuild.item.jet.effect": "💉|Energy of {0} restored to maximum! ({1})",
