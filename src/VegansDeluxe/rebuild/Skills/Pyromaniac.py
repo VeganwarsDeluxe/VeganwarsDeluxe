@@ -1,4 +1,4 @@
-from VegansDeluxe.core import Session
+from VegansDeluxe.core import Session, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import ls, RegisterState, At, AttackGameEvent, PreDamagesGameEvent
 from VegansDeluxe.core.Entities.Entity import Entity
@@ -17,7 +17,7 @@ async def register(root_context: StateContext[Pyromaniac]):
     session: Session = root_context.session
     source = root_context.entity
 
-    @At(session.id, turn=session.turn, event=AttackGameEvent)
+    @RegisterEvent(session.id, event=AttackGameEvent)
     async def attack_handler(actions_context: EventContext[AttackGameEvent]):
         if actions_context.event.source != source:
             return
