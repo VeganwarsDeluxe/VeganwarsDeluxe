@@ -4,7 +4,7 @@ from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent
+    DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent, SessionStopGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -94,8 +94,10 @@ class Session[T: Entity]:
 
             await self.lose_hp(entity, entity.inbound_dmg.sum())
 
-    def stop(self):
-        # TODO: Maybe publish some stop event?
+    async def stop(self):
+        event = SessionStopGameEvent(self.id, self.turn)
+        await self.event_manager.publish(event)
+
         self.active = False
 
     async def death(self) -> None:
