@@ -3,24 +3,31 @@
   "core.base_attack.miss": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} використовуючи {weapon_name}, але не попадає.",
   "core.self_target_name": "себе",
   "core.base_action.name": "Дія",
+
   "core.base_attack.text_ranged": "стріляє в",
   "core.base_attack.text_melee": "б'є",
   "core.base_attack.emoji_ranged": "\uD83D\uDCA5",
   "core.base_attack.emoji_melee": "\uD83D\uDC4A",
+
   "core.action.approach.name": "Підійти",
   "core.action.approach.text": "\uD83D\uDC63|{0} підходить до противника впритул.",
   "core.action.reload.name": "Перезарядка",
   "core.action.skip.name": "Пропустити",
   "core.action.skip.text": "⬇|{0} пропускає хід.",
+
   "core.base_item.name": "Предмет",
+
   "core.base_attack.name": "Атака",
+
   "core.session.message.alive_entities": "\uD83D\uDCA8|{0} втрачає зайву енергію.",
   "core.session.message.hp_loss": "{hearts}|{name} втрачає {hp_loss} ХП. Залишається {hp} ХП.",
   "core.session.message.death": "☠\uFE0F|{name} втрачає свідомість.",
   "core.session.message.effects": "\nЕффекти {0}:",
   "core.session.message.results": "\nРезультати ходу {0}:",
+
   "core.base_state.name": "Стейт",
   "core.base_state.description": "Інформація ще не написана.",
+
   "core.base_weapon.name": "Пустое оружие",
   "core.base_weapon.description": "Опис ще не написано.",
   "core.base_weapon_reload_text_ranged": "🕓|{0} перезаряджаєтся. Енергія відновлена до максимальної! ({1})",

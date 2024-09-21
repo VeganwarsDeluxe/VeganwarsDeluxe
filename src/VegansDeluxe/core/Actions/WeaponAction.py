@@ -44,10 +44,8 @@ class Attack(DecisiveWeaponAction):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ATTACK_TEXT = ls("core.base_attack.text_ranged") if self.weapon.ranged else ls(
-            "core.base_attack.text_melee")
-        self.ATTACK_EMOJI = ls("core.base_attack.emoji_ranged") if self.weapon.ranged else ls(
-            "core.base_attack.emoji_melee")
+        self.ATTACK_TEXT = ls("core.base_attack.text_ranged") if self.weapon.ranged else ls("core.base_attack.text_melee")
+        self.ATTACK_EMOJI = ls("core.base_attack.emoji_ranged") if self.weapon.ranged else ls("core.base_attack.emoji_melee")
         self.ATTACK_MESSAGE = ls("core.base_attack.hit")
         self.MISS_MESSAGE = ls("core.base_attack.miss")
         self.SELF_TARGET_NAME = ls("core.self_target_name")

@@ -126,7 +126,7 @@ async def perform_fire_attack(session: Session, source, state, message):
     if state.flame == 1:
         session.say(ls("rebuild.state.aflame.damage").format(source.name, damage))
     elif state.flame > 1:
-        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, damage, state.flame - 1))
+        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, damage, state.flame-1))
 
     post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
     await session.event_manager.publish(post_fire_event)
