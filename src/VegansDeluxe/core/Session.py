@@ -4,7 +4,8 @@ from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
-    DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent, SessionStopGameEvent
+    DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent, SessionStopGameEvent, \
+    SessionFinishGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -121,11 +122,14 @@ class Session[T: Entity]:
 
             await self.event_manager.publish(DeathGameEvent(self.id, self.turn, entity))
 
-    def finish(self):
-        # TODO: Broadcast a pair of events, like in Session.death().
-        #  Maybe someone will want to make a dungeon or something.
+    async def finish(self):
+        event = SessionFinishGameEvent(self.id, self.turn)
+        await self.event_manager.publish(event)
+        if event.cancelled:
+            return
+
         if not len(self.alive_teams):  # If everyone is dead
-            self.stop()
+            await self.stop()
             return
 
         if len(self.alive_teams) > 1:  # If there is more than 1 team alive (no-team is also a team)
@@ -133,7 +137,7 @@ class Session[T: Entity]:
         if len(self.alive_teams) == 1 and None in self.alive_teams:  # If there is only no-team entities
             if len(list(self.alive_entities)) > 1:  # If there is more than one player
                 return
-        self.stop()
+        await self.stop()
 
     async def move(self):
         await self.event_manager.publish(
@@ -156,6 +160,6 @@ class Session[T: Entity]:
         await self.death()  # 8. Death stage
         await self.event_manager.publish(
             PostDeathsGameEvent(self.id, self.turn))  # 9. Post-death stage
-        self.finish()  # 10. Finish stage
+        await self.finish()  # 10. Finish stage
 
         self.turn += 1

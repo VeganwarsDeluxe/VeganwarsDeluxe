@@ -8,6 +8,7 @@ T = TypeVar("T")
 class Event:
     def __init__(self, unique_type=None):
         self.unique_type = unique_type
+        self.cancelled = False
 
     def __str__(self):
         return type(self).__name__
@@ -56,10 +57,6 @@ class ActionGameEvent(GameEvent):
         self.target_id = target_id
 
 
-class AddAction(GameEvent):
-    pass
-
-
 class DeliveryRequestEvent(GameEvent):
     def __init__(self, session_id, turn):
         super().__init__(session_id, turn)
@@ -80,7 +77,6 @@ class PreDeathGameEvent(GameEvent):
     def __init__(self, session_id, turn, entity):
         super().__init__(session_id, turn)
         self.entity = entity
-        self.canceled = False
 
 
 class DeathGameEvent(GameEvent):
@@ -98,6 +94,10 @@ class HPLossGameEvent(GameEvent):
 
 
 class SessionStopGameEvent(GameEvent):
+    pass
+
+
+class SessionFinishGameEvent(GameEvent):
     pass
 
 
