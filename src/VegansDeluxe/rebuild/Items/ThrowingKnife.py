@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
+from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag, percentage_chance
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
@@ -33,9 +33,10 @@ class ThrowingKnifeAction(DecisiveItem):
 
     async def func(self, source, target):
         source.energy -= 1
-        if random.randint(0, 100) > self.hit_chance:
+        if not percentage_chance(self.hit_chance):
             self.session.say(ls("item_throwing_knife_name_miss").format(source.name, target.name))
             return
+
         bleeding = target.get_state('bleeding')
         if bleeding.active:
             bleeding.bleeding -= 1

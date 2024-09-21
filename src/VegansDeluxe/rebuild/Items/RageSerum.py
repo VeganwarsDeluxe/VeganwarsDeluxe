@@ -48,4 +48,4 @@ class RageSerumAction(FreeItem):
                 self.session.say(ls("item_rage_serum_sneeze").format(target.name))
                 return
             attack.target = random.choice(attack.targets) if attack.targets else target
-            await attack()
+            await attack.execute()

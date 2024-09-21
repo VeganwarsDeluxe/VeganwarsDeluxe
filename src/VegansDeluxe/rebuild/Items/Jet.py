@@ -32,11 +32,11 @@ class JetAction(FreeItem):
         )
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent, priority=3)
-        def jet_reload(context: EventContext[PostDamagesGameEvent]):
+        async def jet_reload(context: EventContext[PostDamagesGameEvent]):
             self.session.say(
                 ls("item_jet_effect").format(target.name, target.max_energy)
             )
 
         @At(self.session.id, turn=self.session.turn + 3, event=PreMoveGameEvent, priority=3)
-        def jet_reload(context: EventContext[PreMoveGameEvent]):
+        async def jet_reload(context: EventContext[PreMoveGameEvent]):
             target.energy = target.max_energy

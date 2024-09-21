@@ -97,6 +97,10 @@ class HPLossGameEvent(GameEvent):
         self.hp_loss = hp_loss
 
 
+class SessionStopGameEvent(GameEvent):
+    pass
+
+
 class CallActionsGameEvent(GameEvent):
     pass
 
