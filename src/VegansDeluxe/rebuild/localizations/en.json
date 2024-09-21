@@ -83,6 +83,10 @@
   "rebuild.skill.ninja.name": "Ninja",
   "rebuild.skill.ninja.description": "You cannot be hit by attacks when you dodge.",
 
+  "rebuild.skill.pyromaniac.name": "Pyromaniac",
+  "rebuild.skill.pyromaniac.description": "For each enemy aflame, you get a bonus to your damage.",
+  "rebuild.skill.pyromaniac.effect": "\uD83D\uDC7A|Pyromaniac {0} deals additional damage to their target ({1})!",
+
   "rebuild.skill.sadist.name": "Sadist",
   "rebuild.skill.sadist.description": "By taking HP from an opponent, you restore 1 energy.",
   "rebuild.skill.sadist.effect": "\uD83D\uDE03|Sadist {0} gains {1} energy.",

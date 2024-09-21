@@ -84,6 +84,10 @@
   "rebuild.skill.ninja.name": "Ніндзя",
   "rebuild.skill.ninja.description": "По вашому перекату неможливо потрапити атакою.",
 
+  "rebuild.skill.pyromaniac.name": "Піромант",
+  "rebuild.skill.pyromaniac.description": "За кожного палаючого суперника ви отримуєте бонус до урону.",
+  "rebuild.skill.pyromaniac.effect": "\uD83D\uDC7A|Пироман {0} наносит дополнительный урон своей цели ({1})!",
+
   "rebuild.skill.sadist.name": "Садист",
   "rebuild.skill.sadist.description": "Віднімаючи ХП противнику, ви відновлюєте 1 енергію.",
   "rebuild.skill.sadist.effect": "\uD83D\uDE03|Садист {0} отримує {1} енергії.",
