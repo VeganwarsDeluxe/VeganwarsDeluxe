@@ -95,9 +95,9 @@ class ScheduledEventSubscription(EventSubscription):
         else:
             return message.turn == self.start
 
-    def handle(self, message: Event):
+    async def handle(self, message: Event):
         if not isinstance(message, GameEvent) or self.is_valid_schedule(message):
-            super().handle(message)
+            await super().handle(message)
 
 
 class SingleTurnSubscription(ScheduledEventSubscription):
