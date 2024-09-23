@@ -8,7 +8,7 @@ T = TypeVar("T")
 class Event:
     def __init__(self, unique_type=None):
         self.unique_type = unique_type
-        self.cancelled = False
+        self.canceled = False
 
     def __str__(self):
         return type(self).__name__

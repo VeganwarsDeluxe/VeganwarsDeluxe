@@ -125,7 +125,7 @@ class Session[T: Entity]:
     async def finish(self):
         event = SessionFinishGameEvent(self.id, self.turn)
         await self.event_manager.publish(event)
-        if event.cancelled:
+        if event.canceled:
             return
 
         if not len(self.alive_teams):  # If everyone is dead
