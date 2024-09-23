@@ -26,7 +26,7 @@ class Rifle(RangedWeapon):
         self.main_target = None, 0
 
         @RegisterEvent(session_id=session_id, event=PreMoveGameEvent)
-        def pre_move(context: EventContext[PreMoveGameEvent]):
+        async def pre_move(context: EventContext[PreMoveGameEvent]):
             entity = context.session.get_entity(entity_id)
             main_target, level = self.main_target
             if main_target:
