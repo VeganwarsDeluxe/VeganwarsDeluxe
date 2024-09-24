@@ -1,7 +1,3 @@
-import VegansDeluxe.core
-import VegansDeluxe.rebuild
-import VegansDeluxe.deluxe
-
 from VegansDeluxe.core.ContentManager import content_manager
 
 all_actions = []

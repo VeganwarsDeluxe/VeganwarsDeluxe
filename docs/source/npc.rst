@@ -69,7 +69,7 @@ you need to create and attach them to the NPC.
         name = ls('slime.reload.name')
         target_type = OwnOnly()
 
-        def func(self, source, target):
+        async def func(self, source, target):
             self.session.say(ls("slime.reload.text").format(source.name, source.max_energy))
             source.energy = source.max_energy
 
@@ -143,7 +143,7 @@ usual weapons, really.
             self.ATTACK_MESSAGE = ls("slime.weapon.attack")
             self.MISS_MESSAGE = ls("slime.weapon.miss")
 
-        def func(self, source: Slime, target: Entity):
+        async def func(self, source: Slime, target: Entity):
             damage = super().func(source, target)
             if not damage:
                 return
@@ -226,7 +226,7 @@ Full NPC example
             self.ATTACK_MESSAGE = ls("slime.weapon.attack")
             self.MISS_MESSAGE = ls("slime.weapon.miss")
 
-        def func(self, source: Slime, target: Entity):
+        async def func(self, source: Slime, target: Entity):
             damage = super().func(source, target)
             if not damage:
                 return

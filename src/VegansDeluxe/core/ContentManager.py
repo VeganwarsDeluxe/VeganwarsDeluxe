@@ -15,6 +15,18 @@ from VegansDeluxe.core.Weapons import Weapon
 ActionOwnerType = type[Entity] | type[Weapon] | type[State] | type[Item]
 
 
+class Assignment:
+    def __init__(self, func: typing.Callable, desc: str = ""):
+        self.desc: str = desc
+        self.func: typing.Callable = func
+
+    def execute(self, am: ActionManager):
+        return self.func(am)
+
+    def __str__(self):
+        return self.desc
+
+
 class ContentManager:
     """
     ContentManager is a singleton. It is used by content to register itself for usage
@@ -27,15 +39,18 @@ class ContentManager:
 
         self.state_init_map: dict[type[State], typing.Callable] = dict()
         """Map of State classes to their "game inits"."""
-        self.assignments: list[typing.Callable] = list()
+        self.assignments: list[Assignment] = list()
         """List of event assignments to be completed on Engine initialization."""
 
         self.attached_action_managers: list[ActionManager] = list()
         """List of attached SessionManagers."""
 
         self.weapons: dict[str, Weapon] = dict()
+        """Map of Weapon classes to their IDs."""
         self.states: dict[str, State] = dict()
+        """Map of State classes to their IDs."""
         self.items: dict[str, Item] = dict()
+        """Map of Item classes to their IDs."""
 
     def get_state(self, state_id: str) -> typing.Optional[State]:
         """
@@ -65,9 +80,9 @@ class ContentManager:
         """
 
         @RegisterEvent(event=AttachSessionEvent)
-        def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
+        async def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
             @RegisterEvent(root_context.session.id, event=PostActionsGameEvent, priority=99)
-            def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
+            async def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
                 """
                 Clears out all action from the queue after they are executed.
                 :todo: Make sure if this is the right time to clear. Though before we cleared them after the execution,
@@ -78,7 +93,7 @@ class ContentManager:
                     [action for action in action_manager.action_queue if action.session.id != root_context.session.id]
 
             @RegisterEvent(root_context.session.id, event=CallActionsGameEvent)
-            def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
+            async def handle_call_actions_game_event(context: EventContext[CallActionsGameEvent]):
                 """
                 Calls all the actions in the Action Queue that attached to certain Session.
                 """
@@ -88,25 +103,25 @@ class ContentManager:
                 action_queue.sort(key=lambda a: a.priority)
                 for action in action_queue:
                     event = ExecuteActionEvent(context.session.id, context.session.turn, action)
-                    context.event_manager.publish(event)
+                    await context.event_manager.publish(event)
 
             @RegisterEvent(root_context.session.id, event=DeliveryRequestEvent)
-            def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
+            async def handle_delivery_request(context: EventContext[DeliveryRequestEvent]):
                 """
                 Broadcasts EventContext[DeliveryPackageEvent] immediately on receiving DeliveryRequestEvent.
 
                 Useful to get the ActionManager contained in the EventContext, circumventing circular dependencies.
                 """
                 event = DeliveryPackageEvent(context.session.id, context.session.turn)
-                context.event_manager.publish(event)
+                await context.event_manager.publish(event)
 
             @self.register_action_execution_event(root_context.session.id)
-            def execute_action_handler(context: ActionExecutionContext):
+            async def execute_action_handler(context: ActionExecutionContext):
                 """Execute the action on receiving ExecuteActionEvent."""
-                context.action()
+                await context.action.execute()
 
         @RegisterEvent(event=PreMoveGameEvent)
-        def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
+        async def handle_pre_move_game_event(context: EventContext[PreMoveGameEvent]):
             """
             Every PreMoveGameEvent, resets removed actions for the Session.
             """
@@ -115,14 +130,14 @@ class ContentManager:
     def attach_action_manager(self, action_manager: ActionManager):
         self.attached_action_managers.append(action_manager)
         for assignment in self.assignments:
-            assignment(action_manager)
+            assignment.execute(action_manager)
         for state in content_manager.state_init_map:
             content_manager.initialize_state_attachment(state, action_manager)
 
-    def add_assignment(self, assignment: typing.Callable):
+    def add_assignment(self, assignment: Assignment):
         self.assignments.append(assignment)
         for action_manager in self.attached_action_managers:
-            assignment(action_manager)
+            assignment.execute(action_manager)
 
     def register_event(self, session_id: str = None, event: type[Event] = Event, unique_type=None,
                        priority=0, filters=None):
@@ -136,15 +151,16 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at_event(event=event, session_id=session_id, unique_type=unique_type,
                                        priority=priority, filters=filters, callback_wrapper=callback_wrapper)
 
-            self.add_assignment(assignment)
+            desc = f"RegisterEvent Assignment for session[{session_id}], event[{event}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -160,16 +176,17 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = ActionExecutionContext[ExecuteActionEvent](
                         message, session_manager.get_session(message.session_id), action_manager
                     )
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at_event(event=ExecuteActionEvent, session_id=session_id, unique_type=unique_type,
                                        priority=priority, filters=filters, callback_wrapper=callback_wrapper)
 
-            self.add_assignment(assignment)
+            desc = f"RegisterActionExecutionEvent Assignment for session[{session_id}], unique_type[{unique_type}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -191,14 +208,15 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.at(callback_wrapper, session_id, turn, event, priority=priority, filters=filters)
 
-            self.add_assignment(assignment)
+            desc = f"At Assignment for session[{session_id}], unique_type[{event}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -208,14 +226,15 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.nearest(callback_wrapper, session_id, event=event, priority=priority, filters=filters)
 
-            self.add_assignment(assignment)
+            desc = f"Next Assignment for session[{session_id}], unique_type[{event}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -225,14 +244,15 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.every(callback_wrapper, session_id, turns, start, event, filters)
 
-            self.add_assignment(assignment)
+            desc = f"Every Assignment for session[{session_id}], unique_type[{event}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -242,15 +262,16 @@ class ContentManager:
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
-                def callback_wrapper(message):
+                async def callback_wrapper(message):
                     context = EventContext[event](message, session_manager.get_session(message.session_id),
                                                   action_manager)
-                    return callback(context)
+                    return await callback(context)
 
                 event_manager.after(event=event, session_id=session_id, turns=turns, repeats=repeats,
                                     filters=filters, callback_wrapper=callback_wrapper)
 
-            self.add_assignment(assignment)
+            desc = f"After Assignment for session[{session_id}], unique_type[{event}]."
+            self.add_assignment(Assignment(assignment, desc))
 
         return decorator_func
 
@@ -262,10 +283,10 @@ class ContentManager:
         session_manager = action_manager.session_manager
         event_manager = session_manager.event_manager
 
-        def callback_wrapper(event):
+        async def callback_wrapper(event):
             session = session_manager.get_session(event.session_id)
             context = StateContext[state](event, session, action_manager)
-            return callback(context)
+            return await callback(context)
 
         event_manager.at_event(event=AttachStateEvent, unique_type=state, callback_wrapper=callback_wrapper)
 

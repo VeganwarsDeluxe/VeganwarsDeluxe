@@ -8,8 +8,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Claws(MeleeWeapon):
     id = 'claws'
-    name = ls("weapon_claws_name")
-    description = ls("weapon_claws_description")
+    name = ls("rebuild.weapon.claws.name")
+    description = ls("rebuild.weapon.claws.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,9 +34,9 @@ class SwitchClaws(FreeWeaponAction):
 
     @property
     def name(self):
-        return ls("weapon_claws_enable_name") if not self.weapon.claws else ls("weapon_claws_disable_name")
+        return ls("rebuild.weapon.claws.enable.name") if not self.weapon.claws else ls("rebuild.weapon.claws.disable.name")
 
-    def func(self, source, target):
+    async def func(self, source, target):
         if not self.weapon.claws:
             self.weapon.cubes = 4
             self.weapon.damage_bonus = 1
@@ -48,7 +48,8 @@ class SwitchClaws(FreeWeaponAction):
             self.weapon.energy_cost = 2
             self.weapon.accuracy_bonus = 2
         self.weapon.claws = not self.weapon.claws
-        self.session.say(ls("weapon_claws_switch_text").format(source.name,
-                                       ls("weapon_claws_enable_text") if not self.weapon.claws else
-                                       ls("weapon_claws_disable_text"))
-                         )
+        self.session.say(
+            ls("rebuild.weapon.claws.switch.text").format(source.name,
+                                                  ls("rebuild.weapon.claws.enable.text") if not self.weapon.claws else
+                                                  ls("rebuild.weapon.claws.disable.text"))
+        )

@@ -4,12 +4,9 @@ Action - building block of the game.
 All attacks, usage of items, and other actions that Entities do stem from it.
 """
 
-
-import logging
-
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
-from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Entities import Entity
+from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls, LocalizedString
@@ -19,7 +16,7 @@ class Action:
     id: str = 'action'
     """ID of the action."""
 
-    name: str | LocalizedString = ls("base_action_name")
+    name: str | LocalizedString = ls("core.base_action.name")
     """Name of the action, that is displayed to the player."""
 
     priority: int = 0
@@ -51,7 +48,7 @@ class Action:
         self.removed = False
         self.queued = False
 
-    def func(self, source: Entity, target: Entity):
+    async def func(self, source: Entity, target: Entity):
         """
         Function to override with actual mechanics of the action.
 
@@ -59,10 +56,10 @@ class Action:
         """
         pass
 
-    def __call__(self):
+    async def execute(self):
         if self.canceled:
             return
-        return self.func(self.source, self.target)
+        return await self.func(self.source, self.target)
 
     @property
     def cost(self):
@@ -96,7 +93,7 @@ class Action:
         """
         return self.get_targets(self.source, self.target_type)
 
-    def get_targets(self, source: Entity, target_type: TargetType):
+    def get_targets(self, source: Entity, target_type: TargetType) -> list[Entity]:
         """
         Function that filters targets by TargetType filter relative to source.
         """

@@ -14,12 +14,12 @@ class DamageThreshold(State):
 
 
 @RegisterState(DamageThreshold)
-def register(root_context: StateContext[DamageThreshold]):
+async def register(root_context: StateContext[DamageThreshold]):
     session: Session = root_context.session
     state = root_context.state
 
     @RegisterEvent(session.id, event=HPLossGameEvent)
-    def func(context: EventContext[HPLossGameEvent]):
+    async def func(context: EventContext[HPLossGameEvent]):
         if not context.event.damage:
             return
         context.event.hp_loss = (context.event.damage // max(state.threshold, 1)) + 1

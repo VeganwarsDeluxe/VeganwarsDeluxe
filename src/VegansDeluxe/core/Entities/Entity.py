@@ -1,13 +1,14 @@
+from typing import Type
 from uuid import uuid4
 
-from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.DamageHolder import DamageHolder
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachStateEvent
+from VegansDeluxe.core.Items.Item import Item
+from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Translator.LocalizedString import LocalizedString
 from VegansDeluxe.core.Weapons.Weapon import Weapon
-from VegansDeluxe.core.Items.Item import Item
-from VegansDeluxe.core.DamageHolder import DamageHolder
 
 
 class Entity:
@@ -110,12 +111,12 @@ class Entity:
             item.source = self
             return item
 
-    def attach_state(self, state: State, event_manager: EventManager):
+    async def attach_state(self, state: State, event_manager: EventManager):
         self.states.append(state)
-        event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
+        await event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
-    def get_state(self, skill_id: str) -> State:
-        result = list(filter(lambda s: s.id == skill_id, self.states))
+    def get_state[T: State](self, state: Type[T]) -> T:
+        result = list(filter(lambda s: s.id == state.id, self.states))
         if result:
             return result[0]
 

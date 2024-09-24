@@ -1,8 +1,8 @@
-from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import Session
 from VegansDeluxe.core import Enemies, Distance
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
@@ -10,8 +10,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Molot(MeleeWeapon):
     id = 'molot'
-    name = ls("weapon_molot_name")
-    description = ls("weapon_molot_description")
+    name = ls("rebuild.weapon.molot.name")
+    description = ls("rebuild.weapon.molot.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -46,7 +46,7 @@ class MolotAttack(MeleeAttack):
 @AttachedAction(Molot)
 class TrueStrike(MeleeAttack):
     id = 'true_strike'
-    name = ls("weapon_molot_action_name")
+    name = ls("rebuild.weapon.molot.action.name")
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
     priority = -3
 
@@ -63,7 +63,7 @@ class TrueStrike(MeleeAttack):
             return damage
         return damage + self.energy_bonus(source)
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
         source.energy -= 4
-        self.attack(source, target, pay_energy=False)
+        await self.attack(source, target, pay_energy=False)

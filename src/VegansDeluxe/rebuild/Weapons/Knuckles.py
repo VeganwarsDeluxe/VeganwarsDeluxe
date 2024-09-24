@@ -1,7 +1,7 @@
-from VegansDeluxe.core import MeleeAttack, ActionTag
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import Next
 from VegansDeluxe.core import EventContext
+from VegansDeluxe.core import MeleeAttack, ActionTag
+from VegansDeluxe.core import Next
 from VegansDeluxe.core import PreDamagesGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -10,8 +10,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Knuckles(MeleeWeapon):
     id = 'knuckles'
-    name = ls("weapon_knuckles_name")
-    description = ls("weapon_knuckles_description")
+    name = ls("rebuild.weapon.knuckles.name")
+    description = ls("rebuild.weapon.knuckles.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -23,8 +23,8 @@ class Knuckles(MeleeWeapon):
 class KnucklesAttack(MeleeAttack):
     priority = -1
 
-    def func(self, source, target):
-        damage = super().attack(source, target).dealt
+    async def func(self, source, target):
+        damage = (await super().attack(source, target)).dealt
         if not damage:
             return damage
 
@@ -35,7 +35,7 @@ class KnucklesAttack(MeleeAttack):
                 if ActionTag.RELOAD in action.tags:
                     reloading = True
             if reloading:
-                self.session.say(ls("weapon_knuckles_effect").format(target.name))
+                self.session.say(ls("rebuild.weapon.knuckles.effect").format(target.name))
                 target.energy = max(target.energy - 4, 0)
 
         return damage

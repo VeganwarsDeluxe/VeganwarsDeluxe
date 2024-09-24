@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -9,8 +9,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Hatchet(MeleeWeapon):
     id = 'hatchet'
-    name = ls("weapon_hatchet_name")
-    description = ls("weapon_hatchet_description")
+    name = ls("rebuild.weapon.hatchet.name")
+    description = ls("rebuild.weapon.hatchet.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,8 +34,8 @@ class HatchetAttack(MeleeAttack):
             return
         return damage + self.weapon.hatchet_bonus
 
-    def func(self, source, target):
-        damage = super().attack(source, target).dealt
+    async def func(self, source, target):
+        damage = (await super().attack(source, target)).dealt
         if damage:
             self.weapon.hatchet_bonus = max(self.weapon.hatchet_bonus - 1, 0)
         return damage

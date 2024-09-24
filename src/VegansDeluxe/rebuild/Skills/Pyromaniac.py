@@ -1,33 +1,45 @@
-from VegansDeluxe.core import RegisterEvent
+from VegansDeluxe.core import Session, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import HPLossGameEvent
-from VegansDeluxe.core import Session
+from VegansDeluxe.core import ls, RegisterState, At, AttackGameEvent, PreDamagesGameEvent
+from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.rebuild.States.Aflame import Aflame
 
 
 class Pyromaniac(Skill):
     id = 'pyromaniac'
-    name = 'Пиромант'
-    description = 'За каждого горящего соперника вы получаете бонус к урону.'
+    name = ls("rebuild.skill.pyromaniac.name")
+    description = ls("rebuild.skill.pyromaniac.description")
 
 
-# @RegisterState(Pyromaniac)
-# TODO: Fix Pyromaniac!!!
-def register(root_context: StateContext[Pyromaniac]):
+@RegisterState(Pyromaniac)
+async def register(root_context: StateContext[Pyromaniac]):
     session: Session = root_context.session
     source = root_context.entity
 
-    @RegisterEvent(session.id, event=HPLossGameEvent)
-    def func(context: EventContext[HPLossGameEvent]):
-        if source in context.event.source.inbound_dmg.contributors():
-            source.energy += context.event.hp_loss
-            session.say(f'😃|Садист {source.name} получает {context.event.hp_loss} энергии.')
+    @RegisterEvent(session.id, event=AttackGameEvent)
+    async def attack_handler(actions_context: EventContext[AttackGameEvent]):
+        if actions_context.event.source != source:
+            return
+
+        damage_bonus = get_bonus(session, source)
+
+        if actions_context.event.damage:
+            actions_context.event.damage += damage_bonus
+
+        @At(session.id, turn=session.turn, event=PreDamagesGameEvent)
+        async def post_actions(damages_context: EventContext[PreDamagesGameEvent]):
+            session.say(ls("rebuild.skill.pyromaniac.effect").format(source.name, damage_bonus))
 
 
-def get_bonus(session: Session):
+def get_bonus(session: Session, source: Entity):
     bonus = 0
     for entity in session.entities:
-        aflame = entity.get_state('aflame')
+        entity: Entity
+
+        if entity.is_ally(source):
+            continue
+        aflame = entity.get_state(Aflame)
         if aflame.flame:
             bonus += 1
     return bonus

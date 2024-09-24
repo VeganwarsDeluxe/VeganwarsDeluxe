@@ -6,9 +6,9 @@ from ...core.Translator.LocalizedString import ls
 
 @RegisterWeapon
 class SawedOffShotgun(RangedWeapon):
-    id = 'sawed-off-shotgun'
-    name = ls("weapon_sawed-off-shotgun_name")
-    description = ls("weapon_sawed-off-shotgun_description")
+    id = 'sawed_off_shotgun'
+    name = ls("rebuild.weapon.sawed_off_shotgun.name")
+    description = ls("rebuild.weapon.sawed_off_shotgun.description")
 
     energy_cost = 3
     accuracy_bonus = 0

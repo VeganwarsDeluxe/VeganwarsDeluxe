@@ -1,12 +1,12 @@
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction, ActionTag
-from VegansDeluxe.core import RegisterState, RegisterEvent
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
+from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import PostUpdateActionsGameEvent
+from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -19,13 +19,13 @@ class Knockdown(State):
 
 
 @RegisterState(Knockdown)
-def register(root_context: StateContext[Knockdown]):
+async def register(root_context: StateContext[Knockdown]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def func(context: EventContext[PostUpdateActionsGameEvent]):
+    async def func(context: EventContext[PostUpdateActionsGameEvent]):
         if not state.active:
             return
 
@@ -36,7 +36,7 @@ def register(root_context: StateContext[Knockdown]):
 @AttachedAction(Knockdown)
 class StandUp(DecisiveStateAction):
     id = 'stand_up'
-    name = ls("state_knockdown_name")
+    name = ls("rebuild.state.knockdown.name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Knockdown):
@@ -47,6 +47,6 @@ class StandUp(DecisiveStateAction):
     def hidden(self) -> bool:
         return not self.state.active
 
-    def func(self, source, target):
+    async def func(self, source, target):
         self.state.active = False
-        self.session.say(ls("state_knockdown_text").format(source.name))
+        self.session.say(ls("rebuild.state.knockdown.text").format(source.name))

@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -9,8 +9,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Mace(MeleeWeapon):
     id = 'mace'
-    name = ls("weapon_mace_name")
-    description = ls("weapon_mace_description")
+    name = ls("rebuild.weapon.mace.name")
+    description = ls("rebuild.weapon.mace.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -41,7 +41,7 @@ class MaceAttack(MeleeAttack):
             damage += bonus
         return damage
 
-    def func(self, source: Entity, target: Entity) -> int:
+    async def func(self, source: Entity, target: Entity) -> int:
         """
         Attacks the target and keeps track of consecutive attacks on the same target for damage bonus.
         """
@@ -51,5 +51,5 @@ class MaceAttack(MeleeAttack):
         else:
             self.weapon.consecutive_target = target, 1
         self.weapon.last_attack_turn = self.session.turn
-        damage = super().attack(source, target).dealt
+        damage = (await super().attack(source, target)).dealt
         return damage

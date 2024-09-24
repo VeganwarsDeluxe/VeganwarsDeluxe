@@ -1,20 +1,20 @@
-from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import RegisterEvent
-from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PreMoveGameEvent
-from VegansDeluxe.core import Session
+from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import EventContext
+from VegansDeluxe.core import PreMoveGameEvent
+from VegansDeluxe.core import RegisterEvent
+from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
 
 @RegisterWeapon
 class Rifle(RangedWeapon):
-    id = 'sniperRifle'
-    name = ls("weapon_sniperRifle_name")
-    description = ls("weapon_sniperRifle_description")
+    id = 'sniper_rifle'
+    name = ls("rebuild.weapon.sniper_rifle.name")
+    description = ls("rebuild.weapon.sniper_rifle.description")
 
     cubes = 1
     accuracy_bonus = -4
@@ -26,7 +26,7 @@ class Rifle(RangedWeapon):
         self.main_target = None, 0
 
         @RegisterEvent(session_id=session_id, event=PreMoveGameEvent)
-        def pre_move(context: EventContext[PreMoveGameEvent]):
+        async def pre_move(context: EventContext[PreMoveGameEvent]):
             entity = context.session.get_entity(entity_id)
             main_target, level = self.main_target
             if main_target:
@@ -39,7 +39,7 @@ class Rifle(RangedWeapon):
                     chance += 90
 
                 entity.notifications.append(
-                    ls("weapon_sniperRifle_notification").format(main_target.name, chance)
+                    ls("rebuild.weapon.sniper_rifle.notification").format(main_target.name, chance)
                 )
 
 
@@ -57,8 +57,8 @@ class RifleAttack(RangedAttack):
             self.weapon.accuracy_bonus = -4
         return super().calculate_damage(source, target)
 
-    def func(self, source, target):
-        damage = super().attack(source, target).dealt
+    async def func(self, source, target):
+        damage = (await super().attack(source, target)).dealt
         self.weapon.main_target = None, 0
         return damage
 
@@ -66,14 +66,14 @@ class RifleAttack(RangedAttack):
 @AttachedAction(Rifle)
 class AimRifle(DecisiveWeaponAction):
     id = 'aim_rifle'
-    name = ls("weapon_sniperRifle_action_name")
+    name = ls("rebuild.weapon.sniper_rifle.action.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Rifle):
         super().__init__(session, source, weapon)
         self.weapon: Rifle = weapon
 
-    def func(self, source, target):
+    async def func(self, source, target):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
-        self.session.say(ls("weapon_sniperRifle_action_text").format(source.name))
+        self.session.say(ls("rebuild.weapon.sniper_rifle.action.text").format(source.name))

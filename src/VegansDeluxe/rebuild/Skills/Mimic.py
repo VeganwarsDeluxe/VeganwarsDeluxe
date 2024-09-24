@@ -1,21 +1,21 @@
 import random
 
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core import AttachedAction, Next
-from VegansDeluxe.core import RegisterEvent, RegisterState
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
-from VegansDeluxe.core import Session
-from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core import Everyone, Own
+from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
+from VegansDeluxe.core import RegisterEvent, RegisterState
+from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext, EventContext
+from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
+from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Mimic(Skill):
     id = 'mimic'
-    name = ls("skill_mimic_name")
-    description = ls("skill_mimic_description")
+    name = ls("rebuild.skill.mimic.name")
+    description = ls("rebuild.skill.mimic.description")
 
     def __init__(self):
         super().__init__()
@@ -24,12 +24,12 @@ class Mimic(Skill):
 
 
 @RegisterState(Mimic)
-def register(root_context: StateContext[Mimic]):
+async def register(root_context: StateContext[Mimic]):
     session: Session = root_context.session
     source = root_context.entity
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)
-    def post_update_actions(update_context: EventContext[PostUpdateActionsGameEvent]):
+    async def post_update_actions(update_context: EventContext[PostUpdateActionsGameEvent]):
         if update_context.event.entity_id != source.id:
             return
         if root_context.state.memorized_action:
@@ -39,7 +39,7 @@ def register(root_context: StateContext[Mimic]):
 @AttachedAction(Mimic)
 class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
-    name = ls("skill_mimic_action_name")
+    name = ls("rebuild.skill.mimic.action.name")
     priority = -2
     target_type = Everyone(own=Own.SELF_EXCLUDED)
 
@@ -51,9 +51,9 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
             action_pool = []
@@ -65,15 +65,15 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
                 action_pool.append(action)
 
             if not action_pool:
-                self.session.say(ls("skill_mimic_action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.mimic.action_miss").format(source.name, target.name))
                 return
 
-            self.session.say(ls("skill_mimic_action_text").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.mimic.action.text").format(source.name, target.name))
 
             action = random.choice(action_pool)
             self.state.memorized_action = action.id
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.state.cooldown_turn = self.session.turn + 6
 

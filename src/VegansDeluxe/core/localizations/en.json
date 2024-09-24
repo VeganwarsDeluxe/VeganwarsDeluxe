@@ -1,35 +1,34 @@
 {
-  "base_attack_message": "{attack_emoji}|{source_name} {attack_text} {target_name} using {weapon_name}! Dealt {damage} damage.",
-  "base_miss_message": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} using {weapon_name}, but misses.",
-  "base_self_target_name": "themselves",
-  "base_action_name": "Action",
+  "core.self_target_name": "themselves",
+  "core.base_action.name": "Action",
 
-  "base_attack_text_ranged": "shoots",
-  "base_attack_text_melee": "punches",
-  "base_attack_emoji_ranged": "\uD83D\uDCA5",
-  "base_attack_emoji_melee": "\uD83D\uDC4A",
+  "core.base_attack.name": "Attack",
+  "core.base_attack.hit": "{attack_emoji}|{source_name} {attack_text} {target_name} using {weapon_name}! Dealt {damage} damage.",
+  "core.base_attack.miss": "\uD83D\uDCA8|{source_name} {attack_text} {target_name} using {weapon_name}, but misses.",
+  "core.base_attack.text_ranged": "shoots",
+  "core.base_attack.text_melee": "punches",
+  "core.base_attack.emoji_ranged": "\uD83D\uDCA5",
+  "core.base_attack.emoji_melee": "\uD83D\uDC4A",
 
-  "approach_entity_action_name": "Approach",
-  "approach_entity_action_text": "\uD83D\uDC63|{0} approaches the enemy.",
-  "reload_entity_action_name": "Reload",
-  "skip_entity_action_name": "Skip",
-  "skip_entity_action_text": "⬇|{0} skips turn.",
+  "core.action.approach.name": "Approach",
+  "core.action.approach.text": "\uD83D\uDC63|{0} approaches the enemy.",
+  "core.action.reload.name": "Reload",
+  "core.action.skip.name": "Skip",
+  "core.action.skip.text": "⬇|{0} skips turn.",
 
-  "base_item_name": "Item",
+  "core.base_item.name": "Item",
 
-  "base_attack_name": "Attack",
+  "core.session.message.alive_entities": "\uD83D\uDCA8|{0} loses excess energy.",
+  "core.session.message.hp_loss": "{hearts}|{name} loses {hp_loss} HP. {hp} HP left.",
+  "core.session.message.death": "☠\uFE0F|{name} passes out.",
+  "core.session.message.effects": "\nEffects {0}:",
+  "core.session.message.results": "\nResults of turn {0}:",
 
-  "session_alive_entities_msg": "\uD83D\uDCA8|{0} loses excess energy.",
-  "session_hp_loss_msg": "{hearts}|{name} loses {hp_loss} HP. {hp} HP left.",
-  "session_death_msg": "☠\uFE0F|{name} passes out.",
-  "session_effects_line": "\nEffects {0}:",
-  "session_results_line": "\nResults of turn {0}:",
+  "core.base_state.name": "State",
+  "core.base_state.description": "No information written yet.",
 
-  "base_state_name": "State",
-  "base_state_description": "No information written yet.",
-
-  "base_weapon_name": "Empty weapon",
-  "base_weapon_description": "No description written yet.",
-  "base_weapon_reload_text_ranged": "🕓|{0} is reloading. Energy restored to maximum! ({1})",
-  "base_weapon_reload_text_melee": "😤|{0}️ catches his breath. Energy restored to maximum! ({1})"
+  "core.base_weapon.name": "Empty weapon",
+  "core.base_weapon.description": "No description written yet.",
+  "core.base_weapon_reload_text_ranged": "🕓|{0} is reloading. Energy restored to maximum! ({1})",
+  "core.base_weapon_reload_text_melee": "😤|{0}️ catches his breath. Energy restored to maximum! ({1})"
 }

@@ -1,7 +1,8 @@
-from VegansDeluxe.core import SessionManager, Session, Entity
+from VegansDeluxe.core import Session, Entity
 from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.ContentManager import content_manager
 from VegansDeluxe.core.Events.EventManager import EventManager
+from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.States import State
 
 
@@ -18,19 +19,20 @@ class Engine:
         content_manager.initialize_action_manager(self.action_manager)
         content_manager.attach_action_manager(self.action_manager)
 
-    def attach_session(self, session: Session):
-        self.session_manager.attach_session(session)
+    async def attach_session(self, session: Session):
+        await self.session_manager.attach_session(session)
 
     def detach_session(self, session: Session):
         self.session_manager.delete_session(session.id)
         self.event_manager.clean_by_session_id(session.id)
 
-    def attach_states(self, entity: Entity, state_pool: list[type[State]]):
+    async def attach_states(self, entity: Entity, state_pool: list[type[State]]):
         for state in state_pool:
-            entity.attach_state(state(), self.event_manager)
+            await entity.attach_state(state(), self.event_manager)
 
     def stats(self):
         result = (f"Event Handlers: {self.event_manager.size}\n"
                   f"Sessions: {len(self.session_manager.sessions)}\n"
-                  f"Action Queue: {len(self.action_manager.action_queue)}\n")
+                  f"Action Queue: {len(self.action_manager.action_queue)}\n"
+                  f"CM Assignments: {len(content_manager.assignments)}")
         return result

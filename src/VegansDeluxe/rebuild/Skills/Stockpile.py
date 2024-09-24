@@ -1,21 +1,21 @@
 import random
 
 from VegansDeluxe import rebuild
-from VegansDeluxe.core import StateContext
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
+from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
 class Stockpile(Skill):
     id = 'stockpile'
-    name = ls("skill_stockpile_name")
-    description = ls("skill_stockpile_description")
+    name = ls("rebuild.skill.stockpile.name")
+    description = ls("rebuild.skill.stockpile.description")
 
 
 @RegisterState(Stockpile)
-def register(root_context: StateContext[Stockpile]):
+async def register(root_context: StateContext[Stockpile]):
     session: Session = root_context.session
     source = root_context.entity
 

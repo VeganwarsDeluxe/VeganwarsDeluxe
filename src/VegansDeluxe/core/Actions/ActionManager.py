@@ -1,15 +1,15 @@
 from typing import Union, Optional
 
-from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.ItemAction import ItemAction
 from VegansDeluxe.core.Actions.StateAction import StateAction
 from VegansDeluxe.core.Actions.WeaponAction import WeaponAction
 from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.Events import PostUpdateActionsGameEvent, PreUpdateActionsGameEvent
 from VegansDeluxe.core.Items.Item import Item
-from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.Session import Session
+from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
 
@@ -18,7 +18,7 @@ ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
 
 class ActionManager:
     """
-    Manages action queues for all active sessions,
+    Manages action queues for all active sessions.
     """
     def __init__(self, session_manager: SessionManager, action_map: dict[ActionOwnerType, list[type[Action]]]):
         self.session_manager = session_manager
@@ -63,13 +63,13 @@ class ActionManager:
             action = action_type(session, entity, owner_type())
         self.actions[(session, entity)].append(action)
 
-    def update_entity_actions(self, session: Session, entity: Entity):
+    async def update_entity_actions(self, session: Session, entity: Entity):
         """
         Compiles actions available to the entity from itself, all its items, states, skills and the weapon.
 
         Can be influenced by subscribing to PreUpdateActionsGameEvent and PostUpdateActionsGameEvent events.
         """
-        self.event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish(PreUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
         entity_actions = self.actions.get((session, entity))
         if not entity_actions:
@@ -103,11 +103,11 @@ class ActionManager:
                     action: type[ItemAction]
                     entity_actions.append(action(session, entity, item))
 
-        self.event_manager.publish(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
+        await self.event_manager.publish(PostUpdateActionsGameEvent(session.id, session.turn, entity.id))
 
-    def update_actions(self, session: Session):
+    async def update_actions(self, session: Session):
         for entity in session.entities:
-            self.update_entity_actions(session, entity)
+            await self.update_entity_actions(session, entity)
 
     def get_action(self, session: Session, entity: Entity, action_id: str) -> Action:
         """

@@ -1,6 +1,6 @@
+from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core import RegisterState, Every
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.Items.RageSerum import RageSerum
@@ -8,13 +8,13 @@ from VegansDeluxe.rebuild.Items.RageSerum import RageSerum
 
 class Alchemist(Skill):
     id = 'alchemist'
-    name = ls("skill_alchemist_name")
-    description = ls("skill_alchemist_description")
+    name = ls("rebuild.skill.alchemist.name")
+    description = ls("rebuild.skill.alchemist.description")
 
 
 @RegisterState(Alchemist)
-def register(root_context: StateContext[Alchemist]):
+async def register(root_context: StateContext[Alchemist]):
 
     @Every(root_context.session.id, turns=9, event=PreMoveGameEvent)
-    def func(context: EventContext[PreMoveGameEvent]):
+    async def func(context: EventContext[PreMoveGameEvent]):
         root_context.entity.items.append(RageSerum())

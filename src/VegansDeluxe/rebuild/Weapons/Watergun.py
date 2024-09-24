@@ -1,14 +1,14 @@
-from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
-from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import After
-from VegansDeluxe.core import Entity
+from VegansDeluxe.core import Allies
+from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import AttackGameEvent
-
+from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import PreDamagesGameEvent
 from VegansDeluxe.core import Session
-from VegansDeluxe.core import Allies
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
+from VegansDeluxe.rebuild import Aflame
 
 
 @RegisterWeapon
@@ -45,18 +45,18 @@ class CreateWaterShield(DecisiveWeaponAction):
 
     @property
     def hidden(self) -> bool:
-        return self.session.turn < self.cooldown_turn
+        return self.session.turn < self.weapon.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @After(self.session.id, 0, event=PreDamagesGameEvent, repeats=3)
         def _(context: EventContext[PreDamagesGameEvent]):
-            aflame = self.source.get_state('aflame')
+            aflame = self.source.get_state(Aflame)
             aflame.extinguished = True
             aflame.flame = 0
 
             self.session.say(f'🔋|{self.source.name} получает 2 энергии.')
             self.source.energy += 2
-            if self.session.turn >= self.turn:
+            if self.session.turn >= self.weapon.cooldown_turn:
                 self.active = False
                 self.session.say(f'💨|Водяной щит {self.source.name} испарился!')
 

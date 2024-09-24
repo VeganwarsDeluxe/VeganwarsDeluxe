@@ -1,5 +1,4 @@
-import copy
-from typing import Self, Tuple, Dict
+from typing import Self
 
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.Translator import translator

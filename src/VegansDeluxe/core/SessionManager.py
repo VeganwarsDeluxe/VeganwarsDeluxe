@@ -12,9 +12,9 @@ class SessionManager:
     def get_session(self, session_id):
         return self.sessions.get(session_id)
 
-    def attach_session(self, session: Session):
+    async def attach_session(self, session: Session):
         self.sessions.update({session.id: session})
-        self.event_manager.publish(AttachSessionEvent(session.id))
+        await self.event_manager.publish(AttachSessionEvent(session.id))
         return session
 
     def delete_session(self, session_id):

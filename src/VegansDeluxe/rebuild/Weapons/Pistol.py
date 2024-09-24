@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class Pistol(RangedWeapon):
     id = 'pistol'
-    name = ls("weapon_pistol_name")
-    description = ls("weapon_pistol_description")
+    name = ls("rebuild.weapon.pistol.name")
+    description = ls("rebuild.weapon.pistol.description")
 
     cubes = 3
     accuracy_bonus = 3

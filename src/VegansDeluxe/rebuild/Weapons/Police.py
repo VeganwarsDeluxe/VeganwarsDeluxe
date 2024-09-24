@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Police(MeleeWeapon):
     id = 'police_bat'
-    name = ls("weapon_police_bat_name")
-    description = ls("weapon_police_bat_description")
+    name = ls("rebuild.weapon.police_bat.name")
+    description = ls("rebuild.weapon.police_bat.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -20,10 +20,10 @@ class Police(MeleeWeapon):
 class PoliceAttack(MeleeAttack):
     priority = -1
 
-    def func(self, source, target):
-        damage = super().attack(source, target).dealt
+    async def func(self, source, target):
+        damage = (await super().attack(source, target)).dealt
         if not damage:
             return damage
         target.energy = max(target.energy - 1, 0)
-        self.session.say(ls("weapon_police_bat_effect").format(target.name))
+        self.session.say(ls("rebuild.weapon.police_bat.effect").format(target.name))
         return damage

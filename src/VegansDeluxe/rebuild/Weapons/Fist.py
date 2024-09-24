@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Fist(MeleeWeapon):
     id = 'fist'
-    name = ls("weapon_fist_name")
-    description = ls("weapon_fist_description")
+    name = ls("rebuild.weapon.fist.name")
+    description = ls("rebuild.weapon.fist.description")
 
     accuracy_bonus = 2
 

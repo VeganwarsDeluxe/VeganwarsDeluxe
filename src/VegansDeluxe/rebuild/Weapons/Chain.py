@@ -1,10 +1,10 @@
 import random
 
-from VegansDeluxe.core import MeleeAttack, ActionTag
 from VegansDeluxe.core import AttachedAction, Next, RegisterWeapon
-from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core import Enemies, Distance
+from VegansDeluxe.core import EventContext
+from VegansDeluxe.core import MeleeAttack, ActionTag
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild import KnockedWeapon
@@ -13,8 +13,8 @@ from VegansDeluxe.rebuild import KnockedWeapon
 @RegisterWeapon
 class Chain(MeleeWeapon):
     id = 'chain'
-    name = ls("weapon_chain_name")
-    description = ls("weapon_chain_description")
+    name = ls("rebuild.weapon.chain.name")
+    description = ls("rebuild.weapon.chain.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -34,7 +34,7 @@ class ChainAttack(MeleeAttack):
 @AttachedAction(Chain)
 class KnockWeapon(MeleeAttack):
     id = 'knock_weapon'
-    name = ls("weapon_chain_action_name")
+    name = ls("rebuild.weapon.chain.action.name")
     priority = -1
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
 
@@ -42,15 +42,15 @@ class KnockWeapon(MeleeAttack):
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn
 
-    def func(self, source, target):
+    async def func(self, source, target):
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
 
             self.weapon.cooldown_turn = self.session.turn + 6
-            damage = self.attack(source, target).dealt
+            damage = (await self.attack(source, target)).dealt
             if not damage:
-                self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
                 return
 
             source_reloading = False
@@ -59,10 +59,10 @@ class KnockWeapon(MeleeAttack):
                     source_reloading = True
 
             if source_reloading or random.randint(1, 100) <= 10:
-                self.session.say(ls("weapon_chain_action_text").format(source.name, target.name))
-                state = target.get_state(KnockedWeapon.id)
+                self.session.say(ls("rebuild.weapon.chain.action.text").format(source.name, target.name))
+                state = target.get_state(KnockedWeapon)
                 state.drop_weapon(target)
             else:
-                self.session.say(ls("weapon_chain_action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
 
-        self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+        await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))

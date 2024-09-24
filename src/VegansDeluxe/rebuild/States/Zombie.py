@@ -16,13 +16,13 @@ class ZombieState(State):
 
 
 @RegisterState(ZombieState)
-def register(root_context: StateContext[ZombieState]):
+async def register(root_context: StateContext[ZombieState]):
     session: Session = root_context.session
     source = root_context.entity
     state = root_context.state
 
     @RegisterEvent(session.id, event=PreDamagesGameEvent)
-    def func(context: EventContext[PreDamagesGameEvent]):
+    async def func(context: EventContext[PreDamagesGameEvent]):
         if not state.active:
             return
         if state.timer <= 0:
@@ -31,7 +31,7 @@ def register(root_context: StateContext[ZombieState]):
         state.timer -= 1
 
     @RegisterEvent(session.id, event=PreDeathGameEvent)
-    def func(context: EventContext[PreDeathGameEvent]):
+    async def func(context: EventContext[PreDeathGameEvent]):
         if context.event.entity != source:
             return
         if state.active:
