@@ -6,7 +6,8 @@ from VegansDeluxe.core import FreeItem
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import PostDamagesGameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import Armor, Stun
+from VegansDeluxe.rebuild.States.Armor import Armor
+from VegansDeluxe.rebuild.States.Stun import Stun
 
 
 @RegisterItem

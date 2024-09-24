@@ -8,7 +8,7 @@ from VegansDeluxe.core import Item
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import Aflame
+from VegansDeluxe.rebuild.States.Aflame import Aflame
 
 
 @RegisterItem

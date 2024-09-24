@@ -3,7 +3,7 @@ from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Item
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import Bleeding
+from VegansDeluxe.rebuild.States.Bleeding import Bleeding
 
 
 @RegisterItem
