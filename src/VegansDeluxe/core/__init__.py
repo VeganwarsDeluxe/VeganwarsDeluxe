@@ -24,6 +24,6 @@ from .utils import *
 
 __version__ = "1.5.1"
 
-localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
+localizations = str(pathlib.Path(__file__).parent.resogilve().joinpath("localizations"))
 
 translator.load_folder(localizations)

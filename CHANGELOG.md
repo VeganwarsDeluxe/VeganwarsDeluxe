@@ -4,39 +4,16 @@ All notable changes to this project will be documented in this file.
 
 (unfortunately, i didn't start with conventional commits. you'll see what you see.)
 
-## [unreleased]
-
-### 🐛 Bug Fixes
-
-- Skip action was incorrectly handling events
-- Skip action was incorrectly handling events
-
 ## [1.5.1] - 2024-09-24
 
-### 🏷 Release
-
-- 1.4.7
-- 1.4.7
-
-### 🚀 Features
-
-- Changelog
-
 ### 🐛 Bug Fixes
 
 - Skip action was incorrectly handling events
-- Skip action was incorrectly handling events
+- *(dev)* Fix for inquisitor (#7)
 
 ### 🧩 Structure
 
 - Merged dev into master
-
-### Other
-
-- *(dev)* Fix for inquisitor (#7)
-- Merges pull request #3
-
-Merge dev
 
 ## [1.5.0] - 2024-09-24
 
@@ -85,8 +62,8 @@ Merge dev
 
 ### 🧩 Structure
 
-- Structure(session)!: moved session to the core module instead of core.Session module
-goatexchanger convinced me that Session should not be inherited by users. We don't need a separate module for it therefore.
+- Structure(session)!: moved session to the core module instead of core.Session module 
+- goatexchanger convinced me that Session should not be inherited by users. We don't need a separate module for it therefore.
 
 - *(engine)* [**breaking**] Moved session to the core module instead of core.Engine module
 - *(engine)* [**breaking**] Moved session to the core module instead of core.Engine module
@@ -107,17 +84,7 @@ goatexchanger convinced me that Session should not be inherited by users. We don
 
 ### 🧪 Testing
 
-- Testing autodoc
-
-- Testing autodoc
-
-- Testing autodoc
-
-- Testing autodoc
-
-- Testing doc
-
-- Testing doc
+- Testing docs
 
 
 ### Other
@@ -342,18 +309,6 @@ actually enabled docs
 
 
 ### Other
-
-- + no way: localization!
-
-- + no way: localization!
-
-- + no way: localization!
-
-- + no way: localization!
-
-- + no way: localization!
-
-- + no way: localization!
 
 - + no way: localization!
 
