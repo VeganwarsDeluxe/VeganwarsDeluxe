@@ -39,7 +39,7 @@ async def register(root_context: StateContext[Weaponsmith]):
 
     await session.event_manager.publish(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
 
-    @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question.id == weapon_choice.id])
+    @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question_id == weapon_choice.id])
     async def answer(context: EventContext[AnswerGameEvent]):
         chosen_weapon_index = int(context.event.choice_id)
         chosen_weapon = pool[chosen_weapon_index]

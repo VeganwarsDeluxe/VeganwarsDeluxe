@@ -19,8 +19,8 @@ class AnswerGameEvent(GameEvent):
     Published when entity sends a response to the question.
     """
 
-    def __init__(self, session_id, turn, entity_id, question: Question, choice_id: str):
+    def __init__(self, session_id, turn, entity_id, question_id: str, choice_id: str):
         super().__init__(session_id, turn)
         self.entity_id = entity_id
-        self.question = question
+        self.question_id = question_id
         self.choice_id = choice_id
