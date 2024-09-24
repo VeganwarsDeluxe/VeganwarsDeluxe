@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 (unfortunately, i didn't start with conventional commits. you'll see what you see.)
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- Skip action was incorrectly handling events
+
 ## [1.5.1] - 2024-09-24
 
 ### 🏷 Release
