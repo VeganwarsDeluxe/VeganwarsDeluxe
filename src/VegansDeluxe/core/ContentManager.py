@@ -140,7 +140,7 @@ class ContentManager:
             assignment.execute(action_manager)
 
     def register_event(self, session_id: str = None, event: type[Event] = Event, unique_type=None,
-                       priority=0, filters=None):
+                       priority=0, filters=None, subscription_id: str | None = None):
         """
         Works same as self.register_state, but more complicated. Adds an Assignment to be completed
         in Engine init.
@@ -157,7 +157,8 @@ class ContentManager:
                     return await callback(context)
 
                 event_manager.at_event(event=event, session_id=session_id, unique_type=unique_type,
-                                       priority=priority, filters=filters, callback_wrapper=callback_wrapper)
+                                       priority=priority, filters=filters, callback_wrapper=callback_wrapper,
+                                       subscription_id=subscription_id)
 
             desc = f"RegisterEvent Assignment for session[{session_id}], event[{event}]."
             self.add_assignment(Assignment(assignment, desc))
