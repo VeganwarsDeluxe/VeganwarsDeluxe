@@ -3,7 +3,7 @@ from typing import Type
 
 from VegansDeluxe.core.Events.EventHandlers import EventSubscription, ScheduledEventSubscription, SingleTurnSubscription
 from VegansDeluxe.core.Events.EventHandlers import HandlerType
-from VegansDeluxe.core.Events.Events import GameEvent, Event
+from VegansDeluxe.core.Events.Events import Event
 
 
 class EventManager:
@@ -23,8 +23,6 @@ class EventManager:
 
         self._subscriptions.sort(key=lambda h: h.priority)
         for subscription in self._subscriptions:
-            if isinstance(event, GameEvent) and event.session_id != subscription.session_id:
-                continue
             response = await subscription.handle(event)
             responses.append(response)
         return responses
@@ -38,10 +36,10 @@ class EventManager:
               turns: int,
               start: int = 1,
               event: Type[Event] = Event,
-              filters=None):
-
+              filters=None,
+              subscription_id=None):
         subscription = ScheduledEventSubscription(session_id, callback_wrapper, event, start=start, interval=turns,
-                                                  max_repeats=-1, filters=filters)
+                                                  max_repeats=-1, filters=filters, subscription_id=subscription_id)
         self.add_subscription(subscription)
 
     def at(self,
@@ -50,10 +48,10 @@ class EventManager:
            turn: int,
            event: Type[Event] = Event,
            priority: int = 0,
-           filters=None):
-
+           filters=None,
+           subscription_id=None):
         subscription = SingleTurnSubscription(session_id, callback_wrapper, event, turn=turn, priority=priority,
-                                              filters=filters)
+                                              filters=filters, subscription_id=subscription_id)
         self.add_subscription(subscription)
 
     def nearest(self,
@@ -61,10 +59,11 @@ class EventManager:
                 session_id: str,
                 event: Type[Event] = Event,
                 priority=0,
-                filters=None):
-
+                filters=None,
+                subscription_id=None
+                ):
         handler = EventSubscription(session_id, callback_wrapper, event, max_repeats=1, priority=priority,
-                                    filters=filters)
+                                    filters=filters, subscription_id=subscription_id)
         self.add_subscription(handler)
 
     def after(self,
@@ -73,10 +72,11 @@ class EventManager:
               turns: int,
               event: Type[Event] = Event,
               repeats: int = 1,
-              filters=None):
-
+              filters=None,
+              subscription_id=None
+              ):
         handler = EventSubscription(session_id, callback_wrapper, event, max_repeats=repeats, min_wait_turns=turns,
-                                    filters=filters)
+                                    filters=filters, subscription_id=subscription_id)
         self.add_subscription(handler)
 
     def at_event(self,
@@ -85,8 +85,10 @@ class EventManager:
                  event: Type[Event] = Event,
                  unique_type=None,
                  priority=0,
-                 filters=None):
-
+                 filters=None,
+                 subscription_id=None
+                 ):
         handler = EventSubscription(session_id, callback_wrapper, event,
-                                    unique_type=unique_type, priority=priority, filters=filters)
+                                    unique_type=unique_type, priority=priority, filters=filters,
+                                    subscription_id=subscription_id)
         self.add_subscription(handler)
