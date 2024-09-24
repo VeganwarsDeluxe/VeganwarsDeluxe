@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 (unfortunately, i didn't start with conventional commits. you'll see what you see.)
 
+## [1.5.1] - 2024-09-24
+
+### 🏷 Release
+
+- 1.4.7
+
+### 🐛 Bug Fixes
+
+- Skip action was incorrectly handling events
+- Skip action was incorrectly handling events
+
+### 🧩 Structure
+
+- Merged dev into master
+
+### Other
+
+- Merges pull request #3
+
+Merge dev
+
+## [1.4.7] - 2024-08-28
+
+### 🏷 Release
+
+- 1.4.7
+
+### 🚀 Features
+
+- Changelog
+
+### Other
+
+- *(dev)* Fix for inquisitor (#7)
+
 ## [1.5.0] - 2024-09-24
 
 ### 🏷 Release
@@ -220,7 +255,6 @@ actually enabled docs
 
 ### Other
 
-- ActionTag update!
 - Merge remote-tracking branch 'onedev/master'
 
 - Circular import hotfix
@@ -232,6 +266,7 @@ actually enabled docs
 
 ### Other
 
+- ActionTag update!
 - ActionTag update!
 
 ## [1.2.8] - 2024-05-30
