@@ -9,12 +9,18 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Skip action was incorrectly handling events
+- Skip action was incorrectly handling events
 
 ## [1.5.1] - 2024-09-24
 
 ### 🏷 Release
 
 - 1.4.7
+- 1.4.7
+
+### 🚀 Features
+
+- Changelog
 
 ### 🐛 Bug Fixes
 
@@ -27,23 +33,10 @@ All notable changes to this project will be documented in this file.
 
 ### Other
 
+- *(dev)* Fix for inquisitor (#7)
 - Merges pull request #3
 
 Merge dev
-
-## [1.4.7] - 2024-08-28
-
-### 🏷 Release
-
-- 1.4.7
-
-### 🚀 Features
-
-- Changelog
-
-### Other
-
-- *(dev)* Fix for inquisitor (#7)
 
 ## [1.5.0] - 2024-09-24
 
