@@ -24,7 +24,7 @@ async def register(root_context: StateContext[Zombie]):
             return
         if context.event.canceled:
             return
-        zombie = source.get_state(ZombieState.id)
+        zombie = source.get_state(ZombieState)
         if zombie.active:
             return
         if not zombie.active and zombie.deactivations > 0:

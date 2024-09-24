@@ -93,7 +93,7 @@ class Action:
         """
         return self.get_targets(self.source, self.target_type)
 
-    def get_targets(self, source: Entity, target_type: TargetType):
+    def get_targets(self, source: Entity, target_type: TargetType) -> list[Entity]:
         """
         Function that filters targets by TargetType filter relative to source.
         """

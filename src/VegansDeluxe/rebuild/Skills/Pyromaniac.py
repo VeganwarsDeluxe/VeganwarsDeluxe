@@ -35,9 +35,11 @@ async def register(root_context: StateContext[Pyromaniac]):
 def get_bonus(session: Session, source: Entity):
     bonus = 0
     for entity in session.entities:
+        entity: Entity
+
         if entity.is_ally(source):
             continue
-        aflame = entity.get_state(Aflame.id)
+        aflame = entity.get_state(Aflame)
         if aflame.flame:
             bonus += 1
     return bonus

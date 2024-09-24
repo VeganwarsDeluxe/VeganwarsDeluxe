@@ -4,6 +4,7 @@ from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
+from VegansDeluxe.rebuild import Stun
 
 
 @RegisterWeapon
@@ -24,7 +25,7 @@ class BaseballBatAttack(MeleeAttack):
             return damage
         if random.randint(0, 100) > 30:
             return
-        stun = target.get_state('stun')
+        stun = target.get_state(Stun)
         self.session.say(ls("rebuild.weapon.baseball_bat.effect").format(target.name))
         stun.stun += 2
         return damage

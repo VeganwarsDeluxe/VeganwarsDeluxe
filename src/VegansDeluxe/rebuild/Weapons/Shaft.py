@@ -5,6 +5,7 @@ from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
+from VegansDeluxe.rebuild.States.KnockDown import Knockdown
 
 
 @RegisterWeapon
@@ -49,5 +50,5 @@ class KnockDown(MeleeAttack):
             self.session.say(ls("rebuild.weapon.shaft.action_miss").format(source.name, target.name))
             return
         self.session.say(ls("rebuild.weapon.shaft.action.text").format(source.name, target.name))
-        state = target.get_state('knockdown')
+        state = target.get_state(Knockdown)
         state.active = True

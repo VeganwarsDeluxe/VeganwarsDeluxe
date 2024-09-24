@@ -4,6 +4,7 @@ from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
+from VegansDeluxe.rebuild import Aflame
 
 
 @RegisterWeapon
@@ -25,6 +26,6 @@ class TorchAttack(MeleeAttack):
         if not damage:
             return damage
         if random.randint(0, 100) > 50:
-            aflame = target.get_state('aflame')
+            aflame = target.get_state(Aflame)
             aflame.add_flame(self.session, target, source, 1)
         return damage

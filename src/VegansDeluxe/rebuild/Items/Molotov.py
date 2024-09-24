@@ -8,6 +8,7 @@ from VegansDeluxe.core import Item
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.rebuild import Aflame
 
 
 @RegisterItem
@@ -28,7 +29,7 @@ class MolotovAction(DecisiveItem):
 
         self.range = 2
 
-    async def func(self, source, target):
+    async def func(self, source: Entity, target: Entity):
         targets = []
         for _ in range(self.range):
             target_pool = list(filter(lambda t: t not in targets,
@@ -37,7 +38,9 @@ class MolotovAction(DecisiveItem):
             if not target_pool:
                 continue
             target = random.choice(target_pool)
-            aflame = target.get_state('aflame')
+            target: Entity
+
+            aflame = target.get_state(Aflame)
             aflame.add_flame(self.session, target, source, 1)
             targets.append(target)
         source.energy = max(source.energy - 2, 0)

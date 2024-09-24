@@ -108,7 +108,7 @@ class Pray(DecisiveStateAction):
 
             @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
             async def post_actions(actions_context: EventContext[PostDamagesGameEvent]):
-                target.get_state(Stun.id).stun += 1
+                target.get_state(Stun).stun += 1
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 

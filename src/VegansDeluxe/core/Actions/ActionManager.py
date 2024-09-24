@@ -1,15 +1,15 @@
 from typing import Union, Optional
 
-from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.Action import Action
+from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Actions.ItemAction import ItemAction
 from VegansDeluxe.core.Actions.StateAction import StateAction
 from VegansDeluxe.core.Actions.WeaponAction import WeaponAction
 from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.Events import PostUpdateActionsGameEvent, PreUpdateActionsGameEvent
 from VegansDeluxe.core.Items.Item import Item
-from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.Session import Session
+from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
 
@@ -18,7 +18,7 @@ ActionOwnerType = Union[type[Entity], type[Weapon], type[State], type[Item]]
 
 class ActionManager:
     """
-    Manages action queues for all active sessions,
+    Manages action queues for all active sessions.
     """
     def __init__(self, session_manager: SessionManager, action_map: dict[ActionOwnerType, list[type[Action]]]):
         self.session_manager = session_manager

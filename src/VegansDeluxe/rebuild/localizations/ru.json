@@ -32,8 +32,8 @@
   "rebuild.item.stimulator.effect": "{0}\uD83D\uDC89|{1} получает 2 хп. Остается {2} хп.",
 
   "rebuild.item.throwing_knife.name": "Метательный нож",
-  "rebuild.item.throwing_knife_name_percentage": "Метательный нож ({0}%)",
-  "rebuild.item.throwing_knife_name_miss": "\uD83D\uDCA8|{0} кидает метательный нож в {1}, но не попадает.",
+  "rebuild.item.throwing_knife_name.percentage": "Метательный нож ({0}%)",
+  "rebuild.item.throwing_knife_name.miss": "\uD83D\uDCA8|{0} кидает метательный нож в {1}, но не попадает.",
   "rebuild.item.throwing_knife.text": "\uD83D\uDD2A|{0} кидает метательный нож в {1}.\n❣\uFE0F|{1} истекает кровью!",
 
 

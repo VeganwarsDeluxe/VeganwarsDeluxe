@@ -32,8 +32,8 @@
   "rebuild.item.stimulator.effect": "{0}\uD83D\uDC89|{1} gains 2 HP. Remaining: {2} HP.",
 
   "rebuild.item.throwing_knife.name": "Throwing Knife",
-  "rebuild.item.throwing_knife_name_percentage": "Throwing Knife ({0}%)",
-  "rebuild.item.throwing_knife_name_miss": "\uD83D\uDCA8|{0} throws a throwing knife at {1}, but misses.",
+  "rebuild.item.throwing_knife_name.percentage": "Throwing Knife ({0}%)",
+  "rebuild.item.throwing_knife_name.miss": "\uD83D\uDCA8|{0} throws a throwing knife at {1}, but misses.",
   "rebuild.item.throwing_knife.text": "\uD83D\uDD2A|{0} throws a throwing knife at {1}.\n❣\uFE0F|{1} is bleeding!",
 
 

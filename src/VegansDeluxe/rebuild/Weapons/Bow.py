@@ -3,6 +3,7 @@ from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import RangedAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
+from VegansDeluxe.rebuild import Aflame
 
 
 @RegisterWeapon
@@ -50,5 +51,5 @@ class FireArrow(RangedAttack):
             ls("rebuild.weapon.bow.fire_arrow.text")
             .format(source.name, target.name)
         )
-        aflame = target.get_state('aflame')
+        aflame = target.get_state(Aflame)
         aflame.add_flame(self.session, target, source, 2)

@@ -3,6 +3,7 @@ from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Item
 from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.rebuild import Bleeding
 
 
 @RegisterItem
@@ -23,7 +24,7 @@ class ThrowingKnifeAction(DecisiveItem):
 
     @property
     def name(self):
-        return ls("rebuild.item.throwing_knife_name_percentage").format(self.hit_chance)
+        return ls("rebuild.item.throwing_knife_name.percentage").format(self.hit_chance)
 
     @property
     def hit_chance(self):
@@ -32,10 +33,10 @@ class ThrowingKnifeAction(DecisiveItem):
     async def func(self, source, target):
         source.energy -= 1
         if not percentage_chance(self.hit_chance):
-            self.session.say(ls("rebuild.item.throwing_knife_name_miss").format(source.name, target.name))
+            self.session.say(ls("rebuild.item.throwing_knife_name.miss").format(source.name, target.name))
             return
 
-        bleeding = target.get_state('bleeding')
+        bleeding = target.get_state(Bleeding)
         if bleeding.active:
             bleeding.bleeding -= 1
         bleeding.active = True

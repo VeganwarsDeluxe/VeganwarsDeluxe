@@ -23,7 +23,7 @@ class AxeAttack(MeleeAttack):
         damage = (await super().attack(source, target)).dealt
         if not damage:
             return damage
-        threshold = target.get_state(DamageThreshold.id)
+        threshold = target.get_state(DamageThreshold)
         self.session.say(ls("rebuild.weapon.axe.effect").format(target.name))
 
         threshold.threshold -= 1
