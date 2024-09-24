@@ -1,17 +1,19 @@
 # Configuration file for the Sphinx documentation builder.
 
-# -- Project information
-
 import os
 import sys
+
+# -- Project information
+from VegansDeluxe.core import __version__
+
 sys.path.insert(0, os.path.abspath("../../src"))
 
 project = 'VeganwarsDeluxe'
 copyright = '2024, VeganwarsDeluxe'
 author = 'Vezono'
 
-release = '1.4'
-version = '1.4.5'
+release = '1.5'
+version = __version__
 
 # -- General configuration
 
