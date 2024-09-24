@@ -1,7 +1,8 @@
-from VegansDeluxe.core import SessionManager, Session, Entity
+from VegansDeluxe.core import Session, Entity
 from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.ContentManager import content_manager
 from VegansDeluxe.core.Events.EventManager import EventManager
+from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.States import State
 
 
