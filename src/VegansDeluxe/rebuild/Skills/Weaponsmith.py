@@ -30,10 +30,12 @@ async def register(root_context: StateContext[Weaponsmith]):
     source = root_context.entity
 
     pool = []
+    weapon_pool = []
     weapon_choice = Question(text=ls("rebuild.skill.weaponsmith_choice.text"))
     for i in range(3):
         weapon = random.choice(root_context.state.weapon_pool)
         pool.append(weapon_choice)
+        weapon_pool.append(weapon)
         choice = Choice(choice_id=str(i), text=weapon.name)
         weapon_choice.choices.append(choice)
 
@@ -42,7 +44,7 @@ async def register(root_context: StateContext[Weaponsmith]):
     @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question_id == weapon_choice.id])
     async def answer(context: EventContext[AnswerGameEvent]):
         chosen_weapon_index = int(context.event.choice_id)
-        chosen_weapon = pool[chosen_weapon_index]
+        chosen_weapon = weapon_pool[chosen_weapon_index]
 
         root_context.state.other_weapon = chosen_weapon
 
