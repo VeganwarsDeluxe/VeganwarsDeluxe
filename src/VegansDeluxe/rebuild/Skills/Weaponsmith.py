@@ -9,7 +9,7 @@ from VegansDeluxe.core.Question.Question import Question
 from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent, AnswerGameEvent
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import all_weapons
+from VegansDeluxe.rebuild import all_weapons, Fist
 
 
 class Weaponsmith(Skill):
@@ -21,13 +21,15 @@ class Weaponsmith(Skill):
 
     def __init__(self):
         super().__init__()
-        self.other_weapon = None
+        self.other_weapon: Weapon
 
 
 @RegisterState(Weaponsmith)
 async def register(root_context: StateContext[Weaponsmith]):
     session: Session = root_context.session
     source = root_context.entity
+
+    root_context.state.other_weapon = Fist(session.id, source.id)
 
     pool = []
     weapon_pool: list[type[Weapon]] = []
