@@ -65,9 +65,9 @@ class SwitchWeapon(FreeStateAction):
         source.weapon = other_weapon
 
         @Next(self.session.id, event=DeliveryPackageEvent)
-        def delivery(context: EventContext[DeliveryPackageEvent]):
+        async def delivery(context: EventContext[DeliveryPackageEvent]):
             action_manager = context.action_manager
-            action_manager.update_entity_actions(self.session, source)
+            await action_manager.update_entity_actions(self.session, source)
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.session.say(ls("rebuild.skill.weaponsmith_action.text").format(source.name, other_weapon.name))
