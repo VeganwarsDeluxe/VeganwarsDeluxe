@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import RegisterState
+from VegansDeluxe.core import RegisterState, Weapon
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, FreeStateAction, \
     OwnOnly, Entity, DeliveryPackageEvent, DeliveryRequestEvent
@@ -30,7 +30,7 @@ async def register(root_context: StateContext[Weaponsmith]):
     source = root_context.entity
 
     pool = []
-    weapon_pool = []
+    weapon_pool: list[type[Weapon]] = []
     weapon_choice = Question(text=ls("rebuild.skill.weaponsmith_choice.text"))
     for i in range(3):
         weapon = random.choice(root_context.state.weapon_pool)
@@ -44,7 +44,7 @@ async def register(root_context: StateContext[Weaponsmith]):
     @Next(session.id, event=AnswerGameEvent, filters=[lambda e: e.question_id == weapon_choice.id])
     async def answer(context: EventContext[AnswerGameEvent]):
         chosen_weapon_index = int(context.event.choice_id)
-        chosen_weapon = weapon_pool[chosen_weapon_index]
+        chosen_weapon = weapon_pool[chosen_weapon_index](source.session_id, source.id)
 
         root_context.state.other_weapon = chosen_weapon
 
