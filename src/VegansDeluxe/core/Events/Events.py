@@ -1,8 +1,4 @@
-from typing import TypeVar
-
 from VegansDeluxe.core.States import State
-
-T = TypeVar("T")
 
 
 class Event:

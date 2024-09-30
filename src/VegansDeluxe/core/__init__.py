@@ -22,7 +22,7 @@ from .Translator.Translator import translator
 from .Weapons import *
 from .utils import *
 
-__version__ = "1.5.1.dev1"
+__version__ = "1.5.1.dev2"
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 
