@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 (unfortunately, i didn't start with conventional commits. you'll see what you see.)
 
+## [unreleased]
+
+### 🏷 Release
+
+- 1.4.7
+- 1.4.7
+- 1.5.2
+
+### 🚀 Features
+
+- Changelog
+- Subscriptions can be assigned IDs
+- AnswerGameEvent now contains question_id, not the Question object
+- *(weaponsmith)* Now other weapon is a Fist by default
+- Added a distinction between global and local event subscriptions
+
+### 🐛 Bug Fixes
+
+- Removed hurtful redundancy of validations during event handling
+- Weaponsmith avoided async migration
+- *(weaponsmith)* Weapon was being put in the wrong pool
+- *(weaponsmith)* Weapon was being incorrectly initialized
+
+### 🧩 Structure
+
+- Merged dev into master
+
+### 🧪 Testing
+
+- Introduced basic unit tests for the library
+
+### Other
+
+- *(dev)* Fix for inquisitor (#7)
+
 ## [1.5.0] - 2024-09-24
 
 ### 🏷 Release
@@ -220,7 +255,6 @@ actually enabled docs
 
 ### Other
 
-- ActionTag update!
 - Merge remote-tracking branch 'onedev/master'
 
 - Circular import hotfix
@@ -232,6 +266,7 @@ actually enabled docs
 
 ### Other
 
+- ActionTag update!
 - ActionTag update!
 
 ## [1.2.8] - 2024-05-30
