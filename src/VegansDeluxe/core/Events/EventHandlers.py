@@ -14,7 +14,10 @@ class EventSubscription:
                  min_wait_turns: int = 0,
                  unique_type: Any = None,
                  priority: int = 0,
-                 filters=None):
+                 filters=None,
+                 subscription_id=None):
+
+        self.subscription_id = subscription_id
 
         if filters is None:
             filters = []
@@ -44,9 +47,21 @@ class EventSubscription:
         return True
 
     def is_valid_event(self, event: Event) -> bool:
-        if isinstance(event, GameEvent) and event.session_id != self.session_id:
+        if isinstance(event, GameEvent) and not self.is_valid_session(event.session_id):
             return False
-        return isinstance(event, self.event_type) and event.unique_type == self.unique_type
+        return isinstance(event, self.event_type) and self.is_valid_unique_type(event.unique_type)
+
+    def is_valid_unique_type(self, unique_type):
+        if self.unique_type is None:
+            return True
+        else:
+            return self.unique_type == unique_type
+
+    def is_valid_session(self, session_id: str | None):
+        if self.session_id is None:
+            return True
+        else:
+            return session_id == self.session_id
 
     def is_valid_filter(self, message: Event) -> bool:
         return all(map(lambda f: f(message), self.filters))
@@ -66,8 +81,8 @@ class EventSubscription:
 
 
 class ConstantEventSubscription(EventSubscription):
-    def __init__(self, session_id: str, handler:  HandlerType):
-        super().__init__(session_id, handler, event=Event)
+    def __init__(self, session_id: str, handler:  HandlerType, subscription_id=None):
+        super().__init__(session_id, handler, event=Event, subscription_id=subscription_id)
 
 
 class ScheduledEventSubscription(EventSubscription):
@@ -80,10 +95,11 @@ class ScheduledEventSubscription(EventSubscription):
                  max_repeats: int = -1,
                  min_wait_turns: int = 0,
                  priority: int = 0,
-                 filters=None
+                 filters=None,
+                 subscription_id=None,
                  ):
         super().__init__(session_id, handler, event, max_repeats=max_repeats, min_wait_turns=min_wait_turns,
-                         priority=priority, filters=filters)
+                         priority=priority, filters=filters, subscription_id=subscription_id)
         self.start = start
         self.interval = interval
 
@@ -101,7 +117,7 @@ class ScheduledEventSubscription(EventSubscription):
 
 
 class SingleTurnSubscription(ScheduledEventSubscription):
-    def __init__(self, session_id: str, handler:  HandlerType, event: Type[Event], turn: int, priority: int = 0,
-                 filters=None):
+    def __init__(self, session_id: str, handler: HandlerType, event: Type[Event], turn: int, priority: int = 0,
+                 filters=None, subscription_id=None):
         super().__init__(session_id, handler, event, start=turn, interval=0, max_repeats=1, priority=priority,
-                         filters=filters)
+                         filters=filters, subscription_id=subscription_id)

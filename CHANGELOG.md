@@ -4,16 +4,40 @@ All notable changes to this project will be documented in this file.
 
 (unfortunately, i didn't start with conventional commits. you'll see what you see.)
 
-## [1.5.1] - 2024-09-24
+## [unreleased]
+
+### 🏷 Release
+
+- 1.4.7
+- 1.4.7
+- 1.5.2
+
+### 🚀 Features
+
+- Changelog
+- Subscriptions can be assigned IDs
+- AnswerGameEvent now contains question_id, not the Question object
+- *(weaponsmith)* Now other weapon is a Fist by default
+- Added a distinction between global and local event subscriptions
 
 ### 🐛 Bug Fixes
 
-- Skip action was incorrectly handling events
-- *(dev)* Fix for inquisitor (#7)
+- Removed hurtful redundancy of validations during event handling
+- Weaponsmith avoided async migration
+- *(weaponsmith)* Weapon was being put in the wrong pool
+- *(weaponsmith)* Weapon was being incorrectly initialized
 
 ### 🧩 Structure
 
 - Merged dev into master
+
+### 🧪 Testing
+
+- Introduced basic unit tests for the library
+
+### Other
+
+- *(dev)* Fix for inquisitor (#7)
 
 ## [1.5.0] - 2024-09-24
 
@@ -62,8 +86,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🧩 Structure
 
-- Structure(session)!: moved session to the core module instead of core.Session module 
-- goatexchanger convinced me that Session should not be inherited by users. We don't need a separate module for it therefore.
+- Structure(session)!: moved session to the core module instead of core.Session module
+goatexchanger convinced me that Session should not be inherited by users. We don't need a separate module for it therefore.
 
 - *(engine)* [**breaking**] Moved session to the core module instead of core.Engine module
 - *(engine)* [**breaking**] Moved session to the core module instead of core.Engine module
@@ -84,7 +108,17 @@ All notable changes to this project will be documented in this file.
 
 ### 🧪 Testing
 
-- Testing docs
+- Testing autodoc
+
+- Testing autodoc
+
+- Testing autodoc
+
+- Testing autodoc
+
+- Testing doc
+
+- Testing doc
 
 
 ### Other
@@ -309,6 +343,18 @@ actually enabled docs
 
 
 ### Other
+
+- + no way: localization!
+
+- + no way: localization!
+
+- + no way: localization!
+
+- + no way: localization!
+
+- + no way: localization!
+
+- + no way: localization!
 
 - + no way: localization!
 

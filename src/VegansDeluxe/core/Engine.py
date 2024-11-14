@@ -16,7 +16,6 @@ class Engine:
         self.session_manager: SessionManager = SessionManager(self.event_manager)
         self.action_manager: ActionManager = ActionManager(self.session_manager, action_map=content_manager.action_map)
 
-        content_manager.initialize_action_manager(self.action_manager)
         content_manager.attach_action_manager(self.action_manager)
 
     async def attach_session(self, session: Session):

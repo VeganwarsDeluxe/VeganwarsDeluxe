@@ -1,6 +1,5 @@
 .venv
 .idea
-test
 __pycache__
 docs/build
 

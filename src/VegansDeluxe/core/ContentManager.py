@@ -52,6 +52,8 @@ class ContentManager:
         self.items: dict[str, Item] = dict()
         """Map of Item classes to their IDs."""
 
+        self.add_assignment(Assignment(self.initialize_action_manager))
+
     def get_state(self, state_id: str) -> typing.Optional[State]:
         """
         Retrieve a state by its ID.
@@ -128,6 +130,7 @@ class ContentManager:
             action_manager.reset_removed_actions(context.session.id)
 
     def attach_action_manager(self, action_manager: ActionManager):
+        self.initialize_action_manager(action_manager)
         self.attached_action_managers.append(action_manager)
         for assignment in self.assignments:
             assignment.execute(action_manager)
@@ -136,18 +139,21 @@ class ContentManager:
 
     def add_assignment(self, assignment: Assignment):
         self.assignments.append(assignment)
+        self.propagate_assignment(assignment)
+
+    def propagate_assignment(self, assignment: Assignment):
         for action_manager in self.attached_action_managers:
             assignment.execute(action_manager)
 
     def register_event(self, session_id: str = None, event: type[Event] = Event, unique_type=None,
-                       priority=0, filters=None):
+                       priority=0, filters=None, subscription_id: str | None = None, add_assignment=False):
         """
         Works same as self.register_state, but more complicated. Adds an Assignment to be completed
         in Engine init.
         """
 
         def decorator_func(callback: typing.Callable):
-            def assignment(action_manager: ActionManager):
+            def assignment_func(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
@@ -157,10 +163,15 @@ class ContentManager:
                     return await callback(context)
 
                 event_manager.at_event(event=event, session_id=session_id, unique_type=unique_type,
-                                       priority=priority, filters=filters, callback_wrapper=callback_wrapper)
+                                       priority=priority, filters=filters, callback_wrapper=callback_wrapper,
+                                       subscription_id=subscription_id)
 
             desc = f"RegisterEvent Assignment for session[{session_id}], event[{event}]."
-            self.add_assignment(Assignment(assignment, desc))
+            assignment = Assignment(assignment_func, desc)
+            if add_assignment:
+                self.add_assignment(assignment)
+            else:
+                self.propagate_assignment(assignment)
 
         return decorator_func
 
@@ -202,9 +213,10 @@ class ContentManager:
 
         return decorator_func
 
-    def at(self, session_id: str, turn: int, event: type[Event] = Event, priority: int = 0, filters=None):
+    def at(self, session_id: str, turn: int, event: type[Event] = Event, priority: int = 0, filters=None,
+           add_assignment: bool = False):
         def decorator_func(callback: typing.Callable):
-            def assignment(action_manager: ActionManager):
+            def assignment_func(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
@@ -216,13 +228,17 @@ class ContentManager:
                 event_manager.at(callback_wrapper, session_id, turn, event, priority=priority, filters=filters)
 
             desc = f"At Assignment for session[{session_id}], unique_type[{event}]."
-            self.add_assignment(Assignment(assignment, desc))
+            assignment = Assignment(assignment_func, desc)
+            if add_assignment:
+                self.add_assignment(assignment)
+            else:
+                self.propagate_assignment(assignment)
 
         return decorator_func
 
-    def next(self, session_id: str, event: type[Event] = Event, priority=0, filters=None):
+    def next(self, session_id: str, event: type[Event] = Event, priority=0, filters=None, add_assignment: bool = False):
         def decorator_func(callback: typing.Callable):
-            def assignment(action_manager: ActionManager):
+            def assignment_func(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
@@ -234,13 +250,18 @@ class ContentManager:
                 event_manager.nearest(callback_wrapper, session_id, event=event, priority=priority, filters=filters)
 
             desc = f"Next Assignment for session[{session_id}], unique_type[{event}]."
-            self.add_assignment(Assignment(assignment, desc))
+            assignment = Assignment(assignment_func, desc)
+            if add_assignment:
+                self.add_assignment(assignment)
+            else:
+                self.propagate_assignment(assignment)
 
         return decorator_func
 
-    def every(self, session_id: str, turns: int, start: int = 1, event: type[Event] = Event, filters=None):
+    def every(self, session_id: str, turns: int, start: int = 1, event: type[Event] = Event, filters=None,
+              add_assignment: bool = False):
         def decorator_func(callback: typing.Callable):
-            def assignment(action_manager: ActionManager):
+            def assignment_func(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
@@ -252,13 +273,18 @@ class ContentManager:
                 event_manager.every(callback_wrapper, session_id, turns, start, event, filters)
 
             desc = f"Every Assignment for session[{session_id}], unique_type[{event}]."
-            self.add_assignment(Assignment(assignment, desc))
+            assignment = Assignment(assignment_func, desc)
+            if add_assignment:
+                self.add_assignment(assignment)
+            else:
+                self.propagate_assignment(assignment)
 
         return decorator_func
 
-    def after(self, session_id: str, turns: int, event: type[Event] = Event, repeats: int = 1, filters=None):
+    def after(self, session_id: str, turns: int, event: type[Event] = Event, repeats: int = 1, filters=None,
+              add_assignment: bool = False):
         def decorator_func(callback: typing.Callable):
-            def assignment(action_manager: ActionManager):
+            def assignment_func(action_manager: ActionManager):
                 session_manager = action_manager.session_manager
                 event_manager = session_manager.event_manager
 
@@ -271,7 +297,11 @@ class ContentManager:
                                     filters=filters, callback_wrapper=callback_wrapper)
 
             desc = f"After Assignment for session[{session_id}], unique_type[{event}]."
-            self.add_assignment(Assignment(assignment, desc))
+            assignment = Assignment(assignment_func, desc)
+            if add_assignment:
+                self.add_assignment(assignment)
+            else:
+                self.propagate_assignment(assignment)
 
         return decorator_func
 
@@ -307,13 +337,17 @@ class ContentManager:
 
 
 content_manager = ContentManager()
+# Content handlers
 AttachedAction = content_manager.register_action
 RegisterState = content_manager.register_state
+RegisterWeapon = content_manager.register_weapon
+RegisterItem = content_manager.register_item
+
+# Both
 RegisterEvent = content_manager.register_event
 At = content_manager.at
 Next = content_manager.next
 Every = content_manager.every
 After = content_manager.after
 
-RegisterWeapon = content_manager.register_weapon
-RegisterItem = content_manager.register_item
+
