@@ -45,7 +45,7 @@ class RageSerumAction(FreeItem):
                     break
 
             if not attack:
-                self.session.say(ls("rebuild.item.rage_serum_sneeze").format(target.name))
+                self.session.say(ls("rebuild.item.rage_serum.sneeze").format(target.name))
                 return
             attack.target = random.choice(attack.targets) if attack.targets else target
             await attack.execute()

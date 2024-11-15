@@ -1,6 +1,7 @@
 .venv
 .idea
 __pycache__
+work
 docs/build
 
 WeaponsLegacy.py

@@ -33,7 +33,7 @@ async def register(root_context: StateContext[Weaponsmith]):
 
     pool = []
     weapon_pool: list[type[Weapon]] = []
-    weapon_choice = Question(text=ls("rebuild.skill.weaponsmith_choice.text"))
+    weapon_choice = Question(text=ls("rebuild.skill.weaponsmith.choice.text"))
     for i in range(3):
         weapon = random.choice(root_context.state.weapon_pool)
         pool.append(weapon_choice)
