@@ -15,6 +15,9 @@ classifiers = [
 
     "Topic :: Games/Entertainment :: Turn Based Strategy"
 ]
+dependencies = [
+    "jproperties == 2.1.2",
+]
 authors = [
   {name = "Vezono", email = "vezono@gts.org.ua"}
 ]
