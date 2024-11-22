@@ -1,7 +1,4 @@
-version: 27
-imports:
-- projectPath: public/ci-templates
-  revision: master
+version: 37
 jobs:
 - name: push-to-github
   steps:
