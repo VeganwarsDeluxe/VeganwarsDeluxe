@@ -1,2 +1,4 @@
 include src/VegansDeluxe/core/localizations/*.json
 include src/VegansDeluxe/rebuild/localizations/*.json
+include src/VegansDeluxe/core/localizations/*.properties
+include src/VegansDeluxe/rebuild/localizations/*.properties

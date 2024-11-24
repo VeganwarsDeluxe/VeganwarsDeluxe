@@ -1,6 +1,8 @@
 import json
 import os
 
+from jproperties import Properties
+
 from VegansDeluxe.core.Translator.Locale import Locale
 
 
@@ -33,8 +35,21 @@ class Translator:
         files = os.listdir(folder_path)
 
         for file in files:
-            code = file.split(".json", 1)[0]
-            self.load_json(code, f"{folder_path}/{file}")
+            if file.endswith(".json"):
+                code = file.split(".json", 1)[0]
+                self.load_json(code, f"{folder_path}/{file}")
+            elif file.endswith(".properties"):
+                code = file.split(".properties", 1)[0].split("locale_", 1)[1]
+                self.load_properties(code, f"{folder_path}/{file}")
+
+    def load_properties(self, code: str, filepath: str):
+        properties = Properties()
+        with open(filepath, "r", encoding="utf-8") as file:
+            properties.load(file.read(), encoding="utf-8")
+
+        # Access values
+        data = {key: value.data for key, value in properties.items()}
+        self.update_locale(code, data)
 
     def load_json(self, code: str, filepath: str):
         file = open(filepath, "r", encoding="utf-8")

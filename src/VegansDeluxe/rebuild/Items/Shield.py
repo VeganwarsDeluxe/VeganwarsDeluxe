@@ -25,7 +25,7 @@ class ShieldAction(DecisiveItem):
         if target == source:
             self.session.say(ls("rebuild.item.shield.text").format(source.name))
         else:
-            self.session.say(ls("rebuild.item.shield_text_targeted").format(source.name, target.name))
+            self.session.say(ls("rebuild.item.shield.text_targeted").format(source.name, target.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
         async def shield_block(context: EventContext[PostDamageGameEvent]):

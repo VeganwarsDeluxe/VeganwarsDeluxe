@@ -37,4 +37,4 @@ class ChitinAction(FreeItem):
         async def chitin_knockout(context: EventContext[PostDamagesGameEvent]):
             target.get_state(Armor).remove((2, 100))
             target.get_state(Stun).stun += 1
-            self.session.say(ls("rebuild.item.chitin_wear_off").format(target.name))
+            self.session.say(ls("rebuild.item.chitin.wear_off").format(target.name))

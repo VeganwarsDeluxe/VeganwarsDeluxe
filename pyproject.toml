@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools >= 61.0", "jproperties == 2.1.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -14,6 +14,9 @@ classifiers = [
     "Development Status :: 3 - Alpha",
 
     "Topic :: Games/Entertainment :: Turn Based Strategy"
+]
+dependencies = [
+    "jproperties == 2.1.2",
 ]
 authors = [
   {name = "Vezono", email = "vezono@gts.org.ua"}
