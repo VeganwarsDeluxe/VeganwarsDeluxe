@@ -19,6 +19,7 @@ from VegansDeluxe.rebuild.Skills.Alchemist import Alchemist
 from VegansDeluxe.rebuild.Skills.Berserk import Berserk
 from VegansDeluxe.rebuild.Skills.Biceps import Biceps
 from VegansDeluxe.rebuild.Skills.DoubleVein import DoubleVein
+from VegansDeluxe.rebuild.Skills.GasMask import GasMask
 from VegansDeluxe.rebuild.Skills.Inquisitor import Inquisitor
 from VegansDeluxe.rebuild.Skills.Junkie import Junkie
 from VegansDeluxe.rebuild.Skills.Medic import Medic
@@ -39,9 +40,9 @@ from VegansDeluxe.rebuild.States.Armor import Armor
 from VegansDeluxe.rebuild.States.Bleeding import Bleeding
 from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 from VegansDeluxe.rebuild.States.Dodge import Dodge
+from VegansDeluxe.rebuild.States.DroppedWeapon import DroppedWeapon
 from VegansDeluxe.rebuild.States.Injury import Injury
 from VegansDeluxe.rebuild.States.KnockDown import Knockdown
-from VegansDeluxe.rebuild.States.KnockedWeapon import KnockedWeapon
 from VegansDeluxe.rebuild.States.Stun import Stun
 from VegansDeluxe.rebuild.States.Zombie import ZombieState
 from VegansDeluxe.rebuild.Weapons.Axe import Axe
@@ -65,14 +66,15 @@ from VegansDeluxe.rebuild.Weapons.Saw import Saw
 from VegansDeluxe.rebuild.Weapons.SawedOffShotgun import SawedOffShotgun
 from VegansDeluxe.rebuild.Weapons.Shaft import Shaft
 from VegansDeluxe.rebuild.Weapons.Shotgun import Shotgun
+from VegansDeluxe.rebuild.Weapons.Spear import Spear
 from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
-all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, KnockedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
+all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, DroppedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
 all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
-              Berserk, Junkie, Ninja, Necromancer, Sadist, Scope, Inquisitor, Visor, Zombie, Pyromaniac]
+              Berserk, Junkie, Ninja, Necromancer, Sadist, Scope, Inquisitor, Visor, Zombie, Pyromaniac, GasMask]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shaft, Saw, Mace, Molot,
-               Police, Saber, Bow]
+               Police, Saber, Bow, Spear]
 all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Chitin, Jet, Shield, RageSerum]
 
 game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Chitin]

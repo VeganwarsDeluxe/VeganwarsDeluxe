@@ -60,10 +60,10 @@ VegansDeluxe.rebuild.States.KnockDown module
    :undoc-members:
    :show-inheritance:
 
-VegansDeluxe.rebuild.States.KnockedWeapon module
+VegansDeluxe.rebuild.States.DroppedWeapon module
 ------------------------------------------------
 
-.. automodule:: VegansDeluxe.rebuild.States.KnockedWeapon
+.. automodule:: VegansDeluxe.rebuild.States.DroppedWeapon
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,4 +1,4 @@
-from VegansDeluxe.core.Actions.Action import Action
+from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction, InstantAction
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.States import State
@@ -10,13 +10,14 @@ class StateAction(Action):
         self.state = state
 
 
-class FreeStateAction(StateAction):
-    @property
-    def cost(self):
-        return False
+class FreeStateAction(StateAction, FreeAction):
+    pass
 
 
-class DecisiveStateAction(StateAction):
-    @property
-    def cost(self):
-        return True
+class DecisiveStateAction(StateAction, DecisiveAction):
+    pass
+
+
+class InstantStateAction(StateAction, InstantAction):
+    pass
+

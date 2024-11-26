@@ -7,6 +7,7 @@ from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import PostDamageGameEvent
 from VegansDeluxe.core import Session
+from VegansDeluxe.core.Actions.Action import filter_targets
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -35,7 +36,7 @@ class GrenadeAction(DecisiveItem):
         targets = []
         for _ in range(self.range):
             target_pool = list(filter(lambda t: t not in targets,
-                                      self.get_targets(source, Enemies())
+                                      filter_targets(source, Enemies(), self.session.entities)
                                       ))
             if not target_pool:
                 continue

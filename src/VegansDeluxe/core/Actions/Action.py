@@ -62,11 +62,13 @@ class Action:
         return await self.func(self.source, self.target)
 
     @property
-    def cost(self):
+    def cost(self) -> int:
         """
-        True if player's turn should be finalized after selecting this action, otherwise False.
+        1 if player's turn should be finalized after selecting this action
+        0 if player may choose more actions after selecting this one
+        -1 if selected action is executed instantly, and player may select more
         """
-        return None
+        return 1
 
     @property
     def hidden(self) -> bool:
@@ -91,34 +93,31 @@ class Action:
         """
         Targets applicable by this Action.
         """
-        return self.get_targets(self.source, self.target_type)
+        return filter_targets(self.source, self.target_type, self.session.entities)
 
-    def get_targets(self, source: Entity, target_type: TargetType) -> list[Entity]:
-        """
-        Function that filters targets by TargetType filter relative to source.
-        """
-        target_pool = self.session.entities
-        targets = []
 
-        for target in target_pool:
-            conditions = [
-                not (target_type.own == Own.SELF_ONLY and target != source),
-                not (target_type.own == Own.SELF_EXCLUDED and target == source),
+def filter_targets(source: Entity, target_type: TargetType, entity_pool: list[Entity]):
+    targets = []
 
-                not (target_type.aliveness == Aliveness.ALIVE_ONLY and target.dead),
-                not (target_type.aliveness == Aliveness.DEAD_ONLY and not target.dead),
+    for target in entity_pool:
+        conditions = [
+            not (target_type.own == Own.SELF_ONLY and target != source),
+            not (target_type.own == Own.SELF_EXCLUDED and target == source),
 
-                not (target_type.team == Team.ALLIES_ONLY and not source.is_ally(target)),
-                not (target_type.team == Team.ENEMIES_ONLY and source.is_ally(target)),
+            not (target_type.aliveness == Aliveness.ALIVE_ONLY and target.dead),
+            not (target_type.aliveness == Aliveness.DEAD_ONLY and not target.dead),
 
-                not (target_type.distance == Distance.NEARBY_ONLY and target not in source.nearby_entities),
-                not (target_type.distance == Distance.DISTANT_ONLY and target in source.nearby_entities)
-            ]
+            not (target_type.team == Team.ALLIES_ONLY and not source.is_ally(target)),
+            not (target_type.team == Team.ENEMIES_ONLY and source.is_ally(target)),
 
-            if all(conditions):
-                targets.append(target)
+            not (target_type.distance == Distance.NEARBY_ONLY and target not in source.nearby_entities),
+            not (target_type.distance == Distance.DISTANT_ONLY and target in source.nearby_entities)
+        ]
 
-        return targets
+        if all(conditions):
+            targets.append(target)
+
+    return targets
 
 
 class DecisiveAction(Action):
@@ -127,7 +126,7 @@ class DecisiveAction(Action):
     """
     @property
     def cost(self):
-        return True
+        return 1
 
 
 class FreeAction(Action):
@@ -136,4 +135,13 @@ class FreeAction(Action):
     """
     @property
     def cost(self):
-        return False
+        return 0
+
+
+class InstantAction(Action):
+    """
+    Action that is executed instantly after selection.
+    """
+    @property
+    def cost(self):
+        return -1

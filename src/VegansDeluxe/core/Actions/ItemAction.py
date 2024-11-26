@@ -1,4 +1,4 @@
-from VegansDeluxe.core.Actions.Action import Action
+from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction, InstantAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Items.Item import Item
@@ -17,13 +17,13 @@ class ItemAction(Action):
         self.type = 'item'
 
 
-class FreeItem(ItemAction):
-    @property
-    def cost(self):
-        return False
+class FreeItem(ItemAction, FreeAction):
+    pass
 
 
-class DecisiveItem(ItemAction):
-    @property
-    def cost(self):
-        return True
+class DecisiveItem(ItemAction, DecisiveAction):
+    pass
+
+
+class InstantItem(ItemAction, InstantAction):
+    pass

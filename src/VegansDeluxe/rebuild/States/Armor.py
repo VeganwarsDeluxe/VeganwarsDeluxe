@@ -13,7 +13,14 @@ class Armor(State):
 
     def __init__(self):
         super().__init__()
-        self.armor = []
+        self.armor: list[tuple[int, int]] = []
+
+    @property
+    def armor_sum(self) -> int:
+        armor_sum = 0
+        for armor, chance in self.armor:
+            armor_sum += armor * (chance/100)
+        return armor_sum
 
     def negate_damage(self, session: Session, source: Entity, message: PostDamageGameEvent):
         if not message.damage:

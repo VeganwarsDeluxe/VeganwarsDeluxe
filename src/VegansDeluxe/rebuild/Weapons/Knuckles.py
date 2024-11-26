@@ -29,7 +29,7 @@ class KnucklesAttack(MeleeAttack):
             return damage
 
         @Next(self.session.id, event=PreDamagesGameEvent)
-        def pre_damages(context: EventContext[PreDamagesGameEvent]):
+        async def pre_damages(context: EventContext[PreDamagesGameEvent]):
             reloading = False
             for action in context.action_manager.get_queued_entity_actions(self.session, target):
                 if ActionTag.RELOAD in action.tags:

@@ -1,16 +1,15 @@
-from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Enemies, Distance
+from VegansDeluxe.core import Entity
+from VegansDeluxe.core import MeleeAttack, ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
 
 @RegisterWeapon
-class Kuvalda(MeleeWeapon):
-    id = 'kuvalda'
-    name = 'Кувалда'
-    description = 'Ближний бой, урон 1-3. Способность: Вы можете сокрушить цель, ' \
-                  'нанося ей (1 + потраченная энергия цели) урона и затрачивая 4 энергии.'
+class Sledgehammer(MeleeWeapon):
+    id = 'sledgehammer'
+    name = ls("rebuild.weapon.sledgehammer.name")
+    description = ls("rebuild.weapon.sledgehammer.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -22,15 +21,15 @@ class Kuvalda(MeleeWeapon):
         self.cooldown_turn = 0
 
 
-@AttachedAction(Kuvalda)
-class KuvaldaAttack(MeleeAttack):
+@AttachedAction(Sledgehammer)
+class SledgehammerAttack(MeleeAttack):
     pass
 
 
-@AttachedAction(Kuvalda)
-class KuvaldaCrush(MeleeAttack):
+@AttachedAction(Sledgehammer)
+class SledgehammerCrush(MeleeAttack):
     id = 'crush'
-    name = 'Сокрушить'
+    name = ls("rebuild.weapon.sledgehammer.action.name")
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
 
     @property

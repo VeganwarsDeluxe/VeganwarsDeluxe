@@ -1,9 +1,10 @@
 import random
 
-from VegansDeluxe.core import RegisterState, Weapon
+from VegansDeluxe.core import RegisterState, Weapon, PreActionsGameEvent
 from VegansDeluxe.core import Session
-from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, FreeStateAction, \
-    OwnOnly, Entity, DeliveryPackageEvent, DeliveryRequestEvent
+from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, OwnOnly, Entity, DeliveryPackageEvent, \
+    DeliveryRequestEvent
+from VegansDeluxe.core.Actions.StateAction import InstantStateAction
 from VegansDeluxe.core.Question.Choice import Choice
 from VegansDeluxe.core.Question.Question import Question
 from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent, AnswerGameEvent
@@ -22,6 +23,7 @@ class Weaponsmith(Skill):
     def __init__(self):
         super().__init__()
         self.other_weapon: Weapon
+        self.last_switch_turn = -1
 
 
 @RegisterState(Weaponsmith)
@@ -35,7 +37,10 @@ async def register(root_context: StateContext[Weaponsmith]):
     weapon_pool: list[type[Weapon]] = []
     weapon_choice = Question(text=ls("rebuild.skill.weaponsmith.choice.text"))
     for i in range(3):
-        weapon = random.choice(root_context.state.weapon_pool)
+        choice_pool = [w for w in root_context.state.weapon_pool if w not in pool]
+        if not choice_pool:
+            continue
+        weapon = random.choice(choice_pool)
         pool.append(weapon_choice)
         weapon_pool.append(weapon)
         choice = Choice(choice_id=str(i), text=weapon.name)
@@ -52,15 +57,18 @@ async def register(root_context: StateContext[Weaponsmith]):
 
 
 @AttachedAction(Weaponsmith)
-class SwitchWeapon(FreeStateAction):
+class SwitchWeapon(InstantStateAction):
     id = 'switch_weapon'
-    name = ls("rebuild.skill.weaponsmith_action.name")
-    priority = -3
+    name = ls("rebuild.skill.weaponsmith.action.name")
     target_type = OwnOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Weaponsmith):
         super().__init__(session, source, skill)
         self.state = skill
+
+    @property
+    def hidden(self) -> bool:
+        return self.state.last_switch_turn == self.session.turn
 
     async def func(self, source: Entity, target: Entity):
         other_weapon = self.state.other_weapon
@@ -74,4 +82,8 @@ class SwitchWeapon(FreeStateAction):
             await action_manager.update_entity_actions(self.session, source)
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
-        self.session.say(ls("rebuild.skill.weaponsmith_action.text").format(source.name, other_weapon.name))
+        @Next(self.session.id, event=PreActionsGameEvent, priority=-10)
+        async def answer(context: EventContext[AnswerGameEvent]):
+            self.session.say(ls("rebuild.skill.weaponsmith.action.text").format(source.name, other_weapon.name))
+
+

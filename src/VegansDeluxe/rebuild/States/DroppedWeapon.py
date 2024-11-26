@@ -7,8 +7,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.Weapons.Fist import Fist
 
 
-class KnockedWeapon(State):
-    id = 'knocked-weapon'
+class DroppedWeapon(State):
+    id = 'dropped-weapon'
 
     def __init__(self):
         super().__init__()
@@ -21,15 +21,16 @@ class KnockedWeapon(State):
 
     def pick_up_weapon(self, source: Entity):
         source.weapon = self.weapon
+        self.weapon = None
 
 
-@AttachedAction(KnockedWeapon)
+@AttachedAction(DroppedWeapon)
 class PickUp(DecisiveStateAction):
     id = 'pick_up'
-    name = ls("rebuild.state.knocked_weapon.name")
+    name = ls("rebuild.state.dropped_weapon.name")
     target_type = OwnOnly()
 
-    def __init__(self, session: Session, source: Entity, skill: KnockedWeapon):
+    def __init__(self, session: Session, source: Entity, skill: DroppedWeapon):
         super().__init__(session, source, skill)
         self.state = skill
 
@@ -39,5 +40,5 @@ class PickUp(DecisiveStateAction):
 
     async def func(self, source, target):
         source.weapon = self.state.weapon
-        self.session.say(ls("rebuild.state.knocked_weapon.text").format(source.name))
+        self.session.say(ls("rebuild.state.dropped_weapon.text").format(source.name))
         self.state.weapon = None

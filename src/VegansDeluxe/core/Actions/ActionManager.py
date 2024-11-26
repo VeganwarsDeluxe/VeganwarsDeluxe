@@ -199,7 +199,7 @@ class ActionManager:
         """
         self.action_queue.append(action)
         action.queued = True
-        return not action.cost
+        return action.cost != 1
 
     def get_action_from_all_actions(self, action_id: str) -> Optional[tuple[type[ActionOwnerType], type[Action]]]:
         for action_owner in self.action_map:

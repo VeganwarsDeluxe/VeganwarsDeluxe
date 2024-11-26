@@ -51,7 +51,7 @@ class Parry(DecisiveWeaponAction):
         self.session.say(ls("rebuild.weapon.saber.action.text").format(source.name))
 
         @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
-        def parry(context: EventContext[PostAttackGameEvent]):
+        async def parry(context: EventContext[PostAttackGameEvent]):
             if target != context.event.source:
                 return
             if context.event.target != source:

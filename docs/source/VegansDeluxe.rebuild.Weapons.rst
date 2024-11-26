@@ -84,10 +84,10 @@ VegansDeluxe.rebuild.Weapons.Knuckles module
    :undoc-members:
    :show-inheritance:
 
-VegansDeluxe.rebuild.Weapons.Kuvalda module
+VegansDeluxe.rebuild.Weapons.Sledgehammer module
 -------------------------------------------
 
-.. automodule:: VegansDeluxe.rebuild.Weapons.Kuvalda
+.. automodule:: VegansDeluxe.rebuild.Weapons.Sledgehammer
    :members:
    :undoc-members:
    :show-inheritance:

@@ -631,7 +631,7 @@ Feature/action manager
 
 - + more minor fixes
 
-- + kuvalda
+- + sledgehammer
 
 - + static stats for weapons
 
