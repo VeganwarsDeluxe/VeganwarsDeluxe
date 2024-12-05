@@ -16,7 +16,7 @@ class FlashGrenadeAction(DecisiveItem):
     id = 'flash_grenade'
     name = ls("rebuild.item.flash_grenade.name")
     target_type = Enemies()
-    priority = -1
+    priority = -2
 
     def __init__(self, *args):
         super().__init__(*args)

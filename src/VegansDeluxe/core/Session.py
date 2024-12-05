@@ -50,6 +50,17 @@ class Session[T: Entity]:
         """
         return {entity.team for entity in self.alive_entities}
 
+    def get_team(self, team: str | None) -> list[T]:
+        """
+
+        Args:
+            team: team which entities belong to
+
+        Returns: list of Entities with in team
+
+        """
+        return [entity for entity in self.entities if entity.team == team]
+
     def tick(self):
         for entity in self.entities:
             entity.tick_turn()
