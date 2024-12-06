@@ -43,8 +43,9 @@ async def register(root_context: StateContext[Weaponsmith]):
         weapon = random.choice(choice_pool)
         pool.append(weapon_choice)
         weapon_pool.append(weapon)
-        choice = Choice(choice_id=str(i), text=weapon.name)
-        weapon_choice.choices.append(choice)
+        choice = Choice(choice_id=str(i), text=weapon.name,
+                        result_text=ls("rebuild.skill.weaponsmith.choice.result_text").format(weapon.name))
+        weapon_choice.add_choice(choice)
 
     await session.event_manager.publish(QuestionGameEvent(session.id, session.turn, source.id, weapon_choice))
 
