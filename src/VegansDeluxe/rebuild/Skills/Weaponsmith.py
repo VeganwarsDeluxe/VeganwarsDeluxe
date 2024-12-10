@@ -22,7 +22,7 @@ class Weaponsmith(Skill):
 
     def __init__(self):
         super().__init__()
-        self.other_weapon: Weapon
+        self.other_weapon: Weapon = None
         self.last_switch_turn = -1
 
 
@@ -73,6 +73,8 @@ class SwitchWeapon(InstantStateAction):
 
     async def func(self, source: Entity, target: Entity):
         other_weapon = self.state.other_weapon
+        if not other_weapon:
+            return
 
         self.state.other_weapon = source.weapon
         source.weapon = other_weapon
