@@ -2,8 +2,8 @@ from VegansDeluxe.core import Session, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import ls, RegisterState
 from VegansDeluxe.core.Skills.Skill import Skill
-from VegansDeluxe.rebuild import Aflame
 from VegansDeluxe.rebuild.Items.FlashGrenade import FlashGrenadeAttemptEvent
+from VegansDeluxe.rebuild.States.Aflame import Aflame
 
 
 class GasMask(Skill):
