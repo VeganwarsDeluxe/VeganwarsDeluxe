@@ -13,14 +13,15 @@ class Aflame(State):
 
     def __init__(self):
         super().__init__()
+        self.timer = 0
         self.flame = 0
         self.dealer = None
         self.extinguished = False
 
-        self.timer = 0
+        self.burn_time = 2
 
     def add_flame(self, session, entity, dealer, flame):
-        self.timer = 2
+        self.timer = self.burn_time
         self.extinguished = False
         if self.flame == 0:
             session.say(ls("rebuild.state.aflame.activate").format(entity.name))

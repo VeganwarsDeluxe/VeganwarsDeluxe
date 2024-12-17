@@ -2,6 +2,7 @@ from VegansDeluxe.core import Session, RegisterEvent
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import ls, RegisterState
 from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.rebuild import Aflame
 from VegansDeluxe.rebuild.Items.FlashGrenade import FlashGrenadeAttemptEvent
 
 
@@ -15,6 +16,8 @@ class GasMask(Skill):
 async def register(root_context: StateContext[GasMask]):
     session: Session = root_context.session
     source = root_context.entity
+
+    source.get_state(Aflame).burn_time -= 1
 
     source.max_energy += 1
     source.energy += 1
