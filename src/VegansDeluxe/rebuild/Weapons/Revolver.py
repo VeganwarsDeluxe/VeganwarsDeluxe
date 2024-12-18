@@ -19,8 +19,8 @@ class Revolver(RangedWeapon):
 
 @AttachedAction(Revolver)
 class RevolverAttack(RangedAttack):
-    def calculate_damage(self, source, target):
-        damage = super().calculate_damage(source, target)
+    def calculate_damage(self, *args):
+        damage = super().calculate_damage(*args)
         return damage if not damage else 3
 
 

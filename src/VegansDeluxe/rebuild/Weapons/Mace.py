@@ -29,11 +29,11 @@ class MaceAttack(MeleeAttack):
         super().__init__(session, source, weapon)
         self.weapon: Mace = weapon
 
-    def calculate_damage(self, source: Entity, target: Entity) -> int:
+    def calculate_damage(self, source: Entity, target: Entity, *args) -> int:
         """
         Calculates the damage dealt to the target, with bonus damage for consecutive attacks on the same target.
         """
-        damage = super().calculate_damage(source, target)
+        damage = super().calculate_damage(source, target, *args)
         if not damage:
             return damage
         consecutive_target, bonus = self.weapon.consecutive_target

@@ -18,8 +18,8 @@ class Flamethrower(RangedWeapon):
 
 @AttachedAction(Flamethrower)
 class FlamethrowerAttack(RangedAttack):
-    def calculate_damage(self, source, target):
-        damage = super().calculate_damage(source, target)
+    def calculate_damage(self, *args):
+        damage = super().calculate_damage(*args)
         if damage:
             return 1
 

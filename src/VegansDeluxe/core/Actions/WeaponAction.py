@@ -1,5 +1,6 @@
 import math
 import random
+from typing import Optional
 
 from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
@@ -44,8 +45,10 @@ class Attack(DecisiveWeaponAction):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ATTACK_TEXT = ls("core.base_attack.text_ranged") if self.weapon.ranged else ls("core.base_attack.text_melee")
-        self.ATTACK_EMOJI = ls("core.base_attack.emoji_ranged") if self.weapon.ranged else ls("core.base_attack.emoji_melee")
+        self.ATTACK_TEXT = ls("core.base_attack.text_ranged") \
+            if self.weapon.ranged else ls("core.base_attack.text_melee")
+        self.ATTACK_EMOJI = ls("core.base_attack.emoji_ranged") \
+            if self.weapon.ranged else ls("core.base_attack.emoji_melee")
         self.ATTACK_MESSAGE = ls("core.base_attack.hit")
         self.MISS_MESSAGE = ls("core.base_attack.miss")
         self.SELF_TARGET_NAME = ls("core.self_target_name")
@@ -55,13 +58,15 @@ class Attack(DecisiveWeaponAction):
     async def func(self, source, target):
         return await self.attack(source, target)
 
-    def calculate_damage(self, source: Entity, target: Entity) -> int:
+    def calculate_damage(self, source: Entity, target: Entity, energy: Optional[int] = None) -> int:
         """
-        Calculate the damage based on weapon's damage bonus and accuracy
+        Calculate the damage based on weapon's damage bonus and accuracy.
         """
-        if source.energy <= 0:
+        if energy is None:
+            energy = source.energy
+        if energy <= 0:
             return 0
-        total_accuracy = (source.energy + self.weapon.accuracy_bonus + target.inbound_accuracy_bonus
+        total_accuracy = (energy + self.weapon.accuracy_bonus + target.inbound_accuracy_bonus
                           + source.outbound_accuracy_bonus)
         damage = sum(1 for _ in range(self.weapon.cubes) if random.randint(1, 10) <= total_accuracy)
         if total_accuracy > 10:

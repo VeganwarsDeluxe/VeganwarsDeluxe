@@ -28,8 +28,8 @@ class HatchetAttack(MeleeAttack):
         super().__init__(session, source, weapon)
         self.weapon: Hatchet = weapon
 
-    def calculate_damage(self, source, target):
-        damage = super().calculate_damage(source, target)
+    def calculate_damage(self, *args):
+        damage = super().calculate_damage(*args)
         if not damage:
             return
         return damage + self.weapon.hatchet_bonus

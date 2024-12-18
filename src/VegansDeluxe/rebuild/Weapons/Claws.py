@@ -34,7 +34,8 @@ class SwitchClaws(FreeWeaponAction):
 
     @property
     def name(self):
-        return ls("rebuild.weapon.claws.enable.name") if not self.weapon.claws else ls("rebuild.weapon.claws.disable.name")
+        return ls("rebuild.weapon.claws.enable.name") \
+            if not self.weapon.claws else ls("rebuild.weapon.claws.disable.name")
 
     async def func(self, source, target):
         if not self.weapon.claws:
@@ -49,7 +50,8 @@ class SwitchClaws(FreeWeaponAction):
             self.weapon.accuracy_bonus = 2
         self.weapon.claws = not self.weapon.claws
         self.session.say(
-            ls("rebuild.weapon.claws.switch.text").format(source.name,
-                                                  ls("rebuild.weapon.claws.enable.text") if not self.weapon.claws else
-                                                  ls("rebuild.weapon.claws.disable.text"))
+            ls("rebuild.weapon.claws.switch.text")
+            .format(source.name,
+                    ls("rebuild.weapon.claws.enable.text") if not self.weapon.claws else
+                    ls("rebuild.weapon.claws.disable.text"))
         )

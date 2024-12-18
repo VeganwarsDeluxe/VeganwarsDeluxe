@@ -49,13 +49,13 @@ class RifleAttack(RangedAttack):
         super().__init__(session, source, weapon)
         self.weapon: Rifle = weapon
 
-    def calculate_damage(self, source, target):
+    def calculate_damage(self, source, target, *args):
         main_target, level = self.weapon.main_target
         if main_target == target:
             self.weapon.accuracy_bonus = 2 if level == 1 else 5
         else:
             self.weapon.accuracy_bonus = -4
-        return super().calculate_damage(source, target)
+        return super().calculate_damage(source, target, *args)
 
     async def func(self, source, target):
         damage = (await super().attack(source, target)).dealt

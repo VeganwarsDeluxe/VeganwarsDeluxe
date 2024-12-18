@@ -37,8 +37,8 @@ class Own(Enum):
 
 
 class Allies(TargetType):
-    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY):
-        super().__init__(distance=distance, team=Team.ALLIES_ONLY, aliveness=aliveness, own=Own.SELF_INCLUDED)
+    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Own.SELF_INCLUDED):
+        super().__init__(distance=distance, team=Team.ALLIES_ONLY, aliveness=aliveness, own=own)
 
 
 class Enemies(TargetType):

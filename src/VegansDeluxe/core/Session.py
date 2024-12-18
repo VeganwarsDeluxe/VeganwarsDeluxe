@@ -87,8 +87,9 @@ class Session[T: Entity]:
         await self.event_manager.publish(message)
 
         entity.hp -= message.hp_loss
-        self.say(ls("core.session.message.hp_loss").format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
-                                                  hp=entity.hp))
+        self.say(ls("core.session.message.hp_loss")
+                 .format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
+                         hp=entity.hp))
 
     async def calculate_damages(self):
         for entity in self.entities:  # Cancelling round

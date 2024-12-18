@@ -22,7 +22,8 @@ class Weaponsmith(Skill):
 
     def __init__(self):
         super().__init__()
-        self.other_weapon: Weapon = None
+        # TODO: This is literally late init. Ideas?
+        self.other_weapon: Weapon = Fist()
         self.last_switch_turn = -1
 
 

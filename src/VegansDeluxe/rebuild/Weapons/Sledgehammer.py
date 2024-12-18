@@ -36,8 +36,8 @@ class SledgehammerCrush(MeleeAttack):
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn or self.source.energy < 4
 
-    def calculate_damage(self, source: Entity, target: Entity) -> int:
-        if not super().calculate_damage(source, target):
+    def calculate_damage(self, source: Entity, target: Entity, *args) -> int:
+        if not super().calculate_damage(source, target, *args):
             return 0
         return 1 + target.max_energy - target.energy
 

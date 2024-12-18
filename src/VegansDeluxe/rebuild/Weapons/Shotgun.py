@@ -18,8 +18,8 @@ class Shotgun(RangedWeapon):
 
 @AttachedAction(Shotgun)
 class ShotgunAttack(RangedAttack):
-    def calculate_damage(self, source, target):
-        damage = super().calculate_damage(source, target)
+    def calculate_damage(self, source, target, *args):
+        damage = super().calculate_damage(source, target, *args)
         if damage == 0:
             return 0
         damage += 1 if target in source.nearby_entities else 0

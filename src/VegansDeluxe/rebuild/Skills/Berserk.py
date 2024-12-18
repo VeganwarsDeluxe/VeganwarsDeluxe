@@ -22,6 +22,7 @@ async def register(root_context: StateContext[Berserk]):
     @RegisterEvent(session.id, PreMoveGameEvent, priority=1)
     async def pre_actions(context: EventContext[PreMoveGameEvent]):
         source.max_energy = max(7 - source.hp, 2)
+        source.energy = min(source.energy, source.max_energy)
         if context.event.turn == 1:
             source.energy = source.max_energy
 
@@ -30,9 +31,9 @@ async def register(root_context: StateContext[Berserk]):
         if context.event.source != source:
             return
         source.energy = min(source.energy+context.event.hp_loss, source.max_energy)
-        session.say(f"😡|Берсерк {source.name} получает {context.event.hp_loss} энергии.")
-        if source.hp == 1:
-            session.say(f"😡|Берсерк {source.name} входит в боевой транс!")
+        session.say(ls("rebuild.skill.berserk.effect").format(source.name, context.event.hp_loss))
+        if source.hp-context.event.hp_loss == 1:
+            session.say(ls("rebuild.skill.berserk.trance").format(source.name))
 
     @RegisterEvent(session.id, event=AttackGameEvent)
     async def attack_handler(attack_context: EventContext[AttackGameEvent]):

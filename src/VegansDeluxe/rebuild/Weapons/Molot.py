@@ -33,11 +33,11 @@ class MolotAttack(MeleeAttack):
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
-    def calculate_damage(self, source, target):
+    def calculate_damage(self, source, target, *args):
         if not self.weapon.strike:
-            damage = super().calculate_damage(source, target)
+            damage = super().calculate_damage(source, target, *args)
         else:
-            damage = self.cubes + self.dmgbonus
+            damage = self.weapon.cubes + self.weapon.damage_bonus
         if not damage:
             return damage
         return damage + self.energy_bonus(source)
@@ -57,9 +57,9 @@ class TrueStrike(MeleeAttack):
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
-    def calculate_damage(self, source, target):
+    def calculate_damage(self, source, target, *args):
         damage = self.weapon.cubes + self.weapon.damage_bonus
-        if not super().calculate_damage(source, target):
+        if not super().calculate_damage(source, target, *args):
             return damage
         return damage + self.energy_bonus(source)
 
