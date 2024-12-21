@@ -11,7 +11,7 @@ from .ContentManager import ContentManager, AttachedAction, RegisterState, Regis
 from .Context import Context, StateContext, EventContext, ActionExecutionContext
 from .Engine import *
 from .Entities import *
-from .Entities.NPC import NPC
+# from .Entities.NPC import NPC
 from .Events import *
 from .Items import *
 from .Session import *
