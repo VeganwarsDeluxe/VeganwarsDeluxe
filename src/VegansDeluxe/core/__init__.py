@@ -11,6 +11,7 @@ from .ContentManager import ContentManager, AttachedAction, RegisterState, Regis
 from .Context import Context, StateContext, EventContext, ActionExecutionContext
 from .Engine import *
 from .Entities import *
+from .Entities.NPC import NPC
 from .Events import *
 from .Items import *
 from .Session import *
@@ -22,7 +23,7 @@ from .Translator.Translator import translator
 from .Weapons import *
 from .utils import *
 
-__version__ = "1.5.8"
+__version__ = "1.5.9"
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 
