@@ -23,7 +23,8 @@ class Weaponsmith(Skill):
     def __init__(self):
         super().__init__()
         # TODO: This is literally late init. Ideas?
-        self.other_weapon: Weapon = Fist()
+        #  Even worse. Come on, not in rebuild module.
+        self.other_weapon: Weapon = Fist("", "")
         self.last_switch_turn = -1
 
 

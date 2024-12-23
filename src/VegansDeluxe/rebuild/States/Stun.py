@@ -1,11 +1,9 @@
-from VegansDeluxe.core import AttachedAction
-from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PostUpdatesGameEvent, PostDamagesGameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
+from VegansDeluxe.core.Events.MatchEvents import ChooseActionEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -39,19 +37,8 @@ async def register(root_context: StateContext[Stun]):
             session.say(ls("rebuild.state.stun.wake_up").format(source.name))
         state.stun -= 1
 
-
-@AttachedAction(Stun)
-class LayStun(DecisiveStateAction):
-    id = 'lay_stun'
-    name = ls("rebuild.state.stun.action.name")
-
-    def __init__(self, session: Session, source: Entity, skill: Stun):
-        super().__init__(session, source, skill)
-        self.state = skill
-
-    @property
-    def hidden(self) -> bool:
-        return not self.state.stun
-
-    async def func(self, source, target):
-        pass
+    @RegisterEvent(session.id, event=ChooseActionEvent, priority=-1)
+    async def handle_choose_action_call(context: EventContext[ChooseActionEvent]):
+        if source.id != context.event.entity_id or state.stun == 0:
+            return
+        context.event.canceled = True

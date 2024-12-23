@@ -1,10 +1,20 @@
-from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.core.Actions.Action import DecisiveAction, FreeAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.ContentManager import AttachedAction
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.Events import GameEvent
 from VegansDeluxe.core.TargetType import OwnOnly
 from VegansDeluxe.core.Translator.LocalizedString import ls
+
+
+@AttachedAction(Entity)
+class InfoAction(FreeAction):
+    id = 'info_action'
+    name = ls("core.action.info.name")
+    target_type = OwnOnly()
+
+    async def func(self, source, target):
+        pass
 
 
 @AttachedAction(Entity)
