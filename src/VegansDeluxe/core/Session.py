@@ -94,7 +94,7 @@ class Session[T: Entity]:
     async def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
-                self.say(ls("core.session.message.alive_entities").format(entity.name))
+                self.say(ls("core.session.message.excess_energy_loss").format(entity.name))
                 entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
