@@ -6,6 +6,7 @@ from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
+from VegansDeluxe.core.Events.Events import EnergyPaymentEvent
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.TargetType import Enemies, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -79,25 +80,31 @@ class Attack(DecisiveWeaponAction):
         """
         calculated_damage = self.calculate_damage(source, target)
         if pay_energy:
-            source.energy = max(source.energy - self.weapon.energy_cost, 0)
+            energy_payment_event = await self.publish_energy_payment_event(source, self.weapon.energy_cost)
+            source.energy = max(source.energy - energy_payment_event.energy_payment, 0)
 
         displayed_damage = await self.publish_attack_event(source, target, calculated_damage)
-        self.send_attack_message(source, target, displayed_damage)
-        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage)
+        self.send_attack_message(source, target, displayed_damage.damage)
+        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage.damage)
 
-        target.inbound_dmg.add(source, dealt_damage, self.session.turn)
-        source.outbound_dmg.add(target, dealt_damage, self.session.turn)
-        return DamageData(calculated_damage, displayed_damage, dealt_damage)
+        target.inbound_dmg.add(source, dealt_damage.damage, self.session.turn)
+        source.outbound_dmg.add(target, dealt_damage.damage, self.session.turn)
+        return DamageData(calculated_damage, displayed_damage, dealt_damage.damage)
 
-    async def publish_attack_event(self, source, target, damage):
+    async def publish_energy_payment_event(self, source, energy_cost) -> EnergyPaymentEvent:
+        message = EnergyPaymentEvent(self.session.id, self.session.turn, source, energy_payment=energy_cost)
+        await self.event_manager.publish(message)
+        return message
+
+    async def publish_attack_event(self, source, target, damage) -> AttackGameEvent:
         message = AttackGameEvent(self.session.id, self.session.turn, source, target, damage)
         await self.event_manager.publish(message)  # 7.1 Pre-Attack stage
-        return message.damage
+        return message
 
-    async def publish_post_attack_event(self, source, target, damage):
+    async def publish_post_attack_event(self, source, target, damage) -> PostAttackGameEvent:
         message = PostAttackGameEvent(self.session.id, self.session.turn, source, target, damage)
         await self.event_manager.publish(message)  # 7.2 Post-Attack stage
-        return message.damage
+        return message
 
     def send_attack_message(self, source, target, damage):
         target_name = self.SELF_TARGET_NAME if source == target else target.name

@@ -153,3 +153,11 @@ class PostTickGameEvent(GameEvent):
 
 class PostDeathsGameEvent(GameEvent):
     pass
+
+# WeaponEvents
+
+class EnergyPaymentEvent(GameEvent):
+    def __init__(self, session_id, turn, entity_id, energy_payment):
+        super().__init__(session_id, turn)
+        self.entity_id: str = entity_id
+        self.energy_payment: int = energy_payment
