@@ -41,6 +41,7 @@ from VegansDeluxe.rebuild.States.Bleeding import Bleeding
 from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 from VegansDeluxe.rebuild.States.Dodge import Dodge
 from VegansDeluxe.rebuild.States.DroppedWeapon import DroppedWeapon
+from VegansDeluxe.rebuild.States.Info import Info
 from VegansDeluxe.rebuild.States.Injury import Injury
 from VegansDeluxe.rebuild.States.KnockDown import Knockdown
 from VegansDeluxe.rebuild.States.Stun import Stun
@@ -69,7 +70,8 @@ from VegansDeluxe.rebuild.Weapons.Shotgun import Shotgun
 from VegansDeluxe.rebuild.Weapons.Spear import Spear
 from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
-all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, DroppedWeapon, Injury, Stun, Dodge, Armor, ZombieState]
+all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, DroppedWeapon, Injury, Stun, Dodge, Armor, ZombieState,
+              Info]
 all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
               Berserk, Junkie, Ninja, Necromancer, Sadist, Scope, Inquisitor, Visor, Zombie, Pyromaniac, GasMask]
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,

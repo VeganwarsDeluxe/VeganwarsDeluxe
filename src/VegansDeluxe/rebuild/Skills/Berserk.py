@@ -30,6 +30,7 @@ async def register(root_context: StateContext[Berserk]):
     async def hp_loss(context: EventContext[HPLossGameEvent]):
         if context.event.source != source:
             return
+        source.max_energy += context.event.hp_loss
         source.energy = min(source.energy+context.event.hp_loss, source.max_energy)
         session.say(ls("rebuild.skill.berserk.effect").format(source.name, context.event.hp_loss))
         if source.hp-context.event.hp_loss == 1:
