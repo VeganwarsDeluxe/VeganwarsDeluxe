@@ -14,7 +14,7 @@ from VegansDeluxe.core.Weapons import Weapon
 
 
 class DamageData:
-    def __init__(self, calculated, displayed, dealt):
+    def __init__(self, calculated: int, displayed: int, dealt: int):
         self.calculated = calculated
         self.displayed = displayed
         self.dealt = dealt
@@ -83,13 +83,13 @@ class Attack(DecisiveWeaponAction):
             energy_payment_event = await self.publish_energy_payment_event(source, self.weapon.energy_cost)
             source.energy = max(source.energy - energy_payment_event.energy_payment, 0)
 
-        displayed_damage = await self.publish_attack_event(source, target, calculated_damage)
-        self.send_attack_message(source, target, displayed_damage.damage)
-        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage.damage)
+        displayed_damage_message = await self.publish_attack_event(source, target, calculated_damage)
+        self.send_attack_message(source, target, displayed_damage_message.damage)
+        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage_message.damage)
 
         target.inbound_dmg.add(source, dealt_damage.damage, self.session.turn)
         source.outbound_dmg.add(target, dealt_damage.damage, self.session.turn)
-        return DamageData(calculated_damage, displayed_damage, dealt_damage.damage)
+        return DamageData(calculated_damage, displayed_damage_message.damage, dealt_damage.damage)
 
     async def publish_energy_payment_event(self, source, energy_cost) -> EnergyPaymentEvent:
         message = EnergyPaymentEvent(self.session.id, self.session.turn, source, energy_payment=energy_cost)
@@ -106,7 +106,7 @@ class Attack(DecisiveWeaponAction):
         await self.event_manager.publish(message)  # 7.2 Post-Attack stage
         return message
 
-    def send_attack_message(self, source, target, damage):
+    def send_attack_message(self, source: Entity, target: Entity, damage: int):
         target_name = self.SELF_TARGET_NAME if source == target else target.name
         if damage:
             message = self.ATTACK_MESSAGE.format(attack_emoji=self.ATTACK_EMOJI, source_name=source.name,

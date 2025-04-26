@@ -38,7 +38,7 @@ class Armor(State):
         if armor in self.armor:
             self.armor.remove(armor)
 
-    def roll_armor(self):
+    def roll_armor(self) -> int:
         result = 0
         for armor, chance in self.armor:
             for _ in range(armor):

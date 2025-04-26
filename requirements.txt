@@ -1,5 +1,5 @@
-APScheduler~=3.10.4
-setuptools~=72.2.0
+APScheduler
+setuptools
 pytest
 pytest-asyncio
 asynctest~=0.13.0
