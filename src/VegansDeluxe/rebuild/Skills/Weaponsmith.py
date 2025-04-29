@@ -18,7 +18,8 @@ class Weaponsmith(Skill):
     name = ls("rebuild.skill.weaponsmith.name")
     description = ls("rebuild.skill.weaponsmith.description")
 
-    weapon_pool = all_weapons
+    weapon_pool = all_weapons.copy()
+    weapon_pool.remove(Fist)
 
     def __init__(self):
         super().__init__()
@@ -33,17 +34,16 @@ async def register(root_context: StateContext[Weaponsmith]):
     session: Session = root_context.session
     source = root_context.entity
 
+    root_context.state.weapon_pool = [w for w in root_context.state.weapon_pool if w.id != source.weapon.id]
     root_context.state.other_weapon = Fist(session.id, source.id)
 
-    pool = []
     weapon_pool: list[type[Weapon]] = []
     weapon_choice = Question(text=ls("rebuild.skill.weaponsmith.choice.text"))
     for i in range(3):
-        choice_pool = [w for w in root_context.state.weapon_pool if w not in pool]
+        choice_pool = [w for w in root_context.state.weapon_pool if w not in weapon_pool]
         if not choice_pool:
             continue
         weapon = random.choice(choice_pool)
-        pool.append(weapon_choice)
         weapon_pool.append(weapon)
         choice = Choice(choice_id=str(i), text=weapon.name,
                         result_text=ls("rebuild.skill.weaponsmith.choice.result_text").format(weapon.name))
