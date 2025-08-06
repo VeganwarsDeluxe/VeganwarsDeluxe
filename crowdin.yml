@@ -1,3 +1,0 @@
-files:
-  - source: /src/VegansDeluxe/*/localizations/locale_ru.properties
-    translation: /%original_path%/locale_%two_letters_code%.properties
