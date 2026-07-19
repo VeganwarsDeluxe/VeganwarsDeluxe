@@ -45,7 +45,7 @@ class KnockDown(MeleeAttack):
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
-        damage = (await self.attack(source, target)).dealt
+        damage = (await self.attack(source, target)).calculated
         if not damage:
             self.session.say(ls("rebuild.weapon.shaft.action_miss").format(source.name, target.name))
             return

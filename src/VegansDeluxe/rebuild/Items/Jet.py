@@ -20,10 +20,7 @@ class JetAction(FreeItem):
     name = ls("rebuild.item.jet.name")
     target_type = Allies()
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.MEDICINE]
+    tags = FreeItem.tags + [ActionTag.MEDICINE]
 
     async def func(self, source, target):
         self.session.say(

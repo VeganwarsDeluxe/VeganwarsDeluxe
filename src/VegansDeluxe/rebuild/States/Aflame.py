@@ -20,15 +20,15 @@ class Aflame(State):
 
         self.burn_time = 2
 
-    def add_flame(self, session, entity, dealer, flame):
+    def add_flame(self, session, target, source, flame):
         self.timer = self.burn_time
         self.extinguished = False
         if self.flame == 0:
-            session.say(ls("rebuild.state.aflame.activate").format(entity.name))
+            session.say(ls("rebuild.state.aflame.activate").format(target.name))
         else:
-            session.say(ls("rebuild.state.aflame.increase").format(entity.name))
+            session.say(ls("rebuild.state.aflame.increase").format(target.name))
         self.flame += flame
-        self.dealer = dealer
+        self.dealer = source
 
 
 @RegisterState(Aflame)

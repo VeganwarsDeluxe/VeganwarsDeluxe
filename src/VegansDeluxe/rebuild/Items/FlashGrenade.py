@@ -18,10 +18,7 @@ class FlashGrenadeAction(DecisiveItem):
     target_type = Enemies()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.HARMFUL]
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     async def func(self, source, target):
         flash_grenade_attempt = FlashGrenadeAttemptEvent(self.session.id, self.session.turn, target,

@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Callable
 
 from jproperties import Properties
 
@@ -9,12 +10,22 @@ from VegansDeluxe.core.Translator.Locale import Locale
 class Translator:
     def __init__(self, default_locale: str):
         self.default_locale = default_locale
-        self.locales: dict[str: Locale] = dict()
+        self.locales: dict[str, Locale] = dict()
 
-    def get_string(self, key: str, code: str = ""):
+        self.get_string_hooks: list[Callable] = []
+
+    def get_string(self, key: str, code: str = "", context=None):
         if not code:
             code = self.default_locale
-        return self.get_locale(code).get_string(key)
+        string = self.get_locale(code).get_string(key)
+        return string
+        #k, c, s, ctx = self.run_get_string_hooks(key, code, string, context)
+        #return s if s else string
+
+    def run_get_string_hooks(self, key: str | None, code: str | None, string: str | None, context):
+        for hook in self.get_string_hooks:
+            key, code, string, context = hook(key, code, string, context)
+        return key, code, string, context
 
     def get_locale(self, code: str) -> Locale:
         return self.locales.get(code)

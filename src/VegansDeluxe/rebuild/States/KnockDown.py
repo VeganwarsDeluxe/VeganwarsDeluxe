@@ -1,8 +1,8 @@
 from VegansDeluxe.core import AttachedAction, ActionTag
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import PostUpdateActionsGameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
@@ -37,7 +37,7 @@ async def register(root_context: StateContext[Knockdown]):
 class StandUp(DecisiveStateAction):
     id = 'stand_up'
     name = ls("rebuild.state.knockdown.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Knockdown):
         super().__init__(session, source, skill)

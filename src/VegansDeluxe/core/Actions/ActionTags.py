@@ -2,9 +2,9 @@ from enum import Enum
 
 
 class ActionTag(Enum):
-    SKIP = 'skip'
-    ITEM = 'item'
-    ATTACK = 'attack'
-    HARMFUL = 'harmful'
-    MEDICINE = 'medicine'
-    RELOAD = 'reload'
+    SKIP = 'core.action.skip'
+    ITEM = 'core.action.item'
+    ATTACK = 'core.action.attack'
+    HARMFUL = 'core.action.harmful'
+    MEDICINE = 'core.action.medicine'
+    RELOAD = 'core.action.reload'

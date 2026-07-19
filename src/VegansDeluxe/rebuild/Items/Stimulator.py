@@ -18,10 +18,7 @@ class StimulatorAction(DecisiveItem):
     target_type = Allies()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.MEDICINE]
+    tags = DecisiveItem.tags + [ActionTag.MEDICINE]
 
     async def func(self, source, target):
         target.hp = min(target.hp + 2, target.max_hp)

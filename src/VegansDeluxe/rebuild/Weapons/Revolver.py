@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
@@ -29,7 +29,7 @@ class ShootYourself(DecisiveWeaponAction):
     id = 'shoot_yourself'
     name = ls("rebuild.weapon.revolver_action.name")
     priority = 3
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("rebuild.weapon.revolver_action.text").format(source.name))

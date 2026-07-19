@@ -4,6 +4,9 @@ Module for Rebuild game content.
 
 import pathlib
 
+from VegansDeluxe import core
+from VegansDeluxe.ModManager import Mod
+from VegansDeluxe.core import Weapon, State, Skill, Item
 from VegansDeluxe.core.Translator.Translator import translator
 from VegansDeluxe.rebuild.Items.Adrenaline import Adrenaline
 from VegansDeluxe.rebuild.Items.Chitin import Chitin
@@ -30,7 +33,6 @@ from VegansDeluxe.rebuild.Skills.Pyromaniac import Pyromaniac
 from VegansDeluxe.rebuild.Skills.Sadist import Sadist
 from VegansDeluxe.rebuild.Skills.Scope import Scope
 from VegansDeluxe.rebuild.Skills.ShieldGen import ShieldGen
-from VegansDeluxe.rebuild.Skills.Stockpile import Stockpile
 from VegansDeluxe.rebuild.Skills.Thief import Thief
 from VegansDeluxe.rebuild.Skills.ToughSkull import ToughSkull
 from VegansDeluxe.rebuild.Skills.Visor import Visor
@@ -70,6 +72,12 @@ from VegansDeluxe.rebuild.Weapons.Shotgun import Shotgun
 from VegansDeluxe.rebuild.Weapons.Spear import Spear
 from VegansDeluxe.rebuild.Weapons.Torch import Torch
 
+all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Chitin, Jet, Shield, RageSerum]
+
+game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Chitin]
+
+from VegansDeluxe.rebuild.Skills.Stockpile import Stockpile
+
 all_states = [Aflame, DamageThreshold, Bleeding, Knockdown, DroppedWeapon, Injury, Stun, Dodge, Armor, ZombieState,
               Info]
 all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen, Alchemist, Mimic,
@@ -77,9 +85,25 @@ all_skills = [DoubleVein, Biceps, ToughSkull, Thief, Medic, Stockpile, ShieldGen
 all_weapons = [Claws, Shotgun, SawedOffShotgun, Fist, Knuckles, Hatchet, Chain, BaseballBat, Rifle, Torch,
                Revolver, Pistol, Flamethrower, Axe, Knife, Shaft, Saw, Mace, Molot,
                Police, Saber, Bow, Spear]
-all_items = [Stimulator, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Chitin, Jet, Shield, RageSerum]
-
-game_items_pool = [Shield, Grenade, Molotov, FlashGrenade, ThrowingKnife, Adrenaline, Jet, Chitin]
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 translator.load_folder(localizations)
+
+class Rebuild(Mod):
+    def __init__(self):
+        super().__init__()
+        self.id = 'rebuild'
+        self.version = core.__version__
+
+        # Path to the "localizations" folder.
+        self.localizations = localizations
+
+        self.weapons: list[type[Weapon]] = all_weapons
+        self.states: list[type[State]] = all_states
+        self.skills: list[type[Skill]] = all_skills
+        self.items: list[type[Item]] = all_items
+
+        # If you want a mod with REALLY extra stuff and your implementation supports that - so be it.
+        self.extra: dict = {
+            "game_items_pool": game_items_pool
+        }

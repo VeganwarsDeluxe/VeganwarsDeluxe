@@ -1,9 +1,8 @@
-from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
-
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
+from VegansDeluxe.core import StateContext, EventContext
 
 
 class Injury(State):

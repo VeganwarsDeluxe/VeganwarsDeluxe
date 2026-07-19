@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import FreeWeaponAction, MeleeAttack
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
@@ -29,7 +29,7 @@ class ClawsAttack(MeleeAttack):
 @AttachedAction(Claws)
 class SwitchClaws(FreeWeaponAction):
     id = 'switch_claws'
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -10
 
     @property

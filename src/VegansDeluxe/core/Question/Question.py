@@ -19,6 +19,7 @@ class Question:
         _ = [choice for choice in self.__choices if choice.id == choice_id]
         if _:
             return _[0]
+        return None
 
     def add_choice(self, choice: Choice):
         choice.question_id = self.id

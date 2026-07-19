@@ -15,10 +15,7 @@ class NuirAction(FreeItem):
     target_type = Everyone()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.MEDICINE]
+    tags = FreeItem.tags + [ActionTag.MEDICINE]
 
     async def func(self, source: Entity, target: Entity):
         target.hp -= 1

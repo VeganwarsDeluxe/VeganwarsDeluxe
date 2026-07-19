@@ -23,11 +23,10 @@ class GrenadeAction(DecisiveItem):
     id = 'grenade'
     name = ls("rebuild.item.grenade.name")
     target_type = Enemies()
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source, item)
-        self.tags += [ActionTag.HARMFUL]
-
         self.damage = 3
         self.range = 2
 

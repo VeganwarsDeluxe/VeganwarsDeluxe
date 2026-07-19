@@ -7,7 +7,7 @@ from VegansDeluxe.core.Actions.ActionManager import ActionManager
 from VegansDeluxe.core.Context import StateContext, EventContext, ActionExecutionContext
 from VegansDeluxe.core.Events.Events import (Event, AttachStateEvent, AttachSessionEvent, PreMoveGameEvent,
                                              CallActionsGameEvent, ExecuteActionEvent, DeliveryRequestEvent,
-                                             DeliveryPackageEvent, PostActionsGameEvent)
+                                             DeliveryPackageEvent, PostDeathsGameEvent)
 from VegansDeluxe.core.Items.Item import Item
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Weapons import Weapon
@@ -83,12 +83,17 @@ class ContentManager:
 
         @RegisterEvent(event=AttachSessionEvent)
         async def handle_attach_session(root_context: EventContext[AttachSessionEvent]):
-            @RegisterEvent(root_context.session.id, event=PostActionsGameEvent, priority=99)
-            async def handle_post_actions_game_event(context: EventContext[PostActionsGameEvent]):
+            @RegisterEvent(root_context.session.id, event=PostDeathsGameEvent, priority=99)
+            async def handle_post_actions_game_event(context: EventContext[PostDeathsGameEvent]):
                 """
                 Clears out all action from the queue after they are executed.
-                :todo: Make sure if this is the right time to clear. Though before we cleared them after the execution,
+
+                Make sure if this is the right time to clear. Though before we cleared them after the execution,
                     so I think we are fine for now.
+
+                UPD: Turns out it was too early. Moved from PostActionsGameEvent to PostDeathsGameEvent, basically
+                    as late as possible. There won't be any later event, unless I implement PostMoveGameEvent just for
+                    this.
                 """
 
                 action_manager.action_queue = \

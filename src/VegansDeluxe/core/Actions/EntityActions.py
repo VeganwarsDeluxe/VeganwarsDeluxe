@@ -1,27 +1,16 @@
-from VegansDeluxe.core.Actions.Action import DecisiveAction, FreeAction
+from VegansDeluxe.core.Actions.Action import DecisiveAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.ContentManager import AttachedAction
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.Events import GameEvent
-from VegansDeluxe.core.TargetType import OwnOnly
+from VegansDeluxe.core.TargetType import SelfOnly
 from VegansDeluxe.core.Translator.LocalizedString import ls
-
-
-@AttachedAction(Entity)
-class InfoAction(FreeAction):
-    id = 'info_action'
-    name = ls("core.action.info.name")
-    target_type = OwnOnly()
-
-    async def func(self, source, target):
-        pass
-
 
 @AttachedAction(Entity)
 class ApproachAction(DecisiveAction):
     id = 'approach'
     name = ls("core.action.approach.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     @property
     def hidden(self) -> bool:
@@ -38,12 +27,9 @@ class ApproachAction(DecisiveAction):
 class ReloadAction(DecisiveAction):
     id = 'reload'
     name = ls("core.action.reload.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.RELOAD]
+    tags = DecisiveAction.tags + [ActionTag.RELOAD]
 
     async def func(self, source, target):
         source.energy = source.max_energy
@@ -61,13 +47,10 @@ class SkipActionGameEvent(GameEvent):
 class SkipTurnAction(DecisiveAction):
     id = 'skip'
     name = ls("core.action.skip.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = 2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.SKIP]
+    tags = DecisiveAction.tags + [ActionTag.SKIP]
 
     async def func(self, source, target):
         message = SkipActionGameEvent(self.session.id, self.session.turn, source.id)

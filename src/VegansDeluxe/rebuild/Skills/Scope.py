@@ -2,7 +2,7 @@ from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Skills.Skill import Skill, SkillTag
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -10,6 +10,8 @@ class Scope(Skill):
     id = 'scope'
     name = ls("rebuild.skill.scope.name")
     description = ls("rebuild.skill.scope.description")
+
+    tags = Skill.tags + [SkillTag.RANGED_WEAPON_ONLY]
 
 
 @RegisterState(Scope)

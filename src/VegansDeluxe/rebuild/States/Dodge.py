@@ -1,8 +1,8 @@
 from VegansDeluxe.core import AttachedAction
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import PostTickGameEvent, GameEvent
 from VegansDeluxe.core import RegisterState, RegisterEvent
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
@@ -16,6 +16,7 @@ class Dodge(State):
     def __init__(self):
         super().__init__()
         self.dodge_cooldown = 0
+        self.bonus = -5
 
 
 class DodgeGameEvent(GameEvent):
@@ -39,7 +40,7 @@ async def register(root_context: StateContext[Dodge]):
 class DodgeAction(DecisiveStateAction):
     id = 'dodge'
     name = ls("rebuild.state.dodge.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -2
 
     def __init__(self, session: Session, source: Entity, skill: Dodge):
@@ -52,9 +53,10 @@ class DodgeAction(DecisiveStateAction):
 
     async def func(self, source, target):
         self.state.dodge_cooldown = 5
-        bonus = -5
-        message = DodgeGameEvent(self.session.id, self.session.turn, source, bonus)
+
+        message = DodgeGameEvent(self.session.id, self.session.turn, source, self.state.bonus)
         await self.event_manager.publish(message)
+
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
         self.session.say(ls("rebuild.state.dodge.text").format(source.name))

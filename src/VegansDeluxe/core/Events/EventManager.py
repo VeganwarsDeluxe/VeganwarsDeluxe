@@ -1,34 +1,65 @@
 import uuid
+from collections import defaultdict
 from typing import Type
 
 from VegansDeluxe.core.Events.EventHandlers import EventSubscription, ScheduledEventSubscription, SingleTurnSubscription
 from VegansDeluxe.core.Events.EventHandlers import HandlerType
-from VegansDeluxe.core.Events.Events import Event
+from VegansDeluxe.core.Events.Events import Event, GameEvent
 
 
 class EventManager:
     def __init__(self):
         self.id = uuid.uuid4().hex
         self._subscriptions: list[EventSubscription] = []
+        self._by_event_type = defaultdict(list)
+        self._by_session_and_event_type = defaultdict(lambda: defaultdict(list))
+
 
     @property
     def size(self):
         return len(self._subscriptions)
 
     def clean_by_session_id(self, session_id: str):
-        self._subscriptions = list(filter(lambda eh: eh.session_id != session_id, self._subscriptions))
+        self._subscriptions = [
+            sub for sub in self._subscriptions
+            if sub.session_id != session_id
+        ]
+        self._by_session_and_event_type.pop(session_id, None)
+
+        # optional: rebuild global index to be safe
+        self._by_event_type.clear()
+        for sub in self._subscriptions:
+            if sub.session_id is None:
+                self._by_event_type[sub.event_type].append(sub)
 
     async def publish(self, event: Event):
-        responses = []
+        event_types = type(event).mro()
+        session_id = event.session_id if isinstance(event, GameEvent) else None
 
-        self._subscriptions.sort(key=lambda h: h.priority)
-        for subscription in self._subscriptions:
-            response = await subscription.handle(event)
-            responses.append(response)
+        candidates = []
+        for event_type in event_types:
+            candidates.extend(self._by_event_type.get(event_type, ()))
+            if session_id is not None:
+                candidates.extend(
+                    self._by_session_and_event_type
+                    .get(session_id, {})
+                    .get(event_type, ())
+                )
+
+        candidates.sort(key=lambda h: h.priority)
+
+        responses = []
+        for subscription in candidates:
+            responses.append(await subscription.handle(event))
         return responses
 
     def add_subscription(self, subscription: EventSubscription):
         self._subscriptions.append(subscription)
+
+        if subscription.session_id is None:
+            self._by_event_type[subscription.event_type].append(subscription)
+        else:
+            self._by_session_and_event_type[subscription.session_id][subscription.event_type].append(subscription)
 
     def every(self,
               callback_wrapper: HandlerType,

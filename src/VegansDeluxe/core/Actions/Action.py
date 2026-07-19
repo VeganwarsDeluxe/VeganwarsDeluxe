@@ -4,15 +4,16 @@ Action - building block of the game.
 All attacks, usage of items, and other actions that Entities do stem from it.
 """
 
-from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.EventManager import EventManager
+from VegansDeluxe.core.Object import Object
+from VegansDeluxe.core.ObjectTags import ObjectTag
 from VegansDeluxe.core.Session import Session
-from VegansDeluxe.core.TargetType import TargetType, Own, Aliveness, Team, Distance
+from VegansDeluxe.core.TargetType import TargetType, Selfishness, Aliveness, Team, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls, LocalizedString
 
 
-class Action:
+class Action(Object):
     id: str = 'action'
     """ID of the action."""
 
@@ -28,13 +29,14 @@ class Action:
     type: str = 'action'
     """String type definition for the class. Used internally."""
 
+    tags = Object.tags + [ObjectTag.ACTION]
+    """List of tags to categorize the action."""
+
     def __init__(self, session: Session, source: Entity, *args):
         """
         :param session: Session instance
         :param source: Entity instance of action owner
         """
-        self.tags: list[ActionTag] = []
-        """List of tags to categorize the action."""
 
         self.session: Session = session
         self.event_manager: EventManager = self.session.event_manager
@@ -44,7 +46,6 @@ class Action:
 
         self.canceled = False
         """If set to True, the action will not be executed."""
-        self.type = 'action'
         self.removed = False
         self.queued = False
 
@@ -101,8 +102,8 @@ def filter_targets(source: Entity, target_type: TargetType, entity_pool: list[En
 
     for target in entity_pool:
         conditions = [
-            not (target_type.own == Own.SELF_ONLY and target != source),
-            not (target_type.own == Own.SELF_EXCLUDED and target == source),
+            not (target_type.own == Selfishness.SELF_ONLY and target != source),
+            not (target_type.own == Selfishness.SELF_EXCLUDED and target == source),
 
             not (target_type.aliveness == Aliveness.ALIVE_ONLY and target.dead),
             not (target_type.aliveness == Aliveness.DEAD_ONLY and not target.dead),

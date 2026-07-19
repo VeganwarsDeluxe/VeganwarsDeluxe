@@ -1,8 +1,8 @@
 import random
 
-from VegansDeluxe.core import AttachedAction, Next
+from VegansDeluxe.core import AttachedAction, Next, ActionTag
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import Everyone, Own
+from VegansDeluxe.core import Everyone, Selfishness
 from VegansDeluxe.core import PostUpdateActionsGameEvent, DeliveryRequestEvent, DeliveryPackageEvent
 from VegansDeluxe.core import RegisterEvent, RegisterState
 from VegansDeluxe.core import Session
@@ -41,7 +41,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
     id = 'copyAction'
     name = ls("rebuild.skill.mimic.action.name")
     priority = -2
-    target_type = Everyone(own=Own.SELF_EXCLUDED)
+    target_type = Everyone(own=Selfishness.SELF_EXCLUDED)
 
     def __init__(self, session: Session, source: Entity, skill: Mimic):
         super().__init__(session, source, skill)
@@ -58,7 +58,7 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
 
             action_pool = []
             for action in action_manager.action_queue:
-                if action.type == 'item':
+                if ActionTag.ITEM in action.tags:
                     continue
                 if action.source != target:
                     continue

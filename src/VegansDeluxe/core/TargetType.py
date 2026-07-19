@@ -30,27 +30,27 @@ class Aliveness(Enum):
     DEAD_ONLY = 2
 
 
-class Own(Enum):
+class Selfishness(Enum):
     SELF_INCLUDED = 0
     SELF_ONLY = 1
     SELF_EXCLUDED = 2
 
 
 class Allies(TargetType):
-    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Own.SELF_INCLUDED):
+    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Selfishness.SELF_INCLUDED):
         super().__init__(distance=distance, team=Team.ALLIES_ONLY, aliveness=aliveness, own=own)
 
 
 class Enemies(TargetType):
     def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY):
-        super().__init__(distance=distance, team=Team.ENEMIES_ONLY, aliveness=aliveness, own=Own.SELF_EXCLUDED)
+        super().__init__(distance=distance, team=Team.ENEMIES_ONLY, aliveness=aliveness, own=Selfishness.SELF_EXCLUDED)
 
 
 class Everyone(TargetType):
-    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Own.SELF_INCLUDED):
+    def __init__(self, distance=Distance.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Selfishness.SELF_INCLUDED):
         super().__init__(distance=distance, team=Team.ANY, aliveness=aliveness, own=own)
 
 
-class OwnOnly(TargetType):
+class SelfOnly(TargetType):
     def __init__(self):
-        super().__init__(distance=Distance.ANY, team=Team.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Own.SELF_ONLY)
+        super().__init__(distance=Distance.ANY, team=Team.ANY, aliveness=Aliveness.ALIVE_ONLY, own=Selfishness.SELF_ONLY)

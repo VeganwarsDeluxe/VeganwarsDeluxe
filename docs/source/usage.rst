@@ -20,68 +20,45 @@ If for some reason you need to install a version from different branch (ex. dev)
 
    (.venv) $ pip3 install git+https://onedev.gts.org.ua/vezono/vegans-deluxe@dev#egg=VegansDeluxe
 
-Basic usage
-----------------
-
-Below is an example of basic Session process. More examples can be found
-in `examples folder <https://github.com/VeganwarsDeluxe/VeganwarsDeluxe/tree/master/src>`_.
+Then, you must create an Engine instance.
 
 .. code-block:: python3
 
-    import random
-
-    from VegansDeluxe import rebuild
-    from VegansDeluxe.core import Session, Entity
-    from VegansDeluxe.rebuild import Pistol, Shotgun
     from VegansDeluxe.core import Engine
-
-    # Create the engine instance
     engine = Engine()
 
-    # Create the game session and attach it to the engine
-    session = Session(engine.event_manager)
-    engine.attach_session(session)
+As simple as that. At this point, the Engine is ready to be used,
+and content is ready to be loaded. For more, read the Implementation chapter.
 
-    # Create two players
-    player_a = Entity(session.id, "Player A", 4, 4, 5, 5)
-    player_b = Entity(session.id, "Player B", 4, 4, 5, 5)
+Implementation
+------------
 
-    # Attach players to the session
-    session.attach_entity(player_a)
-    session.attach_entity(player_b)
+Implementing is one of the main purposes of the Engine.
+However, if you wish to implement your own VeganWars game, you must adhere
+to very arbitrary conventions that are not well represented in the engine.
 
-    for entity in session.entities:
-        for state in rebuild.all_states:
-            # Attach all default states to all players
-            entity.attach_state(state(), engine.event_manager)
+However, even if you just wish to write content expansions, it would still
+help to read these briefly to have an understanding of the engine.
 
-        # Attach one random skill to all players
-        entity.attach_state(random.choice(rebuild.all_skills), engine.event_manager)
+.. toctree::
 
-    # Set a weapon for each player
-    player_a.weapon = Shotgun(session.id, player_a.id)
-    player_b.weapon = Pistol(session.id, player_b.id)
+   elements
+   implementing/event_system
+   implementing/content_system
+   implementing/match_flow
 
-    # Update the list of actions, available for each player
-    engine.action_manager.update_actions(session)
+Modding
+------------
 
-    # Get "Attack" Action instance
-    attack_a = engine.action_manager.get_action(session, player_a, 'attack')
-    attack_b = engine.action_manager.get_action(session, player_b, 'attack')
+Deluxe is meant to be modded since the inception. Writing a content expansion
+for the Deluxe Engine, you write it for all VeganWars Deluxe implementations.
+Whether you play in Telegram, on Web, on PC or anywhere else.
 
-    # Set player's attack target to each other
-    attack_a.target = player_b
-    attack_b.target = player_a
+.. toctree::
 
-    # Add attack actions to the action queue
-    engine.action_manager.queue_action_instance(attack_a)
-    engine.action_manager.queue_action_instance(attack_b)
-
-    # Execute the move
-    session.move()
-
-    # Display game logs
-    for text in session.texts:
-        print(text, end='')
-
-
+   modding/item
+   modding/state
+   modding/skill
+   modding/weapon
+   modding/npc
+   modding/match

@@ -16,15 +16,17 @@ class ThrowingKnife(Item):
 class ThrowingKnifeAction(DecisiveItem):
     id = 'throwing_knife'
     target_type = Enemies()
-
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.HARMFUL]
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     @property
     def name(self):
+        if hasattr(self, '_name'):
+            return self._name
         return ls("rebuild.item.throwing_knife_name.percentage").format(self.hit_chance)
+
+    @name.setter
+    def name(self, value):
+        self._name = value
 
     @property
     def hit_chance(self):

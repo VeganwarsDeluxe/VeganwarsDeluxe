@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, OwnOnly
+from VegansDeluxe.core import AttachedAction, SelfOnly
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
@@ -28,7 +28,7 @@ class DroppedWeapon(State):
 class PickUp(DecisiveStateAction):
     id = 'pick_up'
     name = ls("rebuild.state.dropped_weapon.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, skill: DroppedWeapon):
         super().__init__(session, source, skill)

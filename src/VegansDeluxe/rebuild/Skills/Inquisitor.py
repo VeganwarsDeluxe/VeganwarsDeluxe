@@ -55,12 +55,11 @@ class Pray(DecisiveStateAction):
     name = ls("rebuild.skill.inquisitor.pray_action.name")
     priority = 2
     target_type = Everyone()
+    tags = DecisiveStateAction.tags + [ActionTag.HARMFUL]
 
     def __init__(self, session: Session, source: Entity, skill: Inquisitor):
         super().__init__(session, source, skill)
         self.state = skill
-
-        self.tags += [ActionTag.HARMFUL]
 
         self._timer = 3
 

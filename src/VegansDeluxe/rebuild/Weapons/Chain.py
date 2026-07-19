@@ -1,6 +1,4 @@
-import random
-
-from VegansDeluxe.core import AttachedAction, Next, RegisterWeapon
+from VegansDeluxe.core import AttachedAction, Next, RegisterWeapon, Entity, percentage_chance
 from VegansDeluxe.core import DeliveryPackageEvent, DeliveryRequestEvent
 from VegansDeluxe.core import Enemies, Distance
 from VegansDeluxe.core import EventContext
@@ -48,8 +46,8 @@ class KnockWeapon(MeleeAttack):
             action_manager = context.action_manager
 
             self.weapon.cooldown_turn = self.session.turn + 6
-            damage = (await self.attack(source, target)).dealt
-            if not damage:
+            damage = (await self.attack(source, target))
+            if not damage.calculated:
                 self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
                 return
 
@@ -58,7 +56,7 @@ class KnockWeapon(MeleeAttack):
                 if ActionTag.RELOAD in action.tags:
                     source_reloading = True
 
-            if source_reloading or random.randint(1, 100) <= 10:
+            if source_reloading or percentage_chance(passive_chance(target)):
                 self.session.say(ls("rebuild.weapon.chain.action.text").format(source.name, target.name))
                 state = target.get_state(DroppedWeapon)
                 state.drop_weapon(target)
@@ -66,3 +64,6 @@ class KnockWeapon(MeleeAttack):
                 self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
+
+def passive_chance(target: Entity):
+    return (target.max_energy - target.energy)*10 + 10

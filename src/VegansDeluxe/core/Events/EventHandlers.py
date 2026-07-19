@@ -26,7 +26,7 @@ class EventSubscription:
         self.handler:  HandlerType = handler
         self.event_type: Type[Event] = event
         self.max_repeats = max_repeats
-        self.times_executed = set()
+        self.times_executed = list()
         self.unique_type = unique_type
         self.priority = priority
 
@@ -42,8 +42,7 @@ class EventSubscription:
             self.turns_waited.add(event.turn)
             return False
         if self.max_repeats != -1 and len(self.times_executed) >= self.max_repeats:
-            if event.turn not in self.times_executed:
-                return False
+            return False
         return True
 
     def is_valid_event(self, event: Event) -> bool:
@@ -75,7 +74,7 @@ class EventSubscription:
             return False
 
         if isinstance(event, GameEvent):
-            self.times_executed.add(event.turn)
+            self.times_executed.append(event.turn)
 
         return await self.handler(event)
 

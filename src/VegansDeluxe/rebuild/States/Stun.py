@@ -3,8 +3,8 @@ from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core.Events.MatchEvents import ChooseActionEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.matchmakery.Events.MatchEvents import RequestActionChoiceEvent
 
 
 class Stun(State):
@@ -26,7 +26,7 @@ async def register(root_context: StateContext[Stun]):
         if not state.stun:
             return
         for action in context.action_manager.get_actions(session, source):
-            if action.id != 'lay_stun':
+            if action.id != 'lay_stun': # TODO: What?
                 action.removed = True
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
@@ -37,8 +37,8 @@ async def register(root_context: StateContext[Stun]):
             session.say(ls("rebuild.state.stun.wake_up").format(source.name))
         state.stun -= 1
 
-    @RegisterEvent(session.id, event=ChooseActionEvent, priority=-1)
-    async def handle_choose_action_call(context: EventContext[ChooseActionEvent]):
+    @RegisterEvent(session.id, event=RequestActionChoiceEvent, priority=-1)
+    async def handle_choose_action_call(context: EventContext[RequestActionChoiceEvent]):
         if source.id != context.event.entity_id or state.stun == 0:
             return
         context.event.canceled = True

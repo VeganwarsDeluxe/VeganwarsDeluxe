@@ -1,12 +1,12 @@
-Welcome to Veganwars Deluxe documentation!
-===================================
+Welcome to VeganWars Deluxe documentation!
+==========================================
 
-**VeganWars Deluxe** is a Python library that aims to be an engine for a locally
-known turn-based game "VeganWars".
+**VeganWars Deluxe** (or just Deluxe) is an Event Driven Engine for a locally
+known turn-based fighting game "VeganWars".
 
-
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+Currently, there is two ways to engage with the engine - Implementing and Modding.
+Currently, creating your own content for Deluxe is much easier than implementing your own
+version of the game.
 
 .. note::
 
@@ -18,7 +18,6 @@ Contents
 .. toctree::
 
    usage
-   api
+   elements
    stages
    npc
-   VegansDeluxe

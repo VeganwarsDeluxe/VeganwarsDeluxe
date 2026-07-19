@@ -10,7 +10,8 @@ class Fist(MeleeWeapon):
     name = ls("rebuild.weapon.fist.name")
     description = ls("rebuild.weapon.fist.description")
 
-    accuracy_bonus = 2
+    cubes = 1
+    accuracy_bonus = 4
 
 
 @AttachedAction(Fist)

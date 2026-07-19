@@ -1,8 +1,6 @@
-import math
-import random
 from typing import Optional
 
-from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction
+from VegansDeluxe.core.Actions.Action import Action, FreeAction, DecisiveAction, InstantAction
 from VegansDeluxe.core.Actions.ActionTags import ActionTag
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.core.Events.DamageEvents import PostAttackGameEvent, AttackGameEvent
@@ -11,6 +9,7 @@ from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.TargetType import Enemies, Distance
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons import Weapon
+from VegansDeluxe.core.utils import per_cubes
 
 
 class DamageData:
@@ -29,6 +28,9 @@ class WeaponAction[T: Weapon](Action):
         self.weapon: T = weapon
 
 
+class InstantWeaponAction(WeaponAction, InstantAction):
+    pass
+
 class FreeWeaponAction(WeaponAction, FreeAction):
     pass
 
@@ -43,6 +45,8 @@ class Attack(DecisiveWeaponAction):
     target_type = Enemies()
     priority = 0
 
+    tags = DecisiveWeaponAction.tags + [ActionTag.HARMFUL, ActionTag.ATTACK]
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -53,8 +57,6 @@ class Attack(DecisiveWeaponAction):
         self.ATTACK_MESSAGE = ls("core.base_attack.hit")
         self.MISS_MESSAGE = ls("core.base_attack.miss")
         self.SELF_TARGET_NAME = ls("core.self_target_name")
-
-        self.tags += [ActionTag.ATTACK, ActionTag.HARMFUL]
 
     async def func(self, source, target):
         return await self.attack(source, target)
@@ -67,24 +69,25 @@ class Attack(DecisiveWeaponAction):
             energy = source.energy
         if energy <= 0:
             return 0
-        total_accuracy = (energy + self.weapon.accuracy_bonus + target.inbound_accuracy_bonus
-                          + source.outbound_accuracy_bonus)
-        damage = sum(1 for _ in range(self.weapon.cubes) if random.randint(1, 10) <= total_accuracy)
-        if total_accuracy > 10:
-            damage = int(math.floor(damage * total_accuracy / 10))
+        damage = per_cubes(self.weapon.cubes, self.weapon.accuracy_bonus,
+                           energy, target.inbound_accuracy_bonus + source.outbound_accuracy_bonus)
         return damage + self.weapon.damage_bonus if damage else 0
 
-    async def attack(self, source, target, pay_energy=True) -> DamageData:
+    async def attack(self, source, target, pay_energy=True,
+                     bonus_damage: int = 0, send_message: bool = True) -> DamageData:
         """
-        Actually performs attack on target, dealing damage.
+        Actually performs attack on target, dealing damage. Bonus damage is added (and displayed) if there's no miss.
         """
         calculated_damage = self.calculate_damage(source, target)
+        if calculated_damage:
+            calculated_damage += bonus_damage
         if pay_energy:
             energy_payment_event = await self.publish_energy_payment_event(source, self.weapon.energy_cost)
             source.energy = max(source.energy - energy_payment_event.energy_payment, 0)
 
         displayed_damage_message = await self.publish_attack_event(source, target, calculated_damage)
-        self.send_attack_message(source, target, displayed_damage_message.damage)
+        if send_message:
+            self.send_attack_message(source, target, displayed_damage_message.damage)
         dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage_message.damage)
 
         target.inbound_dmg.add(source, dealt_damage.damage, self.session.turn)
@@ -92,7 +95,7 @@ class Attack(DecisiveWeaponAction):
         return DamageData(calculated_damage, displayed_damage_message.damage, dealt_damage.damage)
 
     async def publish_energy_payment_event(self, source, energy_cost) -> EnergyPaymentEvent:
-        message = EnergyPaymentEvent(self.session.id, self.session.turn, source, energy_payment=energy_cost)
+        message = EnergyPaymentEvent(self.session.id, self.session.turn, source.id, energy_payment=energy_cost)
         await self.event_manager.publish(message)
         return message
 

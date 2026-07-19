@@ -8,6 +8,7 @@ from VegansDeluxe.core.Actions.WeaponAction import WeaponAction
 from VegansDeluxe.core.Entities.Entity import Entity
 from VegansDeluxe.core.Events.Events import PostUpdateActionsGameEvent, PreUpdateActionsGameEvent
 from VegansDeluxe.core.Items.Item import Item
+from VegansDeluxe.core.ObjectTags import ObjectTag
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.SessionManager import SessionManager
 from VegansDeluxe.core.States import State
@@ -55,9 +56,9 @@ class ActionManager:
         :todo: Deprecate this. Used by Mimic only.
         """
         owner_type, action_type = self.get_action_from_all_actions(action_id)
-        if owner_type.type == 'entity':
+        if ObjectTag.ENTITY in owner_type.tags:
             action = action_type(session, entity)
-        elif owner_type.type == 'weapon':
+        elif ObjectTag.WEAPON in owner_type.tags:
             action = action_type(session, entity, owner_type(session.id, entity.id))
         else:
             action = action_type(session, entity, owner_type())

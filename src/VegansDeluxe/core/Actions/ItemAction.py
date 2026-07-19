@@ -9,12 +9,11 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 class ItemAction(Action):
     id = 'item'
     name = ls("core.base_item.name")
+    tags = Action.tags + [ActionTag.ITEM]
 
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source)
         self.item = item
-        self.tags += [ActionTag.ITEM]
-        self.type = 'item'
 
 
 class FreeItem(ItemAction, FreeAction):

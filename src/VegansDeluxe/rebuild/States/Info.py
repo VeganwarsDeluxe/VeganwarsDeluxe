@@ -1,7 +1,7 @@
 from VegansDeluxe.core import AttachedAction
 from VegansDeluxe.core import Entity
-from VegansDeluxe.core import OwnOnly
 from VegansDeluxe.core import RegisterState
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext
@@ -10,7 +10,7 @@ from VegansDeluxe.core.Question.Question import Question
 from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
-from VegansDeluxe.rebuild import DamageThreshold
+from VegansDeluxe.rebuild.States.DamageThreshold import DamageThreshold
 
 
 class Info(State):
@@ -27,7 +27,7 @@ async def register(root_context: StateContext[Info]):
 class InfoAction(InstantStateAction):
     id = 'info'
     name = ls("rebuild.skill.info.action.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, state: Info):
         super().__init__(session, source, state)
@@ -49,6 +49,7 @@ class InfoAction(InstantStateAction):
             max_energy=target.max_energy,
 
             damage_threshold=target.get_state(DamageThreshold).threshold,
+            accuracy_bonus=target.outbound_accuracy_bonus,
             skill_names=LocalizedList([s.name for s in target.skills]),
 
             weapon_name=target.weapon.name,

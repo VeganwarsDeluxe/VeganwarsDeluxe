@@ -6,3 +6,5 @@ docs/build
 build
 *.egg-info
 WeaponsLegacy.py
+neuro/*
+neuro

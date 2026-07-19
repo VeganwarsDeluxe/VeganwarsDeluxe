@@ -67,7 +67,7 @@ you need to create and attach them to the NPC.
     class SlimeReload(DecisiveAction):
         id = 'slime_reload'
         name = ls('slime.reload.name')
-        target_type = OwnOnly()
+        target_type = SelfOnly()
 
         async def func(self, source, target):
             self.session.say(ls("slime.reload.text").format(source.name, source.max_energy))

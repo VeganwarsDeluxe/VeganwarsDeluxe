@@ -1,6 +1,7 @@
 import random
 
-from VegansDeluxe.core import NPC, Session, AttachedAction, DecisiveAction, ActionTag, OwnOnly, ActionManager
+from VegansDeluxe.core import Session, AttachedAction, DecisiveAction, ActionTag, SelfOnly, ActionManager
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 quotes = """Kozych.
 Three paths lead to knowledge: the path of reflection is the noblest path, the path of imitation is the easiest path, and the path of experience is the bitterest path.
@@ -121,13 +122,9 @@ class Confucius(NPC):
 class ConfuciusQuote(DecisiveAction):
     id = 'skip'
     name = "Confucius"
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = 2
-
-    def __init__(self, *args):
-        super().__init__(*args)
-
-        self.tags += [ActionTag.SKIP]
+    tags = DecisiveAction.tags + [ActionTag.SKIP]
 
     async def func(self, source, target):
         self.session.say(f"💬|{source.name}: {random.choice(quotes.split('\n'))}")

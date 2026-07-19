@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, ActionTag
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import ItemAction
@@ -55,7 +55,7 @@ class Steal(DecisiveStateAction):
             self.state.cooldown_turn = self.session.turn + 3
             success = False
             for action in action_manager.action_queue:
-                if action.type != 'item':
+                if ActionTag.ITEM not in action.tags:
                     continue
                 action: ItemAction
                 if action.source != target:

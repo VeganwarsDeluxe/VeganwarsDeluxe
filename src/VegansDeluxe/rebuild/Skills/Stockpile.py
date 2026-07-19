@@ -13,6 +13,8 @@ class Stockpile(Skill):
     name = ls("rebuild.skill.stockpile.name")
     description = ls("rebuild.skill.stockpile.description")
 
+    item_pool = rebuild.game_items_pool.copy()
+
 
 @RegisterState(Stockpile)
 async def register(root_context: StateContext[Stockpile]):
@@ -21,12 +23,12 @@ async def register(root_context: StateContext[Stockpile]):
 
     given = []
     for _ in range(2):
-        item = random.choice(rebuild.game_items_pool)()
-        pool = list(filter(lambda i: i().id not in given, rebuild.game_items_pool))
+        item = random.choice(root_context.state.item_pool)()
+        pool = list(filter(lambda i: i().id not in given, root_context.state.item_pool))
         pool = list(filter(lambda i: i.id not in [playerItem.id for playerItem in source.items], pool))
         if pool:
             item = random.choice(pool)()
         else:
-            random.choice(rebuild.game_items_pool)()
+            random.choice(root_context.state.item_pool)()
         given.append(item.id)
         source.items.append(item)

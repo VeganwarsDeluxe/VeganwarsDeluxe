@@ -20,7 +20,7 @@ class Axe(MeleeWeapon):
 @AttachedAction(Axe)
 class AxeAttack(MeleeAttack):
     async def func(self, source, target):
-        damage = (await super().attack(source, target)).dealt
+        damage = (await super().attack(source, target)).calculated
         if not damage:
             return damage
         threshold = target.get_state(DamageThreshold)

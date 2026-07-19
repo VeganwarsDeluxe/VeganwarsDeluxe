@@ -86,7 +86,7 @@ class HPLossGameEvent(GameEvent):
         super().__init__(session_id, turn)
         self.source = source
         self.damage = damage
-        self.hp_loss = hp_loss
+        self.hp_loss: int = hp_loss
 
 
 class SessionStopGameEvent(GameEvent):

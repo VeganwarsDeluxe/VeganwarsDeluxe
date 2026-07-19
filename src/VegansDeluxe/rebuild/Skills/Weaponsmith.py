@@ -2,7 +2,7 @@ import random
 
 from VegansDeluxe.core import RegisterState, Weapon, PreActionsGameEvent
 from VegansDeluxe.core import Session
-from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, OwnOnly, Entity, DeliveryPackageEvent, \
+from VegansDeluxe.core import StateContext, Next, EventContext, AttachedAction, SelfOnly, Entity, DeliveryPackageEvent, \
     DeliveryRequestEvent
 from VegansDeluxe.core.Actions.StateAction import InstantStateAction
 from VegansDeluxe.core.Question.Choice import Choice
@@ -63,7 +63,7 @@ async def register(root_context: StateContext[Weaponsmith]):
 class SwitchWeapon(InstantStateAction):
     id = 'switch_weapon'
     name = ls("rebuild.skill.weaponsmith.action.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Weaponsmith):
         super().__init__(session, source, skill)

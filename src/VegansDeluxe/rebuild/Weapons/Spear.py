@@ -1,4 +1,4 @@
-from VegansDeluxe.core import At, OwnOnly
+from VegansDeluxe.core import At, SelfOnly
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import DecisiveWeaponAction, MeleeAttack
 from VegansDeluxe.core import Entity
@@ -43,7 +43,7 @@ class CounterAttack(DecisiveWeaponAction):
     name = ls("rebuild.weapon.spear.action.name")
     id = 'counter-attack'
     priority = -4
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, weapon: Spear):
         super().__init__(session, source, weapon)

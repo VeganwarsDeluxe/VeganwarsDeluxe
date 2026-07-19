@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, Callable
 
 from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.Translator import translator
@@ -10,19 +10,19 @@ class LocalizedString:
             format_queue = []
 
         self.key = key
-        self.__format_queue: list[callable] = format_queue
+        self.__format_queue: list[Callable] = format_queue
 
     def __str__(self):
         return self.localize()
 
-    def localize(self, code: str = ""):
+    def localize(self, code: str = "", context=None) -> str:
         if code and code not in translator.locales:
             print(f"Warning: no [{code}] locale in translator. Defaulting to [{translator.default_locale}].")
             code = translator.default_locale
-        string = translator.get_string(self.key, code)
+        string = translator.get_string(self.key, code, context)
         if string is None and code != translator.default_locale:
             print(f"Warning: string [{self.key}] not found in [{code}]. Defaulting to [{translator.default_locale}].")
-            string = self.localize(translator.default_locale)
+            string = self.localize(translator.default_locale, context)
         if string is None:
             print(f"Warning: string [{self.key}] not found in default locale [{translator.default_locale}]. "
                   f"Defaulting to raw key.")

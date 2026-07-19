@@ -5,7 +5,7 @@ from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent, \
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
     DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent, SessionStopGameEvent, \
-    SessionFinishGameEvent
+    SessionFinishGameEvent, GameEvent
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -13,7 +13,7 @@ class Session[T: Entity]:
     def __init__(self, event_manager: EventManager):
         self.event_manager = event_manager
 
-        self.id = uuid4()
+        self.id = str(uuid4())
         self.turn = 1
         self.active = True
         self.entities: list[T] = []
@@ -30,11 +30,16 @@ class Session[T: Entity]:
         result = [entity for entity in self.entities if entity.id == entity_id]
         return result[0] if result else None
 
-    def say(self, text: str | ls, n: bool = True) -> None:
+    def say(self, text: str | ls, n: str = "\n", at_next_event: type[GameEvent] | None = None) -> None:
         """
         Adds given text to log queue.
         """
-        self.texts.append(text + ("\n" if n else ''))
+        if at_next_event:
+            async def callback(event):
+                self.texts.append(text + n)
+            self.event_manager.nearest(callback, self.id, event=at_next_event)
+        else:
+            self.texts.append(text + n)
 
     @property
     def alive_entities(self) -> list[T]:
@@ -83,12 +88,15 @@ class Session[T: Entity]:
         """
         hp_loss = (damage // 6) + 1
 
-        message = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
-        await self.event_manager.publish(message)
+        event = HPLossGameEvent(self.id, self.turn, entity, damage, hp_loss)
+        await self.event_manager.publish(event)
 
-        entity.hp -= message.hp_loss
+        if event.canceled:
+            return
+
+        entity.hp -= event.hp_loss
         self.say(ls("core.session.message.hp_loss")
-                 .format(hearts=entity.hearts, name=entity.name, hp_loss=message.hp_loss,
+                 .format(hearts=entity.hearts, name=entity.name, hp_loss=event.hp_loss,
                          hp=entity.hp))
 
     async def calculate_damages(self):
@@ -160,7 +168,8 @@ class Session[T: Entity]:
             PostActionsGameEvent(self.id, self.turn))  # 3. Post-action stage
 
         self.say(ls("core.session.message.effects").format(self.turn))
-        await self.event_manager.publish(PreDamagesGameEvent(self.id, self.turn))
+        await self.event_manager.publish(
+            PreDamagesGameEvent(self.id, self.turn))
 
         self.say(ls("core.session.message.results").format(self.turn))
         await self.calculate_damages()  # 4. Damages stage

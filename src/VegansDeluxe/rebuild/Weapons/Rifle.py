@@ -1,13 +1,15 @@
-from VegansDeluxe.core import AttachedAction, RegisterWeapon
-from VegansDeluxe.core import DecisiveWeaponAction, RangedAttack
+from VegansDeluxe.core import AttachedAction, RegisterWeapon, PreActionsGameEvent
+from VegansDeluxe.core import DecisiveWeaponAction, InstantWeaponAction, RangedAttack
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import PreMoveGameEvent
 from VegansDeluxe.core import RegisterEvent
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
+from VegansDeluxe.rebuild.Weapons.Fist import Fist
 
 
 @RegisterWeapon
@@ -77,3 +79,15 @@ class AimRifle(DecisiveWeaponAction):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
         self.session.say(ls("rebuild.weapon.sniper_rifle.action.text").format(source.name))
+
+
+@AttachedAction(Rifle)
+class DropRifle(InstantWeaponAction):
+    id = 'drop_rifle'
+    name = ls("rebuild.weapon.drop.action.name")
+    target_type = SelfOnly()
+    priority = -10
+
+    async def func(self, source, target):
+        source.weapon = Fist(source.session_id, source.id)
+        self.session.say(ls("rebuild.weapon.drop.action.text").format(source.name), at_next_event=PreActionsGameEvent)

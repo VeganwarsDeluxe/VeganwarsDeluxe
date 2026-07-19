@@ -18,7 +18,7 @@ class Knife(MeleeWeapon):
 @AttachedAction(Knife)
 class KnifeAttack(MeleeAttack):
     async def func(self, source, target):
-        damage = (await super().attack(source, target)).dealt
+        damage = (await super().attack(source, target)).calculated
         if not damage:
             return damage
         bleeding = target.get_state(Bleeding)

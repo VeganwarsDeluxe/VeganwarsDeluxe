@@ -24,10 +24,10 @@ class MolotovAction(DecisiveItem):
     name = ls("rebuild.item.molotov.name")
     target_type = Enemies()
 
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
+
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source, item)
-        self.tags += [ActionTag.HARMFUL]
-
         self.range = 2
 
     async def func(self, source: Entity, target: Entity):
@@ -39,15 +39,18 @@ class MolotovAction(DecisiveItem):
             if not target_pool:
                 continue
             target = random.choice(target_pool)
-            target: Entity
-
-            aflame = target.get_state(Aflame)
-            aflame.add_flame(self.session, target, source, 1)
             targets.append(target)
+
         source.energy = max(source.energy - 2, 0)
         self.session.say(
             ls("rebuild.item.molotov.text").format(source.name, LocalizedList([t.name for t in targets]))
         )
+
+        for target in targets:
+            target: Entity
+
+            aflame = target.get_state(Aflame)
+            aflame.add_flame(self.session, target, source, 1)
 
     @property
     def blocked(self):

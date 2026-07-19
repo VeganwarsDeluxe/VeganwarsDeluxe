@@ -5,7 +5,7 @@ from VegansDeluxe.core import RegisterEvent
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core.Skills.Skill import Skill
+from VegansDeluxe.core.Skills.Skill import Skill, SkillTag
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -13,6 +13,8 @@ class Biceps(Skill):
     id = 'biceps'
     name = ls("rebuild.skill.biceps.name")
     description = ls("rebuild.skill.biceps.description")
+
+    tags = Skill.tags + [SkillTag.MELEE_WEAPON_ONLY]
 
 
 @RegisterState(Biceps)
@@ -29,5 +31,5 @@ async def register(root_context: StateContext[Biceps]):
             return
         if not context.event.damage:
             return
-        session.say(f'❗️', n=False)
+        session.say(f'❗️', n='')
         context.event.damage *= 2

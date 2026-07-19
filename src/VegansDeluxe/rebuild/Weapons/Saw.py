@@ -23,7 +23,7 @@ class Saw(RangedWeapon):
 @AttachedAction(Saw)
 class SawAttack(RangedAttack):
     async def func(self, source, target):
-        damage = (await super().attack(source, target)).dealt
+        damage = (await super().attack(source, target)).calculated
         if not damage:
             return damage
         self.session.say(ls("rebuild.weapon.saw.effect")

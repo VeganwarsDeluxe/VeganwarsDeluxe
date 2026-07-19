@@ -5,20 +5,24 @@ from VegansDeluxe.core.DamageHolder import DamageHolder
 from VegansDeluxe.core.Events.EventManager import EventManager
 from VegansDeluxe.core.Events.Events import AttachStateEvent
 from VegansDeluxe.core.Items.Item import Item
+from VegansDeluxe.core.Object import Object
+from VegansDeluxe.core.ObjectTags import ObjectTag
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.States import State
 from VegansDeluxe.core.Translator.LocalizedString import LocalizedString
 from VegansDeluxe.core.Weapons.Weapon import Weapon
 
 
-class Entity:
+class Entity(Object):
     """
     Entity class. Main actor in the Session - Entities perform Actions.
     """
     type = 'entity'
 
+    tags = Object.tags + [ObjectTag.ENTITY]
+
     def __init__(self,
-                 session_id: str = '', name: str = '',
+                 session_id: str = '', name: str | LocalizedString = '',
                  hp: int = 0, max_hp: int = 0,
                  energy: int = 0, max_energy: int = 0):
 
@@ -31,18 +35,24 @@ class Entity:
         self.id = str(uuid4())
         """ID of the entity."""
 
-        self.hp: int = hp
+        self.__hp: int = hp
         """Current HP of the entity."""
-        self.max_hp: int = max_hp
+        self.__max_hp: int = max_hp
         """Max HP value of the entity."""
+        self.__energy: int = energy
+        """Current energy of the entity."""
+        self.__max_energy: int = max_energy
+        """Max energy value of the entity."""
+
+        self.__base_hp: int = hp
+        self.__base_max_hp: int = max_hp
+        self.__base_energy: int = energy
+        self.__base_max_energy: int = max_energy
+        self.__base_locked: bool = False
+        """Base starting values before any modification by the game events."""
 
         self.dead: bool = False
         """Shows if entity is dead or alive."""
-
-        self.energy: int = energy
-        """Current energy of the entity."""
-        self.max_energy: int = max_energy
-        """Max energy value of the entity."""
 
         self.weapon: Weapon = Weapon(session_id, self.id)
         """Weapon of the entity."""
@@ -70,6 +80,69 @@ class Entity:
 
         self.notifications: list[str | LocalizedString] = []
         """Temporary variable. List of strings that should be privately displayed to the Entity."""
+
+        self.metadata: dict = {}
+        """Variable for various expansion."""
+
+    @property
+    def hp(self) -> int:
+        """Current HP of the entity."""
+        return self.__hp
+
+    @hp.setter
+    def hp(self, value: int) -> None:
+        self.__hp = value
+        if not self.__base_locked:
+            self.__base_hp = value
+
+    @property
+    def max_hp(self) -> int:
+        """Max HP value of the entity."""
+        return self.__max_hp
+
+    @max_hp.setter
+    def max_hp(self, value: int) -> None:
+        self.__max_hp = value
+        if not self.__base_locked:
+            self.__base_max_hp = value
+
+    @property
+    def energy(self) -> int:
+        """Current energy of the entity."""
+        return self.__energy
+
+    @energy.setter
+    def energy(self, value: int) -> None:
+        self.__energy = value
+        if not self.__base_locked:
+            self.__base_energy = value
+
+    @property
+    def max_energy(self) -> int:
+        """Max energy value of the entity."""
+        return self.__max_energy
+
+    @max_energy.setter
+    def max_energy(self, value: int) -> None:
+        self.__max_energy = value
+        if not self.__base_locked:
+            self.__base_max_energy = value
+
+    @property
+    def base_hp(self) -> int:
+        return self.__base_hp
+
+    @property
+    def base_max_hp(self) -> int:
+        return self.__base_max_hp
+
+    @property
+    def base_energy(self) -> int:
+        return self.__base_energy
+
+    @property
+    def base_max_energy(self) -> int:
+        return self.__base_max_energy
 
     @property
     def hit_chance(self) -> int:
@@ -101,7 +174,7 @@ class Entity:
     @property
     def skills(self) -> list[Skill]:
         """Returns list of entity's Skills only."""
-        return list(filter(lambda s: s.type == 'skill', self.states))
+        return list(filter(lambda s: ObjectTag.SKILL in s.tags, self.states))
 
     def get_item(self, item_id: str) -> Item:
         """Returns Item by its ID."""
@@ -112,6 +185,7 @@ class Entity:
             return item
 
     async def attach_state(self, state: State, event_manager: EventManager):
+        self.__base_locked = True
         self.states.append(state)
         await event_manager.publish(AttachStateEvent(self.session_id, self.id, state))
 
