@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, ActionTag
+from VegansDeluxe.core import AttachedAction, ActionTag, FreeStateAction
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import ItemAction
@@ -6,7 +6,6 @@ from VegansDeluxe.core import PreActionsGameEvent, DeliveryRequestEvent, Deliver
 from VegansDeluxe.core import RegisterEvent, RegisterState, Next
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import StateContext, EventContext
-from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -33,7 +32,7 @@ async def register(root_context: StateContext[Thief]):
 
 
 @AttachedAction(Thief)
-class Steal(DecisiveStateAction):
+class Steal(FreeStateAction):
     id = 'steal'
     name = ls("rebuild.skill.thief.action.name")
     priority = -3

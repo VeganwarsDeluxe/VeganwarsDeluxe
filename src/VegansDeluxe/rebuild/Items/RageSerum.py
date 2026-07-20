@@ -21,6 +21,7 @@ class RageSerumAction(FreeItem):
     id = 'rage-serum'
     name = ls("rebuild.item.rage_serum.name")
     target_type = Everyone()
+    priority = 1
 
     tags = FreeItem.tags + [ActionTag.MEDICINE]
 

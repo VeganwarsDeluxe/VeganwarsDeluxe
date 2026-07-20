@@ -6,3 +6,6 @@ localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizati
 translator.load_folder(localizations)
 
 from .Tags import EntityTag
+from .Dungeons import Dungeon
+
+__all__ = ["Dungeon", "EntityTag"]

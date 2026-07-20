@@ -21,4 +21,4 @@ async def register(root_context: StateContext[ToughSkull]):
     armor: Armor = source.get_state(Armor)
     armor.add(1, 50)
     threshold = source.get_state(DamageThreshold)
-    threshold.threshold += 1
+    threshold.threshold += 2

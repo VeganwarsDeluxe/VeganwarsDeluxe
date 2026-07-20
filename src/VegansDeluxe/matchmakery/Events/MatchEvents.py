@@ -80,3 +80,36 @@ class WeaponsChosenEvent(GameEvent):
 class SkillsChosenEvent(GameEvent):
     def __init__(self, session_id: str, turn: int):
         super().__init__(session_id, turn)
+
+
+class DungeonMatchStartedEvent(GameEvent):
+    """A Dungeon has initialized a child Match and made it active."""
+    def __init__(self, session_id: str, turn: int, dungeon, previous_match, current_match):
+        super().__init__(session_id, turn)
+        self.dungeon = dungeon
+        self.previous_match = previous_match
+        self.current_match = current_match
+
+
+class DungeonMatchFinishedEvent(GameEvent):
+    """A child Match ended and is about to be replaced or finalized."""
+    def __init__(self, session_id: str, turn: int, dungeon, completed_match):
+        super().__init__(session_id, turn)
+        self.dungeon = dungeon
+        self.completed_match = completed_match
+
+
+class DungeonFinishedEvent(GameEvent):
+    """The final child Match ended and the Dungeon has no next level."""
+    def __init__(self, session_id: str, turn: int, dungeon, final_match):
+        super().__init__(session_id, turn)
+        self.dungeon = dungeon
+        self.final_match = final_match
+
+
+class DungeonFailedEvent(GameEvent):
+    """All players who joined a Dungeon died in one of its child Matches."""
+    def __init__(self, session_id: str, turn: int, dungeon, failed_match):
+        super().__init__(session_id, turn)
+        self.dungeon = dungeon
+        self.failed_match = failed_match

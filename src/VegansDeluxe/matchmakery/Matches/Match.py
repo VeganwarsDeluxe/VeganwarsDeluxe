@@ -1,4 +1,5 @@
 import random
+from collections.abc import Awaitable, Callable
 
 from VegansDeluxe.core import Engine, Session, RegisterEvent, EventContext, Entity, ls, PreMoveGameEvent, ItemAction, \
     Skill, ActionTag, Item
@@ -43,6 +44,13 @@ class Match:
 
         # Misc
         self.detached = False
+        self.completion_handler: Callable[["Match"], Awaitable[bool | None]] | None = None
+        """Optional owner hook called when this Match has ended.
+
+        Return ``True`` when the owner has detached or otherwise taken over the
+        Session lifecycle. This is used by Dungeon to replace a completed Match
+        with its next level.
+        """
 
         # Setup temporaries:
         self.players_with_skill_choice = []
@@ -265,6 +273,11 @@ class Match:
 
             broadcast_logs_event = BroadcastEndMessagesEvent(self.session.id, self.session.turn)
             await self.engine.event_manager.publish(broadcast_logs_event)
+
+            if self.completion_handler:
+                handled = await self.completion_handler(self)
+                if handled:
+                    return False
 
             self.engine.detach_session(self.session)
             return False
