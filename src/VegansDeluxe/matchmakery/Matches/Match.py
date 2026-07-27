@@ -125,6 +125,9 @@ class Match:
 
     # --- INFO, GETTERS & PROPERTIES ---
 
+    def continue_loop(self) -> bool:
+        return True
+
     def is_everyone_ready(self):
         ready_ids = {entity.id for entity in self.ready_players}
         alive_ids = {entity.id for entity in self.session.alive_entities}
@@ -259,8 +262,8 @@ class Match:
 
         broadcast_logs_event = BroadcastLogsEvent(self.session.id, self.session.turn)
         await self.engine.event_manager.publish(broadcast_logs_event)
-
-        await self.pre_move()
+        if self.continue_loop():
+            await self.pre_move()
 
     async def check_game_status(self):
         """Checks the status of the game and sends end game messages if needed."""
