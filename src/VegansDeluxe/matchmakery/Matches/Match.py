@@ -343,14 +343,10 @@ class Match:
         await self.engine.event_manager.publish(team_choice_event)
 
     async def request_action_choice(self):
-        """Requests choice of action from entities. If all are ready, advances the cycle."""
+        """Requests choice of action from entities."""
         for entity in self.session.alive_entities:
             choose_action_event = RequestActionChoiceEvent(self.session.id, self.session.turn, entity.id)
             await self.engine.event_manager.publish(choose_action_event)
-
-        if self.is_everyone_ready():
-            await self.move()
-            return
 
     # --- UI Methods ---
 
