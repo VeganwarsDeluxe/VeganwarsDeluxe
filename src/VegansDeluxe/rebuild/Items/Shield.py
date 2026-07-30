@@ -19,7 +19,7 @@ class ShieldAction(DecisiveItem):
     id = 'shield'
     name = ls("rebuild.item.shield.name")
     target_type = Allies()
-    priority = -2
+    priority = -4
 
     async def func(self, source, target):
         if target == source:

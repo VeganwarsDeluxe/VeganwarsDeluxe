@@ -31,7 +31,7 @@ class ShieldGenAction(DecisiveStateAction):
     id = 'shield-gen'
     name = ls("rebuild.skill.shield_gen.action.name")
     target_type = Allies()
-    priority = -2
+    priority = -4
 
     def __init__(self, session: Session, source: Entity, skill: ShieldGen):
         super().__init__(session, source, skill)

@@ -80,6 +80,8 @@ class Session[T: Entity]:
 
     def cancel_damages(self, source):
         for entity in self.entities:
+            if entity.id == source.id:
+                continue
             entity.inbound_dmg.cancel(source)
 
     async def lose_hp(self, entity: T, damage: int) -> None:
@@ -111,7 +113,6 @@ class Session[T: Entity]:
         for entity in self.entities:
             if entity.inbound_dmg.sum() == 0:
                 continue
-            entity.inbound_dmg.cancel(entity)
 
             await self.lose_hp(entity, entity.inbound_dmg.sum())
 

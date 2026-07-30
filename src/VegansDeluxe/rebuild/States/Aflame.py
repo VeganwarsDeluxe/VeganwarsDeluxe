@@ -14,20 +14,40 @@ class Aflame(State):
     def __init__(self):
         super().__init__()
         self.timer = 0
-        self.flame = 0
+        self.flames = []
         self.dealer = None
         self.extinguished = False
 
         self.burn_time = 2
 
-    def add_flame(self, session, target, source, flame):
+    @property
+    def flame(self):
+        return len(self.flames)
+
+    @flame.setter
+    def flame(self, value):
+        if value <= 0:
+            self.flames = []
+            self.dealer = None
+            return
+
+        current_flames = len(self.flames)
+        if value < current_flames:
+            self.flames = self.flames[:value]
+        elif value > current_flames:
+            if self.dealer is None:
+                raise ValueError("Use add_flame() to increase flame with dealer attribution.")
+            self.flames.extend([self.dealer] * (value - current_flames))
+
+    def add_flame(self, session, target, source, flame, announce=True):
         self.timer = self.burn_time
         self.extinguished = False
-        if self.flame == 0:
-            session.say(ls("rebuild.state.aflame.activate").format(target.name))
-        else:
-            session.say(ls("rebuild.state.aflame.increase").format(target.name))
-        self.flame += flame
+        if announce:
+            if self.flame == 0:
+                session.say(ls("rebuild.state.aflame.activate").format(target.name))
+            else:
+                session.say(ls("rebuild.state.aflame.increase").format(target.name))
+        self.flames.extend([source] * flame)
         self.dealer = source
 
 
@@ -79,13 +99,14 @@ async def register(root_context: StateContext[Aflame]):
             reset_state(state, session, ls("rebuild.state.aflame.disappear").format(source.name))
             return
 
-        damage = await perform_fire_attack(session, source, state, context.event)
+        fire_attacks = await perform_fire_attacks(session, source, state, context.event)
 
-        source.inbound_dmg.add(state.dealer, damage, session.turn)
-        source.outbound_dmg.add(state.dealer, damage, session.turn)
+        for dealer, damage in fire_attacks:
+            source.inbound_dmg.add(dealer, damage, session.turn)
+            dealer.outbound_dmg.add(source, damage, session.turn)
 
         if state.flame > 1:
-            source.energy -= state.flame - 1
+            source.energy = max(0, source.energy - state.flame + 1)
         if state.timer <= 1:
             state.extinguished = True
         else:
@@ -116,22 +137,31 @@ def reset_state(state, session, message):
     session.say(message)
 
 
-async def perform_fire_attack(session: Session, source, state, message):
+async def perform_fire_attacks(session: Session, source, state, message):
     """
-    Perform a fire attack and calculate the damage.
+    Perform fire attacks and calculate the damage for each flame piece.
     """
-    fire_event = FireAttackGameEvent(message.session_id, message.turn, state.dealer, source, state.flame)
-    await session.event_manager.publish(fire_event)
-    damage = fire_event.damage
+    fire_attacks = []
+    displayed_damage = 0
+
+    for dealer in state.flames:
+        fire_event = FireAttackGameEvent(message.session_id, message.turn, dealer, source, 1)
+        await session.event_manager.publish(fire_event)
+        displayed_damage += fire_event.damage
+        fire_attacks.append((dealer, fire_event.damage))
 
     if state.flame == 1:
-        session.say(ls("rebuild.state.aflame.damage").format(source.name, damage))
+        session.say(ls("rebuild.state.aflame.damage").format(source.name, displayed_damage))
     elif state.flame > 1:
-        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, damage, state.flame-1))
+        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, displayed_damage, state.flame-1))
 
-    post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, state.dealer, source, damage)
-    await session.event_manager.publish(post_fire_event)
-    return post_fire_event.damage
+    dealt_fire_attacks = []
+    for dealer, damage in fire_attacks:
+        post_fire_event = PostFireAttackGameEvent(message.session_id, message.turn, dealer, source, damage)
+        await session.event_manager.publish(post_fire_event)
+        dealt_fire_attacks.append((dealer, post_fire_event.damage))
+
+    return dealt_fire_attacks
 
 
 class FireAttackGameEvent(PreDamageGameEvent):
