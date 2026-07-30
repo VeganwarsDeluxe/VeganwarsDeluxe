@@ -15,7 +15,7 @@ from VegansDeluxe.matchmakery.Tags import EntityTag
 
 
 class Match:
-    name: str | LocalizedString = ls("matches.basic")
+    name: str | LocalizedString = ls("deluxe.matches.basic")
 
     def __init__(self, match_id, engine: Engine):
         self.engine = engine
@@ -257,7 +257,7 @@ class Match:
         """
         if not await self.check_game_status():
             return
-        self.session.say(ls("matchmakery.messages.turn_number").format(self.session.turn))
+        self.session.say(ls("core.matchmakery.messages.turn_number").format(self.session.turn))
         await self.session.move()
 
         broadcast_logs_event = BroadcastLogsEvent(self.session.id, self.session.turn)

@@ -5,7 +5,7 @@ from VegansDeluxe.rebuild import all_states
 
 
 class ConfuciusMatch(Match):
-    name = ls("matchmakery.matches.confucius")
+    name = ls("core.matchmakery.matches.confucius")
 
     def __init__(self, match_id, engine):
         super().__init__(match_id, engine)
@@ -14,6 +14,6 @@ class ConfuciusMatch(Match):
         player = await super().join_session(player_id, player_name)
         player.team = 'players'
 
-        confucius = Confucius(self.id, name=ls("matchmakery.confucius.name"))
+        confucius = Confucius(self.id, name=ls("core.matchmakery.confucius.name"))
         self.session.attach_entity(confucius)
         await self.engine.attach_states(confucius, all_states)
