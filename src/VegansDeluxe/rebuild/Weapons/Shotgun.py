@@ -37,4 +37,5 @@ class DropShotgun(InstantWeaponAction):
 
     async def func(self, source, target):
         source.weapon = Fist(source.session_id, source.id)
-        self.session.say(ls("rebuild.weapon.drop.action.text").format(source.name), at_next_event=PreActionsGameEvent)
+        self.session.say(ls("rebuild.weapon.drop.action.text").format(source.name),
+                         at_next_event=PreActionsGameEvent, source_id=source.id, target_id=source.id)

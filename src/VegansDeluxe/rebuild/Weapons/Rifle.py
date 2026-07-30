@@ -78,7 +78,8 @@ class AimRifle(DecisiveWeaponAction):
     async def func(self, source, target):
         main_target, level = self.weapon.main_target
         self.weapon.main_target = target, min(2, level + 1)
-        self.session.say(ls("rebuild.weapon.sniper_rifle.action.text").format(source.name))
+        self.session.say(ls("rebuild.weapon.sniper_rifle.action.text").format(source.name), source_id=source.id,
+                         target_id=target.id)
 
 
 @AttachedAction(Rifle)
@@ -90,4 +91,5 @@ class DropRifle(InstantWeaponAction):
 
     async def func(self, source, target):
         source.weapon = Fist(source.session_id, source.id)
-        self.session.say(ls("rebuild.weapon.drop.action.text").format(source.name), at_next_event=PreActionsGameEvent)
+        self.session.say(ls("rebuild.weapon.drop.action.text").format(source.name),
+                         at_next_event=PreActionsGameEvent, source_id=source.id, target_id=source.id)

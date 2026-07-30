@@ -48,7 +48,8 @@ class KnockWeapon(MeleeAttack):
             self.weapon.cooldown_turn = self.session.turn + 6
             damage = (await self.attack(source, target))
             if not damage.calculated:
-                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name),
+                                 source_id=source.id, target_id=target.id)
                 return
 
             source_reloading = False
@@ -57,11 +58,13 @@ class KnockWeapon(MeleeAttack):
                     source_reloading = True
 
             if source_reloading or percentage_chance(passive_chance(target)):
-                self.session.say(ls("rebuild.weapon.chain.action.text").format(source.name, target.name))
+                self.session.say(ls("rebuild.weapon.chain.action.text").format(source.name, target.name),
+                                 source_id=source.id, target_id=target.id)
                 state = target.get_state(DroppedWeapon)
                 state.drop_weapon(target)
             else:
-                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.weapon.chain.action_miss").format(source.name, target.name),
+                                 source_id=source.id, target_id=target.id)
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 

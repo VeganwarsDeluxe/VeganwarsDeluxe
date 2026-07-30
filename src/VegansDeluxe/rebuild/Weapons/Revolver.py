@@ -32,5 +32,6 @@ class ShootYourself(DecisiveWeaponAction):
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("rebuild.weapon.revolver_action.text").format(source.name))
+        self.session.say(ls("rebuild.weapon.revolver_action.text").format(source.name), source_id=source.id,
+                         target_id=source.id)
         source.hp = 0

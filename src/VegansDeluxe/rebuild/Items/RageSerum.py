@@ -27,7 +27,8 @@ class RageSerumAction(FreeItem):
 
     async def func(self, source, target):
         self.session.say(
-            ls("rebuild.item.rage_serum.text").format(source.name, target.name)
+            ls("rebuild.item.rage_serum.text").format(source.name, target.name),
+            source_id=source.id, target_id=target.id
         )
 
         @Next(self.session.id, event=PostActionsGameEvent)
@@ -43,7 +44,8 @@ class RageSerumAction(FreeItem):
                     break
 
             if not attack:
-                self.session.say(ls("rebuild.item.rage_serum.sneeze").format(target.name))
+                self.session.say(ls("rebuild.item.rage_serum.sneeze").format(target.name),
+                                 source_id=source.id, target_id=target.id)
                 return
             attack.target = random.choice(attack.targets) if attack.targets else target
             await attack.execute()

@@ -13,6 +13,7 @@ from .Engine import *
 from .Entities import *
 from .Events import *
 from .Items import *
+from .LogEntry import LogEntry
 from .Session import *
 from .SessionManager import SessionManager
 from .Skills import *
@@ -22,7 +23,7 @@ from .Translator.Translator import translator
 from .Weapons import *
 from .utils import *
 
-__version__ = "1.7.4"
+__version__ = "1.7.5"
 
 localizations = str(pathlib.Path(__file__).parent.resolve().joinpath("localizations"))
 

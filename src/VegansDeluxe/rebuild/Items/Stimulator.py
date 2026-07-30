@@ -1,4 +1,4 @@
-from VegansDeluxe.core import Allies
+from VegansDeluxe.core import Allies, PreDamagesGameEvent
 from VegansDeluxe.core import AttachedAction, RegisterItem, ActionTag
 from VegansDeluxe.core import DecisiveItem
 from VegansDeluxe.core import Item
@@ -22,5 +22,9 @@ class StimulatorAction(DecisiveItem):
 
     async def func(self, source, target):
         target.hp = min(target.hp + 2, target.max_hp)
-        self.session.say(ls("rebuild.item.stimulator.text").format(source.name, target.name))
-        self.session.say(ls("rebuild.item.stimulator.effect").format(target.hearts, target.name, target.hp))
+        message = "rebuild.item.stimulator.text_self" if source.id == target.id \
+            else "rebuild.item.stimulator.text"
+        self.session.say(ls(message).format(source.name, target.name),
+                         source_id=source.id, target_id=target.id)
+        self.session.say(ls("rebuild.item.stimulator.effect").format(target.hearts, target.name, target.hp),
+                         source_id=source.id, target_id=target.id, at_next_event=PreDamagesGameEvent)

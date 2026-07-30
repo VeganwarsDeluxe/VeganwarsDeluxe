@@ -24,10 +24,12 @@ async def register(root_context: StateContext[Bleeding]):
     @RegisterEvent(session.id, event=PreDamagesGameEvent, filters=[lambda e: state.active])
     async def func(context: EventContext[PreDamagesGameEvent]):
         if state.bleeding <= 0:
-            session.say(ls("rebuild.state.bleeding.hp_loss").format(source.name, source.hp - 1))
+            session.say(ls("rebuild.state.bleeding.hp_loss").format(source.name, source.hp - 1),
+                        source_id=source.id, target_id=source.id)
             source.hp -= 1
             state.active = False
             state.bleeding = 3
             return
-        session.say(ls("rebuild.state.bleeding.timer").format(source.name, max(state.bleeding, 0)))
+        session.say(ls("rebuild.state.bleeding.timer").format(source.name, max(state.bleeding, 0)),
+                    source_id=source.id, target_id=source.id)
         state.bleeding -= 1

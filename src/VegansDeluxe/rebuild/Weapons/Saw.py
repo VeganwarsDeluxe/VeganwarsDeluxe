@@ -27,7 +27,8 @@ class SawAttack(RangedAttack):
         if not damage:
             return damage
         self.session.say(ls("rebuild.weapon.saw.effect")
-                         .format(target.name, target.get_state(Injury).injury+1))
+                         .format(target.name, target.get_state(Injury).injury+1),
+                         source_id=source.id, target_id=target.id)
 
         @Next(self.session.id, PostTickGameEvent)
         async def func(context: EventContext[PostTickGameEvent]):

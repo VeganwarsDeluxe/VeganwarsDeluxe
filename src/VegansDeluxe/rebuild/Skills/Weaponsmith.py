@@ -89,6 +89,6 @@ class SwitchWeapon(InstantStateAction):
 
         @Next(self.session.id, event=PreActionsGameEvent, priority=-10)
         async def answer(context: EventContext[AnswerGameEvent]):
-            self.session.say(ls("rebuild.skill.weaponsmith.action.text").format(source.name, other_weapon.name))
-
+            self.session.say(ls("rebuild.skill.weaponsmith.action.text").format(source.name, other_weapon.name),
+                             source_id=source.id, target_id=source.id)
 

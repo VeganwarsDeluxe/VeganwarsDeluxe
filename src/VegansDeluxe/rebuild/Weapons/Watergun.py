@@ -54,11 +54,13 @@ class CreateWaterShield(DecisiveWeaponAction):
             aflame.extinguished = True
             aflame.flame = 0
 
-            self.session.say(f'🔋|{self.source.name} получает 2 энергии.')
+            self.session.say(f'🔋|{self.source.name} получает 2 энергии.', source_id=self.source.id,
+                             target_id=self.source.id)
             self.source.energy += 2
             if self.session.turn >= self.weapon.cooldown_turn:
                 self.active = False
-                self.session.say(f'💨|Водяной щит {self.source.name} испарился!')
+                self.session.say(f'💨|Водяной щит {self.source.name} испарился!', source_id=self.source.id,
+                                 target_id=self.source.id)
 
         @After(self.session.id, 0, event=AttackGameEvent, repeats=3)
         def _(context: EventContext[AttackGameEvent]):
@@ -68,4 +70,5 @@ class CreateWaterShield(DecisiveWeaponAction):
                 context.event.damage += 1
 
         self.weapon.cooldown_turn = self.session.turn + 5
-        self.session.say(f'💧|{source.name} создаёт водяной щит вокруг {target.name}.')
+        self.session.say(f'💧|{source.name} создаёт водяной щит вокруг {target.name}.', source_id=source.id,
+                         target_id=target.id)

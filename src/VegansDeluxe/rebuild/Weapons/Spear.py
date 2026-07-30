@@ -55,7 +55,8 @@ class CounterAttack(DecisiveWeaponAction):
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 3
-        self.session.say(ls("rebuild.weapon.spear.action.text").format(source.name))
+        self.session.say(ls("rebuild.weapon.spear.action.text").format(source.name), source_id=source.id,
+                         target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
         async def counter_attack(context: EventContext[PostAttackGameEvent]):
@@ -66,4 +67,3 @@ class CounterAttack(DecisiveWeaponAction):
             counterattack_action = SpearAttack(self.session, self.source, self.weapon)
             counterattack_action.target = context.event.source
             await counterattack_action.execute()
-

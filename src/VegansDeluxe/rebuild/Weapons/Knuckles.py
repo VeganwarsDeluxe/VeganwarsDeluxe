@@ -31,7 +31,8 @@ class KnucklesAttack(MeleeAttack):
         async def pre_damages(context: EventContext[PreDamagesGameEvent]):
             for action in context.action_manager.get_queued_entity_actions(self.session, target):
                 if ActionTag.RELOAD in action.tags:
-                    self.session.say(ls("rebuild.weapon.knuckles.effect").format(target.name))
+                    self.session.say(ls("rebuild.weapon.knuckles.effect").format(target.name),
+                                     source_id=source.id, target_id=target.id)
                     target.energy = max(target.energy - 4, 0)
                     break
 

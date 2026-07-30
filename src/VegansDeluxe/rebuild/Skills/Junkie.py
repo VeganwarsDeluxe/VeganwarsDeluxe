@@ -41,7 +41,8 @@ async def register(root_context: StateContext[Junkie]):
                     damage_bonus += 1
 
         if accuracy_bonus:
-            session.say(ls("rebuild.skill.junkie.effect").format(source.name), at_next_event=PreDamagesGameEvent)
+            session.say(ls("rebuild.skill.junkie.effect").format(source.name),
+                        at_next_event=PreDamagesGameEvent, source_id=source.id, target_id=source.id)
             source.outbound_accuracy_bonus += accuracy_bonus
             @At(session.id, turn=session.turn, event=AttackGameEvent, priority=-1)
             async def attack_handler(actions_context: EventContext[AttackGameEvent]):

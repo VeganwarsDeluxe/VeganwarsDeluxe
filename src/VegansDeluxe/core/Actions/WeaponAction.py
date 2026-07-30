@@ -119,7 +119,7 @@ class Attack(DecisiveWeaponAction):
             message = self.MISS_MESSAGE.format(source_name=source.name, attack_text=self.ATTACK_TEXT,
                                                target_name=target_name,
                                                weapon_name=self.weapon.name)
-        self.session.say(message)
+        self.session.say(message, source_id=source.id, target_id=target.id)
 
 
 class MeleeAttack(Attack):

@@ -48,7 +48,8 @@ class Parry(DecisiveWeaponAction):
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 5
-        self.session.say(ls("rebuild.weapon.saber.action.text").format(source.name))
+        self.session.say(ls("rebuild.weapon.saber.action.text").format(source.name), source_id=source.id,
+                         target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn, event=PostAttackGameEvent)
         async def parry(context: EventContext[PostAttackGameEvent]):
@@ -59,6 +60,7 @@ class Parry(DecisiveWeaponAction):
             if not context.event.damage:
                 return
 
-            self.session.say(ls("rebuild.weapon.saber.action.effect").format(source.name, target.name))
+            self.session.say(ls("rebuild.weapon.saber.action.effect").format(source.name, target.name),
+                             source_id=source.id, target_id=target.id)
             target.energy = 0
             context.event.damage = 0

@@ -28,10 +28,11 @@ class ChitinAction(FreeItem):
     async def func(self, source, target):
         target.get_state(Armor).add(2, 100)
         self.session.say(ls("rebuild.item.chitin.text")
-                         .format(source.name, target.name))
+                         .format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent)
         async def chitin_knockout(context: EventContext[PostDamagesGameEvent]):
             target.get_state(Armor).remove((2, 100))
             target.get_state(Stun).stun += 1
-            self.session.say(ls("rebuild.item.chitin.wear_off").format(target.name))
+            self.session.say(ls("rebuild.item.chitin.wear_off").format(target.name),
+                             source_id=source.id, target_id=target.id)

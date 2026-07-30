@@ -21,4 +21,5 @@ async def register(root_context: StateContext[Sadist]):
     async def func(context: EventContext[HPLossGameEvent]):
         if source in context.event.source.inbound_dmg.contributors():
             source.energy = min(source.energy + context.event.hp_loss, source.max_energy)
-            session.say(ls("rebuild.skill.sadist.effect").format(source.name, context.event.hp_loss))
+            session.say(ls("rebuild.skill.sadist.effect").format(source.name, context.event.hp_loss),
+                        source_id=source.id, target_id=context.event.source.id)

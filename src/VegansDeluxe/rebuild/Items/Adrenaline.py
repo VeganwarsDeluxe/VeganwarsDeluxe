@@ -21,4 +21,5 @@ class AdrenalineAction(FreeItem):
 
     async def func(self, source, target):
         target.energy += 3
-        self.session.say(ls("rebuild.item.adrenaline.text").format(self.source.name, target.name))
+        self.session.say(ls("rebuild.item.adrenaline.text").format(self.source.name, target.name),
+                         source_id=self.source.id, target_id=target.id)

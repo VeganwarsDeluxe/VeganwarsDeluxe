@@ -44,9 +44,11 @@ class Aflame(State):
         self.extinguished = False
         if announce:
             if self.flame == 0:
-                session.say(ls("rebuild.state.aflame.activate").format(target.name))
+                session.say(ls("rebuild.state.aflame.activate").format(target.name), source_id=source.id,
+                            target_id=target.id)
             else:
-                session.say(ls("rebuild.state.aflame.increase").format(target.name))
+                session.say(ls("rebuild.state.aflame.increase").format(target.name), source_id=source.id,
+                            target_id=target.id)
         self.flames.extend([source] * flame)
         self.dealer = source
 
@@ -69,7 +71,8 @@ async def register(root_context: StateContext[Aflame]):
                 break
         if not skipped or not state.flame:
             return
-        session.say(ls("rebuild.state.aflame.remove").format(source.name))
+        session.say(ls("rebuild.state.aflame.remove").format(source.name), source_id=source.id,
+                    target_id=source.id)
         state.timer = 0
         state.flame = 0
         state.extinguished = False
@@ -96,7 +99,7 @@ async def register(root_context: StateContext[Aflame]):
             return
 
         if state.extinguished:
-            reset_state(state, session, ls("rebuild.state.aflame.disappear").format(source.name))
+            reset_state(state, session, source, ls("rebuild.state.aflame.disappear").format(source.name))
             return
 
         fire_attacks = await perform_fire_attacks(session, source, state, context.event)
@@ -123,18 +126,19 @@ async def register(root_context: StateContext[Aflame]):
             return
         state.flame = 0
         state.extinguished = False
-        session.say(ls("rebuild.state.aflame.removing").format(source.name))
+        session.say(ls("rebuild.state.aflame.removing").format(source.name), source_id=source.id,
+                    target_id=source.id)
         context.event.no_text = True
 
 
-def reset_state(state, session, message):
+def reset_state(state, session, source, message):
     """
     Reset the state to default values and output a message.
     """
     state.flame = 0
     state.extinguished = False
     state.timer = 0
-    session.say(message)
+    session.say(message, source_id=source.id, target_id=source.id)
 
 
 async def perform_fire_attacks(session: Session, source, state, message):
@@ -151,9 +155,11 @@ async def perform_fire_attacks(session: Session, source, state, message):
         fire_attacks.append((dealer, fire_event.damage))
 
     if state.flame == 1:
-        session.say(ls("rebuild.state.aflame.damage").format(source.name, displayed_damage))
+        session.say(ls("rebuild.state.aflame.damage").format(source.name, displayed_damage),
+                    source_id=state.dealer.id if state.dealer else None, target_id=source.id)
     elif state.flame > 1:
-        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, displayed_damage, state.flame-1))
+        session.say(ls("rebuild.state.aflame.damage_energy").format(source.name, displayed_damage, state.flame-1),
+                    source_id=state.dealer.id if state.dealer else None, target_id=source.id)
 
     dealt_fire_attacks = []
     for dealer, damage in fire_attacks:

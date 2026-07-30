@@ -34,7 +34,8 @@ async def register(root_context: StateContext[Stun]):
         if not state.stun:
             return
         if state.stun == 1:
-            session.say(ls("rebuild.state.stun.wake_up").format(source.name))
+            session.say(ls("rebuild.state.stun.wake_up").format(source.name), source_id=source.id,
+                        target_id=source.id)
         state.stun -= 1
 
     @RegisterEvent(session.id, event=RequestActionChoiceEvent, priority=-1)

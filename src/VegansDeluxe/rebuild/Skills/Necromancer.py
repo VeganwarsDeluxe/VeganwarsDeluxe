@@ -46,4 +46,5 @@ class RaiseUndead(DecisiveStateAction):
 
         target.dead = False
         target.hp = 1
-        self.session.say(ls("rebuild.skill.necromancer.action.text").format(source.name, target.name))
+        self.session.say(ls("rebuild.skill.necromancer.action.text").format(source.name, target.name),
+                         source_id=source.id, target_id=target.id)

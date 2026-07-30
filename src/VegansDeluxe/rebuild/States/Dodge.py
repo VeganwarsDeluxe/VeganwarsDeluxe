@@ -59,4 +59,5 @@ class DodgeAction(DecisiveStateAction):
 
         bonus = message.bonus
         self.source.inbound_accuracy_bonus += bonus
-        self.session.say(ls("rebuild.state.dodge.text").format(source.name))
+        self.session.say(ls("rebuild.state.dodge.text").format(source.name), source_id=source.id,
+                         target_id=source.id)

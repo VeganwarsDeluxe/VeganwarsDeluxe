@@ -47,8 +47,10 @@ class KnockDown(MeleeAttack):
         self.weapon.cooldown_turn = self.session.turn + 6
         damage = (await self.attack(source, target)).calculated
         if not damage:
-            self.session.say(ls("rebuild.weapon.shaft.action_miss").format(source.name, target.name))
+            self.session.say(ls("rebuild.weapon.shaft.action_miss").format(source.name, target.name),
+                             source_id=source.id, target_id=target.id)
             return
-        self.session.say(ls("rebuild.weapon.shaft.action.text").format(source.name, target.name))
+        self.session.say(ls("rebuild.weapon.shaft.action.text").format(source.name, target.name),
+                         source_id=source.id, target_id=target.id)
         state = target.get_state(Knockdown)
         state.active = True

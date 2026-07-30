@@ -31,5 +31,6 @@ async def register(root_context: StateContext[Zombie]):
             return
         zombie.active = True
         zombie.timer = 1
-        session.say(ls("rebuild.skill.zombie.effect").format(source.name))
+        session.say(ls("rebuild.skill.zombie.effect").format(source.name), source_id=source.id,
+                    target_id=source.id)
         context.event.canceled = True

@@ -127,4 +127,5 @@ class ConfuciusQuote(DecisiveAction):
     tags = DecisiveAction.tags + [ActionTag.SKIP]
 
     async def func(self, source, target):
-        self.session.say(f"💬|{source.name}: {random.choice(quotes.split('\n'))}")
+        self.session.say(f"💬|{source.name}: {random.choice(quotes.split('\n'))}", source_id=source.id,
+                         target_id=target.id)

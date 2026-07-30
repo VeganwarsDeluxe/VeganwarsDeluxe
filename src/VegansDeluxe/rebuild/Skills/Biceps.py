@@ -31,5 +31,5 @@ async def register(root_context: StateContext[Biceps]):
             return
         if not context.event.damage:
             return
-        session.say(f'❗️', n='')
+        session.say(f'❗️', n='', source_id=context.event.source.id, target_id=context.event.target.id)
         context.event.damage *= 2

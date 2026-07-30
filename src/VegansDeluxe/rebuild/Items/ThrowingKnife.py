@@ -34,7 +34,8 @@ class ThrowingKnifeAction(DecisiveItem):
 
     async def func(self, source, target):
         if not percentage_chance(self.hit_chance):
-            self.session.say(ls("rebuild.item.throwing_knife_name.miss").format(source.name, target.name))
+            self.session.say(ls("rebuild.item.throwing_knife_name.miss").format(source.name, target.name),
+                             source_id=source.id, target_id=target.id)
             return
 
         source.energy -= 1
@@ -44,5 +45,6 @@ class ThrowingKnifeAction(DecisiveItem):
             bleeding.bleeding -= 1
         bleeding.active = True
         self.session.say(
-            ls("rebuild.item.throwing_knife.text").format(source.name, target.name)
+            ls("rebuild.item.throwing_knife.text").format(source.name, target.name),
+            source_id=source.id, target_id=target.id
         )

@@ -43,7 +43,9 @@ class MolotovAction(DecisiveItem):
 
         source.energy = max(source.energy - 2, 0)
         self.session.say(
-            ls("rebuild.item.molotov.text").format(source.name, LocalizedList([t.name for t in targets]))
+            ls("rebuild.item.molotov.text").format(source.name, LocalizedList([t.name for t in targets])),
+            source_id=source.id,
+            target_id=targets[0].id if targets else None,
         )
 
         for target in targets:
@@ -55,4 +57,3 @@ class MolotovAction(DecisiveItem):
     @property
     def blocked(self):
         return self.source.energy < 2
-

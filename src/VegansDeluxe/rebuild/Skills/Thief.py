@@ -64,13 +64,14 @@ class Steal(FreeStateAction):
                     continue
                 action.canceled = True
 
-                self.session.say(ls("rebuild.skill.thief.action.text").format(target.name, item.name, source.name))
+                self.session.say(ls("rebuild.skill.thief.action.text").format(target.name, item.name, source.name),
+                                 source_id=source.id, target_id=target.id)
                 source.items.append(item)
 
                 success = True
             if not success:
-                self.session.say(ls("rebuild.skill.thief.action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.thief.action_miss").format(source.name, target.name),
+                                 source_id=source.id, target_id=target.id)
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
-
 

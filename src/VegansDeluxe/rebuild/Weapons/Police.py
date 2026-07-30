@@ -25,5 +25,6 @@ class PoliceAttack(MeleeAttack):
         if not damage:
             return damage
         target.energy = max(target.energy - 1, 0)
-        self.session.say(ls("rebuild.weapon.police_bat.effect").format(target.name))
+        self.session.say(ls("rebuild.weapon.police_bat.effect").format(target.name), source_id=source.id,
+                         target_id=target.id)
         return damage

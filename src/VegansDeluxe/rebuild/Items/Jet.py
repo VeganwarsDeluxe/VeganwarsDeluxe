@@ -24,13 +24,15 @@ class JetAction(FreeItem):
 
     async def func(self, source, target):
         self.session.say(
-            ls("rebuild.item.jet.text").format(source.name, target.name)
+            ls("rebuild.item.jet.text").format(source.name, target.name),
+            source_id=source.id, target_id=target.id
         )
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent, priority=3)
         async def jet_reload(context: EventContext[PostDamagesGameEvent]):
             self.session.say(
-                ls("rebuild.item.jet.effect").format(target.name, target.max_energy)
+                ls("rebuild.item.jet.effect").format(target.name, target.max_energy),
+                source_id=source.id, target_id=target.id
             )
 
         @At(self.session.id, turn=self.session.turn + 3, event=PreMoveGameEvent, priority=3)

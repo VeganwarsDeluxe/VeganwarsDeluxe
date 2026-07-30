@@ -84,6 +84,9 @@ class Entity(Object):
         self.metadata: dict = {}
         """Variable for various expansion."""
 
+        self.custom_texts: dict[str, str] = {}
+        """Optional replacements for log messages originating from this entity."""
+
     @property
     def hp(self) -> int:
         """Current HP of the entity."""

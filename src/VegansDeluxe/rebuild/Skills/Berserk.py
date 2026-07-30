@@ -49,9 +49,11 @@ async def register(root_context: StateContext[Berserk]):
             return
         source.max_energy += context.event.hp_loss
         source.energy = min(source.energy + context.event.hp_loss, source.max_energy)
-        session.say(ls("rebuild.skill.berserk.effect").format(source.name, context.event.hp_loss))
+        session.say(ls("rebuild.skill.berserk.effect").format(source.name, context.event.hp_loss),
+                    source_id=source.id, target_id=source.id)
         if source.hp-context.event.hp_loss == 1:
-            session.say(ls("rebuild.skill.berserk.trance").format(source.name))
+            session.say(ls("rebuild.skill.berserk.trance").format(source.name), source_id=source.id,
+                        target_id=source.id)
 
     @RegisterEvent(session.id, event=AttackGameEvent)
     async def attack_handler(attack_context: EventContext[AttackGameEvent]):

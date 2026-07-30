@@ -44,12 +44,12 @@ class FireArrow(RangedAttack):
         if not damage:
             self.session.say(
                 ls("rebuild.weapon.bow.fire_arrow_miss")
-                .format(source.name, target.name)
+                .format(source.name, target.name), source_id=source.id, target_id=target.id
             )
             return
         self.session.say(
             ls("rebuild.weapon.bow.fire_arrow.text")
-            .format(source.name, target.name)
+            .format(source.name, target.name), source_id=source.id, target_id=target.id
         )
         aflame = target.get_state(Aflame)
         aflame.add_flame(self.session, target, source, 2)

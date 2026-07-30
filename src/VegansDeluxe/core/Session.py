@@ -6,6 +6,8 @@ from VegansDeluxe.core.Events.Events import HPLossGameEvent, PreActionsGameEvent
     PostActionsGameEvent, PreDamagesGameEvent, PostDamagesGameEvent, PostTickGameEvent, PostDeathsGameEvent, \
     DeathGameEvent, CallActionsGameEvent, PreDeathGameEvent, StartSessionEvent, SessionStopGameEvent, \
     SessionFinishGameEvent, GameEvent
+from VegansDeluxe.core.LogEntry import LogEntry
+from VegansDeluxe.core.Translator.LocalizedString import LocalizedString
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -18,7 +20,7 @@ class Session[T: Entity]:
         self.active = True
         self.entities: list[T] = []
 
-        self.texts = []
+        self.texts: list[LogEntry] = []
 
     def attach_entity(self, entity: T):
         self.entities.append(entity)
@@ -30,16 +32,45 @@ class Session[T: Entity]:
         result = [entity for entity in self.entities if entity.id == entity_id]
         return result[0] if result else None
 
-    def say(self, text: str | ls, n: str = "\n", at_next_event: type[GameEvent] | None = None) -> None:
+    def say(
+        self,
+        text: str | LocalizedString,
+        n: str = "\n",
+        at_next_event: type[GameEvent] | None = None,
+        *,
+        message_id: str | None = None,
+        args: tuple = (),
+        kwargs: dict | None = None,
+        source_id: str | None = None,
+        target_id: str | None = None,
+        custom_text_role: str = "source",
+    ) -> None:
+        """Add a structured message to the log queue.
+
+        The original positional arguments remain supported. New callers can
+        provide a stable ``message_id``, formatting data, and entity IDs for
+        custom-text lookup and structured rendering.
         """
-        Adds given text to log queue.
-        """
+        if message_id is None and isinstance(text, LocalizedString):
+            message_id = text.key
+
+        entry = LogEntry(
+            message_id=message_id,
+            text=text,
+            args=args,
+            kwargs=kwargs,
+            source_id=source_id,
+            target_id=target_id,
+            custom_text_role=custom_text_role,
+            suffix=n,
+        )
+
         if at_next_event:
             async def callback(event):
-                self.texts.append(text + n)
+                self.texts.append(entry)
             self.event_manager.nearest(callback, self.id, event=at_next_event)
         else:
-            self.texts.append(text + n)
+            self.texts.append(entry)
 
     @property
     def alive_entities(self) -> list[T]:
@@ -99,12 +130,14 @@ class Session[T: Entity]:
         entity.hp -= event.hp_loss
         self.say(ls("core.session.message.hp_loss")
                  .format(hearts=entity.hearts, name=entity.name, hp_loss=event.hp_loss,
-                         hp=entity.hp))
+                         hp=entity.hp), source_id=event.source.id if hasattr(event.source, "id") else None,
+                 target_id=entity.id)
 
     async def calculate_damages(self):
         for entity in self.entities:  # Cancelling round
             if entity.energy > entity.max_energy:
-                self.say(ls("core.session.message.excess_energy_loss").format(entity.name))
+                self.say(ls("core.session.message.excess_energy_loss").format(entity.name),
+                         source_id=entity.id, target_id=entity.id)
                 entity.energy = entity.max_energy
             if entity.inbound_dmg.sum() > entity.outbound_dmg.sum():
                 entity.outbound_dmg.clear()
@@ -136,7 +169,8 @@ class Session[T: Entity]:
             if entity.hp > 0 or message.canceled:
                 continue
 
-            self.say(ls("core.session.message.death").format(name=entity.name))
+            self.say(ls("core.session.message.death").format(name=entity.name), source_id=entity.id,
+                     target_id=entity.id)
             entity.dead = True
             for alive_entity in self.entities:
                 alive_entity.nearby_entities.remove(entity) if entity in alive_entity.nearby_entities else None

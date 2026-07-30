@@ -47,7 +47,9 @@ class GrenadeAction(DecisiveItem):
         source.energy = max(source.energy - 2, 0)
         self.session.say(
             ls("rebuild.item.grenade.text")
-            .format(source.name, damage, LocalizedList([t.name for t in targets]))
+            .format(source.name, damage, LocalizedList([t.name for t in targets])),
+            source_id=source.id,
+            target_id=targets[0].id if targets else None,
         )
 
     async def publish_post_damage_event(self, source, target, damage):

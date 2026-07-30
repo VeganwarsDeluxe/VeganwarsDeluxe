@@ -44,7 +44,8 @@ async def register(root_context: StateContext[Inquisitor]):
             return
         if source.hp <= 0:
             source.hp = 1
-            session.say(ls("rebuild.skill.inquisitor.effect").format(source.name))
+            session.say(ls("rebuild.skill.inquisitor.effect"), args=(source.name,), source_id=source.id,
+                        target_id=source.id)
             state.random_activated = True
             context.event.canceled = True
 
@@ -70,7 +71,8 @@ class Pray(DecisiveStateAction):
     async def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
         if source.is_ally(target):
-            self.session.say(ls("rebuild.skill.inquisitor.pray_action_targeted").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.inquisitor.pray_action_targeted"),
+                             args=(source.name, target.name), source_id=source.id, target_id=target.id)
 
             @At(self.session.id, turn=self.session.turn, event=PreDeathGameEvent)
             async def hp_loss(context: EventContext[PreDeathGameEvent]):
@@ -78,7 +80,8 @@ class Pray(DecisiveStateAction):
                     return
                 if source.hp <= 0:
                     source.hp = 1
-                    self.session.say(ls("rebuild.skill.inquisitor.pray_action_saved").format(source.name))
+                    self.session.say(ls("rebuild.skill.inquisitor.pray_action_saved"), args=(source.name,),
+                                     source_id=source.id, target_id=source.id)
                     context.event.canceled = True
 
             return
@@ -93,19 +96,24 @@ class Pray(DecisiveStateAction):
                     harmful_actions.append(action)
 
             if not harmful_actions:
-                self.session.say(ls("rebuild.skill.inquisitor.pray_action_missed").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.inquisitor.pray_action_missed"),
+                                 args=(source.name, target.name), source_id=source.id, target_id=target.id)
                 return
 
-            self.session.say(ls("rebuild.skill.inquisitor.pray_action_angered").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.inquisitor.pray_action_angered"),
+                             args=(source.name, target.name), source_id=source.id, target_id=target.id)
 
             @After(self.session.id, turns=0, repeats=2, event=PreDamagesGameEvent)
             async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
-                self.session.say(ls("rebuild.skill.inquisitor.clouds_timer").format(target.name, self.get_timer()))
+                self.session.say(ls("rebuild.skill.inquisitor.clouds_timer"),
+                                 args=(target.name, self.get_timer()), source_id=source.id, target_id=target.id)
 
             @After(self.session.id, turns=3, repeats=1, event=PreDamagesGameEvent)
             async def post_actions(actions_context: EventContext[PreDamagesGameEvent]):
-                self.session.say(ls("rebuild.skill.inquisitor.clouds.effect").format(target.name))
-                self.session.say(ls("rebuild.skill.inquisitor.stun").format(target.name))
+                self.session.say(ls("rebuild.skill.inquisitor.clouds.effect"), args=(target.name,),
+                                 source_id=source.id, target_id=target.id)
+                self.session.say(ls("rebuild.skill.inquisitor.stun"), args=(target.name,),
+                                 source_id=source.id, target_id=target.id)
 
             @After(self.session.id, turns=3, repeats=1, event=PostDamagesGameEvent)
             async def post_actions(actions_context: EventContext[PostDamagesGameEvent]):

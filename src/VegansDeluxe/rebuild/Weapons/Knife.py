@@ -24,8 +24,9 @@ class KnifeAttack(MeleeAttack):
         bleeding = target.get_state(Bleeding)
         if bleeding.active:
             bleeding.bleeding -= 1
-            self.session.say(ls("rebuild.weapon.knife.increase"))
+            self.session.say(ls("rebuild.weapon.knife.increase"), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("rebuild.weapon.knife.effect").format(target.name))
+            self.session.say(ls("rebuild.weapon.knife.effect").format(target.name), source_id=source.id,
+                             target_id=target.id)
         bleeding.active = True
         return damage

@@ -53,5 +53,6 @@ class SwitchClaws(FreeWeaponAction):
             ls("rebuild.weapon.claws.switch.text")
             .format(source.name,
                     ls("rebuild.weapon.claws.enable.text") if not self.weapon.claws else
-                    ls("rebuild.weapon.claws.disable.text"))
+                    ls("rebuild.weapon.claws.disable.text")),
+            source_id=source.id, target_id=target.id
         )

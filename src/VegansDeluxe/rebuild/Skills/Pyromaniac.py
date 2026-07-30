@@ -36,7 +36,7 @@ async def register(root_context: StateContext[Pyromaniac]):
         if not damage_bonus or not actions_context.event.damage:
             return
         session.say(ls("rebuild.skill.pyromaniac.effect").format(source.name, damage_bonus),
-                    at_next_event=PreDamagesGameEvent)
+                    at_next_event=PreDamagesGameEvent, source_id=source.id, target_id=source.id)
 
 @AttachedAction(Pyromaniac)
 class IgniteEnemy(DecisiveStateAction):
@@ -56,9 +56,11 @@ class IgniteEnemy(DecisiveStateAction):
     async def func(self, source, target):
         self.state.cooldown_turn = self.session.turn + 3
         if not per_cubes(1, 4, source.energy, source.outbound_accuracy_bonus+target.inbound_accuracy_bonus):
-            self.session.say(ls("rebuild.skill.pyromaniac.ignite_miss.text").format(self.source.name, self.target.name))
+            self.session.say(ls("rebuild.skill.pyromaniac.ignite_miss.text").format(self.source.name, self.target.name),
+                             source_id=source.id, target_id=target.id)
             return
-        self.session.say(ls("rebuild.skill.pyromaniac.ignite.text").format(self.source.name, self.target.name))
+        self.session.say(ls("rebuild.skill.pyromaniac.ignite.text").format(self.source.name, self.target.name),
+                         source_id=source.id, target_id=target.id)
         self.target.get_state(Aflame).add_flame(self.session, target, source, 1)
 
 
@@ -78,7 +80,8 @@ class IgniteAlly(FreeStateAction):
         return False
 
     async def func(self, source, target):
-        self.session.say(ls("rebuild.skill.pyromaniac.ignite.text").format(self.source.name, self.target.name))
+        self.session.say(ls("rebuild.skill.pyromaniac.ignite.text").format(self.source.name, self.target.name),
+                         source_id=source.id, target_id=target.id)
         self.target.get_state(Aflame).add_flame(self.session, target, source, 1)
 
 

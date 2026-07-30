@@ -44,9 +44,11 @@ class ShieldGenAction(DecisiveStateAction):
     async def func(self, source, target):
         self.state.cooldown_turn = self.session.turn + 5
         if target == source:
-            self.session.say(ls("rebuild.skill.shield_gen.action.text").format(source.name))
+            self.session.say(ls("rebuild.skill.shield_gen.action.text").format(source.name),
+                             source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("rebuild.skill.shield_gen.action_targeted").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.shield_gen.action_targeted").format(source.name, target.name),
+                             source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn, event=PostDamageGameEvent)
         async def shield_block(context: EventContext[PostDamageGameEvent]):

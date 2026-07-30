@@ -65,10 +65,12 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
                 action_pool.append(action)
 
             if not action_pool:
-                self.session.say(ls("rebuild.skill.mimic.action_miss").format(source.name, target.name))
+                self.session.say(ls("rebuild.skill.mimic.action_miss").format(source.name, target.name),
+                                 source_id=source.id, target_id=target.id)
                 return
 
-            self.session.say(ls("rebuild.skill.mimic.action.text").format(source.name, target.name))
+            self.session.say(ls("rebuild.skill.mimic.action.text").format(source.name, target.name),
+                             source_id=source.id, target_id=target.id)
 
             action = random.choice(action_pool)
             self.state.memorized_action = action.id
@@ -76,5 +78,4 @@ class CopyAction(DecisiveStateAction):  # TODO: Fix Mimic
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))
 
         self.state.cooldown_turn = self.session.turn + 6
-
 

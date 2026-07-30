@@ -49,4 +49,5 @@ class StandUp(DecisiveStateAction):
 
     async def func(self, source, target):
         self.state.active = False
-        self.session.say(ls("rebuild.state.knockdown.text").format(source.name))
+        self.session.say(ls("rebuild.state.knockdown.text").format(source.name), source_id=source.id,
+                         target_id=source.id)

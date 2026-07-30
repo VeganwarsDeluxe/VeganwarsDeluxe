@@ -28,9 +28,12 @@ class LocalizedString:
                   f"Defaulting to raw key.")
             string = self.key
 
+        return self.apply_format_queue(string, code)
+
+    def apply_format_queue(self, string: str, code: str = "") -> str:
+        """Apply deferred formatting to another template."""
         for format_func in self.__format_queue:
             string = format_func(string, code)
-
         return string
 
     def localize_args(self, args: tuple, kwargs: dict, code: str) -> tuple[list[str], dict[str, str]]:

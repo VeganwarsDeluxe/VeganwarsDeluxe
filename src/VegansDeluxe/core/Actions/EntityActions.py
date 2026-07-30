@@ -20,7 +20,8 @@ class ApproachAction(DecisiveAction):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("core.action.approach.text").format(source.name))
+        self.session.say(ls("core.action.approach.text").format(source.name), source_id=source.id,
+                         target_id=target.id)
 
 
 @AttachedAction(Entity)
@@ -33,7 +34,7 @@ class ReloadAction(DecisiveAction):
 
     async def func(self, source, target):
         source.energy = source.max_energy
-        self.session.say(source.weapon.reload_text(source))
+        self.session.say(source.weapon.reload_text(source), source_id=source.id, target_id=source.id)
 
 
 class SkipActionGameEvent(GameEvent):
@@ -56,4 +57,5 @@ class SkipTurnAction(DecisiveAction):
         message = SkipActionGameEvent(self.session.id, self.session.turn, source.id)
         await self.event_manager.publish(message)
         if not message.no_text:
-            self.session.say(ls("core.action.skip.text").format(source.name))
+            self.session.say(ls("core.action.skip.text").format(source.name), source_id=source.id,
+                             target_id=source.id)

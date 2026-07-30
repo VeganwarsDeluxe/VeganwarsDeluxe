@@ -27,10 +27,12 @@ class FlashGrenadeAction(DecisiveItem):
 
         target.energy = max(0, target.energy - flash_grenade_attempt.energy_lost)
         if flash_grenade_attempt.success:
-            self.session.say(ls("rebuild.item.flash_grenade.text").format(self.source.name, target.name))
+            self.session.say(ls("rebuild.item.flash_grenade.text").format(self.source.name, target.name),
+                             source_id=self.source.id, target_id=target.id)
         else:
             self.session.say(ls("rebuild.item.flash_grenade.fail").format(
-                self.source.name, target.name, flash_grenade_attempt.energy_lost))
+                self.source.name, target.name, flash_grenade_attempt.energy_lost),
+                source_id=self.source.id, target_id=target.id)
 
 
 class FlashGrenadeAttemptEvent(GameEvent):

@@ -26,6 +26,7 @@ class BaseballBatAttack(MeleeAttack):
         if random.randint(0, 100) > 30:
             return
         stun = target.get_state(Stun)
-        self.session.say(ls("rebuild.weapon.baseball_bat.effect").format(target.name))
+        self.session.say(ls("rebuild.weapon.baseball_bat.effect").format(target.name),
+                         source_id=source.id, target_id=target.id)
         stun.stun += 2
         return damage

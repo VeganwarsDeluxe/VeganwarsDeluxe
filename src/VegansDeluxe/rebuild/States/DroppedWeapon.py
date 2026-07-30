@@ -40,5 +40,6 @@ class PickUp(DecisiveStateAction):
 
     async def func(self, source, target):
         source.weapon = self.state.weapon
-        self.session.say(ls("rebuild.state.dropped_weapon.text").format(source.name))
+        self.session.say(ls("rebuild.state.dropped_weapon.text").format(source.name), source_id=source.id,
+                         target_id=source.id)
         self.state.weapon = None
