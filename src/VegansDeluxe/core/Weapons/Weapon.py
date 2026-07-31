@@ -29,11 +29,12 @@ class Weapon(Object):
             tts = ls("core.base_weapon_reload_text_melee").format(source.name, source.max_energy)
         return tts
 
-    def hit_chance(self, source) -> int:
+    def hit_chance(self, source, additional_accuracy=0) -> int | float:
         if source.energy <= 0:
             return 0
-        total_accuracy = source.energy + self.accuracy_bonus + source.outbound_accuracy_bonus
-        return int(max((1 - ((1 - total_accuracy / 10) ** self.cubes)) * 100, 0))
+        total_accuracy = source.energy + self.accuracy_bonus + source.outbound_accuracy_bonus + additional_accuracy
+        chance = round(max((1 - ((1 - total_accuracy / 10) ** self.cubes)) * 100, 0), 1)
+        return int(chance) if chance.is_integer() else chance
 
 
 class MeleeWeapon(Weapon):

@@ -148,7 +148,7 @@ class Entity(Object):
         return self.__base_max_energy
 
     @property
-    def hit_chance(self) -> int:
+    def hit_chance(self) -> float | int:
         """Returns hit chance of the entity's weapon."""
         if self.weapon:
             return self.weapon.hit_chance(self)

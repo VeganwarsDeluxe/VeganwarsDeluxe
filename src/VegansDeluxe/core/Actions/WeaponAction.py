@@ -45,6 +45,8 @@ class Attack(DecisiveWeaponAction):
     target_type = Enemies()
     priority = 0
 
+    action_accuracy_bonus = 0
+
     tags = DecisiveWeaponAction.tags + [ActionTag.HARMFUL, ActionTag.ATTACK]
 
     def __init__(self, *args):
@@ -70,7 +72,8 @@ class Attack(DecisiveWeaponAction):
         if energy <= 0:
             return 0
         damage = per_cubes(self.weapon.cubes, self.weapon.accuracy_bonus,
-                           energy, target.inbound_accuracy_bonus + source.outbound_accuracy_bonus)
+                           energy, target.inbound_accuracy_bonus + source.outbound_accuracy_bonus
+                           + self.action_accuracy_bonus)
         return damage + self.weapon.damage_bonus if damage else 0
 
     async def attack(self, source, target, pay_energy=True,

@@ -37,9 +37,10 @@ class SledgehammerCrush(MeleeAttack):
         return self.session.turn < self.weapon.cooldown_turn or self.source.energy < 4
 
     def calculate_damage(self, source: Entity, target: Entity, *args) -> int:
-        if not super().calculate_damage(source, target, *args):
-            return 0
-        return 1 + target.max_energy - target.energy
+        damage = super().calculate_damage(source, target, *args)
+        if not damage:
+            return damage
+        return 1 + damage + (target.max_energy - target.energy)
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6

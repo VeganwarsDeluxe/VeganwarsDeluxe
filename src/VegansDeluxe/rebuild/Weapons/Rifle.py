@@ -34,14 +34,9 @@ class Rifle(RangedWeapon):
             if main_target:
                 main_target: Entity
 
-                chance = self.hit_chance(entity)
-                if level == 1:
-                    chance += 60
-                elif level == 2:
-                    chance += 90
-
                 entity.notifications.append(
-                    ls("rebuild.weapon.sniper_rifle.notification").format(main_target.name, chance)
+                    ls("rebuild.weapon.sniper_rifle.notification").format(main_target.name,
+                                                                          self.hit_chance(entity, 3 * (level+1)))
                 )
 
 
@@ -54,7 +49,7 @@ class RifleAttack(RangedAttack):
     def calculate_damage(self, source, target, *args):
         main_target, level = self.weapon.main_target
         if main_target == target:
-            self.weapon.accuracy_bonus = 2 if level == 1 else 5
+            self.weapon.accuracy_bonus = 3 * (level+1)
         else:
             self.weapon.accuracy_bonus = -4
         return super().calculate_damage(source, target, *args)

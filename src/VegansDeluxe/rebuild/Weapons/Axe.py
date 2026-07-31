@@ -1,4 +1,4 @@
-from VegansDeluxe.core import AttachedAction, RegisterWeapon
+from VegansDeluxe.core import AttachedAction, RegisterWeapon, percentage_chance
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -23,9 +23,10 @@ class AxeAttack(MeleeAttack):
         damage = (await super().attack(source, target)).calculated
         if not damage:
             return damage
-        threshold = target.get_state(DamageThreshold)
-        self.session.say(ls("rebuild.weapon.axe.effect").format(target.name), source_id=source.id,
-                         target_id=target.id)
+        if percentage_chance(70):
+            threshold = target.get_state(DamageThreshold)
+            self.session.say(ls("rebuild.weapon.axe.effect").format(target.name), source_id=source.id,
+                             target_id=target.id)
 
-        threshold.threshold -= 1
+            threshold.threshold -= 1
         return damage

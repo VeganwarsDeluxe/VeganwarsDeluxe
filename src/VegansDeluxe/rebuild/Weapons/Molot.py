@@ -1,3 +1,5 @@
+from typing import Optional
+
 from VegansDeluxe.core import AttachedAction, RegisterWeapon
 from VegansDeluxe.core import Enemies, Distance
 from VegansDeluxe.core import Entity
@@ -33,14 +35,12 @@ class MolotAttack(MeleeAttack):
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
-    def calculate_damage(self, source, target, *args):
-        if not self.weapon.strike:
-            damage = super().calculate_damage(source, target, *args)
-        else:
-            damage = self.weapon.cubes + self.weapon.damage_bonus
+    def calculate_damage(self, source, target, energy: Optional[int] = None):
+        innate_bonus = self.energy_bonus(source)
+        damage = super().calculate_damage(source, target, energy)
         if not damage:
             return damage
-        return damage + self.energy_bonus(source)
+        return damage + innate_bonus
 
 
 @AttachedAction(Molot)
@@ -50,6 +50,8 @@ class TrueStrike(MeleeAttack):
     target_type = Enemies(distance=Distance.NEARBY_ONLY)
     priority = -3
 
+    action_accuracy_bonus = 15
+
     @property
     def hidden(self) -> bool:
         return self.session.turn < self.weapon.cooldown_turn or self.source.energy < 4
@@ -57,13 +59,19 @@ class TrueStrike(MeleeAttack):
     def energy_bonus(self, source):
         return (source.max_energy - source.energy) // 2
 
-    def calculate_damage(self, source, target, *args):
+    def calculate_damage(self, source, target, energy: Optional[int] = None):
+        innate_bonus = self.energy_bonus(source)
         damage = self.weapon.cubes + self.weapon.damage_bonus
-        if not super().calculate_damage(source, target, *args):
+        if not super().calculate_damage(source, target, energy):
             return damage
-        return damage + self.energy_bonus(source)
+        return damage + innate_bonus
 
     async def func(self, source, target):
         self.weapon.cooldown_turn = self.session.turn + 6
+        damage = await self.attack(source, target, pay_energy=False, send_message=False)
         source.energy -= 4
-        await self.attack(source, target, pay_energy=False)
+        if damage.dealt:
+            self.session.say(ls("rebuild.weapon.molot.action.text").format(source.name, target.name, damage.dealt),
+                             source_id=source.id, target_id=target.id)
+        else:
+            self.send_attack_message(source, target, damage.dealt)
