@@ -71,6 +71,7 @@ async def test_visor_shows_target_skills_and_items():
     await source.attach_state(Visor(), engine.event_manager)
     await target.attach_state(DoubleVein(), engine.event_manager)
     target.items.append(Stimulator())
+    target.items.append(Stimulator())
 
     questions = []
 
@@ -85,4 +86,4 @@ async def test_visor_shows_target_skills_and_items():
     assert len(questions) == 1
     message = str(questions[0].text)
     assert "Double Vein" in message
-    assert "Stimulator" in message
+    assert "x2 Stimulator" in message

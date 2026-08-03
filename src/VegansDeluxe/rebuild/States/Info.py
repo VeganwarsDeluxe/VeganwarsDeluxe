@@ -38,6 +38,12 @@ class InfoAction(InstantStateAction):
         return False
 
     async def func(self, source: Entity, target: Entity):
+        item_counts = {}
+        for item in target.items:
+            if item.id not in item_counts:
+                item_counts[item.id] = [item, 0]
+            item_counts[item.id][1] += 1
+
         visor_message = Question(text=ls("rebuild.skill.visor.message").format(
             player_name=target.name,
             hp_emojies=target.hearts,
@@ -51,7 +57,10 @@ class InfoAction(InstantStateAction):
             damage_threshold=target.get_state(DamageThreshold).threshold,
             accuracy_bonus=target.outbound_accuracy_bonus,
             skill_names=LocalizedList([s.name for s in target.skills]),
-            item_names=LocalizedList([item.name for item in target.items]),
+            item_names=LocalizedList([
+                ls("rebuild.skill.visor.item").format(count, item.name)
+                for item, count in item_counts.values()
+            ]),
 
             weapon_name=target.weapon.name,
             energy_cost=target.weapon.energy_cost,

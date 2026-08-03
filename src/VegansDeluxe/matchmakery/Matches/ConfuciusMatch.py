@@ -17,3 +17,4 @@ class ConfuciusMatch(Match):
         confucius = Confucius(self.id, name=ls("core.matchmakery.confucius.name"))
         self.session.attach_entity(confucius)
         await self.engine.attach_states(confucius, all_states)
+        return player
