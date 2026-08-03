@@ -51,6 +51,7 @@ class InfoAction(InstantStateAction):
             damage_threshold=target.get_state(DamageThreshold).threshold,
             accuracy_bonus=target.outbound_accuracy_bonus,
             skill_names=LocalizedList([s.name for s in target.skills]),
+            item_names=LocalizedList([item.name for item in target.items]),
 
             weapon_name=target.weapon.name,
             energy_cost=target.weapon.energy_cost,

@@ -1,10 +1,12 @@
 from enum import Enum
 
+from VegansDeluxe.core.ObjectTags import ObjectTag
 from VegansDeluxe.core.States.State import State
 
 
 class Skill(State):
     type = 'skill'
+    tags = State.tags + [ObjectTag.SKILL]
 
 class SkillTag(Enum):
     RANGED_WEAPON_ONLY = 'core.skill.ranged_weapon_only'

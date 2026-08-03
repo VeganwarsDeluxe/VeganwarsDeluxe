@@ -1,7 +1,10 @@
 import pytest
 
 from VegansDeluxe.core import PreMoveGameEvent
-from VegansDeluxe.rebuild import DoubleVein, Berserk, Junkie
+from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent
+from VegansDeluxe.rebuild import DoubleVein, Berserk, Junkie, Visor
+from VegansDeluxe.rebuild.Items.Stimulator import Stimulator
+from VegansDeluxe.rebuild.Skills.Visor import VisorAction
 from VegansDeluxe.rebuild.Weapons.Revolver import RevolverAttack, Revolver
 from tests.utils import get_duel_setup
 
@@ -59,3 +62,27 @@ async def test_junkie():
     assert type(player_a.items[0]) in Junkie.item_pool
 
     await session.move()
+
+
+@pytest.mark.asyncio()
+async def test_visor_shows_target_skills_and_items():
+    engine, session = await get_duel_setup()
+    source, target = session.entities
+    await source.attach_state(Visor(), engine.event_manager)
+    await target.attach_state(DoubleVein(), engine.event_manager)
+    target.items.append(Stimulator())
+
+    questions = []
+
+    async def capture_question(event: QuestionGameEvent):
+        questions.append(event.question)
+
+    engine.event_manager.at_event(capture_question, session.id, event=QuestionGameEvent)
+
+    action = VisorAction(session, source, source.get_state(Visor))
+    await action.func(source, target)
+
+    assert len(questions) == 1
+    message = str(questions[0].text)
+    assert "Double Vein" in message
+    assert "Stimulator" in message
