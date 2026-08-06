@@ -47,6 +47,34 @@ async def test_berserk():
 
 
 @pytest.mark.asyncio()
+async def test_berserk_hp_loss_does_not_increase_max_energy_twice():
+    engine, session = await get_duel_setup()
+    player_a, player_b = session.entities
+
+    await player_a.attach_state(Berserk(), engine.event_manager)
+    await engine.action_manager.update_actions(session)
+    await engine.event_manager.publish(PreMoveGameEvent(session.id, session.turn))
+
+    assert player_a.max_energy == 3
+
+    await session.lose_hp(player_a, 6)
+    assert player_a.hp == 2
+    assert player_a.max_energy == 5
+
+    session.turn += 1
+    await engine.event_manager.publish(PreMoveGameEvent(session.id, session.turn))
+    assert player_a.max_energy == 5
+
+    await session.lose_hp(player_a, 6)
+    assert player_a.hp == 0
+    assert player_a.max_energy == 7
+
+    session.turn += 1
+    await engine.event_manager.publish(PreMoveGameEvent(session.id, session.turn))
+    assert player_a.max_energy == 7
+
+
+@pytest.mark.asyncio()
 async def test_junkie():
     engine, session = await get_duel_setup()
     player_a, player_b = session.entities
