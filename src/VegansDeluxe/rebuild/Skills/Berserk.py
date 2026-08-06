@@ -48,6 +48,11 @@ async def register(root_context: StateContext[Berserk]):
         if context.event.source != source:
             return
         source.max_energy += context.event.hp_loss
+        # The max-energy increase is applied before the entity's HP is
+        # actually reduced. Keep the tracked Berserk baseline in sync so the
+        # next PreMoveGameEvent does not count the same HP loss again.
+        if state.base is not None:
+            state.base += context.event.hp_loss
         source.energy = min(source.energy + context.event.hp_loss, source.max_energy)
         session.say(ls("rebuild.skill.berserk.effect").format(source.name, context.event.hp_loss),
                     source_id=source.id, target_id=source.id)
